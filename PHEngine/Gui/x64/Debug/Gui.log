@@ -1,0 +1,58 @@
+﻿  GuiMain.cpp
+GuiMain.obj : error LNK2019: unresolved external symbol glewInit referenced in function main
+GuiMain.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
+GuiMain.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
+GuiMain.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function main
+GuiMain.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function main
+GuiMain.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+GuiMain.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
+GuiMain.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
+PHEngine.lib(Engine.obj) : error LNK2019: unresolved external symbol __imp_glClear referenced in function "public: void __cdecl Engine::TickWindow(void)" (?TickWindow@Engine@@QEAAXXZ)
+PHEngine.lib(Engine.obj) : error LNK2019: unresolved external symbol __imp_glClearColor referenced in function "public: void __cdecl Engine::TickWindow(void)" (?TickWindow@Engine@@QEAAXXZ)
+PHEngine.lib(Engine.obj) : error LNK2001: unresolved external symbol __imp___glewBufferData
+PHEngine.lib(IndexBufferObject.obj) : error LNK2001: unresolved external symbol __imp___glewBufferData
+PHEngine.lib(Engine.obj) : error LNK2001: unresolved external symbol __imp___glewDeleteBuffers
+PHEngine.lib(IndexBufferObject.obj) : error LNK2001: unresolved external symbol __imp___glewDeleteBuffers
+PHEngine.lib(Engine.obj) : error LNK2001: unresolved external symbol __imp___glewDisableVertexAttribArray
+PHEngine.lib(VertexArrayObject.obj) : error LNK2001: unresolved external symbol __imp___glewDisableVertexAttribArray
+PHEngine.lib(Engine.obj) : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+PHEngine.lib(Engine.obj) : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+PHEngine.lib(Engine.obj) : error LNK2001: unresolved external symbol __imp___glewVertexAttribIPointer
+PHEngine.lib(Engine.obj) : error LNK2001: unresolved external symbol __imp___glewVertexAttribLPointer
+PHEngine.lib(VertexBufferObjectBase.obj) : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+PHEngine.lib(IndexBufferObject.obj) : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+PHEngine.lib(VertexBufferObjectBase.obj) : error LNK2001: unresolved external symbol __imp___glewGenBuffers
+PHEngine.lib(VertexArrayObject.obj) : error LNK2019: unresolved external symbol __imp_glDrawArrays referenced in function "public: void __cdecl EngineOpenGL::VertexArrayObject::RenderVAO(int)" (?RenderVAO@VertexArrayObject@EngineOpenGL@@QEAAXH@Z)
+PHEngine.lib(VertexArrayObject.obj) : error LNK2019: unresolved external symbol __imp_glDrawElements referenced in function "public: void __cdecl EngineOpenGL::VertexArrayObject::RenderVAO(int)" (?RenderVAO@VertexArrayObject@EngineOpenGL@@QEAAXH@Z)
+PHEngine.lib(VertexArrayObject.obj) : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
+PHEngine.lib(VertexArrayObject.obj) : error LNK2001: unresolved external symbol __imp___glewDeleteVertexArrays
+PHEngine.lib(VertexArrayObject.obj) : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewAttachShader
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewCompileShader
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewCreateProgram
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewCreateShader
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewDeleteShader
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewDetachShader
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewGetProgramInfoLog
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewGetProgramiv
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewGetShaderInfoLog
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewGetShaderiv
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewLinkProgram
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewShaderSource
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewUseProgram
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewGetSubroutineIndex
+PHEngine.lib(Shader.obj) : error LNK2001: unresolved external symbol __imp___glewUniformSubroutinesuiv
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewGetUniformLocation
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniform1f
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniform1i
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniform2f
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniform3f
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniform4f
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniformMatrix2fv
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniformMatrix3fv
+PHEngine.lib(Uniform.obj) : error LNK2001: unresolved external symbol __imp___glewUniformMatrix4fv
+D:\OpenGL\PortHighlightEngine\PHEngine\PHEngine\PHEngine\Dependencies\GLM\lib\Release\glm_static.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\OpenGL\PortHighlightEngine\PHEngine\PHEngine\PHEngine\Dependencies\GL\opengl32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\OpenGL\PortHighlightEngine\PHEngine\PHEngine\PHEngine\Dependencies\GLFW\lib-vc2015\\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\OpenGL\PortHighlightEngine\PHEngine\PHEngine\PHEngine\Dependencies\GLEW\lib\Release\Win32\glew32s.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\OpenGL\PortHighlightEngine\PHEngine\PHEngine\x64\Debug\Gui.exe : fatal error LNK1120: 48 unresolved externals
