@@ -65,8 +65,8 @@ namespace MeshLoader
 		/********* SkeletonBoneLOADER ***************/
 
 		SkeletonBoneLOADER::SkeletonBoneLOADER(SkeletonBoneBaseLOADER* const parent)
+			: m_parent(parent)
 		{
-			m_parent = parent;
 		}
 
 

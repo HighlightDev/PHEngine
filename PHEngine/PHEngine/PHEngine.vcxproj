@@ -539,6 +539,7 @@
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\VertexArrayObject.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\VertexBufferObjectBase.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\Uniform.h" />
+    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.cpp" />
@@ -557,6 +558,7 @@
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\VertexArrayObject.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\VertexBufferObjectBase.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\Uniform.cpp" />
+    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

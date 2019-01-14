@@ -1214,6 +1214,9 @@
     <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -1262,6 +1265,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
