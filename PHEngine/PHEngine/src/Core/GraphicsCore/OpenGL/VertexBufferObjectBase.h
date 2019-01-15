@@ -27,7 +27,7 @@ namespace Graphics
 
 			virtual int32_t GetCountOfIndices() const = 0;
 
-			virtual int32_t GetTotalLengthOfData() const = 0;
+			virtual size_t GetTotalLengthOfData() const = 0;
 
 			virtual int32_t GetVectorSize() const = 0;
 

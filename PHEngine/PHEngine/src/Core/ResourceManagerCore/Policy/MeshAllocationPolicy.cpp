@@ -1,4 +1,7 @@
 #include "MeshAllocationPolicy.h"
+
+#include "Core/MeshLoaderCore/AssimpLoader/AssimpMeshLoader.h"
+
 namespace Resources
 {
 
@@ -13,6 +16,8 @@ namespace Resources
 
 	MeshAllocationPolicy::sharedValue_t MeshAllocationPolicy::AllocateMemory(std::string arg)
 	{
+		MeshLoader::Assimp::AssimpMeshLoader<3> loader(arg);
+
 		return std::make_unique<int>(5);
 	}
 

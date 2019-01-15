@@ -4,6 +4,7 @@
 #include <assimp/scene.h>
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "VertexLOADER.h"
 
@@ -17,7 +18,7 @@ namespace MeshLoader
 		{
 		private:
 
-			aiScene& m_scene;
+			const aiScene* m_scene;
 			aiMesh** m_meshes;
 
 			void GetMeshVertexData();
@@ -26,24 +27,23 @@ namespace MeshLoader
 
 			void LoadSkeleton();
 
-			void FillHierarchyRecursive(aiNode& parentNode, class SkeletonBoneLOADER& parentBone, int32_t& boneIdCounter);
+			void FillHierarchyRecursive(aiNode& parentNode, class SkeletonBoneLOADER* parentBone, int32_t& boneIdCounter);
 
 			std::string GetSkeletonArmatureNodeName(aiNode& rootNode);
 
 			void IterateHierarchy(aiNode& parentNode, int32_t& countChildren);
 
-			aiBone& GetBoneByName(std::string name);
+			aiBone* GetBoneByName(const std::string& name);
 
-			void CollectIndices(std::vector<uint32_t>& indices, aiMesh& meshBeingCollected, uint32_t lastIndexBeenInterrupted);
+			void CollectIndices(aiMesh& meshBeingCollected, uint32_t lastIndexBeenInterrupted);
 
-			void TryToCollectSkinInfo(int32_t startIndex, float*& vertices, float*& normals, float*& texCoords,
-				float*& tangents, float*& bitangents, aiMesh& meshBeingCollected);
+			void TryToCollectSkinInfo(size_t startIndex, aiMesh& meshBeingCollected);
 
 			void CollectBlendables(int32_t vertexId, std::vector<VertexLOADER>& blendData, aiMesh& meshBeingCollected, std::vector<uint32_t>& countOfIndicesPerMesh);
 
 		public:
 
-			MeshVertexData(aiScene& scene);
+			MeshVertexData(const aiScene* scene);
 			~MeshVertexData();
 
 			bool bHasIndices = false;
@@ -52,31 +52,30 @@ namespace MeshLoader
 			bool bHasTangentVertices = false;
 			bool bHasAnimation = false;
 
-			uint32_t* Indices;
-			uint32_t indicesCount;
+			std::shared_ptr<std::vector<uint32_t>> Indices;
 
-			float* Verts;
-			uint32_t verticesCount;
+			std::shared_ptr<std::vector<float>> Verts;
 
-			float* T_Verts;
-			uint32_t texCoordsCount;
+			std::shared_ptr<std::vector<float>> T_Verts;
 
-			float* N_Verts;
-			uint32_t normalsCount;
+			std::shared_ptr<std::vector<float>> N_Verts;
 
-			float* Tangent_Verts;
-			uint32_t tangentsCount;
+			std::shared_ptr<std::vector<float>> Tangent_Verts;
 
-			float* Bitanget_Verts;
-			uint32_t bitangentsCount;
+			std::shared_ptr<std::vector<float>> Bitanget_Verts;
 
-			float* BlendWeights;
-			uint32_t blendWeightsCount;
+			std::shared_ptr<std::vector<float>> BlendWeights;
 
-			int32_t* BlendIndices;
-			uint32_t blendIndicesCount;
+			std::shared_ptr<std::vector<int32_t>> BlendIndices;
 
 			class SkeletonBoneBaseLOADER* SkeletonRoot;
+
+			inline size_t GetBlendablesCount() const {
+
+				return (BlendWeights->size() / count_bones_influence_vertex);
+			}
+
+			void CollectBlendWeightsAndIndices(VertexLOADER& blendInfoVertex, size_t blendableIndex);
 
 			void CleanUp();
 

@@ -5,7 +5,8 @@ namespace MeshLoader
 	namespace Assimp
 	{
 
-		VertexLOADER::VertexLOADER()
+		VertexLOADER::VertexLOADER(int32_t index)
+			: m_index(index)
 		{
 		}
 
@@ -15,9 +16,9 @@ namespace MeshLoader
 		}
 
 
-		void VertexLOADER::CleanUp()
+		void VertexLOADER::AddBoneWeight(std::pair<std::tuple<aiBone&, int32_t>, float>&& boneInfo)
 		{
-
+			BoneWeightMap.emplace_back(std::move(boneInfo));
 		}
 	}
 }

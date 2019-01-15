@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 #include <GL/glew.h>
+#include <memory>
+#include <vector>
 
 #include "DataCarryFlag.h"
 #include "VertexBufferObjectBase.h"
@@ -49,19 +51,19 @@ namespace Graphics
 
 		protected:
 
-			DataType* m_data;
-			int32_t m_totalDataLength;
+			std::shared_ptr<std::vector<DataType>> m_data;
+			size_t m_totalDataLength;
 			int32_t m_countOfIndices;
 			int32_t m_vertexAttribIndex;
 			DataCarryFlag m_dataCarryFlag;
 
 		public:
 
-			VertexBufferObject(DataType* data, int32_t totalDataLength, int32_t bufferTarget, int32_t vertexAttribIndex, DataCarryFlag flag)
+			VertexBufferObject(std::shared_ptr<std::vector<DataType>> data, int32_t bufferTarget, int32_t vertexAttribIndex, DataCarryFlag flag)
 				: VertexBufferObjectBase(bufferTarget)
 				, m_data(data)
-				, m_totalDataLength(totalDataLength)
-				, m_countOfIndices(totalDataLength / m_vectorSize)
+				, m_totalDataLength(data->size())
+				, m_countOfIndices(m_totalDataLength / m_vectorSize)
 				, m_vertexAttribIndex(vertexAttribIndex)
 				, m_dataCarryFlag(flag)
 			{
@@ -69,13 +71,11 @@ namespace Graphics
 				GenBuffer();
 			}
 
-			~VertexBufferObject()
+			virtual ~VertexBufferObject()
 			{
-				delete m_data;
-				m_data = nullptr;
 			}
 
-			DataType* GetData() const
+			std::shared_ptr<std::vector<DataType>> GetData() const
 			{
 				return m_data;
 			}
@@ -85,17 +85,19 @@ namespace Graphics
 				const size_t data_size = GetVectorElementByteSize() * m_totalDataLength;
 
 				BindVBO();
-				glBufferData(m_bufferTarget, data_size, m_data, GL_STATIC_DRAW);
+				std::vector<float> aasd;
+				
+				glBufferData(m_bufferTarget, data_size, m_data->data(), GL_STATIC_DRAW);
 				glEnableVertexAttribArray(m_vertexAttribIndex);
 				this->SetVertexAttribPointerWithSpecificParams();
 				glDisableVertexAttribArray(m_vertexAttribIndex);
 				VertexBufferObjectBase::UnbindAttribBuffer();
 
-				// If data on CPU is unnecessary - delete it
+				// If data on CPU is unnecessary
 				if (m_dataCarryFlag == DataCarryFlag::Invalidate)
 				{
-					delete m_data;
 					m_data = nullptr;
+					m_data.~shared_ptr();
 				}
 			}
 
@@ -104,7 +106,7 @@ namespace Graphics
 				return m_countOfIndices;
 			}
 
-			virtual int32_t GetTotalLengthOfData() const override
+			virtual size_t GetTotalLengthOfData() const override
 			{
 				return m_totalDataLength;
 			}

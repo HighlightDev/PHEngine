@@ -7,6 +7,8 @@
 #include "Core/GraphicsCore/OpenGL/DataCarryFlag.h"
 #include "Core/GraphicsCore/OpenGL/Shader/Shader.h"
 #include "Core/CommonCore/FolderManager.h"
+#include "Core/ResourceManagerCore/Pool/PoolBase.h"
+#include <Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h>
 
 #include <glm\vec2.hpp>
 
@@ -34,11 +36,13 @@ struct S : public Graphics::OpenGL::Shader
 Engine::Engine()
 {
 	S shader;
+	std::vector<float> v1 = { 1, 2, 3 };
+	std::shared_ptr<std::vector<float>> s1 = std::make_shared<std::vector<float>>(v1);
 
-	Graphics::OpenGL::VertexBufferObjectBase* vbo = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(new float[3]{ 1, 2, 3 }, 3, GL_ARRAY_BUFFER, 0, Graphics::OpenGL::DataCarryFlag::Invalidate);
-	Graphics::OpenGL::VertexBufferObjectBase* vbo1 = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(new float[3]{ 1, 2, 3 }, 3, GL_ARRAY_BUFFER, 0, Graphics::OpenGL::DataCarryFlag::Invalidate);
-	Graphics::OpenGL::VertexBufferObjectBase* vbo2 = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(new float[3]{ 1, 2, 3 }, 3, GL_ARRAY_BUFFER, 0, Graphics::OpenGL::DataCarryFlag::Invalidate);
-	Graphics::OpenGL::VertexBufferObjectBase* vbo3 = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(new float[3]{ 1, 2, 3 }, 3, GL_ARRAY_BUFFER, 0, Graphics::OpenGL::DataCarryFlag::Invalidate);
+	Graphics::OpenGL::VertexBufferObjectBase* vbo = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(s1, GL_ARRAY_BUFFER, 0, Graphics::OpenGL::DataCarryFlag::Invalidate);
+	Graphics::OpenGL::VertexBufferObjectBase* vbo1 = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(s1, GL_ARRAY_BUFFER, 1, Graphics::OpenGL::DataCarryFlag::Invalidate);
+	Graphics::OpenGL::VertexBufferObjectBase* vbo2 = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(s1, GL_ARRAY_BUFFER, 2, Graphics::OpenGL::DataCarryFlag::Invalidate);
+	Graphics::OpenGL::VertexBufferObjectBase* vbo3 = new Graphics::OpenGL::VertexBufferObject<float, 3, GL_FLOAT>(s1, GL_ARRAY_BUFFER, 3, Graphics::OpenGL::DataCarryFlag::Invalidate);
 		
 	Graphics::OpenGL::VertexArrayObject vao;
 
@@ -50,6 +54,10 @@ Engine::Engine()
 	vao.AddVBO(std::move(p_vbo), std::move(p_vbo1), std::move(p_vbo2), std::move(p_vbo3));
 	vao.GenVAO();
 	vao.BindBuffersToVao();
+
+	Resources::PoolBase<int32_t, std::string, Resources::MeshAllocationPolicy> pool;
+	std::string pathToFile = Common::FolderManager::GetInstance()->GetShadersPath() + "testVS.glsl";
+	pool.GetOrAllocateResource(pathToFile);
 }
 
 

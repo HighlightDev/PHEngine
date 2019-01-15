@@ -1,22 +1,28 @@
 #pragma once
 
 #include <stdint.h>
+#include <assimp/mesh.h>
+#include <vector>
+#include <tuple>
+#include <utility>
 
 namespace MeshLoader
 {
 	namespace Assimp
 	{
 
-		class VertexLOADER
+		struct VertexLOADER
 		{
-			int32_t someInfo;
+			
+			int32_t m_index;
+			std::vector<std::pair<std::tuple<aiBone&, int32_t>, float>> BoneWeightMap;
 
 		public:
 
-			void CleanUp();
-
-			VertexLOADER();
+			VertexLOADER(int32_t index);
 			~VertexLOADER();
+
+			void AddBoneWeight(std::pair<std::tuple<aiBone&, int32_t>, float>&& boneInfo);
 		};
 	}
 }

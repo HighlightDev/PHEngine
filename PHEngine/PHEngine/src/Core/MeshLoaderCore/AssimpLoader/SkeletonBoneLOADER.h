@@ -18,7 +18,7 @@ namespace MeshLoader
 			SkeletonBoneBaseLOADER();
 			virtual ~SkeletonBoneBaseLOADER();
 
-			inline void AddChildBone(SkeletonBoneLOADER& child);
+			void AddChildBone(SkeletonBoneLOADER& child);
 
 			inline std::vector<SkeletonBoneLOADER>& GetChildren();
 
@@ -36,7 +36,7 @@ namespace MeshLoader
 			int32_t m_boneId;
 
 		public:
-			SkeletonBoneLOADER(SkeletonBoneBaseLOADER* const parent);
+			SkeletonBoneLOADER(SkeletonBoneBaseLOADER* parent);
 			~SkeletonBoneLOADER();
 
 			void SetBoneInfo(aiBone& bone);
