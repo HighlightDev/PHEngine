@@ -29,14 +29,20 @@ namespace Graphics
 			template <typename Arg, typename ...Args>
 			void AddVBO(Arg&& p_vbo, Args... p_vbos)
 			{
-				m_vbos.emplace_back(std::move(p_vbo));
+				if (p_vbo != nullptr)
+				{
+					m_vbos.emplace_back(std::move(p_vbo));
+				}
 				AddVBO(std::forward<Args>(p_vbos)...);
 			}
 
 			template <typename Arg>
 			void AddVBO(Arg&& p_vbo)
 			{
-				m_vbos.emplace_back(std::move(p_vbo));
+				if (p_vbo != nullptr)
+				{
+					m_vbos.emplace_back(std::move(p_vbo));
+				}
 			}
 
 			bool HasIBO() const;

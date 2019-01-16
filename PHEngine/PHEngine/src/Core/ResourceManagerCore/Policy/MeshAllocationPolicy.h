@@ -2,6 +2,10 @@
 #include <string>
 #include <memory>
 
+#include "Core/GraphicsCore/OpenGL/VertexArrayObject.h"
+
+using namespace Graphics::OpenGL;
+
 namespace Resources
 {
 
@@ -9,14 +13,12 @@ namespace Resources
 	{
 	public:
 
-		using sharedValue_t = std::shared_ptr<int>;
-
 		MeshAllocationPolicy();
 		~MeshAllocationPolicy();
 
-		static sharedValue_t AllocateMemory(std::string arg);
+		static std::shared_ptr<VertexArrayObject> AllocateMemory(std::string& arg);
 
-		static void DeallocateMemory(sharedValue_t arg);
+		static void DeallocateMemory(std::shared_ptr<VertexArrayObject> arg);
 	};
 
 }
