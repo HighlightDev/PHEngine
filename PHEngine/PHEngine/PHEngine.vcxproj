@@ -275,6 +275,10 @@
     <None Include="res\shaders\testVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\MeshAnimationData.h" />
+    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.h" />
+    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationLOADER.h" />
+    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.h" />
     <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.h" />
     <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\MeshVertexData.h" />
     <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AssimpMeshLoader.h" />
@@ -542,6 +546,10 @@
     <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\MeshAnimationData.cpp" />
+    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.cpp" />
+    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationLOADER.cpp" />
+    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.cpp" />
     <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.cpp" />
     <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\MeshVertexData.cpp" />
     <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AssimpMeshLoader.cpp" />

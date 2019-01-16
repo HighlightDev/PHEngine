@@ -48,12 +48,12 @@ namespace Common
 
 	std::string FolderManager::GetResPath() 
 	{
-		return m_rootFolder + "res\\";
+		return GetRootPath() + "res\\";
 	}
 
 	std::string FolderManager::GetModelPath()
 	{
-		return m_rootFolder + GetResPath() + "model\\";
+		return GetResPath() + "model\\";
 	}
 
 	std::string FolderManager::GetShadersPath()
