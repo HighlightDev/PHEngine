@@ -1,9 +1,6 @@
 #pragma once
 
 #include "MeshVertexData.h"
-#include "MeshAnimationData.h"
-
-#include <assimp/Importer.hpp>
 
 namespace MeshLoader
 {
@@ -12,10 +9,8 @@ namespace MeshLoader
 		template <int32_t count_bones_influence_vertex>
 		class AssimpMeshLoader
 		{
-			typename ::Assimp::Importer importer;
 			const struct aiScene* m_scene;
 			MeshVertexData<count_bones_influence_vertex>* m_meshData;
-			MeshAnimationData* m_meshAninationData;
 
 		public:
 
@@ -27,7 +22,13 @@ namespace MeshLoader
 			
 			MeshVertexData<count_bones_influence_vertex>& GetMeshData();
 
-			MeshAnimationData& GetAnimationData();
+			/*MeshAnimationData GetAnimationData()
+			{
+				if (m_animationData == null)
+					m_animationData = new MeshAnimationData(m_scene);
+
+				return m_animationData;
+			}*/
 		};
 	}
 }

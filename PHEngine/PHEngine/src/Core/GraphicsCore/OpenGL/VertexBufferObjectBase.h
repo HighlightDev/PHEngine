@@ -25,13 +25,13 @@ namespace Graphics
 
 			virtual void SendDataToGPU() = 0;
 
-			virtual size_t GetCountOfIndices() const = 0;
+			virtual int32_t GetCountOfIndices() const = 0;
 
 			virtual size_t GetTotalLengthOfData() const = 0;
 
-			virtual size_t GetVectorSize() const = 0;
+			virtual int32_t GetVectorSize() const = 0;
 
-			virtual size_t GetVertexAttribIndex() const = 0;
+			virtual int32_t GetVertexAttribIndex() = 0;
 
 			virtual void CleanUp() = 0;
 		};

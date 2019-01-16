@@ -1217,18 +1217,6 @@
     <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationLOADER.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\MeshAnimationData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -1280,18 +1268,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationLOADER.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\MeshAnimationData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,15 +6,18 @@ namespace Graphics
 {
 	namespace OpenGL
 	{
-		IndexBufferObject::IndexBufferObject(std::shared_ptr<std::vector<uint32_t>> data, DataCarryFlag dataCarryFlag)
+		IndexBufferObject::IndexBufferObject(uint32_t* indicesData, int32_t indicesCount, DataCarryFlag dataCarryFlag)
 			: VertexBufferObjectBase(GL_ELEMENT_ARRAY_BUFFER)
-			, m_data(data)
-			, m_dataCarryFlag(dataCarryFlag)
 		{
+			m_data = indicesData;
+			m_dataCarryFlag = dataCarryFlag;
+			m_indicesCount = indicesCount;
 		}
 
 		IndexBufferObject::~IndexBufferObject()
 		{
+			delete m_data;
+			m_data = nullptr;
 		}
 
 		void IndexBufferObject::GenIndexBuffer()
@@ -30,12 +33,12 @@ namespace Graphics
 		void IndexBufferObject::SendDataToGPU()
 		{
 			BindIndexBuffer();
-			size_t bufferSize = sizeof(size_t) * GetTotalLengthOfData();
-			glBufferData(m_bufferTarget, bufferSize, m_data->data(), GL_STATIC_DRAW);
+			size_t bufferSize = sizeof(uint32_t) * m_indicesCount;
+			glBufferData(m_bufferTarget, bufferSize, m_data, GL_STATIC_DRAW);
 
 			if (m_dataCarryFlag == DataCarryFlag::Invalidate)
 			{
-				m_data.~shared_ptr();
+				delete m_data;
 				m_data = nullptr;
 			}
 		}
@@ -50,24 +53,9 @@ namespace Graphics
 			glDeleteBuffers(1, &m_descriptor);
 		}
 
-		size_t IndexBufferObject::GetCountOfIndices() const
+		int32_t IndexBufferObject::GetVertexAttribIndex()
 		{
-			return m_data->size();
-		}
-
-		size_t IndexBufferObject::GetVectorSize() const
-		{
-			return 1;
-		}
-
-		size_t IndexBufferObject::GetTotalLengthOfData() const
-		{
-			return m_data->size();
-		}
-
-		size_t IndexBufferObject::GetVertexAttribIndex() const 
-		{
-			return (size_t)-1;
+			return 0;
 		}
 	}
 }

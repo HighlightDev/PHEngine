@@ -1,6 +1,7 @@
 #include "AssimpMeshLoader.h"
 
 #include <assimp/scene.h>
+#include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <string>
 
@@ -13,6 +14,8 @@ namespace MeshLoader
 		template <int32_t count_bones_influence_vertex>
 		AssimpMeshLoader<count_bones_influence_vertex>::AssimpMeshLoader(std::string& modelFilePath)
 		{
+			typename ::Assimp::Importer importer;
+
 			m_scene = importer.ReadFile(modelFilePath, aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 			if (!m_scene)
 				throw std::exception("Could not load scene from file!");
@@ -23,9 +26,6 @@ namespace MeshLoader
 		{
 			delete m_meshData;
 			m_meshData = nullptr;
-
-			delete m_meshAninationData;
-			m_meshAninationData = nullptr;
 		}
 
 		template <int32_t count_bones_influence_vertex>
@@ -44,15 +44,6 @@ namespace MeshLoader
 			}
 
 			return *m_meshData;
-		}
-
-		template <int32_t count_bones_influence_vertex>
-		MeshAnimationData& AssimpMeshLoader<count_bones_influence_vertex>::GetAnimationData()
-		{
-			if (!m_meshAninationData)
-				m_meshAninationData = new MeshAnimationData(m_scene->mAnimations, m_scene->mNumAnimations);
-
-			return *m_meshAninationData;
 		}
 	}
 }

@@ -2,10 +2,6 @@
 #include "VertexBufferObjectBase.h"
 #include "DataCarryFlag.h"
 
-#include <memory>
-#include <vector>
-#include <stdint.h>
-
 namespace Graphics
 {
 	namespace OpenGL
@@ -15,12 +11,13 @@ namespace Graphics
 		{
 		private:
 
-			std::shared_ptr<std::vector<uint32_t>> m_data;
+			uint32_t* m_data;
 			DataCarryFlag m_dataCarryFlag;
+			int32_t m_indicesCount;
 
 		public:
 
-			IndexBufferObject(std::shared_ptr<std::vector<uint32_t>> indicesData, DataCarryFlag dataCarryFlag = DataCarryFlag::Invalidate);
+			IndexBufferObject(uint32_t* indicesData, int32_t indicesCount, DataCarryFlag dataCarryFlag = DataCarryFlag::Invalidate);
 
 			virtual ~IndexBufferObject();
 
@@ -34,13 +31,12 @@ namespace Graphics
 
 			void CleanUp() override;
 
-			virtual size_t GetCountOfIndices() const override;
+			inline int32_t GetIndicesCount()
+			{
+				return m_indicesCount;
+			}
 
-			virtual size_t GetTotalLengthOfData() const override;
-
-			virtual size_t GetVectorSize() const override;
-
-			virtual size_t GetVertexAttribIndex() const override;
+			int32_t GetVertexAttribIndex() override;
 		};
 	}
 }

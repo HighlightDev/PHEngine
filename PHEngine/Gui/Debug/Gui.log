@@ -1,5 +1,21 @@
 ﻿LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+PHEngine.lib(Engine.obj) : warning LNK4049: locally defined symbol ___glewBufferData imported
+PHEngine.lib(IndexBufferObject.obj) : warning LNK4049: locally defined symbol ___glewBufferData imported
+PHEngine.lib(Engine.obj) : warning LNK4049: locally defined symbol ___glewDeleteBuffers imported
+PHEngine.lib(IndexBufferObject.obj) : warning LNK4049: locally defined symbol ___glewDeleteBuffers imported
+PHEngine.lib(Engine.obj) : warning LNK4049: locally defined symbol ___glewDisableVertexAttribArray imported
+PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewDisableVertexAttribArray imported
+PHEngine.lib(Engine.obj) : warning LNK4049: locally defined symbol ___glewEnableVertexAttribArray imported
+PHEngine.lib(Engine.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribPointer imported
+PHEngine.lib(Engine.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribIPointer imported
+PHEngine.lib(Engine.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribLPointer imported
+PHEngine.lib(VertexBufferObjectBase.obj) : warning LNK4049: locally defined symbol ___glewBindBuffer imported
+PHEngine.lib(IndexBufferObject.obj) : warning LNK4049: locally defined symbol ___glewBindBuffer imported
+PHEngine.lib(VertexBufferObjectBase.obj) : warning LNK4049: locally defined symbol ___glewGenBuffers imported
+PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewBindVertexArray imported
+PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewDeleteVertexArrays imported
+PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewGenVertexArrays imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewAttachShader imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewCompileShader imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewCreateProgram imported
@@ -15,16 +31,6 @@ PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewShader
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewUseProgram imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewGetSubroutineIndex imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewUniformSubroutinesuiv imported
-PHEngine.lib(MeshAllocationPolicy.obj) : warning LNK4049: locally defined symbol ___glewBufferData imported
-PHEngine.lib(IndexBufferObject.obj) : warning LNK4049: locally defined symbol ___glewBufferData imported
-PHEngine.lib(MeshAllocationPolicy.obj) : warning LNK4049: locally defined symbol ___glewDeleteBuffers imported
-PHEngine.lib(IndexBufferObject.obj) : warning LNK4049: locally defined symbol ___glewDeleteBuffers imported
-PHEngine.lib(MeshAllocationPolicy.obj) : warning LNK4049: locally defined symbol ___glewDisableVertexAttribArray imported
-PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewDisableVertexAttribArray imported
-PHEngine.lib(MeshAllocationPolicy.obj) : warning LNK4049: locally defined symbol ___glewEnableVertexAttribArray imported
-PHEngine.lib(MeshAllocationPolicy.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribPointer imported
-PHEngine.lib(MeshAllocationPolicy.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribIPointer imported
-PHEngine.lib(MeshAllocationPolicy.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribLPointer imported
 PHEngine.lib(Uniform.obj) : warning LNK4049: locally defined symbol ___glewGetUniformLocation imported
 PHEngine.lib(Uniform.obj) : warning LNK4049: locally defined symbol ___glewUniform1f imported
 PHEngine.lib(Uniform.obj) : warning LNK4049: locally defined symbol ___glewUniform1i imported
@@ -34,11 +40,5 @@ PHEngine.lib(Uniform.obj) : warning LNK4049: locally defined symbol ___glewUnifo
 PHEngine.lib(Uniform.obj) : warning LNK4049: locally defined symbol ___glewUniformMatrix2fv imported
 PHEngine.lib(Uniform.obj) : warning LNK4049: locally defined symbol ___glewUniformMatrix3fv imported
 PHEngine.lib(Uniform.obj) : warning LNK4049: locally defined symbol ___glewUniformMatrix4fv imported
-PHEngine.lib(VertexBufferObjectBase.obj) : warning LNK4049: locally defined symbol ___glewBindBuffer imported
-PHEngine.lib(IndexBufferObject.obj) : warning LNK4049: locally defined symbol ___glewBindBuffer imported
-PHEngine.lib(VertexBufferObjectBase.obj) : warning LNK4049: locally defined symbol ___glewGenBuffers imported
-PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewBindVertexArray imported
-PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewDeleteVertexArrays imported
-PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewGenVertexArrays imported
 glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\vc120.pdb'; linking object as if no debug info
   Gui.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\Gui.exe

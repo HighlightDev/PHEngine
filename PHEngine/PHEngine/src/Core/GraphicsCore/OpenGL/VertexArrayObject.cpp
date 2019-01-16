@@ -36,7 +36,7 @@ namespace Graphics
 			glBindVertexArray(m_descriptor);
 			if (HasIBO())
 			{
-				glDrawElements(privitiveMode, m_ibo->GetCountOfIndices(), GL_UNSIGNED_INT, 0);
+				glDrawElements(privitiveMode, m_ibo->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 			}
 			else
 			{

@@ -24,13 +24,11 @@ namespace MeshLoader
 			Bitanget_Verts = std::make_shared<std::vector<float>>(std::vector<float>());
 			BlendWeights = std::make_shared<std::vector<float>>(std::vector<float>());
 			BlendIndices = std::make_shared<std::vector<int32_t>>(std::vector<int32_t>());
-			GetMeshVertexData();
 		}
 
 		template <int32_t count_bones_influence_vertex>
 		MeshVertexData<count_bones_influence_vertex>::~MeshVertexData()
 		{
-
 		}
 
 		template <int32_t count_bones_influence_vertex>
@@ -41,11 +39,11 @@ namespace MeshLoader
 			for (size_t currentMeshIndex = size_t(0); currentMeshIndex < meshCount; currentMeshIndex++)
 			{
 				if (!bHasIndices)
-					bHasIndices = m_meshes[currentMeshIndex]->HasFaces();
+					m_meshes[currentMeshIndex]->HasFaces();
 				if (!bHasNormals)
-					bHasNormals = m_meshes[currentMeshIndex]->HasNormals();
+					m_meshes[currentMeshIndex]->HasNormals();
 				if (!bHasTextureCoordinates)
-					bHasTextureCoordinates = m_meshes[currentMeshIndex]->HasTextureCoords(0);
+					m_meshes[currentMeshIndex]->HasTextureCoords(0);
 
 				// If we have all necessary info already -> stop passing through array
 				if (bHasIndices && bHasNormals && bHasTextureCoordinates)
@@ -286,8 +284,8 @@ namespace MeshLoader
 						if (boneId >= 0)
 						{
 							std::tuple<aiBone&, int32_t> weightTuple = std::tuple<aiBone&, int32_t>(*bone, boneId);
-							std::pair<std::tuple<aiBone&, int32_t>, float> weightPair = std::make_pair<std::tuple<aiBone&, int32_t>, float>(std::move(weightTuple), std::move(weight.mWeight));
-							vertex.AddBoneWeight(std::move(weightPair));
+							//std::pair<std::tuple<aiBone&, int32_t>, float> weightPair = std::make_pair<std::tuple<aiBone&, int32_t>, float>(weightTuple, weight.mWeight);
+							//vertex.AddBoneWeight(std::move(weightPair));
 						}
 						else
 						{

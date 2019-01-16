@@ -101,7 +101,7 @@ namespace Graphics
 				}
 			}
 
-			virtual size_t GetCountOfIndices() const override
+			virtual int32_t GetCountOfIndices() const override
 			{
 				return m_countOfIndices;
 			}
@@ -111,12 +111,12 @@ namespace Graphics
 				return m_totalDataLength;
 			}
 
-			virtual size_t GetVectorSize() const override
+			virtual int32_t GetVectorSize() const override
 			{
 				return m_vectorSize;
 			}
 
-			virtual size_t GetVertexAttribIndex() const override
+			virtual int32_t GetVertexAttribIndex() override
 			{
 				return m_vertexAttribIndex;
 			}
