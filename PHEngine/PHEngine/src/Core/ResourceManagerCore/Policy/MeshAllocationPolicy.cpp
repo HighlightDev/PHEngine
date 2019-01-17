@@ -1,14 +1,20 @@
 #include "MeshAllocationPolicy.h"
-#include "Core/MeshLoaderCore/AssimpLoader/AssimpMeshLoader.h"
-#include "Core/MeshLoaderCore/AssimpLoader/MeshVertexData.h"
-#include "Core/MeshLoaderCore/AssimpLoader/MeshAnimationData.h"
+#include "Core/GraphicsCore/OpenGL/VertexArrayObject.h"
+#include "Core/IoCore/MeshLoaderCore/AssimpLoader/AssimpMeshLoader.h"
+#include "Core/IoCore/MeshLoaderCore/AssimpLoader/MeshVertexData.h"
+#include "Core/IoCore/MeshLoaderCore/AssimpLoader/MeshAnimationData.h"
 #include "Core/GraphicsCore/OpenGL/IndexBufferObject.h"
 #include "Core/GraphicsCore/OpenGL/VertexBufferObject.h"
 #include "Core/UtilityCore/PlatformDependentFunctions.h"
+#include "Core/GraphicsCore/Animation/Bone.h"
+#include "Core/UtilityCore/AssimpSkeletonConverter.h"
+#include "Core/GraphicsCore/Mesh/AnimatedSkin.h"
 
 #include <gl/glew.h>
 
+using namespace Graphics::OpenGL;
 using namespace MeshLoader::Assimp;
+using namespace Graphics::Animation;
 
 namespace Resources
 {
@@ -22,17 +28,17 @@ namespace Resources
 	{
 	}
 
-	std::shared_ptr<VertexArrayObject> MeshAllocationPolicy::AllocateMemory(std::string& arg)
+	std::shared_ptr<Skin> MeshAllocationPolicy::AllocateMemory(std::string& arg)
 	{
 		static const int32_t countOfBonesInfluencingOnVertex = 3;
 
-		std::shared_ptr<VertexArrayObject> vao;
+		std::shared_ptr<Skin> resultSkin;
 
 		{
 			std::string absolutePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(arg));
 			MeshLoader::Assimp::AssimpMeshLoader<countOfBonesInfluencingOnVertex> loader(absolutePath);
 
-			vao = std::make_shared<VertexArrayObject>();
+			std::unique_ptr<VertexArrayObject> vao = std::make_unique<VertexArrayObject>();
 
 			MeshVertexData<countOfBonesInfluencingOnVertex>& meshData = loader.GetMeshData();
 
@@ -80,22 +86,22 @@ namespace Resources
 			vao->AddIndexBuffer(std::unique_ptr<IndexBufferObject>(ibo));
 			vao->BindBuffersToVao();
 
-			/*if (meshData.bHasAnimation)
+			if (meshData.bHasAnimation)
 			{
-				ParentBone rootBone = AssimpConverter.Converter.ConvertAssimpBoneToEngineBone(meshData.SkeletonRoot);
-				resultSkin = new AnimatedSkin(vao, rootBone);
+				Bone* rootBone = EngineUtility::AssimpSkeletonConverter::GetInstance()->ConvertAssimpBoneToEngineBone(meshData.SkeletonRoot);
+				resultSkin = std::make_shared<AnimatedSkin>(std::move(vao), std::make_shared<Bone>(*rootBone));
 			}
 			else
 			{
-				resultSkin = new Skin(vao);
-			}*/
+				resultSkin = std::make_shared<Skin>(std::move(vao));
+			}
 
 		}
 
-		return vao;
+		return resultSkin;
 	}
 
-	void MeshAllocationPolicy::DeallocateMemory(std::shared_ptr<VertexArrayObject> arg)
+	void MeshAllocationPolicy::DeallocateMemory(std::shared_ptr<Skin> arg)
 	{
 		arg->CleanUp();
 	}

@@ -8,9 +8,10 @@
 #include "Core/GraphicsCore/OpenGL/Shader/Shader.h"
 #include "Core/CommonCore/FolderManager.h"
 #include "Core/ResourceManagerCore/Pool/PoolBase.h"
-#include <Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h>
+#include "Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h"
+#include "Core/GraphicsCore/Mesh/Skin.h"
 
-#include <glm\vec2.hpp>
+#include <glm/vec2.hpp>
 
 struct S : public Graphics::OpenGL::Shader
 {
@@ -28,8 +29,6 @@ struct S : public Graphics::OpenGL::Shader
 	virtual void SetShaderPredefine() override
 	{
 		Predefine<glm::vec2>((Graphics::OpenGL::ShaderType)(Graphics::OpenGL::ShaderType::VertexShader | Graphics::OpenGL::ShaderType::GeometryShader), "hallo", glm::vec2(0.5f, 1));
-		Predefine<glm::vec2>(Graphics::OpenGL::ShaderType::VertexShader, "hallo", glm::vec2(0.5f, 1));
-		Predefine<glm::vec2>(Graphics::OpenGL::ShaderType::VertexShader, "hallo", glm::vec2(0.5f, 1));
 	}
 };
 
@@ -37,9 +36,9 @@ Engine::Engine()
 {
 	S shader;
 
-	Resources::PoolBase<Graphics::OpenGL::VertexArrayObject, std::string, Resources::MeshAllocationPolicy> pool;
+	Resources::PoolBase<Graphics::Mesh::Skin, std::string, Resources::MeshAllocationPolicy> pool;
 	std::string pathToFile = Common::FolderManager::GetInstance()->GetModelPath() + "playerCube.obj";
-	std::shared_ptr<Graphics::OpenGL::VertexArrayObject> vao = pool.GetOrAllocateResource(pathToFile);
+	std::shared_ptr<Graphics::Mesh::Skin> skin = pool.GetOrAllocateResource(pathToFile);
 }
 
 

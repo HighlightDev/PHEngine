@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\PHEngine\src;$(SolutionDir)\PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\GLFW\include\GLFW</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;STB_IMAGE_IMPLEMENTATION_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release</AdditionalLibraryDirectories>
@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\PHEngine\src;$(SolutionDir)\PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\GLFW\include\GLFW</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;STB_IMAGE_IMPLEMENTATION_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release</AdditionalLibraryDirectories>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\PHEngine\src;$(SolutionDir)\PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\GLFW\include\GLFW</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;STB_IMAGE_IMPLEMENTATION_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -136,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\PHEngine\src;$(SolutionDir)\PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\GLFW\include\GLFW</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;STB_IMAGE_IMPLEMENTATION_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

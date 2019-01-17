@@ -87,7 +87,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -96,7 +97,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -107,7 +109,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -122,7 +125,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -275,13 +279,17 @@
     <None Include="res\shaders\testVS.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\MeshAnimationData.h" />
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.h" />
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationLOADER.h" />
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.h" />
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.h" />
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\MeshVertexData.h" />
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\AssimpMeshLoader.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Mesh\Skin.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Animation\Bone.h" />
+    <ClInclude Include="src\Core\UtilityCore\AssimpSkeletonConverter.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\MeshAnimationData.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\AnimationLOADER.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\MeshVertexData.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\AssimpMeshLoader.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\glew.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\glxew.h" />
@@ -543,16 +551,21 @@
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\VertexArrayObject.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\VertexBufferObjectBase.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\Uniform.h" />
-    <ClInclude Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.h" />
+    <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\VertexLOADER.h" />
+    <ClInclude Include="src\Core\IoCore\TextureLoaderCore\StbLoader\StbLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\MeshAnimationData.cpp" />
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.cpp" />
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AnimationLOADER.cpp" />
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.cpp" />
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.cpp" />
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\MeshVertexData.cpp" />
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\AssimpMeshLoader.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Mesh\Skin.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Animation\Bone.cpp" />
+    <ClCompile Include="src\Core\UtilityCore\AssimpSkeletonConverter.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\MeshAnimationData.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\AnimationLOADER.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\BoneFrameCollectionLOADER.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\SkeletonBoneLOADER.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\MeshVertexData.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\AssimpMeshLoader.cpp" />
     <ClCompile Include="Dependencies\GLM\include\glm\detail\glm.cpp" />
     <ClCompile Include="src\Core\CommonCore\FolderManager.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderPredefine.cpp" />
@@ -566,7 +579,8 @@
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\VertexArrayObject.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\VertexBufferObjectBase.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\Uniform.cpp" />
-    <ClCompile Include="src\Core\MeshLoaderCore\AssimpLoader\VertexLOADER.cpp" />
+    <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\VertexLOADER.cpp" />
+    <ClCompile Include="src\Core\IoCore\TextureLoaderCore\StbLoader\StbLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
