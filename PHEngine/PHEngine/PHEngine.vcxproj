@@ -279,6 +279,7 @@
     <None Include="res\shaders\testVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GraphicsCore\Texture\ITexture.h" />
     <ClInclude Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.h" />
     <ClInclude Include="src\Core\GraphicsCore\Mesh\Skin.h" />
     <ClInclude Include="src\Core\GraphicsCore\Animation\Bone.h" />
@@ -553,6 +554,9 @@
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\Uniform.h" />
     <ClInclude Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\VertexLOADER.h" />
     <ClInclude Include="src\Core\IoCore\TextureLoaderCore\StbLoader\StbLoader.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Texture\TexParams.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Texture\Texture2d.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Texture\TextureMipMapState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.cpp" />
@@ -581,6 +585,9 @@
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\Uniform.cpp" />
     <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\VertexLOADER.cpp" />
     <ClCompile Include="src\Core\IoCore\TextureLoaderCore\StbLoader\StbLoader.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Texture\TexParams.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Texture\TextureMipMapState.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Texture\Texture2d.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
