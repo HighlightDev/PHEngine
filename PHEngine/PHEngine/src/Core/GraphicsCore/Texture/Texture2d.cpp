@@ -38,7 +38,7 @@ namespace Graphics
 		{
 			std::string absolutePathToTex = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(pathToTex));
 
-			uint8_t* data = Io::Texture::Stb::StbLoader::GetInstance().LoadTextureFromFile(absolutePathToTex);
+			uint8_t* data = Io::Images::Stb::StbLoader::GetInstance().LoadTextureFromFile(absolutePathToTex);
 
 			return CreateTexture(0, nullptr, 100, 100);
 		}

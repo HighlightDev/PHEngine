@@ -6,7 +6,7 @@
 
 namespace Io
 {
-	namespace Texture
+	namespace Images
 	{
 		namespace Stb
 		{

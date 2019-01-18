@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>STB_IMAGE_IMPLEMENTATION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -562,6 +562,7 @@
     <ClCompile Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Mesh\Skin.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Animation\Bone.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Texture\ITexture.cpp" />
     <ClCompile Include="src\Core\UtilityCore\AssimpSkeletonConverter.cpp" />
     <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\MeshAnimationData.cpp" />
     <ClCompile Include="src\Core\IoCore\MeshLoaderCore\AssimpLoader\AnimationFrameLOADER.cpp" />

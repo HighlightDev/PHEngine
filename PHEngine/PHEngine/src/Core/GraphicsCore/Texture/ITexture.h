@@ -28,16 +28,5 @@ namespace Graphics
 			virtual glm::ivec2 GetTextureRezolution() = 0;
 			virtual TexParams GetTextureParameters() = 0;
 		};
-
-		ITexture::ITexture() 
-			: m_texDescriptor(-1)
-		{
-		}
-
-
-		ITexture::~ITexture()
-		{
-		}
-
 	}
 }

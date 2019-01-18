@@ -1,47 +1,4 @@
-﻿  LINK : D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\Gui.exe not found or not built by the last incremental link; performing full link
-PHEngine.lib(Texture2d.obj) : error LNK2005: "public: __thiscall Graphics::Texture::ITexture::ITexture(void)" (??0ITexture@Texture@Graphics@@QAE@XZ) already defined in PHEngine.lib(Engine.obj)
-PHEngine.lib(Texture2d.obj) : error LNK2005: "public: virtual __thiscall Graphics::Texture::ITexture::~ITexture(void)" (??1ITexture@Texture@Graphics@@UAE@XZ) already defined in PHEngine.lib(Engine.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_convert_iphone_png_to_rgb already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_failure_reason already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_hdr_to_ldr_gamma already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_hdr_to_ldr_scale already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_image_free already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_info already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_info_from_callbacks already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_info_from_file already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_info_from_memory already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_16_bit already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_16_bit_from_callbacks already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_16_bit_from_file already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_16_bit_from_memory already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_hdr already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_hdr_from_callbacks already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_hdr_from_file already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_is_hdr_from_memory already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_ldr_to_hdr_gamma already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_ldr_to_hdr_scale already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_16 already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_16_from_callbacks already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_16_from_memory already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_from_callbacks already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_from_file already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_from_file_16 already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_from_memory already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_load_gif_from_memory already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_loadf already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_loadf_from_callbacks already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_loadf_from_file already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_loadf_from_memory already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_set_flip_vertically_on_load already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_set_unpremultiply_on_load already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_zlib_decode_buffer already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_zlib_decode_malloc already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_zlib_decode_malloc_guesssize already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_zlib_decode_malloc_guesssize_headerflag already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_zlib_decode_noheader_buffer already defined in PHEngine.lib(Texture2d.obj)
-PHEngine.lib(StbLoader.obj) : error LNK2005: _stbi_zlib_decode_noheader_malloc already defined in PHEngine.lib(Texture2d.obj)
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewAttachShader imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewCompileShader imported
@@ -83,4 +40,5 @@ PHEngine.lib(VertexBufferObjectBase.obj) : warning LNK4049: locally defined symb
 PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewBindVertexArray imported
 PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewDeleteVertexArrays imported
 PHEngine.lib(VertexArrayObject.obj) : warning LNK4049: locally defined symbol ___glewGenVertexArrays imported
-D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\Gui.exe : fatal error LNK1169: one or more multiply defined symbols found
+PHEngine.lib(StbLoader.obj) : error LNK2019: unresolved external symbol _stbi_load referenced in function "public: unsigned char * __thiscall Io::Images::Stb::StbLoader::LoadTextureFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)" (?LoadTextureFromFile@StbLoader@Stb@Images@Io@@QAEPAEAAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\Gui.exe : fatal error LNK1120: 1 unresolved externals
