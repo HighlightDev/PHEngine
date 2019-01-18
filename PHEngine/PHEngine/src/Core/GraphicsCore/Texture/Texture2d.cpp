@@ -1,11 +1,14 @@
 #include "Texture2d.h"
 
+#include "Core/UtilityCore/PlatformDependentFunctions.h"
+#include "Core/IoCore/TextureLoaderCore/StbLoader/StbLoader.h"
+
 namespace Graphics
 {
 	namespace Texture
 	{
 
-		Texture2d::Texture2d(std::string pathToTex, ITextureMipMapState& mipmapState) 
+		Texture2d::Texture2d(std::string& pathToTex, ITextureMipMapState& mipmapState) 
 			: ITexture()
 			, m_mipmapState(&mipmapState)
 		{
@@ -31,10 +34,13 @@ namespace Graphics
 			delete &m_mipmapState;
 		}
 
-		int32_t Texture2d::LoadTextureFromFile(std::string pathToTex, int32_t texWrapMode)
+		int32_t Texture2d::LoadTextureFromFile(std::string& pathToTex, int32_t texWrapMode)
 		{
+			std::string absolutePathToTex = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(pathToTex));
 
-			return -1;
+			uint8_t* data = Io::Texture::Stb::StbLoader::GetInstance().LoadTextureFromFile(absolutePathToTex);
+
+			return CreateTexture(0, nullptr, 100, 100);
 		}
 
 		int32_t Texture2d::CreateTexture(int32_t format, const void* pixelsData, int32_t width, int32_t height) 

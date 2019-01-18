@@ -7,7 +7,7 @@
 #include "Core/IoCore/MeshLoaderCore/AssimpLoader/SkeletonBoneLOADER.h"
 
 using namespace Graphics::Animation;
-using namespace MeshLoader::Assimp;
+using namespace Io::MeshLoader::Assimp;
 
 namespace EngineUtility
 {

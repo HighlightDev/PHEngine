@@ -1,17 +1,36 @@
 #pragma once
 
 #include <stb/stb_image.h>
+#include <stdint.h>
+#include <string>
 
-namespace Texture
+namespace Io
 {
-	namespace Stb
+	namespace Texture
 	{
-		class StbLoader
+		namespace Stb
 		{
-		public:
-			StbLoader();
-			~StbLoader();
-		};
+			class StbLoader
+			{
+
+				static StbLoader* m_instance;
+
+				StbLoader();
+
+			public:
+
+				static StbLoader& GetInstance()
+				{
+					if (!m_instance)
+						m_instance = new StbLoader();
+
+					return *m_instance;
+				}
+
+				uint8_t* LoadTextureFromFile(std::string& pathToFile);
+
+				~StbLoader();
+			};
+		}
 	}
 }
-

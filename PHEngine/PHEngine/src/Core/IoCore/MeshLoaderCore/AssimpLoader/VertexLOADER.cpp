@@ -1,24 +1,27 @@
 #include "VertexLOADER.h"
 
-namespace MeshLoader
+namespace Io
 {
-	namespace Assimp
+	namespace MeshLoader
 	{
-
-		VertexLOADER::VertexLOADER(int32_t index)
-			: m_index(index)
+		namespace Assimp
 		{
-		}
+
+			VertexLOADER::VertexLOADER(int32_t index)
+				: m_index(index)
+			{
+			}
 
 
-		VertexLOADER::~VertexLOADER()
-		{
-		}
+			VertexLOADER::~VertexLOADER()
+			{
+			}
 
 
-		void VertexLOADER::AddBoneWeight(std::pair<std::tuple<aiBone&, int32_t>, float>&& boneInfo)
-		{
-			BoneWeightMap.emplace_back(std::move(boneInfo));
+			void VertexLOADER::AddBoneWeight(std::pair<std::tuple<aiBone&, int32_t>, float>&& boneInfo)
+			{
+				BoneWeightMap.emplace_back(std::move(boneInfo));
+			}
 		}
 	}
 }

@@ -1,27 +1,29 @@
 #include "MeshAnimationData.h"
 
-
-namespace MeshLoader
+namespace Io
 {
-	namespace Assimp
+	namespace MeshLoader
 	{
-
-		MeshAnimationData::MeshAnimationData(aiAnimation** animations, size_t animationCount)
+		namespace Assimp
 		{
-			if (animationCount > 0)
+
+			MeshAnimationData::MeshAnimationData(aiAnimation** animations, size_t animationCount)
 			{
-				for (size_t animationIndex = 0; animationIndex < animationCount; animationIndex ++)
+				if (animationCount > 0)
 				{
-					aiAnimation* animation = animations[animationIndex];
-					Animations.emplace_back(std::move(AnimationLOADER(*animation)));
+					for (size_t animationIndex = 0; animationIndex < animationCount; animationIndex++)
+					{
+						aiAnimation* animation = animations[animationIndex];
+						Animations.emplace_back(std::move(AnimationLOADER(*animation)));
+					}
 				}
 			}
+
+			MeshAnimationData::~MeshAnimationData()
+			{
+
+			}
+
 		}
-
-		MeshAnimationData::~MeshAnimationData()
-		{
-
-		}
-
 	}
 }

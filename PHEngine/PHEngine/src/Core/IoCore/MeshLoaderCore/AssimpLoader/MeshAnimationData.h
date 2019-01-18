@@ -5,22 +5,24 @@
 
 #include "AnimationLOADER.h"
 
-namespace MeshLoader
+namespace Io
 {
-	namespace Assimp
+	namespace MeshLoader
 	{
-		class MeshAnimationData
+		namespace Assimp
 		{
+			class MeshAnimationData
+			{
 
-			std::vector<AnimationLOADER> Animations;
+				std::vector<AnimationLOADER> Animations;
 
-		public:
+			public:
 
-			MeshAnimationData(aiAnimation** animations, size_t animationCount);
+				MeshAnimationData(aiAnimation** animations, size_t animationCount);
 
-			~MeshAnimationData();
-		};
+				~MeshAnimationData();
+			};
 
+		}
 	}
 }
-

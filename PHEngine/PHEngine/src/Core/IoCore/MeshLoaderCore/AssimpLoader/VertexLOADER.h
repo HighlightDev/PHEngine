@@ -6,24 +6,26 @@
 #include <tuple>
 #include <utility>
 
-namespace MeshLoader
+namespace Io
 {
-	namespace Assimp
+	namespace MeshLoader
 	{
-
-		struct VertexLOADER
+		namespace Assimp
 		{
-			
-			int32_t m_index;
-			std::vector<std::pair<std::tuple<aiBone&, int32_t>, float>> BoneWeightMap;
 
-		public:
+			struct VertexLOADER
+			{
 
-			VertexLOADER(int32_t index);
-			~VertexLOADER();
+				int32_t m_index;
+				std::vector<std::pair<std::tuple<aiBone&, int32_t>, float>> BoneWeightMap;
 
-			void AddBoneWeight(std::pair<std::tuple<aiBone&, int32_t>, float>&& boneInfo);
-		};
+			public:
+
+				VertexLOADER(int32_t index);
+				~VertexLOADER();
+
+				void AddBoneWeight(std::pair<std::tuple<aiBone&, int32_t>, float>&& boneInfo);
+			};
+		}
 	}
 }
-

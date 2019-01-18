@@ -13,8 +13,9 @@
 #include <gl/glew.h>
 
 using namespace Graphics::OpenGL;
-using namespace MeshLoader::Assimp;
+using namespace Io::MeshLoader::Assimp;
 using namespace Graphics::Animation;
+using namespace Graphics::Mesh;
 
 namespace Resources
 {
@@ -36,7 +37,7 @@ namespace Resources
 
 		{
 			std::string absolutePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(arg));
-			MeshLoader::Assimp::AssimpMeshLoader<countOfBonesInfluencingOnVertex> loader(absolutePath);
+			AssimpMeshLoader<countOfBonesInfluencingOnVertex> loader(absolutePath);
 
 			std::unique_ptr<VertexArrayObject> vao = std::make_unique<VertexArrayObject>();
 

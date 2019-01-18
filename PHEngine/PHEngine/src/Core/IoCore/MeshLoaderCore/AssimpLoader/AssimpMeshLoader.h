@@ -5,30 +5,32 @@
 
 #include <assimp/Importer.hpp>
 
-namespace MeshLoader
+namespace Io
 {
-	namespace Assimp
+	namespace MeshLoader
 	{
-		template <int32_t count_bones_influence_vertex>
-		class AssimpMeshLoader
+		namespace Assimp
 		{
-			typename ::Assimp::Importer importer;
-			const struct aiScene* m_scene;
-			MeshVertexData<count_bones_influence_vertex>* m_meshData;
-			MeshAnimationData* m_meshAninationData;
+			template <int32_t count_bones_influence_vertex>
+			class AssimpMeshLoader
+			{
+				typename ::Assimp::Importer importer;
+				const struct aiScene* m_scene;
+				MeshVertexData<count_bones_influence_vertex>* m_meshData;
+				MeshAnimationData* m_meshAninationData;
 
-		public:
+			public:
 
-			AssimpMeshLoader(std::string& modelFilePath);
+				AssimpMeshLoader(std::string& modelFilePath);
 
-			~AssimpMeshLoader();
+				~AssimpMeshLoader();
 
-			bool GetHasAnimationData() const;
-			
-			MeshVertexData<count_bones_influence_vertex>& GetMeshData();
+				bool GetHasAnimationData() const;
 
-			MeshAnimationData& GetAnimationData();
-		};
+				MeshVertexData<count_bones_influence_vertex>& GetMeshData();
+
+				MeshAnimationData& GetAnimationData();
+			};
+		}
 	}
 }
-

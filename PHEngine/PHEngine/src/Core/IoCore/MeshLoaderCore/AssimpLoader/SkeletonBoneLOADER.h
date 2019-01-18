@@ -4,54 +4,56 @@
 #include <stdint.h>
 #include <assimp/mesh.h>
 
-namespace MeshLoader
+namespace Io
 {
-	namespace Assimp
+	namespace MeshLoader
 	{
-		class SkeletonBoneLOADER;
-
-		class SkeletonBoneBaseLOADER
+		namespace Assimp
 		{
-		protected:
-			std::vector< SkeletonBoneLOADER> m_children;
-		public:
-			SkeletonBoneBaseLOADER();
-			virtual ~SkeletonBoneBaseLOADER();
+			class SkeletonBoneLOADER;
 
-			void AddChildBone(SkeletonBoneLOADER& child);
+			class SkeletonBoneBaseLOADER
+			{
+			protected:
+				std::vector< SkeletonBoneLOADER> m_children;
+			public:
+				SkeletonBoneBaseLOADER();
+				virtual ~SkeletonBoneBaseLOADER();
 
-			inline std::vector<SkeletonBoneLOADER>& GetChildren();
+				void AddChildBone(SkeletonBoneLOADER& child);
 
-			int32_t GetIdByBoneInHierarchy(aiBone& seekBone);
+				inline std::vector<SkeletonBoneLOADER>& GetChildren();
 
-			int32_t GetIdByBone(aiBone& seekBone, SkeletonBoneLOADER& currentSkeletonBone);
-		};
+				int32_t GetIdByBoneInHierarchy(aiBone& seekBone);
 
-		class SkeletonBoneLOADER : public SkeletonBoneBaseLOADER
-		{
-		private:
+				int32_t GetIdByBone(aiBone& seekBone, SkeletonBoneLOADER& currentSkeletonBone);
+			};
 
-			SkeletonBoneBaseLOADER* m_parent;
-			aiBone m_boneInfo;
-			int32_t m_boneId;
+			class SkeletonBoneLOADER : public SkeletonBoneBaseLOADER
+			{
+			private:
 
-		public:
-			SkeletonBoneLOADER(SkeletonBoneBaseLOADER* parent);
-			~SkeletonBoneLOADER();
+				SkeletonBoneBaseLOADER* m_parent;
+				aiBone m_boneInfo;
+				int32_t m_boneId;
 
-			void SetBoneInfo(aiBone& bone);
+			public:
+				SkeletonBoneLOADER(SkeletonBoneBaseLOADER* parent);
+				~SkeletonBoneLOADER();
 
-			void SetBoneId(int32_t id);
+				void SetBoneInfo(aiBone& bone);
 
-			inline aiBone& GetBoneInfo();
+				void SetBoneId(int32_t id);
 
-			inline int32_t GetBoneId();
+				inline aiBone& GetBoneInfo();
 
-			inline SkeletonBoneBaseLOADER* GetParent();
+				inline int32_t GetBoneId();
 
-			void CleanUp();
-		};
+				inline SkeletonBoneBaseLOADER* GetParent();
 
+				void CleanUp();
+			};
+
+		}
 	}
 }
-

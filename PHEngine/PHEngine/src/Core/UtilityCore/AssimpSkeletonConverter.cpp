@@ -17,7 +17,7 @@ namespace EngineUtility
 		return std::move(dstMatrix);
 	}
 
-	void AssimpSkeletonConverter::IterateBoneTree(Bone& dstParentBone, MeshLoader::Assimp::SkeletonBoneLOADER* srcParentNode)
+	void AssimpSkeletonConverter::IterateBoneTree(Bone& dstParentBone, Io::MeshLoader::Assimp::SkeletonBoneLOADER* srcParentNode)
 	{
 		for (auto& srcNode : srcParentNode->GetChildren())
 		{

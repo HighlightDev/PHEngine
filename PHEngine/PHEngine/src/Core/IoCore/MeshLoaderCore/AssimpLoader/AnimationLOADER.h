@@ -6,26 +6,28 @@
 
 #include "BoneFrameCollectionLOADER.h"
 
-namespace MeshLoader
+namespace Io
 {
-
-	namespace Assimp
+	namespace MeshLoader
 	{
 
-		struct AnimationLOADER
+		namespace Assimp
 		{
-			double AnimationDuration;
-			std::string Name;
-			std::vector<BoneFrameCollectionLOADER> FramesBoneCollection;
 
-		public:
+			struct AnimationLOADER
+			{
+				double AnimationDuration;
+				std::string Name;
+				std::vector<BoneFrameCollectionLOADER> FramesBoneCollection;
 
-			AnimationLOADER(aiAnimation& animation);
+			public:
 
-			~AnimationLOADER();
-		};
+				AnimationLOADER(aiAnimation& animation);
+
+				~AnimationLOADER();
+			};
+
+		}
 
 	}
-
 }
-

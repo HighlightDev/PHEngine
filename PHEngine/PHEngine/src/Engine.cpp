@@ -10,6 +10,8 @@
 #include "Core/ResourceManagerCore/Pool/PoolBase.h"
 #include "Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h"
 #include "Core/GraphicsCore/Mesh/Skin.h"
+#include "Core/GraphicsCore/Texture/Texture2d.h"
+#include "Core/GraphicsCore/Texture/TextureMipMapState.h"
 
 #include <glm/vec2.hpp>
 
@@ -39,6 +41,13 @@ Engine::Engine()
 	Resources::PoolBase<Graphics::Mesh::Skin, std::string, Resources::MeshAllocationPolicy> pool;
 	std::string pathToFile = Common::FolderManager::GetInstance()->GetModelPath() + "playerCube.obj";
 	std::shared_ptr<Graphics::Mesh::Skin> skin = pool.GetOrAllocateResource(pathToFile);
+
+	pool.TryToFreeMemory(skin);
+
+	std::string pathToTexture = Common::FolderManager::GetInstance()->GetModelPath() + "playerCube.obj";
+	
+	Graphics::Texture::TextureMipMap mipMap;
+	Graphics::Texture::Texture2d* tex = new Graphics::Texture::Texture2d(pathToTexture, mipMap);
 }
 
 
