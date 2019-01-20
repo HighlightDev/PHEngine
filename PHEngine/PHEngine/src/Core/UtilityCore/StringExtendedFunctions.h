@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace EngineUtility
 {
@@ -15,4 +16,5 @@ namespace EngineUtility
 
 	std::string TrimEnd(std::string& source);
 
+	std::vector<std::string> Split(std::string& source, char splitChar);
 }

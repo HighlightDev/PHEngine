@@ -26,15 +26,18 @@ namespace Graphics
 
 		void IndexBufferObject::BindIndexBuffer()
 		{
-			glBindBuffer(m_bufferTarget, m_descriptor);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_descriptor);
 		}
 
 		void IndexBufferObject::SendDataToGPU()
 		{
+			GenIndexBuffer();
 			BindIndexBuffer();
 			size_t bufferSize = sizeof(size_t) * GetTotalLengthOfData();
+
 			glBufferData(m_bufferTarget, bufferSize, m_data->data(), GL_STATIC_DRAW);
 
+			// If data on CPU is unnecessary
 			if (m_dataCarryFlag == DataCarryFlag::Invalidate)
 			{
 				m_data.~shared_ptr();

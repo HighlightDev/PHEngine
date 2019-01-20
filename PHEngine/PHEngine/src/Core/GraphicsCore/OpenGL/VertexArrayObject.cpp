@@ -20,7 +20,7 @@ namespace Graphics
 			return m_ibo != nullptr;
 		}
 
-		std::vector<std::unique_ptr<VertexBufferObjectBase>>& VertexArrayObject::GetVertexBufferArray()
+		std::vector<std::unique_ptr<VertexBufferObjectBase>>& VertexArrayObject::GetVertexBufferObjects()
 		{
 			return m_vbos;
 		}
@@ -61,14 +61,13 @@ namespace Graphics
 				(*it)->SendDataToGPU();
 			}
 			glBindVertexArray(0);
-			IndexBufferObject::UnbindIndexBuffer();
 			DisableVertexAttribArrays();
 		}
 
 		void VertexArrayObject::DisableVertexAttribArrays()
 		{
-			VertexBufferObjectBase::UnbindAttribBuffer();
-
+			IndexBufferObject::UnbindIndexBuffer();
+			VertexBufferObjectBase::UnbindVBO();
 			for (auto it = m_vbos.begin(); it != m_vbos.end(); ++it)
 			{
 				glDisableVertexAttribArray((*it)->GetVertexAttribIndex());

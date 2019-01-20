@@ -10,6 +10,7 @@
 #include "Core/CommonCore/FolderManager.h"
 #include "Core/ResourceManagerCore/Pool/PoolBase.h"
 #include "Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h"
+#include "Core/ResourceManagerCore/Policy/TextureAllocationPolicy.h"
 #include "Core/GraphicsCore/Mesh/Skin.h"
 #include "Core/GraphicsCore/Texture/Texture2d.h"
 #include "Core/GraphicsCore/Texture/TextureMipMapState.h"
@@ -18,7 +19,7 @@
 struct BasicShader : public Graphics::OpenGL::Shader
 {
 
-	Uniform m_viewMatrix, m_projectionMatrix, m_texture;
+	Uniform m_worldMatrix, m_viewMatrix, m_projectionMatrix, m_texture;
 
 	BasicShader() : Shader("TestShader", Common::FolderManager::GetInstance()->GetShadersPath() + "testVS.glsl",
 		Common::FolderManager::GetInstance()->GetShadersPath() + "testFS.glsl")
@@ -28,13 +29,15 @@ struct BasicShader : public Graphics::OpenGL::Shader
 
 	virtual void AccessAllUniformLocations()  override
 	{
+		m_worldMatrix = GetUniform("worldMatrix");
 		m_viewMatrix = GetUniform("viewMatrix");
 		m_projectionMatrix = GetUniform("projectionMatrix");
 		m_texture = GetUniform("albedo");
 	}
 
-	void SetTransformationMatrices(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
+	void SetTransformationMatrices(glm::mat4& worldMatrix, glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
 	{
+		m_worldMatrix.LoadUniform(worldMatrix);
 		m_viewMatrix.LoadUniform(viewMatrix);
 		m_projectionMatrix.LoadUniform(projectionMatrix);
 	}
@@ -52,23 +55,24 @@ struct BasicShader : public Graphics::OpenGL::Shader
 
 class Engine
 {
+	Resources::PoolBase<Graphics::Mesh::Skin, std::string, Resources::MeshAllocationPolicy> m_meshPool;
+	Resources::PoolBase<Graphics::Texture::ITexture, std::string, Resources::TextureAllocationPolicy> m_texturePool;
+
 	BasicShader m_shader;
-	glm::mat4 m_viewMatrix;
-	glm::mat4 projectionMatrix;
-	Resources::PoolBase<Graphics::Mesh::Skin, std::string, Resources::MeshAllocationPolicy> pool;
-	Graphics::Texture::Texture2d* m_texture;
+	std::shared_ptr<Graphics::Texture::ITexture> m_texture;
 	std::shared_ptr<Graphics::Mesh::Skin> m_skin;
 
-	float* vertices;
-
-	uint32_t vbo;
-
-	bool bPreconstructor = false;
+	glm::mat4 m_viewMatrix;
+	glm::mat4 projectionMatrix;
+	glm::mat4 worldMatrix;
+	float rotateAngle = 0.0f;
 
 public:
 	Engine();
 	~Engine();
 
 	void TickWindow();
+
+	void UpdateWorldMatrix();
 };
 

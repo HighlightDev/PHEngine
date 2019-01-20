@@ -14,7 +14,7 @@ namespace Graphics
 		{
 		protected:
 
-			int32_t m_texDescriptor;
+			uint32_t m_texDescriptor;
 
 		public:
 			ITexture();

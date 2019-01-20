@@ -25,19 +25,19 @@ namespace Graphics
 					m_glType == GL_UNSIGNED_BYTE ||
 					m_glType == GL_UNSIGNED_INT)
 				{
-					glVertexAttribIPointer(index, size, m_glType, stride, (void*)(pointer_offset));
+					glVertexAttribIPointer(index, size, m_glType, stride, 0);
 				}
 				else if (m_glType == GL_DOUBLE)
 				{
-					glVertexAttribLPointer(index, size, m_glType, stride, (void*)(pointer_offset));
+					glVertexAttribLPointer(index, size, m_glType, stride, 0);
 				}
 				else if (m_glType == GL_FLOAT)
 				{
-					glVertexAttribPointer(index, size, m_glType, normalized, stride, (void*)(pointer_offset));
+					glVertexAttribPointer(index, size, m_glType, normalized, stride, 0);
 				}
 			}
 
-			static size_t GetVectorElementByteSize()
+			static const size_t GetVectorElementByteSize()
 			{
 				return sizeof(DataType);
 			}
@@ -67,12 +67,15 @@ namespace Graphics
 				, m_vertexAttribIndex(vertexAttribIndex)
 				, m_dataCarryFlag(flag)
 			{
-				m_bufferTarget = bufferTarget;
-				GenBuffer();
 			}
 
 			virtual ~VertexBufferObject()
 			{
+			}
+
+			virtual void* GetData()
+			{
+				return &m_data;
 			}
 
 			std::shared_ptr<std::vector<DataType>> GetData() const
@@ -83,15 +86,12 @@ namespace Graphics
 			virtual void SendDataToGPU() override
 			{
 				const size_t data_size = GetVectorElementByteSize() * m_totalDataLength;
-
+				GenBuffer();
 				BindVBO();
-				std::vector<float> aasd;
 				
 				glBufferData(m_bufferTarget, data_size, m_data->data(), GL_STATIC_DRAW);
 				glEnableVertexAttribArray(m_vertexAttribIndex);
 				this->SetVertexAttribPointerWithSpecificParams();
-				glDisableVertexAttribArray(m_vertexAttribIndex);
-				VertexBufferObjectBase::UnbindAttribBuffer();
 
 				// If data on CPU is unnecessary
 				if (m_dataCarryFlag == DataCarryFlag::Invalidate)

@@ -17,13 +17,14 @@ namespace Graphics
 		private:
 
 			TexParams m_textureParams;
+			
 			ITextureMipMapState* m_mipmapState;
 
 		public:
 
-			Texture2d(std::string& pathToTex, ITextureMipMapState& mipmapState);
+			Texture2d(std::string& pathToTex, ITextureMipMapState* mipmapState);
 
-			Texture2d(int32_t texDescriptor, glm::ivec2 texBufferWH);
+			Texture2d(uint32_t texDescriptor, glm::ivec2 texBufferWH);
 
 			Texture2d(TexParams&& textureParameters);
 
@@ -31,38 +32,38 @@ namespace Graphics
 
 			void BindTexture(uint32_t textureSlot)
 			{
+				glActiveTexture(GL_TEXTURE0 + textureSlot);
 				glBindTexture(m_textureParams.TexTarget, m_texDescriptor);
 			}
 
 			void UnbindTexture(uint32_t textureSlot)
 			{
+				glActiveTexture(GL_TEXTURE0 + textureSlot);
 				glBindTexture(m_textureParams.TexTarget, 0);
 			}
 
-			void CleanUp()
-			{
-			}
+			void CleanUp();
 
-			uint32_t GetTextureDescriptor()
-			{
+			inline uint32_t GetTextureDescriptor() {
+
 				return m_texDescriptor;
 			}
 
-			glm::ivec2 GetTextureRezolution()
-			{
-				return glm::ivec2();
+			inline glm::ivec2 GetTextureRezolution() {
+
+				return glm::ivec2(m_textureParams.TexBufferWidth, m_textureParams.TexBufferHeight);
 			}
 
-			TexParams GetTextureParameters()
-			{
-				return TexParams();
+			inline TexParams GetTextureParameters() {
+
+				return m_textureParams;
 			}
 
 		private:
 
-			int32_t LoadTextureFromFile(std::string& pathToTex, int32_t texWrapMode = GL_REPEAT);
+			uint32_t LoadTextureFromFile(std::string& pathToTex, int32_t texWrapMode = GL_REPEAT);
 
-			int32_t CreateTexture(const void* pixelsData);
+			uint32_t CreateTexture(const void* pixelsData);
 		};
 
 	}

@@ -21,7 +21,7 @@ namespace Graphics
 
 			void BindVBO();
 
-			static void UnbindAttribBuffer();
+			static void UnbindVBO();
 
 			virtual void SendDataToGPU() = 0;
 
@@ -34,6 +34,8 @@ namespace Graphics
 			virtual size_t GetVertexAttribIndex() const = 0;
 
 			virtual void CleanUp() = 0;
+
+			virtual void* GetData();
 		};
 	}
 }

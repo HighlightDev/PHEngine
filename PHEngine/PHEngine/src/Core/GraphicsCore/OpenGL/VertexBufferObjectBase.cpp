@@ -5,8 +5,8 @@ namespace Graphics
 	namespace OpenGL
 	{
 		VertexBufferObjectBase::VertexBufferObjectBase(int32_t bufferTarget)
+			: m_bufferTarget(bufferTarget)
 		{
-			m_bufferTarget = bufferTarget;
 		}
 
 		VertexBufferObjectBase::~VertexBufferObjectBase()
@@ -23,9 +23,14 @@ namespace Graphics
 			glBindBuffer(m_bufferTarget, m_descriptor);
 		}
 
-		void VertexBufferObjectBase::UnbindAttribBuffer()
+		void VertexBufferObjectBase::UnbindVBO()
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+
+		void* VertexBufferObjectBase::GetData()
+		{
+			return nullptr;
 		}
 	}
 }

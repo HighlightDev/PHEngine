@@ -2,32 +2,33 @@
 
 #include <algorithm>
 #include <cctype>
+#include <sstream>
 
 namespace EngineUtility
 {
 
-	bool StartsWith(std::string& source, const std::string& lookfor)
+	bool StartsWith(std::string& sourceStr, const std::string& lookfor)
 	{
-		return source.find(lookfor) == 0;
+		return sourceStr.find(lookfor) == 0;
 	}
 
-	size_t IndexOf(std::string& source, const std::string& lookfor, size_t offset)
+	size_t IndexOf(std::string& sourceStr, const std::string& lookfor, size_t offset)
 	{
 		size_t result = std::string::npos;
-		typename std::string::size_type location = source.find(lookfor, offset);
+		typename std::string::size_type location = sourceStr.find(lookfor, offset);
 		if (location != std::string::npos)
 			result = location;
 
 		return result;
 	}
 
-	size_t LastIndexOf(std::string& source, const std::string& lookfor, size_t offset)
+	size_t LastIndexOf(std::string& sourceStr, const std::string& lookfor, size_t offset)
 	{
 		size_t index = std::string::npos;
 		size_t new_offset = 0;
 		do
 		{
-			new_offset = IndexOf(source, lookfor, new_offset);
+			new_offset = IndexOf(sourceStr, lookfor, new_offset);
 			if (new_offset != std::string::npos)
 			{
 				index = new_offset;
@@ -65,6 +66,19 @@ namespace EngineUtility
 
 		trim(str);
 		return str;
+	}
+
+	std::vector<std::string> Split(std::string& source, char splitChar)
+	{
+		std::stringstream test(source);
+		std::string segment;
+		std::vector<std::string> seglist;
+
+		while (std::getline(test, segment, splitChar))
+		{
+			seglist.push_back(segment);
+		}
+		return seglist;
 	}
 
 }

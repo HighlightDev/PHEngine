@@ -557,6 +557,7 @@
     <ClInclude Include="src\Core\GraphicsCore\Texture\TexParams.h" />
     <ClInclude Include="src\Core\GraphicsCore\Texture\Texture2d.h" />
     <ClInclude Include="src\Core\GraphicsCore\Texture\TextureMipMapState.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Policy\TextureAllocationPolicy.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.cpp" />
@@ -589,6 +590,7 @@
     <ClCompile Include="src\Core\GraphicsCore\Texture\TexParams.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Texture\TextureMipMapState.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Texture\Texture2d.cpp" />
+    <ClCompile Include="src\Core\ResourceManagerCore\Policy\TextureAllocationPolicy.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

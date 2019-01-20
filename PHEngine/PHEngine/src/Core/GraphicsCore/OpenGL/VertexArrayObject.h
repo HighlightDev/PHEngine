@@ -47,7 +47,7 @@ namespace Graphics
 
 			bool HasIBO() const;
 
-			std::vector<std::unique_ptr<VertexBufferObjectBase>>& GetVertexBufferArray();
+			std::vector<std::unique_ptr<VertexBufferObjectBase>>& GetVertexBufferObjects();
 
 			void GenVAO();
 
