@@ -3,6 +3,7 @@
 #include <stb/stb_image.h>
 #include <stdint.h>
 #include <string>
+#include "Core/GraphicsCore/Texture/TexParams.h"
 
 namespace Io
 {
@@ -27,7 +28,7 @@ namespace Io
 					return *m_instance;
 				}
 
-				uint8_t* LoadTextureFromFile(std::string& pathToFile);
+				uint8_t* LoadTextureFromFile(std::string& pathToFile, Graphics::Texture::TexParams& out_params);
 
 				~StbLoader();
 			};

@@ -10,6 +10,8 @@ namespace Graphics
 			: VertexBufferObjectBase(GL_ELEMENT_ARRAY_BUFFER)
 			, m_data(data)
 			, m_dataCarryFlag(dataCarryFlag)
+			, m_countOfIndices(m_data->size())
+			, m_countOfTotalLengthOfData(m_countOfIndices)
 		{
 		}
 
@@ -52,7 +54,7 @@ namespace Graphics
 
 		size_t IndexBufferObject::GetCountOfIndices() const
 		{
-			return m_data->size();
+			return m_countOfIndices;
 		}
 
 		size_t IndexBufferObject::GetVectorSize() const
@@ -62,7 +64,7 @@ namespace Graphics
 
 		size_t IndexBufferObject::GetTotalLengthOfData() const
 		{
-			return m_data->size();
+			return m_countOfTotalLengthOfData;
 		}
 
 		size_t IndexBufferObject::GetVertexAttribIndex() const 

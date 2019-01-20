@@ -31,10 +31,12 @@ namespace Graphics
 
 			void BindTexture(uint32_t textureSlot)
 			{
+				glBindTexture(m_textureParams.TexTarget, m_texDescriptor);
 			}
 
 			void UnbindTexture(uint32_t textureSlot)
 			{
+				glBindTexture(m_textureParams.TexTarget, 0);
 			}
 
 			void CleanUp()
@@ -43,7 +45,7 @@ namespace Graphics
 
 			uint32_t GetTextureDescriptor()
 			{
-				return 0;
+				return m_texDescriptor;
 			}
 
 			glm::ivec2 GetTextureRezolution()
@@ -60,7 +62,7 @@ namespace Graphics
 
 			int32_t LoadTextureFromFile(std::string& pathToTex, int32_t texWrapMode = GL_REPEAT);
 
-			int32_t CreateTexture(int32_t format, const void* pixelsData, int32_t width, int32_t height);
+			int32_t CreateTexture(const void* pixelsData);
 		};
 
 	}

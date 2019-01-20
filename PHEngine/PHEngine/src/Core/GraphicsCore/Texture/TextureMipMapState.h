@@ -12,7 +12,10 @@ namespace Graphics
 
 		public:
 			ITextureMipMapState();
+
 			virtual ~ITextureMipMapState();
+
+			virtual void ExecuteTextureSampleFilteringInstructions() = 0;
 		};
 
 		/************************************************************************/
@@ -26,6 +29,8 @@ namespace Graphics
 			TextureMipMap();
 
 			~TextureMipMap();
+
+			virtual void ExecuteTextureSampleFilteringInstructions() override;
 		};
 
 		/************************************************************************/
@@ -33,11 +38,22 @@ namespace Graphics
 		/************************************************************************/
 		class TextureAnisotropy : public ITextureMipMapState
 		{
+			float m_anisitropyLvl;
+			float m_preferableAnisotropyLvl;
+
+			bool bAnisotropyLvlChecked;
 
 		public :
-			TextureAnisotropy();
+
+			TextureAnisotropy(float preferableAnisotropyLvl);
 
 			~TextureAnisotropy();
+
+			virtual void ExecuteTextureSampleFilteringInstructions() override;
+
+		private:
+
+			float GetSupportedAnisotropyLvl();
 		};
 
 	}

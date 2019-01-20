@@ -7,11 +7,13 @@ namespace Graphics
 {
 	namespace OpenGL
 	{
+		Uniform::Uniform() {}
+
 		Uniform::Uniform(int32_t programDescriptor, std::string&& uniformName)
 		{
 			uniformLocation = glGetUniformLocation(programDescriptor, uniformName.c_str());
-			if (uniformLocation < 0)
-				throw new std::invalid_argument(std::string("Could not bind uniform " + uniformName));
+		/*	if (uniformLocation < 0)
+				throw new std::invalid_argument(std::string("Could not bind uniform " + uniformName));*/
 		}
 
 		Uniform::~Uniform()

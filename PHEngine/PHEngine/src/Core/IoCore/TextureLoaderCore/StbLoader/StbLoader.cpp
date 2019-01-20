@@ -1,3 +1,4 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "StbLoader.h"
 
 namespace Io
@@ -18,14 +19,20 @@ namespace Io
 				delete m_instance;
 				m_instance = nullptr;
 			}
-#define STB_IMAGE_IMPLEMENTATION 1
 
-			uint8_t* StbLoader::LoadTextureFromFile(std::string& pathToFile)
+			uint8_t* StbLoader::LoadTextureFromFile(std::string& pathToFile, Graphics::Texture::TexParams& out_params)
 			{
-				//char const *filename, int *x, int *y, int *channels_in_file, int desired_channels
 				int32_t width, height, components;
 
 				uint8_t* texData = stbi_load(pathToFile.c_str(), &width, &height, &components, STBI_rgb_alpha);
+
+				out_params.TexBufferWidth = width;
+				out_params.TexBufferHeight = height;
+
+				if (components == 3)
+					out_params.TexPixelType = GL_RGB;
+				else if (components == 4)
+					out_params.TexPixelFormat = GL_RGBA;
 
 				return texData;
 			}

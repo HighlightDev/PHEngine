@@ -38,12 +38,12 @@ namespace Graphics
 		{
 			std::string absolutePathToTex = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(pathToTex));
 
-			uint8_t* data = Io::Images::Stb::StbLoader::GetInstance().LoadTextureFromFile(absolutePathToTex);
+			uint8_t* data = Io::Images::Stb::StbLoader::GetInstance().LoadTextureFromFile(absolutePathToTex, m_textureParams);
 
-			return CreateTexture(0, nullptr, 100, 100);
+			return CreateTexture(data);
 		}
 
-		int32_t Texture2d::CreateTexture(int32_t format, const void* pixelsData, int32_t width, int32_t height) 
+		int32_t Texture2d::CreateTexture(const void* pixelsData)
 		{
 			uint32_t texObject = -1;
 			int32_t& textureTarget = m_textureParams.TexTarget;
@@ -58,31 +58,16 @@ namespace Graphics
 			glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, m_textureParams.TexWrapMode);
 			glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, m_textureParams.TexMagFilter);
 			if (!m_mipmapState)
+			{
 				glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, m_textureParams.TexMinFilter);
+			}
 			else
 			{
-				//m_mipmapState;
-				//if (CheckForAnisotropicTextureFiltering())
-				//{
-				//	GL.TexParameter(TextureTarget.Texture2D, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt,
-				//		(anisotropyLevel == -1.0f) ? MaxAnisotropy : (anisotropyLevel >= MaxAnisotropy) ? MaxAnisotropy : (anisotropyLevel < 0.0f) ? 0.0f : anisotropyLevel);
-				//}
-				//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (Int32)filterType);
-				//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1); // 1 stands for TRUE statement
-				//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureLodBias, -0.4f); // might need to use variable to change this value
+				m_mipmapState->ExecuteTextureSampleFilteringInstructions();
 			}
 			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-			switch (format)
-			{
-			case 24:
-				glTexImage2D(textureTarget, 0, GL_RGB, width, height, 0, m_textureParams.TexPixelFormat, GL_RGB, pixelsData);
-				break;
-
-			case 32:
-				glTexImage2D(textureTarget, 0, GL_RGBA, width, height, 0, m_textureParams.TexPixelFormat, GL_RGBA, pixelsData);
-				break;
-			}
+			glTexImage2D(textureTarget, 0, m_textureParams.TexPixelInternalFormat, m_textureParams.TexBufferWidth, m_textureParams.TexBufferHeight, 0, m_textureParams.TexPixelFormat, m_textureParams.TexPixelFormat, pixelsData);
 
 			return texObject;
 		}

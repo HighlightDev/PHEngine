@@ -11,7 +11,6 @@ namespace Graphics
 			GenVAO();
 		}
 
-
 		VertexArrayObject::~VertexArrayObject()
 		{
 		}

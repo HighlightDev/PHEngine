@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <string>
-#include <glm\vec2.hpp>
+#include <glm\vec2.hpp> 
 #include <glm\vec3.hpp>
 #include <glm\vec4.hpp>
 #include <glm\mat2x2.hpp>
@@ -19,6 +19,9 @@ namespace Graphics
 			int32_t uniformLocation;
 
 		public:
+
+			Uniform();
+
 			explicit Uniform(int32_t programDescriptor, std::string&& uniformName);
 
 			~Uniform();
