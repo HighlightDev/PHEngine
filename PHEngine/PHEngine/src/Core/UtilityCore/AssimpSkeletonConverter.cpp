@@ -6,7 +6,7 @@ namespace EngineUtility
 
 	std::unique_ptr<AssimpSkeletonConverter> AssimpSkeletonConverter::m_instance;
 
-	glm::mat4&& AssimpSkeletonConverter::ConvertAssimpMatrix4x4ToOpenTKMatrix4(aiMatrix4x4& srcMatrix)
+	glm::mat4 AssimpSkeletonConverter::ConvertAssimpMatrix4x4ToOpenTKMatrix4(aiMatrix4x4& srcMatrix)
 	{
 		glm::mat4 dstMatrix(
 			srcMatrix.a1, srcMatrix.b1, srcMatrix.c1, srcMatrix.d1,
@@ -14,7 +14,7 @@ namespace EngineUtility
 			srcMatrix.a3, srcMatrix.b3, srcMatrix.c3, srcMatrix.d3,
 			srcMatrix.a4, srcMatrix.b4, srcMatrix.c4, srcMatrix.d4);
 
-		return std::move(dstMatrix);
+		return dstMatrix;
 	}
 
 	void AssimpSkeletonConverter::IterateBoneTree(Bone& dstParentBone, Io::MeshLoader::Assimp::SkeletonBoneLOADER* srcParentNode)
