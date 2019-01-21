@@ -7,13 +7,14 @@
 
 #include "Core/IoCore/TextureLoaderCore/StbLoader/StbLoader.h"
 #include "Core/UtilityCore/PlatformDependentFunctions.h"
+#include "Core/UtilityCore/EngineMath.h"
 #include "Core/GraphicsCore/Texture/TexParams.h"
-
-#define PI 3.14f
-#define DEG_TO_RAD(X) (X * (PI / 180.0f))
+#include "Core/GameCore/Components/SkyboxComponent.h"
 
 using namespace Graphics::Texture;
 using namespace Common;
+using namespace EngineUtility;
+using namespace Game::Components;
 
 Engine::Engine()
 {
@@ -32,12 +33,55 @@ Engine::Engine()
 	// RESOURCES
 	{
 		// MESH
-		std::string pathToFile = FolderManager::GetInstance()->GetModelPath() + "playerCube.obj";
+		std::string pathToFile = FolderManager::GetInstance()->GetModelPath() + "City_House_2_BI.obj";
 		m_skin = m_meshPool.GetOrAllocateResource(pathToFile);
 		// TEXTURE
 		std::string pathToTexture = FolderManager::GetInstance()->GetLandscapeTexturePath() + "b.png";
 		m_texture = m_texturePool.GetOrAllocateResource(pathToTexture);
 	}
+
+	float SKYBOX_SIZE = 50.0f;
+
+	std::vector<float> vertices = { -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE ,
+				 SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
+				 -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE ,
+				 -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE ,
+				 SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
+				 -SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
+				 -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE ,
+				 SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE ,
+				 -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
+				 SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE };
+
+	auto vertPtr = std::make_shared<std::vector<float>>(vertices);
+
+	std::unique_ptr<VertexArrayObject> vao = std::make_unique<VertexArrayObject>();
+	VertexBufferObjectBase* vbo = new VertexBufferObject<float, 3, GL_FLOAT>(vertPtr, GL_ARRAY_BUFFER, 0, DataCarryFlag::Invalidate);
+	vao->AddVBO(std::unique_ptr<VertexBufferObjectBase>(vbo));
+
+	vao->BindBuffersToVao();
+
+	auto skin = std::make_shared<Skin>(std::move(vao));
+
+	std::shared_ptr<SkyboxShader> skyShader = std::make_shared<SkyboxShader>(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl",
+		FolderManager::GetInstance()->GetShadersPath() + "tSkyboxFS.glsl");
+
+
+	StringStreamWrapper::ToString(FolderManager::GetInstance()->GetCubemapTexturePath(),"Day/" ,"right.bmp", ",",
+		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "left.bmp", ",",
+		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "top.bmp", ",",
+		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "bottom.bmp", ",",
+		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "back.bmp", ",",
+		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "front.bmp");
+
+	auto dTexPath = StringStreamWrapper::FlushString();
+	auto dTex = m_texturePool.GetOrAllocateResource(dTexPath);
+	auto nTex = std::shared_ptr<ITexture>();
+	std::shared_ptr<Component> skyboxComponent = std::make_shared<SkyboxComponent>(skin, skyShader, dTex, nTex , 0.0f);
+
+	Actor skybox;
+	skybox.AddComponent(skyboxComponent);
+	m_allActors.emplace_back(std::move(skybox));
 }
 
 Engine::~Engine()
@@ -55,7 +99,7 @@ void Engine::UpdateWorldMatrix()
 	worldMatrix = glm::rotate(worldMatrix, angleRad, glm::vec3(0, 0, 1));
 	worldMatrix = glm::translate(worldMatrix, glm::vec3(0));
 
-	rotateAngle += 0.05f;
+	rotateAngle += 0.02f;
 	if (rotateAngle > 360.0f)
 	{
 		rotateAngle -= 360.0f;
@@ -77,5 +121,10 @@ void Engine::TickWindow()
 	m_shader.SetTransformationMatrices(worldMatrix, m_viewMatrix, projectionMatrix);
 	m_skin->GetBuffer()->RenderVAO(GL_TRIANGLES);
 	m_shader.StopShader();
+
+	for (auto it = m_allActors.begin(); it != m_allActors.end(); ++it)
+	{
+		it->Render(m_viewMatrix, projectionMatrix, 0.0f);
+	}
 
 }

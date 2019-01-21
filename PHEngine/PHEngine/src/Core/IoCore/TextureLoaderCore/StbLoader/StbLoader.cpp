@@ -53,7 +53,7 @@ namespace Io
 			{
 				if (m_lastAllocatedMemory)
 				{
-					delete m_lastAllocatedMemory;
+					stbi_image_free(m_lastAllocatedMemory);
 					m_lastAllocatedMemory = nullptr;
 				}
 			}

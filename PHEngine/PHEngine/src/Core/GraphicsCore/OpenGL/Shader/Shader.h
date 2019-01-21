@@ -31,10 +31,16 @@ namespace Graphics
 			int32_t m_fragmentShaderID;
 			int32_t m_geometryShaderID;
 			uint32_t m_shaderProgramID;
-			bool m_shaderCompiledSuccessfully;
+			
 			std::string m_shaderName;
 
 			std::vector<ShaderPredefine> m_defineParameters;
+
+		protected:
+
+			bool m_shaderCompiledSuccessfully;
+
+		private:
 
 			bool LoadSingleShaderSource(int32_t shaderId, std::string& shaderPath);
 

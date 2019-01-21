@@ -6,7 +6,7 @@
 #include "Core/GraphicsCore/OpenGL/VertexArrayObject.h"
 #include "Core/GraphicsCore/OpenGL/VertexBufferObject.h"
 #include "Core/GraphicsCore/OpenGL/DataCarryFlag.h"
-#include "Core/GraphicsCore/OpenGL/Shader/Shader.h"
+#include "Core/GraphicsCore/OpenGL/Shader/ShaderBase.h"
 #include "Core/CommonCore/FolderManager.h"
 #include "Core/ResourceManagerCore/Pool/PoolBase.h"
 #include "Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h"
@@ -14,14 +14,17 @@
 #include "Core/GraphicsCore/Mesh/Skin.h"
 #include "Core/GraphicsCore/Texture/Texture2d.h"
 #include "Core/GraphicsCore/Texture/TextureMipMapState.h"
+#include "Core/GameCore/Actor.h"
 
+using namespace Game;
+using namespace Graphics::OpenGL;
 
-struct BasicShader : public Graphics::OpenGL::Shader
+struct BasicShader : public ShaderBase
 {
 
 	Uniform m_worldMatrix, m_viewMatrix, m_projectionMatrix, m_texture;
 
-	BasicShader() : Shader("TestShader", Common::FolderManager::GetInstance()->GetShadersPath() + "testVS.glsl",
+	BasicShader() : ShaderBase("TestShader", Common::FolderManager::GetInstance()->GetShadersPath() + "testVS.glsl",
 		Common::FolderManager::GetInstance()->GetShadersPath() + "testFS.glsl")
 	{
 		Init();
@@ -66,6 +69,8 @@ class Engine
 	glm::mat4 projectionMatrix;
 	glm::mat4 worldMatrix;
 	float rotateAngle = 0.0f;
+
+	std::vector<Actor> m_allActors;
 
 public:
 	Engine();

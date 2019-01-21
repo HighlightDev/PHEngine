@@ -279,6 +279,14 @@
     <None Include="res\shaders\testVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\SkyboxShader.h" />
+    <ClInclude Include="src\Core\GameCore\Components\SkyboxComponent.h" />
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderBase.h" />
+    <ClInclude Include="src\Core\GameCore\Components\SceneComponent.h" />
+    <ClInclude Include="src\Core\GameCore\Components\Component.h" />
+    <ClInclude Include="src\Core\GameCore\Actor.h" />
+    <ClInclude Include="src\Core\GameCore\Components\ComponentType.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Texture\CubemapTexture.h" />
     <ClInclude Include="src\Core\GraphicsCore\Texture\ITexture.h" />
     <ClInclude Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.h" />
     <ClInclude Include="src\Core\GraphicsCore\Mesh\Skin.h" />
@@ -542,6 +550,7 @@
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\DataCarryFlag.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderType.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderPredefineUtility.h" />
+    <ClInclude Include="src\Core\UtilityCore\EngineMath.h" />
     <ClInclude Include="src\Core\UtilityCore\PlatformDependentFunctions.h" />
     <ClInclude Include="src\Core\UtilityCore\StringExtendedFunctions.h" />
     <ClInclude Include="src\Core\UtilityCore\StringStreamWrapper.h" />
@@ -560,6 +569,13 @@
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\TextureAllocationPolicy.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\SkyboxShader.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\SkyboxComponent.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\SceneComponent.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\Component.cpp" />
+    <ClCompile Include="src\Core\GameCore\Actor.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderBase.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Texture\CubemapTexture.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Mesh\AnimatedSkin.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Mesh\Skin.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Animation\Bone.cpp" />
@@ -577,6 +593,7 @@
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderPredefine.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\Shader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\IndexBufferObject.cpp" />
+    <ClCompile Include="src\Core\UtilityCore\EngineMath.cpp" />
     <ClCompile Include="src\Core\UtilityCore\PlatformDependentFunctions.cpp" />
     <ClCompile Include="src\Core\UtilityCore\StringExtendedFunctions.cpp" />
     <ClCompile Include="src\Core\UtilityCore\StringStreamWrapper.cpp" />

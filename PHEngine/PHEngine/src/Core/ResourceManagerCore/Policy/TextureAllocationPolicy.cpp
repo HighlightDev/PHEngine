@@ -1,6 +1,7 @@
 #include "TextureAllocationPolicy.h"
 #include "Core/UtilityCore/StringExtendedFunctions.h"
 #include "Core/UtilityCore/PlatformDependentFunctions.h"
+#include "Core/GraphicsCore/Texture/CubemapTexture.h"
 
 namespace Resources
 {
@@ -17,19 +18,19 @@ namespace Resources
 	std::shared_ptr<ITexture> TextureAllocationPolicy::AllocateMemory(std::string& arg)
 	{
 		std::shared_ptr<ITexture> resultTexture;
-
-		std::string absolutePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(arg));
-		std::vector<std::string> pathToTexture = EngineUtility::Split(absolutePath, ',');
-		switch (pathToTexture.size())
+		std::vector<std::string> pathToTextures = EngineUtility::Split(arg, ',');
+		
+		switch (pathToTextures.size())
 		{
 		case 1:
 		{
-			resultTexture = std::shared_ptr<ITexture>(LoadTexture2dFromFile(pathToTexture[0]));
+			std::string absolutePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(arg));
+			resultTexture = std::shared_ptr<ITexture>(LoadTexture2dFromFile(absolutePath));
 			break;
 		}
 		case 6:
 		{
-			resultTexture = std::shared_ptr<ITexture>(LoadTextureCubeFromFile(pathToTexture));
+			resultTexture = std::shared_ptr<ITexture>(LoadTextureCubeFromFile(pathToTextures));
 			break;
 		}
 		default: throw  std::invalid_argument("Undefined count of files.");
@@ -49,8 +50,15 @@ namespace Resources
 
 	ITexture* TextureAllocationPolicy::LoadTextureCubeFromFile(std::vector<std::string>& pathToFiles)
 	{
-		return nullptr;
-		//return new CubemapTexture(pathToFiles);
+		std::vector<std::string> absolutePaths;
+
+		for (auto it = pathToFiles.begin(); it != pathToFiles.end(); ++it)
+		{
+			std::string absolutePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(*it));
+			absolutePaths.emplace_back(std::move(absolutePath));
+		}
+
+		return new CubemapTexture(absolutePaths);
 	}
 
 }

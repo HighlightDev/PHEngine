@@ -236,18 +236,18 @@ namespace Io
 					Verts->emplace_back(meshBeingCollected.mVertices[attribIndex].y);
 					Verts->emplace_back(meshBeingCollected.mVertices[attribIndex].z);
 
-					if (bHasNormals)
+					if (meshBeingCollected.HasNormals() && bHasNormals)
 					{
 						N_Verts->emplace_back(meshBeingCollected.mNormals[attribIndex].x);
 						N_Verts->emplace_back(meshBeingCollected.mNormals[attribIndex].y);
 						N_Verts->emplace_back(meshBeingCollected.mNormals[attribIndex].z);
 					}
-					if (bHasTextureCoordinates)
+					if (meshBeingCollected.HasTextureCoords(0) && bHasTextureCoordinates)
 					{
 						T_Verts->emplace_back(meshBeingCollected.mTextureCoords[0][attribIndex].x);
 						T_Verts->emplace_back(meshBeingCollected.mTextureCoords[0][attribIndex].y);
 					}
-					if (bHasTangentVertices)
+					if (meshBeingCollected.HasTangentsAndBitangents() && bHasTangentVertices)
 					{
 						Tangent_Verts->emplace_back(meshBeingCollected.mTangents[attribIndex].x);
 						Tangent_Verts->emplace_back(meshBeingCollected.mTangents[attribIndex].y);
