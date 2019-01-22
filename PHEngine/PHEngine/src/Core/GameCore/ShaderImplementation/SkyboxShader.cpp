@@ -8,6 +8,7 @@ namespace Game
 		SkyboxShader::SkyboxShader(std::string&& vsPath, std::string&& fsPath)
 			: ShaderBase("Skybox Shader", std::move(vsPath), std::move(fsPath))
 		{
+			Init();
 		}
 
 
@@ -30,6 +31,8 @@ namespace Game
 
 		void SkyboxShader::AccessAllUniformLocations()
 		{
+			ShaderBase::AccessAllUniformLocations();
+
 			u_worldMatrix = GetUniform("worldMatrix");
 			u_viewMatrix = GetUniform("viewMatrix");
 			u_projectionMatrix = GetUniform("projectionMatrix");

@@ -61,7 +61,7 @@ namespace Graphics
 			try
 			{
 				std::ifstream stream(shaderPath);
-				std::string line;
+				std::string line = std::string("");
 
 				while (stream.is_open() && getline(stream, line))
 				{
@@ -332,7 +332,7 @@ namespace Graphics
 
 				std::vector<char> message(log_length);
 				glGetShaderInfoLog(m_vertexShaderID, log_length, nullptr, message.data());
-				EngineUtility::StringStreamWrapper::ToString(std::string(message.begin(), message.end()), '\n');
+				EngineUtility::StringStreamWrapper::ToString("Vertex shader : ", std::string(message.begin(), message.end()), '\n');
 			}
 
 			/*Fragment shader log info*/
@@ -345,7 +345,7 @@ namespace Graphics
 
 				std::vector<char> message(log_length);
 				glGetShaderInfoLog(m_fragmentShaderID, log_length, nullptr, message.data());
-				EngineUtility::StringStreamWrapper::ToString(std::string(message.begin(), message.end()), '\n');
+				EngineUtility::StringStreamWrapper::ToString("Fragment shader : ", std::string(message.begin(), message.end()), '\n');
 			}
 
 
@@ -361,12 +361,12 @@ namespace Graphics
 
 					std::vector<char> message(log_length);
 					glGetShaderInfoLog(m_geometryShaderID, log_length, nullptr, message.data());
-					EngineUtility::StringStreamWrapper::ToString(std::string(message.begin(), message.end()), '\n');
+					EngineUtility::StringStreamWrapper::ToString("Geometry shader : ", std::string(message.begin(), message.end()), '\n');
 				}
 			}
 
 			if (vertex_compiled != GL_TRUE || fragment_compiled != GL_TRUE || (m_geometryShaderID != -1 && geometry_compiled != GL_TRUE))
-				compileLog += std::string("Unsolved mistakes at :" + m_shaderName + '\n') + EngineUtility::StringStreamWrapper::FlushString();
+				compileLog += std::string("Unresolved mistakes at :" + m_shaderName + '\n') + EngineUtility::StringStreamWrapper::FlushString();
 
 			return compileLog;
 		}

@@ -7,7 +7,6 @@ namespace Graphics
 		ShaderBase::ShaderBase(std::string&& shaderName, std::string&& vertexShaderFile, std::string&& fragmentShaderFile, std::string&& geometryShaderFile)
 			: Shader(std::move(shaderName), std::move(vertexShaderFile), std::move(fragmentShaderFile), std::move(geometryShaderFile))
 		{
-
 		}
 
 		void ShaderBase::SetShaderPredefine()

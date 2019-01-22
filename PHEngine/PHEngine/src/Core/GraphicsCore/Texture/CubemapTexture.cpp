@@ -22,8 +22,8 @@ namespace Graphics
 			uint32_t resultTextureDescriptor = -1;
 			size_t mutualPixelFormat = -1;
 
-			glGenTextures(1, &m_texDescriptor);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, m_texDescriptor);
+			glGenTextures(1, &resultTextureDescriptor);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, resultTextureDescriptor);
 
 			const size_t texturesCount = pathToTextures.size();
 			for (size_t texIndex = 0; texIndex < texturesCount; texIndex++)
@@ -47,12 +47,12 @@ namespace Graphics
 				glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texParam.TexMagFilter);
 				glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texParam.TexMinFilter);
 
-				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-
 				m_texParams.emplace_back(std::move(texParam));
 
 				StbLoader::GetInstance().ReleaseTextureMemory();
 			}
+
+			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
 			return resultTextureDescriptor;
 		}

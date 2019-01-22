@@ -28,7 +28,7 @@ namespace Game
 		{
 			if ((*it)->GetComponentType() == ComponentType::SCENE_COMPONENT)
 			{
-				std::shared_ptr<SceneComponent> sceneComponent = std::dynamic_pointer_cast<SceneComponent>(*it);
+				SceneComponent* sceneComponent = static_cast<SceneComponent*>((*it).get());
 				sceneComponent->Render(viewMatrix, projectionMatrix);
 			}
 		}

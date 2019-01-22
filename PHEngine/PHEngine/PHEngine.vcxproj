@@ -277,8 +277,14 @@
     <None Include="Dependencies\GLM\include\glm\gtx\wrap.inl" />
     <None Include="res\shaders\testFS.glsl" />
     <None Include="res\shaders\testVS.glsl" />
+    <None Include="res\shaders\tSkyboxFS.glsl" />
+    <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\ComponentData.h" />
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\SkyboxComponentData.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Pool\MeshPool.h" />
+    <ClInclude Include="src\Core\GameCore\Components\ComponentCreatorFactory.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\SkyboxShader.h" />
     <ClInclude Include="src\Core\GameCore\Components\SkyboxComponent.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderBase.h" />
@@ -567,8 +573,10 @@
     <ClInclude Include="src\Core\GraphicsCore\Texture\Texture2d.h" />
     <ClInclude Include="src\Core\GraphicsCore\Texture\TextureMipMapState.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\TextureAllocationPolicy.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Pool\TexturePool.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\ResourceManagerCore\Pool\MeshPool.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\SkyboxShader.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\SkyboxComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\SceneComponent.cpp" />
@@ -608,6 +616,7 @@
     <ClCompile Include="src\Core\GraphicsCore\Texture\TextureMipMapState.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Texture\Texture2d.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\TextureAllocationPolicy.cpp" />
+    <ClCompile Include="src\Core\ResourceManagerCore\Pool\TexturePool.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

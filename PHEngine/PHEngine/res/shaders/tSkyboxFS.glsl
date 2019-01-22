@@ -3,13 +3,12 @@
 layout (location = 0) out vec4 FragColor;
 
 uniform samplerCube dayTexture;
-uniform samplerCube nightTexture;
 
-in vec3 passTextureCoord;
+in vec3 texCoords;
 
 void main(void)
 {
-	vec4 texDayColour = texture(dayTexture, passTextureCoord);
+	vec4 texDayColour = texture(dayTexture, texCoords);
 
 	FragColor = texDayColour;
 }

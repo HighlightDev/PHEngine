@@ -8,6 +8,7 @@ namespace Game
 		{
 			SCENE_COMPONENT,
 			COLLISION_COMPONENT,
+			SKYBOX_COMPONENT,
 			UNDEFINED
 		};
 	}

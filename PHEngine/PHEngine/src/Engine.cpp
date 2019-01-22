@@ -10,6 +10,9 @@
 #include "Core/UtilityCore/EngineMath.h"
 #include "Core/GraphicsCore/Texture/TexParams.h"
 #include "Core/GameCore/Components/SkyboxComponent.h"
+#include "Core/GameCore/Components/ComponentCreatorFactory.h"
+#include "Core/ResourceManagerCore/Pool/MeshPool.h"
+#include "Core/ResourceManagerCore/Pool/TexturePool.h"
 
 using namespace Graphics::Texture;
 using namespace Common;
@@ -34,54 +37,35 @@ Engine::Engine()
 	{
 		// MESH
 		std::string pathToFile = FolderManager::GetInstance()->GetModelPath() + "City_House_2_BI.obj";
-		m_skin = m_meshPool.GetOrAllocateResource(pathToFile);
+		m_skin =  MeshPool::GetInstance()->GetOrAllocateResource(pathToFile);
 		// TEXTURE
-		std::string pathToTexture = FolderManager::GetInstance()->GetLandscapeTexturePath() + "b.png";
-		m_texture = m_texturePool.GetOrAllocateResource(pathToTexture);
+		std::string pathToTexture = FolderManager::GetInstance()->GetAlbedoTexturePath() + "city_house_2_Col.png";
+		m_texture = TexturePool::GetInstance()->GetOrAllocateResource(pathToTexture);
 	}
 
-	float SKYBOX_SIZE = 50.0f;
+	// SKYBOX
+	{
+		float SKYBOX_SIZE = 50.0f;
 
-	std::vector<float> vertices = { -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE ,
-				 SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
-				 -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE ,
-				 -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE ,
-				 SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
-				 -SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
-				 -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE ,
-				 SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE , -SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE ,
-				 -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE , -SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE ,
-				 SKYBOX_SIZE, -SKYBOX_SIZE, SKYBOX_SIZE };
+		StringStreamWrapper::ToString(
+			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "right.png", ",",
+			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "left.png", ",",
+			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "top.png", ",",
+			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "bottom.png", ",",
+			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "back.png", ",",
+			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "front.png");
 
-	auto vertPtr = std::make_shared<std::vector<float>>(vertices);
+		auto dTexPath = StringStreamWrapper::FlushString();
 
-	std::unique_ptr<VertexArrayObject> vao = std::make_unique<VertexArrayObject>();
-	VertexBufferObjectBase* vbo = new VertexBufferObject<float, 3, GL_FLOAT>(vertPtr, GL_ARRAY_BUFFER, 0, DataCarryFlag::Invalidate);
-	vao->AddVBO(std::unique_ptr<VertexBufferObjectBase>(vbo));
+		SkyboxComponentData mData(SKYBOX_SIZE, std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl"),
+			std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxFS.glsl"), std::move(dTexPath));
 
-	vao->BindBuffersToVao();
+		std::shared_ptr<Component> skyboxComp = ComponentCreatorFactory<SkyboxComponent>::CreateComponent(mData);
 
-	auto skin = std::make_shared<Skin>(std::move(vao));
-
-	std::shared_ptr<SkyboxShader> skyShader = std::make_shared<SkyboxShader>(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl",
-		FolderManager::GetInstance()->GetShadersPath() + "tSkyboxFS.glsl");
-
-
-	StringStreamWrapper::ToString(FolderManager::GetInstance()->GetCubemapTexturePath(),"Day/" ,"right.bmp", ",",
-		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "left.bmp", ",",
-		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "top.bmp", ",",
-		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "bottom.bmp", ",",
-		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "back.bmp", ",",
-		FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "front.bmp");
-
-	auto dTexPath = StringStreamWrapper::FlushString();
-	auto dTex = m_texturePool.GetOrAllocateResource(dTexPath);
-	auto nTex = std::shared_ptr<ITexture>();
-	std::shared_ptr<Component> skyboxComponent = std::make_shared<SkyboxComponent>(skin, skyShader, dTex, nTex , 0.0f);
-
-	Actor skybox;
-	skybox.AddComponent(skyboxComponent);
-	m_allActors.emplace_back(std::move(skybox));
+		Actor skyboxActor;
+		skyboxActor.AddComponent(skyboxComp);
+		m_allActors.emplace_back(std::move(skyboxActor));
+	}
 }
 
 Engine::~Engine()

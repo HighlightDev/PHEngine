@@ -58,9 +58,6 @@ struct BasicShader : public ShaderBase
 
 class Engine
 {
-	Resources::PoolBase<Graphics::Mesh::Skin, std::string, Resources::MeshAllocationPolicy> m_meshPool;
-	Resources::PoolBase<Graphics::Texture::ITexture, std::string, Resources::TextureAllocationPolicy> m_texturePool;
-
 	BasicShader m_shader;
 	std::shared_ptr<Graphics::Texture::ITexture> m_texture;
 	std::shared_ptr<Graphics::Mesh::Skin> m_skin;

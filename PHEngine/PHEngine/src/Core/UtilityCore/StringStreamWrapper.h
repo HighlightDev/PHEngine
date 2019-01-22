@@ -27,7 +27,7 @@ namespace EngineUtility
 		static std::string FlushString()
 		{
 			std::string result = std::move(m_stringStream.str());
-			m_stringStream.str(std::string());
+			m_stringStream = std::stringstream();
 			return result;
 		}
 	};

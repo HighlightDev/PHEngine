@@ -76,13 +76,13 @@ namespace Resources
 				blendIndicesVBO = new VertexBufferObject<int32_t, countOfBonesInfluencingOnVertex, GL_FLOAT>(blendIndices, GL_ARRAY_BUFFER, 7, DataCarryFlag::Invalidate);
 			}
 
-			vao->AddVBO(std::unique_ptr<VertexBufferObjectBase>(vertexVBO),
-				std::unique_ptr<VertexBufferObjectBase>(normalsVBO),
-				std::unique_ptr<VertexBufferObjectBase>(texCoordsVBO),
-				std::unique_ptr<VertexBufferObjectBase>(tangentsVBO),
-				std::unique_ptr<VertexBufferObjectBase>(bitangentsVBO),
-				std::unique_ptr<VertexBufferObjectBase>(blendWeightsVBO),
-				std::unique_ptr<VertexBufferObjectBase>(blendIndicesVBO));
+			vao->AddVBO(std::move(std::unique_ptr<VertexBufferObjectBase>(vertexVBO)),
+				std::move(std::unique_ptr<VertexBufferObjectBase>(normalsVBO)),
+				std::move(std::unique_ptr<VertexBufferObjectBase>(texCoordsVBO)),
+				std::move(std::unique_ptr<VertexBufferObjectBase>(tangentsVBO)),
+				std::move(std::unique_ptr<VertexBufferObjectBase>(bitangentsVBO)),
+				std::move(std::unique_ptr<VertexBufferObjectBase>(blendWeightsVBO)),
+				std::move(std::unique_ptr<VertexBufferObjectBase>(blendIndicesVBO)));
 
 			vao->AddIndexBuffer(std::unique_ptr<IndexBufferObject>(ibo));
 			vao->BindBuffersToVao();

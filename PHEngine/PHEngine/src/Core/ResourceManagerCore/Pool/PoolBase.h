@@ -81,10 +81,26 @@ namespace Resources
 
 		}
 
+		void CleanUp()
+		{
+			for (auto it = resourceMap.begin(); it != resourceMap.end(); ++it)
+			{
+				 auto key = it->first;
+				 policy_t::DeallocateMemory(resourceMap[key]);
+			}
+
+			resourceMap.clear();
+			referenceMap.clear();
+		}
+
 	public:
 
 		PoolBase() {}
-		~PoolBase() {}
+
+		virtual ~PoolBase() 
+		{
+			CleanUp();
+		}
 
 		int32_t GetReferenceCount(KeyType& key)
 		{
