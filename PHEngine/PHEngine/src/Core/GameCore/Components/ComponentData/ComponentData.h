@@ -5,14 +5,12 @@
 namespace Game
 {
 
-	namespace Components
+	struct ComponentData
 	{
-		struct ComponentData
-		{
 
-			ComponentData() { }
+		ComponentData() { }
 
-			virtual ComponentType GetType() = 0;
-		};
-	}
+		virtual ComponentType GetType() = 0;
+	};
+
 }

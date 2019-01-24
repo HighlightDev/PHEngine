@@ -1,23 +1,36 @@
 #include "SceneComponent.h"
 
+
 namespace Game
 {
-	namespace Components
+	SceneComponent::SceneComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
+		: Component()
+		, bTransformationDirty(false)
+		, m_translation(translation)
+		, m_rotation(rotation)
+		, m_scale(scale)
 	{
+	}
 
-		SceneComponent::SceneComponent(std::shared_ptr<Skin> skin, std::shared_ptr<ShaderBase> shader, std::shared_ptr<ITexture> albedoTex, std::shared_ptr<ITexture> normalMapTex,
-			std::shared_ptr<ITexture> specularMapTex)
-			: Component()
-			, m_skin(skin)
-			, m_shader(shader)
-			, m_albedoTex(albedoTex)
-			, m_normalMapTex(normalMapTex)
-			, m_specularTex(specularMapTex)
-		{
-		}
+	SceneComponent::~SceneComponent()
+	{
+	}
 
-		SceneComponent::~SceneComponent()
+	void SceneComponent::Tick(float deltaTime)
+	{
+		Component::Tick(deltaTime);
+
+		if (bTransformationDirty)
 		{
+			// Update transform matrix
+			bTransformationDirty = false;
 		}
 	}
+
+	void SceneComponent::UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix)
+	{
+		// Update current relative matrix
+		// and whole hierarchy
+	}
+
 }

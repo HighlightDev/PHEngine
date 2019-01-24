@@ -43,7 +43,6 @@ namespace Resources
 
 			MeshVertexData<countOfBonesInfluencingOnVertex>& meshData = loader.GetMeshData();
 
-			// explicit null assignment if there is no some of mesh data
 			std::shared_ptr<std::vector<float>> vertices = meshData.Verts;
 			std::shared_ptr<std::vector<float>> normals = meshData.N_Verts;
 			std::shared_ptr<std::vector<float>> texCoords = meshData.T_Verts;

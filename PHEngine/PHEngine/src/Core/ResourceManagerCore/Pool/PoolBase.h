@@ -18,6 +18,32 @@ namespace Resources
 		using policy_t = AllocationPolicyType;
 		using sharedValue_t = std::shared_ptr<ValueType>;
 
+	private:
+		
+		// META DATA
+
+		struct NullInnerType {};
+
+		template <typename T>
+		struct IfHasInnerType
+		{
+			static sharedValue_t Allocation(KeyType& key)
+			{
+				return policy_t::template AllocateMemory<T>(key);
+			}
+		};
+
+		template <>
+		struct IfHasInnerType<NullInnerType>
+		{
+			static sharedValue_t Allocation(KeyType& key)
+			{
+				return policy_t::AllocateMemory(key);
+			}
+		};
+
+		//META DATA
+
 	protected:
 
 		std::unordered_map<KeyType, sharedValue_t> resourceMap;
@@ -102,6 +128,25 @@ namespace Resources
 			CleanUp();
 		}
 
+		template <typename InnerAllocationType = NullInnerType>
+		sharedValue_t GetOrAllocateResource(KeyType& key)
+		{
+			sharedValue_t resource = GetResource(key);
+			if (!resource)
+			{
+				resource = IfHasInnerType<InnerAllocationType>::Allocation(key);
+				std::pair<KeyType, sharedValue_t> pair = std::make_pair(key, resource);
+				resourceMap.emplace(std::move(pair));
+			}
+
+			if (resource)
+			{
+				IncreaseRefCounter(key);
+			}
+
+			return resource;
+		}
+
 		int32_t GetReferenceCount(KeyType& key)
 		{
 			int32_t referenceCount = 0;
@@ -117,24 +162,6 @@ namespace Resources
 			int32_t resourceCount = resourceMap.size();
 
 			return resourceCount;
-		}
-
-		sharedValue_t GetOrAllocateResource(KeyType& key)
-		{
-			sharedValue_t resource = GetResource(key);
-			if (!resource)
-			{
-				resource = policy_t::AllocateMemory(key);
-				std::pair<KeyType, sharedValue_t> pair = std::make_pair(key, resource);
-				resourceMap.insert(pair);
-			}
-
-			if (resource)
-			{
-				IncreaseRefCounter(key);
-			}
-
-			return resource;
 		}
 
 		bool TryToFreeMemory(KeyType& key)

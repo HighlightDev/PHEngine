@@ -1,49 +1,73 @@
 #pragma once
 #include "Component.h"
-#include "Core/GraphicsCore/Mesh/Skin.h"
-#include "Core/GraphicsCore/OpenGL/Shader/ShaderBase.h"
-#include "Core/GraphicsCore/Texture/ITexture.h"
 
+#include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
-#include <memory>
-
-using namespace Graphics::Mesh;
-using namespace Graphics::Texture;
 
 namespace Game
 {
-	namespace Components
+	class SceneComponent : public Component
 	{
-		// Base class of all renderable components
-		class SceneComponent :
-			public Component
+	private:
+
+		bool bTransformationDirty;
+
+		glm::vec3 m_translation;
+		glm::vec3 m_rotation;
+		glm::vec3 m_scale;
+		// bound
+
+		glm::mat4 m_relativeMatrix;
+
+	public:
+
+		SceneComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale);
+
+		~SceneComponent();
+
+		virtual void Tick(float deltaTime) override;
+
+		virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix);
+
+		void SetTranslation(glm::vec3 translation)
 		{
-		protected:
+			m_translation = translation;
+			bTransformationDirty = true;
+		}
 
-			std::shared_ptr<Skin> m_skin;
+		void SetRotation(glm::vec3 rotation)
+		{
+			m_rotation = rotation;
+			bTransformationDirty = true;
+		}
 
-			std::shared_ptr<ShaderBase> m_shader;
+		void SetScale(glm::vec3 scale)
+		{
+			m_scale = scale;
+			bTransformationDirty = true;
+		}
 
-			std::shared_ptr<ITexture> m_albedoTex;
-			std::shared_ptr<ITexture> m_normalMapTex;
-			std::shared_ptr<ITexture> m_specularTex;
+		inline glm::vec3 GetTranslation()
+		{
+			return m_translation;
+		}
 
-		public:
+		inline glm::vec3 GetRotation()
+		{
+			return m_rotation;
+		}
 
-			SceneComponent(std::shared_ptr<Skin> skin, std::shared_ptr<ShaderBase> shader, std::shared_ptr<ITexture> albedoTex = std::shared_ptr<ITexture>(),
-				std::shared_ptr<ITexture> normalMapTex = std::shared_ptr<ITexture>(),
-				std::shared_ptr<ITexture> specularMapTex = std::shared_ptr<ITexture>());
+		inline glm::vec3 GetScale()
+		{
+			return m_scale;
+		}
 
-			virtual ~SceneComponent();
-
-			virtual ComponentType GetComponentType() override
-			{
-				return ComponentType::SCENE_COMPONENT;
-			}
-
-			virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) = 0;
-		};
-
-	}
+		inline 	glm::mat4 GetRelativeMatrix()
+		{
+			return m_relativeMatrix;
+		}
+	};
 }
+
+
 

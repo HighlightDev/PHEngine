@@ -13,31 +13,24 @@
 #include "Core/GameCore/Components/ComponentCreatorFactory.h"
 #include "Core/ResourceManagerCore/Pool/MeshPool.h"
 #include "Core/ResourceManagerCore/Pool/TexturePool.h"
+#include "Core/GameCore/GlobalProperties.h"
 
 using namespace Graphics::Texture;
 using namespace Common;
 using namespace EngineUtility;
-using namespace Game::Components;
+using namespace Game;
 
 Engine::Engine()
+	: camera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10))
 {
-	// MATRICES
-	{
-		glm::vec3 up = glm::vec3(0, 1, 0);
-		glm::vec3 eye = glm::vec3(0, 0, -10);
-		glm::vec3 center = glm::vec3(0, 0, 0);
-
-		m_viewMatrix = glm::lookAt(eye, center, up);
-
 		const float aspectRatio = 16.0f / 9.0f;
 		projectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
-	}
 
 	// RESOURCES
 	{
 		// MESH
 		std::string pathToFile = FolderManager::GetInstance()->GetModelPath() + "City_House_2_BI.obj";
-		m_skin =  MeshPool::GetInstance()->GetOrAllocateResource(pathToFile);
+		m_skin = MeshPool::GetInstance()->GetOrAllocateResource(pathToFile);
 		// TEXTURE
 		std::string pathToTexture = FolderManager::GetInstance()->GetAlbedoTexturePath() + "city_house_2_Col.png";
 		m_texture = TexturePool::GetInstance()->GetOrAllocateResource(pathToTexture);
@@ -54,7 +47,6 @@ Engine::Engine()
 			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "bottom.png", ",",
 			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "back.png", ",",
 			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "front.png");
-
 		auto dTexPath = StringStreamWrapper::FlushString();
 
 		SkyboxComponentData mData(SKYBOX_SIZE, std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl"),
@@ -62,7 +54,7 @@ Engine::Engine()
 
 		std::shared_ptr<Component> skyboxComp = ComponentCreatorFactory<SkyboxComponent>::CreateComponent(mData);
 
-		Actor skyboxActor;
+		Actor skyboxActor = Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
 		skyboxActor.AddComponent(skyboxComp);
 		m_allActors.emplace_back(std::move(skyboxActor));
 	}
@@ -88,6 +80,8 @@ void Engine::UpdateWorldMatrix()
 	{
 		rotateAngle -= 360.0f;
 	}
+
+	m_viewMatrix = camera.GetViewMatrix();
 }
 
 void Engine::TickWindow()
@@ -111,4 +105,9 @@ void Engine::TickWindow()
 		it->Render(m_viewMatrix, projectionMatrix, 0.0f);
 	}
 
+}
+
+void Engine::MouseMove()
+{
+	camera.Rotate();
 }

@@ -2,14 +2,12 @@
 
 namespace Game
 {
-	namespace Components
+	enum class ComponentType
 	{
-		enum class ComponentType
-		{
-			SCENE_COMPONENT,
-			COLLISION_COMPONENT,
-			SKYBOX_COMPONENT,
-			UNDEFINED
-		};
-	}
+		PRIMITIVE_COMPONENT,
+		SCENE_COMPONENT,
+		COLLISION_COMPONENT,
+		SKYBOX_COMPONENT,
+		COMPONENT
+	};
 }

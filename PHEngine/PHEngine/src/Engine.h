@@ -15,6 +15,7 @@
 #include "Core/GraphicsCore/Texture/Texture2d.h"
 #include "Core/GraphicsCore/Texture/TextureMipMapState.h"
 #include "Core/GameCore/Actor.h"
+#include "Core/GameCore/FirstPersonCamera.h"
 
 using namespace Game;
 using namespace Graphics::OpenGL;
@@ -58,6 +59,9 @@ struct BasicShader : public ShaderBase
 
 class Engine
 {
+
+	FirstPersonCamera camera;
+
 	BasicShader m_shader;
 	std::shared_ptr<Graphics::Texture::ITexture> m_texture;
 	std::shared_ptr<Graphics::Mesh::Skin> m_skin;
@@ -74,6 +78,8 @@ public:
 	~Engine();
 
 	void TickWindow();
+
+	void MouseMove();
 
 	void UpdateWorldMatrix();
 };

@@ -7,34 +7,31 @@
 
 namespace Game
 {
-	namespace Components
+	struct SkyboxComponentData : public ComponentData
 	{
-		struct SkyboxComponentData : public ComponentData
+		SkyboxComponentData(float skyboxSideSize, std::string&& vsPath,
+			std::string&& fsPath, std::string&& commaSeparatedPathToSixTexturesDay, std::string&& commaSeparatedPathToSixTexturesNight = "")
+
+			: ComponentData()
+			, m_skyboxSideSize(skyboxSideSize)
+			, m_vsShaderPath(std::move(vsPath))
+			, m_fsShaderPath(std::move(fsPath))
+			, m_commaSeparatedPathToSixTexturesDay(std::move(commaSeparatedPathToSixTexturesDay))
+			, m_commaSeparatedPathToSixTexturesNight(std::move(commaSeparatedPathToSixTexturesNight))
 		{
-			SkyboxComponentData(float skyboxSideSize, std::string&& vsPath,
-				std::string&& fsPath, std::string&& commaSeparatedPathToSixTexturesDay, std::string&& commaSeparatedPathToSixTexturesNight = "")
 
-				: ComponentData()
-				, m_skyboxSideSize(skyboxSideSize)
-				, m_vsShaderPath(std::move(vsPath))
-				, m_fsShaderPath(std::move(fsPath))
-				, m_commaSeparatedPathToSixTexturesDay(std::move(commaSeparatedPathToSixTexturesDay))
-				, m_commaSeparatedPathToSixTexturesNight(std::move(commaSeparatedPathToSixTexturesNight))
-			{
+		}
 
-			}
+		virtual ComponentType GetType() override {
 
-			virtual ComponentType GetType() override {
+			return ComponentType::SKYBOX_COMPONENT;
+		}
 
-				return ComponentType::SKYBOX_COMPONENT;
-			}
+		float m_skyboxSideSize;
+		std::string m_commaSeparatedPathToSixTexturesDay;
+		std::string m_commaSeparatedPathToSixTexturesNight;
+		std::string m_vsShaderPath;
+		std::string m_fsShaderPath;
+	};
 
-			float m_skyboxSideSize;
-			std::string m_commaSeparatedPathToSixTexturesDay;
-			std::string m_commaSeparatedPathToSixTexturesNight;
-			std::string m_vsShaderPath;
-			std::string m_fsShaderPath;
-		};
-
-	}
 }

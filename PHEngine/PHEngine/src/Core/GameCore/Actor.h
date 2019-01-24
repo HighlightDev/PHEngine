@@ -5,8 +5,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "Core/GameCore/Components/Component.h"
-
-using namespace Game::Components;
+#include "Core/GameCore/Components/SceneComponent.h"
 
 namespace Game
 {
@@ -15,12 +14,20 @@ namespace Game
 	{
 	private:
 
+		std::shared_ptr<Game::SceneComponent> m_rootComponent;
+
 	protected:
 
-		std::vector<std::shared_ptr<Component>> m_allComponents;
+		std::vector<std::shared_ptr<Actor>> m_children;
+
+		std::vector<std::shared_ptr<Game::Component>> m_allComponents;
+
+		std::shared_ptr<Actor> m_parent;
 
 	public:
-		Actor();
+
+		Actor(Game::SceneComponent* rootComponent);
+
 		virtual ~Actor();
 
 		// Tick is executed on game thread
@@ -29,9 +36,20 @@ namespace Game
 		// Render is executed on render thread
 		void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix, float deltaTime);
 
-		void AddComponent(std::shared_ptr<Component> component);
+		void AddComponent(std::shared_ptr<Game::Component> component);
 
-		void RemoveComponent(std::shared_ptr<Component> component);
+		void RemoveComponent(std::shared_ptr<Game::Component> component);
+
+		void SetParent(std::shared_ptr<Actor> actor);
+
+		void AttachActor(std::shared_ptr<Actor> actor);
+
+		void DetachActor(std::shared_ptr<Actor> actor);
+
+		inline std::shared_ptr<Game::SceneComponent>& GetRootComponent() {
+
+			return m_rootComponent;
+		}
 	};
 
 }

@@ -18,8 +18,7 @@ namespace Resources
 
 	public:
 
-		using tPoolType = PoolBase<ITexture, std::string, TextureAllocationPolicy>;
-		using tDataType = std::shared_ptr<ITexture>;
+		using poolType_t = PoolBase<ITexture, std::string, TextureAllocationPolicy>;
 
 		static std::unique_ptr<TexturePool>& GetInstance()
 		{

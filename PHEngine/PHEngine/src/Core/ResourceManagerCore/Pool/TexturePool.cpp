@@ -10,9 +10,7 @@ namespace Resources
 	{
 	}
 
-
 	TexturePool::~TexturePool()
 	{
 	}
-
 }

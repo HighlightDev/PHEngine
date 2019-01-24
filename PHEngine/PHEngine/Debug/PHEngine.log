@@ -1,2 +1,8 @@
 ﻿  Actor.cpp
+  Component.cpp
+  PrimitiveComponent.cpp
+  SceneComponent.cpp
+  SkyboxComponent.cpp
+  Engine.cpp
+  Generating Code...
   PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

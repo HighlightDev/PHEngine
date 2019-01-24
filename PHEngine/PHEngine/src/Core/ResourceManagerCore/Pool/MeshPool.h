@@ -17,7 +17,7 @@ namespace Resources
 
 	public:
 
-		using tPoolType = PoolBase<Skin, std::string, MeshAllocationPolicy>;
+		using poolType_t = PoolBase<Skin, std::string, MeshAllocationPolicy>;
 
 		static std::unique_ptr<MeshPool>& GetInstance()
 		{
