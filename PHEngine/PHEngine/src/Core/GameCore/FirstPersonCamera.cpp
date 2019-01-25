@@ -8,7 +8,6 @@ namespace Game
 		, m_firstPersonCameraPosition(camPos)
 		, m_cameraMoveSpeed(1.5f)
 	{
-		m_eyeSpaceForwardVector = m_localSpaceForwardVector = forwardVec;
 	}
 
 

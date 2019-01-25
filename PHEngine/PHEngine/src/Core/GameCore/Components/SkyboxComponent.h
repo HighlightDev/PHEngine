@@ -24,8 +24,11 @@ namespace Game
 
 		bool m_bPostConstructor;
 
-		float m_moveFactor;
 		// MistComponent
+
+	protected:
+
+		using Base = PrimitiveComponent;
 
 	public:
 
@@ -36,6 +39,11 @@ namespace Game
 		virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
 
 		virtual void Tick(float deltaTime) override;
+
+		virtual ComponentType GetComponentType() override
+		{
+			return ComponentType::SCENE_COMPONENT;
+		}
 
 		inline void SetRotateSpeed(float rotateSpeed)
 		{
@@ -49,9 +57,10 @@ namespace Game
 
 	private:
 
-		inline std::shared_ptr<SkyboxShader> CastToSkyboxShader()
+		inline SkyboxShader* GetSkyboxShader() const
 		{
-			return std::dynamic_pointer_cast<SkyboxShader>(m_shader);
+			SkyboxShader* shader = static_cast<SkyboxShader*>(m_shader.get());
+			return shader;
 		}
 
 		inline std::shared_ptr<ITexture> GetDayTexture()

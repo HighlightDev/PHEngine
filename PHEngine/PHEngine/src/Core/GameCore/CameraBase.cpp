@@ -15,6 +15,7 @@ namespace Game
 		, m_eyeSpaceForwardVector(std::move(glm::vec3(0, 0, 1)))
 		, m_rotationMatrix(std::move(glm::mat3(1)))
 	{
+		
 	}
 
 	CameraBase::~CameraBase()

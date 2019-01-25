@@ -281,6 +281,7 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\StaticMeshComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\SceneComponent.h" />
     <ClInclude Include="src\Core\GameCore\FirstPersonCamera.h" />
     <ClInclude Include="src\Core\GameCore\CameraBase.h" />
@@ -581,6 +582,8 @@
     <ClInclude Include="src\Core\GraphicsCore\Texture\TextureMipMapState.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\TextureAllocationPolicy.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Pool\TexturePool.h" />
+    <ClInclude Include="src\Core\GameCore\Components\StaticMeshComponent.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\GameCore\Components\SceneComponent.cpp" />
@@ -629,6 +632,8 @@
     <ClCompile Include="src\Core\GraphicsCore\Texture\Texture2d.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\TextureAllocationPolicy.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Pool\TexturePool.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\StaticMeshComponent.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

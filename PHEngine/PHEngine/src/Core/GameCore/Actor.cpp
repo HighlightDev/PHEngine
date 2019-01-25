@@ -14,43 +14,93 @@ namespace Game
 	{
 	}
 
-	void Actor::Tick(float deltaTime)
+	void Actor::UpdateRootComponentTransform()
 	{
-		// Tick root component and if transform was dirty -> update all hierarchy of components
-
 		if (m_rootComponent)
 		{
-			m_rootComponent->Tick(deltaTime);
+			// Root component and all attached objects to this actor must update their transforms
+			if (m_rootComponent->GetIsTransformationDirty())
+			{
+				// Update root component with parent transform matrix
+				{
+					glm::mat4 parentRelativeMatrix(1);	// identity matrix
 
+					if (m_parent)
+						parentRelativeMatrix = m_parent->GetRootComponent()->GetRelativeMatrix();
+
+					m_rootComponent->UpdateRelativeMatrix(parentRelativeMatrix);
+				}
+
+				// Update all components that have transformation
+				glm::mat4 rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
+				for (auto& component : m_allComponents)
+				{
+					if (component->GetComponentType() & ComponentType::SCENE_COMPONENT)
+					{
+						SceneComponent* sceneComp = static_cast<SceneComponent*>(component.get());
+						sceneComp->UpdateRelativeMatrix(rootRelativeMatrix);
+					}
+				}
+			}
+			else // If root component wasn't updated then just check if component has dirty transform
+			{
+				UpdateComponentsTransform();
+			}
+		}
+	}
+
+	void Actor::UpdateComponentsTransform() 
+	{
+		if (m_allComponents.size() > 0)
+		{
 			glm::mat4 parentRelativeMatrix(1);	// identity matrix
 
 			if (m_parent)
 				parentRelativeMatrix = m_parent->GetRootComponent()->GetRelativeMatrix();
 
-			m_rootComponent->UpdateRelativeMatrix(parentRelativeMatrix);
+			// Update all components that have transformation
+			glm::mat4 rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
+			for (auto& component : m_allComponents)
+			{
+				if (component->GetComponentType() & ComponentType::SCENE_COMPONENT)
+				{
+					SceneComponent* sceneComp = static_cast<SceneComponent*>(component.get());
+					if (sceneComp->GetIsTransformationDirty())
+					{
+						sceneComp->UpdateRelativeMatrix(rootRelativeMatrix);
+					}
+				}
+			}
+		}
+	}
+
+	void Actor::Tick(float deltaTime)
+	{
+		UpdateRootComponentTransform();
+
+		m_rootComponent->Tick(deltaTime);
+
+		for (auto& component : m_allComponents)
+		{
+			// tick all children components
+			component->Tick(deltaTime);
 		}
 
-		for (auto it = m_allComponents.begin(); it != m_allComponents.end(); ++it)
+		for (auto& actor : m_children)
 		{
-			// update all children components
-			(*it)->Tick(deltaTime);
-		}
-
-		for (auto it = m_children.begin(); it != m_children.end(); ++it)
-		{
-			// update all attached actors
-			(*it)->Tick(deltaTime);
+			// tick all attached actors
+			actor->Tick(deltaTime);
 		}
 	}
 
 	// Render is executed on render thread
 	void Actor::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix, float deltaTime)
 	{
-		for (auto it = m_allComponents.begin(); it != m_allComponents.end(); ++it)
+		for (auto& component : m_allComponents)
 		{
-			if ((*it)->GetComponentType() == Game::ComponentType::PRIMITIVE_COMPONENT)
+			if (component->GetComponentType() & Game::ComponentType::PRIMITIVE_COMPONENT)
 			{
-				Game::PrimitiveComponent* primitiveComponent = static_cast<Game::PrimitiveComponent*>((*it).get());
+				PrimitiveComponent* primitiveComponent = static_cast<PrimitiveComponent*>(component.get());
 				primitiveComponent->Render(viewMatrix, projectionMatrix);
 			}
 		}

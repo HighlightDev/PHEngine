@@ -1,10 +1,4 @@
 #include "Engine.h"
-
-#include <glm/vec2.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
-
 #include "Core/IoCore/TextureLoaderCore/StbLoader/StbLoader.h"
 #include "Core/UtilityCore/PlatformDependentFunctions.h"
 #include "Core/UtilityCore/EngineMath.h"
@@ -14,6 +8,11 @@
 #include "Core/ResourceManagerCore/Pool/MeshPool.h"
 #include "Core/ResourceManagerCore/Pool/TexturePool.h"
 #include "Core/GameCore/GlobalProperties.h"
+
+#include <glm/vec2.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 using namespace Graphics::Texture;
 using namespace Common;
@@ -26,14 +25,15 @@ Engine::Engine()
 		const float aspectRatio = 16.0f / 9.0f;
 		projectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
 
-	// RESOURCES
+	// HOUSE
 	{
-		// MESH
-		std::string pathToFile = FolderManager::GetInstance()->GetModelPath() + "City_House_2_BI.obj";
-		m_skin = MeshPool::GetInstance()->GetOrAllocateResource(pathToFile);
-		// TEXTURE
-		std::string pathToTexture = FolderManager::GetInstance()->GetAlbedoTexturePath() + "city_house_2_Col.png";
-		m_texture = TexturePool::GetInstance()->GetOrAllocateResource(pathToTexture);
+		StaticMeshComponentData mData(FolderManager::GetInstance()->GetModelPath() + "City_House_2_BI.obj", glm::vec3(), glm::vec3(), glm::vec3(1), Common::FolderManager::GetInstance()->GetShadersPath() + "testVS.glsl",
+			Common::FolderManager::GetInstance()->GetShadersPath() + "testFS.glsl", FolderManager::GetInstance()->GetAlbedoTexturePath() + "city_house_2_Col.png");
+
+		std::shared_ptr<Component> staticMeshComp = ComponentCreatorFactory<StaticMeshComponent>::CreateComponent(mData);
+		Actor houseActor = Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+		houseActor.AddComponent(staticMeshComp);
+		m_allActors.emplace_back(std::move(houseActor));
 	}
 
 	// SKYBOX
@@ -49,11 +49,10 @@ Engine::Engine()
 			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "front.png");
 		auto dTexPath = StringStreamWrapper::FlushString();
 
-		SkyboxComponentData mData(SKYBOX_SIZE, std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl"),
+		SkyboxComponentData mData(SKYBOX_SIZE, 5.0f, std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl"),
 			std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxFS.glsl"), std::move(dTexPath));
 
 		std::shared_ptr<Component> skyboxComp = ComponentCreatorFactory<SkyboxComponent>::CreateComponent(mData);
-
 		Actor skyboxActor = Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
 		skyboxActor.AddComponent(skyboxComp);
 		m_allActors.emplace_back(std::move(skyboxActor));
@@ -64,47 +63,19 @@ Engine::~Engine()
 {
 }
 
-void Engine::UpdateWorldMatrix()
-{
-	float angleRad = DEG_TO_RAD(rotateAngle);
-
-	worldMatrix = glm::mat4(1);
-	worldMatrix = glm::scale(worldMatrix, glm::vec3(1));
-	worldMatrix = glm::rotate(worldMatrix, angleRad, glm::vec3(1, 0, 0));
-	worldMatrix = glm::rotate(worldMatrix, angleRad, glm::vec3(0, 1, 0));
-	worldMatrix = glm::rotate(worldMatrix, angleRad, glm::vec3(0, 0, 1));
-	worldMatrix = glm::translate(worldMatrix, glm::vec3(0));
-
-	rotateAngle += 0.02f;
-	if (rotateAngle > 360.0f)
-	{
-		rotateAngle -= 360.0f;
-	}
-
-	m_viewMatrix = camera.GetViewMatrix();
-}
-
 void Engine::TickWindow()
 {
-	// BUILD WORLD MATRIX 
-	UpdateWorldMatrix();
+	m_viewMatrix = camera.GetViewMatrix();
 
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearColor(0, 0, 0, 0);
 
-	m_shader.ExecuteShader();
-	m_texture->BindTexture(0);
-	m_shader.SetTexSampler(0);
-	m_shader.SetTransformationMatrices(worldMatrix, m_viewMatrix, projectionMatrix);
-	m_skin->GetBuffer()->RenderVAO(GL_TRIANGLES);
-	m_shader.StopShader();
-
-	for (auto it = m_allActors.begin(); it != m_allActors.end(); ++it)
+	for (auto& actor : m_allActors)
 	{
-		it->Render(m_viewMatrix, projectionMatrix, 0.0f);
+		actor.Tick(0.05f);
+		actor.Render(m_viewMatrix, projectionMatrix, 0.05f);
 	}
-
 }
 
 void Engine::MouseMove()

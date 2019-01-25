@@ -26,8 +26,6 @@ namespace Game
 		
 		bool bTransformationDirty = false;
 
-	private:
-
 		void UpdateRotationMatrix(int32_t deltaX, int32_t deltaY);
 
 	public:

@@ -13,6 +13,7 @@ namespace Game
 
 		class SkyboxShader : public ShaderBase
 		{
+
 		private:
 			Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_dayTexture, u_nightTexture;
 

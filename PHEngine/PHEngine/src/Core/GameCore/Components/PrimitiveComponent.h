@@ -19,6 +19,8 @@ namespace Game
 	{
 	protected:
 
+		using Base = SceneComponent;
+
 		std::shared_ptr<Skin> m_skin;
 
 		std::shared_ptr<ShaderBase> m_shader;

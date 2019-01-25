@@ -50,6 +50,12 @@ namespace Game
 
 			return m_rootComponent;
 		}
+
+		// If root component has dirty transformation -> update it and all attached actors + children components
+		void UpdateRootComponentTransform();
+
+		// If components from list is scene component -> check if it has dity transformation, and if it does -> update it
+		void UpdateComponentsTransform();
 	};
 
 }

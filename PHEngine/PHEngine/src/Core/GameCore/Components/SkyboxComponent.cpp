@@ -11,7 +11,6 @@ namespace Game
 		: PrimitiveComponent(glm::vec3(), glm::vec3(), glm::vec3(1), skyboxMesh, skyboxShader, dayTexture, nightTexture)
 		, m_rotateSpeed(rotateSpeed)
 		, m_bPostConstructor(true)
-		, m_moveFactor(0.0f)
 	{
 
 	}
@@ -36,10 +35,7 @@ namespace Game
 
 		glDisable(GL_CLIP_DISTANCE0);
 
-		glm::mat4 worldMatrix(1);
-		worldMatrix = glm::rotate(worldMatrix, DEG_TO_RAD(m_moveFactor), glm::vec3(0, 1, 0));
-
-		CastToSkyboxShader()->ExecuteShader();
+		GetSkyboxShader()->ExecuteShader();
 
 		if (GetDayTexture())
 		{
@@ -49,22 +45,18 @@ namespace Game
 		{
 			GetNightTexture()->BindTexture(1);
 		}
-		CastToSkyboxShader()->SetTransformMatrices(worldMatrix, viewMatrix, projectionMatrix);
-		CastToSkyboxShader()->SetTextures(0, 1);
+		GetSkyboxShader()->SetTransformMatrices(m_relativeMatrix, viewMatrix, projectionMatrix);
+		GetSkyboxShader()->SetTextures(0, 1);
 		//CastToSkyboxShader()->SetDayCycleValue(sunDirection.Normalized().Y);
 		//CastToSkyboxShader()->SetMist(m_mist);
 		m_skin->GetBuffer()->RenderVAO(GL_TRIANGLES);
-		CastToSkyboxShader()->StopShader();
+		GetSkyboxShader()->StopShader();
 	}
 
 	void SkyboxComponent::Tick(float deltaTime)
 	{
-		SceneComponent::Tick(deltaTime);
-		m_moveFactor += deltaTime * m_rotateSpeed;
-
-		if (m_moveFactor > 360.0f)
-		{
-			m_moveFactor -= 360.0f;
-		}
+		Base::Tick(deltaTime);
+		
+		SetRotationAxisY(m_rotation.y + deltaTime * m_rotateSpeed);
 	}
 }

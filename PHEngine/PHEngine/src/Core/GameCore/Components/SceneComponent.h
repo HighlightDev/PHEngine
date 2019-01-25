@@ -8,17 +8,18 @@ namespace Game
 {
 	class SceneComponent : public Component
 	{
-	private:
+		protected:
+
+		using Base = Component;
 
 		bool bTransformationDirty;
 
 		glm::vec3 m_translation;
 		glm::vec3 m_rotation;
 		glm::vec3 m_scale;
-		// bound
 
 		glm::mat4 m_relativeMatrix;
-
+		// bound
 	public:
 
 		SceneComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale);
@@ -27,7 +28,13 @@ namespace Game
 
 		virtual void Tick(float deltaTime) override;
 
-		virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix);
+		virtual ComponentType GetComponentType() override
+		{
+			return ComponentType::SCENE_COMPONENT;
+		}
+
+		// This method works every time when this component has dirty transform
+		void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix);
 
 		void SetTranslation(glm::vec3 translation)
 		{
@@ -47,22 +54,59 @@ namespace Game
 			bTransformationDirty = true;
 		}
 
-		inline glm::vec3 GetTranslation()
+		void SetRotationAxisX(float new_x)
+		{
+			if (new_x > 360.0f)
+			{
+				m_rotation.x = new_x - 360.0f;
+			}
+			else
+				m_rotation.x = new_x;
+			bTransformationDirty = true;
+		}
+
+		void SetRotationAxisY(float new_y)
+		{
+			if (new_y > 360.0f)
+			{
+				m_rotation.y = new_y - 360.0f;
+			}
+			else
+				m_rotation.y = new_y;
+			bTransformationDirty = true;
+		}
+
+		void SetRotationAxisZ(float new_z)
+		{
+			if (new_z > 360.0f)
+			{
+				m_rotation.z = new_z - 360.0f;
+			}
+			else
+				m_rotation.z = new_z;
+			bTransformationDirty = true;
+		}
+
+		inline bool GetIsTransformationDirty() const {
+			return bTransformationDirty;
+		}
+
+		inline glm::vec3 GetTranslation() const
 		{
 			return m_translation;
 		}
 
-		inline glm::vec3 GetRotation()
+		inline glm::vec3 GetRotation() const
 		{
 			return m_rotation;
 		}
 
-		inline glm::vec3 GetScale()
+		inline glm::vec3 GetScale() const
 		{
 			return m_scale;
 		}
 
-		inline 	glm::mat4 GetRelativeMatrix()
+		inline 	glm::mat4 GetRelativeMatrix() const
 		{
 			return m_relativeMatrix;
 		}
