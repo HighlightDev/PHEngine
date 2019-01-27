@@ -281,6 +281,7 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredRenderer.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\StaticMeshComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\SceneComponent.h" />
     <ClInclude Include="src\Core\GameCore\FirstPersonCamera.h" />
@@ -586,6 +587,7 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GraphicsCore\Renderer\DeferredRenderer.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\SceneComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\FirstPersonCamera.cpp" />
     <ClCompile Include="src\Core\GameCore\CameraBase.cpp" />
