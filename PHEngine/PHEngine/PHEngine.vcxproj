@@ -281,6 +281,14 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GraphicsCore\Light\SpotLight.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Light\PointLight.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Light\DirectionalLight.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Light\LightBase.h" />
+    <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\PrimitiveSceneProxy.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredShader.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Common\ScreenQuad.h" />
     <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredRenderer.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\StaticMeshComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\SceneComponent.h" />
@@ -587,6 +595,14 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GraphicsCore\Light\SpotLight.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Light\PointLight.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Light\DirectionalLight.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Light\LightBase.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\PrimitiveSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredShader.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Common\ScreenQuad.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Renderer\DeferredRenderer.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\SceneComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\FirstPersonCamera.cpp" />
