@@ -1,62 +1,8 @@
 #include "Engine.h"
-#include "Core/IoCore/TextureLoaderCore/StbLoader/StbLoader.h"
-#include "Core/UtilityCore/PlatformDependentFunctions.h"
-#include "Core/UtilityCore/EngineMath.h"
-#include "Core/GraphicsCore/Texture/TexParams.h"
-#include "Core/GameCore/Components/SkyboxComponent.h"
-#include "Core/GameCore/Components/ComponentCreatorFactory.h"
-#include "Core/ResourceManagerCore/Pool/MeshPool.h"
-#include "Core/ResourceManagerCore/Pool/TexturePool.h"
-#include "Core/GameCore/GlobalProperties.h"
-
-#include <glm/vec2.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
-
-using namespace Graphics::Texture;
-using namespace Common;
-using namespace EngineUtility;
-using namespace Game;
 
 Engine::Engine()
-	: camera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10))
 {
-		const float aspectRatio = 16.0f / 9.0f;
-		projectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
 
-	// HOUSE
-	{
-		StaticMeshComponentData mData(FolderManager::GetInstance()->GetModelPath() + "City_House_2_BI.obj", glm::vec3(), glm::vec3(), glm::vec3(1), Common::FolderManager::GetInstance()->GetShadersPath() + "testVS.glsl",
-			Common::FolderManager::GetInstance()->GetShadersPath() + "testFS.glsl", FolderManager::GetInstance()->GetAlbedoTexturePath() + "city_house_2_Col.png");
-
-		std::shared_ptr<Component> staticMeshComp = ComponentCreatorFactory<StaticMeshComponent>::CreateComponent(mData);
-		Actor houseActor = Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
-		houseActor.AddComponent(staticMeshComp);
-		m_allActors.emplace_back(std::move(houseActor));
-	}
-
-	// SKYBOX
-	{
-		float SKYBOX_SIZE = 50.0f;
-
-		StringStreamWrapper::ToString(
-			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "right.png", ",",
-			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "left.png", ",",
-			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "top.png", ",",
-			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "bottom.png", ",",
-			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "back.png", ",",
-			FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "front.png");
-		auto dTexPath = StringStreamWrapper::FlushString();
-
-		SkyboxComponentData mData(SKYBOX_SIZE, 5.0f, std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl"),
-			std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxFS.glsl"), std::move(dTexPath));
-
-		std::shared_ptr<Component> skyboxComp = ComponentCreatorFactory<SkyboxComponent>::CreateComponent(mData);
-		Actor skyboxActor = Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
-		skyboxActor.AddComponent(skyboxComp);
-		m_allActors.emplace_back(std::move(skyboxActor));
-	}
 }
 
 Engine::~Engine()
@@ -65,20 +11,14 @@ Engine::~Engine()
 
 void Engine::TickWindow()
 {
-	m_viewMatrix = camera.GetViewMatrix();
+   // This should be on game thread
+   scene.Tick(0.05f);
 
-	glEnable(GL_DEPTH_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearColor(0, 0, 0, 0);
-
-	for (auto& actor : m_allActors)
-	{
-		actor.Tick(0.05f);
-		actor.Render(m_viewMatrix, projectionMatrix, 0.05f);
-	}
+   // This should be on render thread
+   scene.Render();
 }
 
 void Engine::MouseMove()
 {
-	camera.Rotate();
+	scene.CameraRotate();
 }

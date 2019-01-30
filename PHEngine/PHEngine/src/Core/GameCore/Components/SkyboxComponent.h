@@ -3,12 +3,14 @@
 #include "Core/GraphicsCore/OpenGL/Shader/ShaderBase.h"
 #include "Core/GraphicsCore/OpenGL/Shader/Uniform.h"
 #include "Core/GameCore/ShaderImplementation/SkyboxShader.h"
+#include "Core/GraphicsCore/RenderData/SkyboxRenderData.h"
 
 #include <memory>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace Game::ShaderImpl;
+using namespace Graphics::Data;
 
 namespace Game
 {
@@ -22,9 +24,9 @@ namespace Game
 
 		float m_rotateSpeed;
 
-		bool m_bPostConstructor;
+      SkyboxRenderData m_renderData;
 
-		// MistComponent
+      // MistComponent
 
 	protected:
 
@@ -32,11 +34,9 @@ namespace Game
 
 	public:
 
-		SkyboxComponent(std::shared_ptr<Skin> skyboxMesh, std::shared_ptr<ShaderBase> skyboxShader, std::shared_ptr<ITexture> dayTexture, std::shared_ptr<ITexture> nightTexture, float rotateSpeed);
+		SkyboxComponent(float rotateSpeed, SkyboxRenderData& renderData);
 
 		virtual ~SkyboxComponent();
-
-		virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
 
 		virtual void Tick(float deltaTime) override;
 
@@ -44,6 +44,8 @@ namespace Game
 		{
 			return ComponentType::SCENE_COMPONENT;
 		}
+
+      virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() override;
 
 		inline void SetRotateSpeed(float rotateSpeed)
 		{
@@ -55,25 +57,6 @@ namespace Game
 			return m_rotateSpeed;
 		}
 
-	private:
-
-		inline SkyboxShader* GetSkyboxShader() const
-		{
-			SkyboxShader* shader = static_cast<SkyboxShader*>(m_shader.get());
-			return shader;
-		}
-
-		inline std::shared_ptr<ITexture> GetDayTexture()
-		{
-			return m_albedoTex;
-		}
-
-		inline std::shared_ptr<ITexture> GetNightTexture()
-		{
-			return m_normalMapTex;
-		}
-
-		void PostConstructor();
 	};
 
 }

@@ -33,9 +33,6 @@ namespace Game
 		// Tick is executed on game thread
 		void Tick(float deltaTime);
 
-		// Render is executed on render thread
-		void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix, float deltaTime);
-
 		void AddComponent(std::shared_ptr<Game::Component> component);
 
 		void RemoveComponent(std::shared_ptr<Game::Component> component);

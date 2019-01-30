@@ -1,0 +1,59 @@
+#include "StaticMeshSceneProxy.h"
+
+namespace Graphics
+{
+   namespace Proxy
+   {
+
+      StaticMeshSceneProxy::StaticMeshSceneProxy(glm::mat4& relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ShaderBase> shader, std::shared_ptr<ITexture> albedoTex, std::shared_ptr<ITexture> normalMapTex,
+         std::shared_ptr<ITexture> specularMapTex)
+         : PrimitiveSceneProxy(relativeMatrix, skin, albedoTex, normalMapTex, specularMapTex)
+         , m_shader(std::dynamic_pointer_cast<StaticMeshShader>(shader))
+      {
+      }
+
+      StaticMeshSceneProxy::~StaticMeshSceneProxy()
+      {
+      }
+
+      std::shared_ptr<ShaderBase> StaticMeshSceneProxy::GetShader()
+      {
+         return m_shader;
+      }
+
+      void StaticMeshSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
+      {
+         /*if (clipPlane.X == 0 && clipPlane.Y == 0 && clipPlane.Z == 0 && clipPlane.W == 0) { GL.Disable(EnableCap.ClipDistance0); }
+         else { GL.Enable(EnableCap.ClipDistance0); }*/
+
+         m_shader->ExecuteShader();
+
+         if (m_albedoTex) m_albedoTex->BindTexture(0);
+         if (m_normalMapTex) m_normalMapTex->BindTexture(1);
+         if (m_specularMapTex) m_specularMapTex->BindTexture(2);
+
+         m_shader->SetAlbedoTex(0);
+         m_shader->SetNormalMapTex(1);
+         m_shader->SetSpecularMapTex(2);
+         //m_shader->SetMaterial(m_material);
+         m_shader->SetTransformationMatrices(m_relativeMatrix, viewMatrix, projectionMatrix);
+         //m_shader->SetPointLights(GetRelevantPointLights(lights));
+         //m_shader->SetDirectionalLight(directionalLight);
+         //m_shader->SetClippingPlane(ref clipPlane);
+         //m_shader->SetMist(m_mist);
+
+         //if (directionalLight != null && directionalLight.GetHasShadow())
+         //{
+         //	DirectionalLightWithShadow lightWithShadow = directionalLight as DirectionalLightWithShadow;
+         //	ITexture shadowMap = lightWithShadow.GetShadowMapTexture();
+         //	shadowMap.BindTexture(TextureUnit.Texture4); // shadowmap
+         //	GetShader().SetDirectionalLightShadowMatrix(lightWithShadow.GetShadowMatrix(ref modelMatrix, ref ProjectionMatrix));
+         //}
+         //GetShader().SetDirectionalLightShadowMap(4);
+
+         if (m_skin) m_skin->GetBuffer()->RenderVAO(GL_TRIANGLES);
+         m_shader->StopShader();
+      }
+
+   }
+}

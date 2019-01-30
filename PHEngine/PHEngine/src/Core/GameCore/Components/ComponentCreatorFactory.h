@@ -60,7 +60,9 @@ namespace Game
             std::string shaderPath = std::move(mData.m_vsShaderPath) + "," + std::move(mData.m_fsShaderPath);
             ShaderPool::sharedValue_t skyboxShader = ShaderPool::GetInstance()->template GetOrAllocateResource<SkyboxShader>(shaderPath);
 
-            resultComponent = std::make_shared<SkyboxComponent>(skin, skyboxShader, dTex, nTex, mData.m_rotateSpeed);
+            SkyboxRenderData renderData(skin, skyboxShader, dTex, nTex);
+
+            resultComponent = std::make_shared<SkyboxComponent>(mData.m_rotateSpeed, renderData);
          }
 
          return resultComponent;
@@ -93,8 +95,9 @@ namespace Game
             std::string shaderPath = std::move(mData.m_vsShaderPath) + "," + std::move(mData.m_fsShaderPath);
             ShaderPool::sharedValue_t staticMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<StaticMeshShader>(shaderPath);
 
-            resultComponent = std::make_shared<StaticMeshComponent>(std::move(mData.m_translation), std::move(mData.m_rotation), std::move(mData.m_scale),
-               skin, staticMeshShader, albedo, normalMap, specularMap);
+            StaticMeshRenderData renderData(skin, staticMeshShader, albedo, normalMap, specularMap);
+
+            resultComponent = std::make_shared<StaticMeshComponent>(std::move(mData.m_translation), std::move(mData.m_rotation), std::move(mData.m_scale), renderData);
          }
 
          return resultComponent;

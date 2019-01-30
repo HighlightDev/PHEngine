@@ -93,19 +93,6 @@ namespace Game
 		}
 	}
 
-	// Render is executed on render thread
-	void Actor::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix, float deltaTime)
-	{
-		for (auto& component : m_allComponents)
-		{
-			if (component->GetComponentType() & Game::ComponentType::PRIMITIVE_COMPONENT)
-			{
-				PrimitiveComponent* primitiveComponent = static_cast<PrimitiveComponent*>(component.get());
-				primitiveComponent->Render(viewMatrix, projectionMatrix);
-			}
-		}
-	}
-
 	void Actor::AddComponent(std::shared_ptr<Game::Component> component)
 	{
 		component->SetOwner(this);
