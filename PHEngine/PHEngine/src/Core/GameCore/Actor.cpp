@@ -74,6 +74,24 @@ namespace Game
 		}
 	}
 
+   void Actor::RemoveComponentIndexOffset(size_t removedProxyIndex)
+   {
+      for (auto& childActor : m_children)
+      {
+         RemoveComponentIndexOffset(removedProxyIndex);
+      }
+
+      for (auto& component : m_allComponents)
+      {
+         if (component->GetComponentType() & ComponentType::PRIMITIVE_COMPONENT)
+         {
+            PrimitiveComponent* compPtr = static_cast<PrimitiveComponent*>(component.get());
+            if (compPtr->SceneProxyComponentId > removedProxyIndex)
+               --compPtr->SceneProxyComponentId;
+         }
+      }
+   }
+
 	void Actor::Tick(float deltaTime)
 	{
 		UpdateRootComponentTransform();
@@ -104,7 +122,7 @@ namespace Game
 		auto componentIt = std::find(m_allComponents.begin(), m_allComponents.end(), component);
 		if (componentIt != m_allComponents.end())
 		{
-			component->SetOwner(nullptr);
+         component->RemoveOwner();
 			m_allComponents.erase(componentIt);
 		}
 	}
@@ -117,7 +135,7 @@ namespace Game
 	void Actor::AttachActor(std::shared_ptr<Actor> actor)
 	{
 		actor->SetParent(actor);
-		m_children.emplace_back(std::move(actor));
+		m_children.push_back(actor);
 	}
 
 	void Actor::DetachActor(std::shared_ptr<Actor> actor)

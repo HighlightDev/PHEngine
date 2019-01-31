@@ -19,6 +19,9 @@ namespace Game
 		glm::vec3 m_scale;
 
 		glm::mat4 m_relativeMatrix;
+
+      class Scene* m_scene;
+
 		// bound
 	public:
 
@@ -34,7 +37,12 @@ namespace Game
 		}
 
 		// This method works every time when this component has dirty transform
-		void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix);
+		virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix);
+
+      inline void SetScene(Scene* scene)
+      {
+         m_scene = scene;
+      }
 
 		void SetTranslation(glm::vec3 translation)
 		{

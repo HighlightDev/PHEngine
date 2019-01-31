@@ -21,10 +21,6 @@ namespace Game
 
 		Actor* m_owner;
 
-	protected:
-
-		ComponentType m_type;
-
 	public:
 
 		Component();
@@ -40,6 +36,13 @@ namespace Game
 		virtual void Tick(float deltaTime);
 
 		void SetOwner(Actor* ownerActor);
+
+      void RemoveOwner();
+
+      inline Actor* GetOwner()
+      {
+         return m_owner;
+      }
 	};
 
 }

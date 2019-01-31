@@ -38,7 +38,7 @@ namespace Graphics
 				return;
 			glUniform1i(uniformLocation, arg);
 		}
-		void Uniform::LoadUniform(glm::vec2& arg)
+		void Uniform::LoadUniform(const glm::vec2& arg)
 		{
 			if (uniformLocation == -1)
 				return;
@@ -50,7 +50,7 @@ namespace Graphics
 				return;
 			glUniform2f(uniformLocation, arg.x, arg.y);
 		}
-		void Uniform::LoadUniform(glm::vec3& arg)
+		void Uniform::LoadUniform(const glm::vec3& arg)
 		{
 			if (uniformLocation == -1)
 				return;
@@ -62,7 +62,7 @@ namespace Graphics
 				return;
 			glUniform3f(uniformLocation, arg.x, arg.y, arg.z);
 		}
-		void Uniform::LoadUniform(glm::vec4& arg)
+		void Uniform::LoadUniform(const glm::vec4& arg)
 		{
 			if (uniformLocation == -1)
 				return;
@@ -74,19 +74,19 @@ namespace Graphics
 				return;
 			glUniform4f(uniformLocation, arg.x, arg.y, arg.z, arg.w);
 		}
-		void Uniform::LoadUniform(glm::mat2& arg)
+		void Uniform::LoadUniform(const glm::mat2& arg)
 		{
 			if (uniformLocation == -1)
 				return;
 			glUniformMatrix2fv(uniformLocation, 1, false, glm::value_ptr(arg));
 		}
-		void Uniform::LoadUniform(glm::mat3& arg)
+		void Uniform::LoadUniform(const glm::mat3& arg)
 		{
 			if (uniformLocation == -1)
 				return;
 			glUniformMatrix3fv(uniformLocation, 1, false, glm::value_ptr(arg));
 		}
-		void Uniform::LoadUniform(glm::mat4& arg)
+		void Uniform::LoadUniform(const glm::mat4& arg)
 		{
 			if (uniformLocation == -1)
 				return;

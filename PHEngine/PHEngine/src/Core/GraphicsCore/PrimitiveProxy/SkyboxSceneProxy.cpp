@@ -12,6 +12,7 @@ namespace Graphics
          , m_dayTexture(dayTexture)
          , m_nightTexture(nightTexture)
       {
+         m_IsDeferred = false;
       }
 
       SkyboxSceneProxy::~SkyboxSceneProxy()

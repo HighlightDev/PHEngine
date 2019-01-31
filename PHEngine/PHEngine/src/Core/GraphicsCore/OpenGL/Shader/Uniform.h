@@ -32,23 +32,23 @@ namespace Graphics
 
 			void LoadUniform(int32_t arg);
 
-			void LoadUniform(glm::vec2& arg);
+			void LoadUniform(const glm::vec2& arg);
 
 			void LoadUniform(glm::vec2&& arg);
 
-			void LoadUniform(glm::vec3& arg);
+			void LoadUniform(const glm::vec3& arg);
 
 			void LoadUniform(glm::vec3&& arg);
 
-			void LoadUniform(glm::vec4& arg);
+			void LoadUniform(const glm::vec4& arg);
 
 			void LoadUniform(glm::vec4&& arg);
 
-			void LoadUniform(glm::mat2& arg);
+			void LoadUniform(const glm::mat2& arg);
 
-			void LoadUniform(glm::mat3& arg);
+			void LoadUniform(const glm::mat3& arg);
 
-			void LoadUniform(glm::mat4& arg);
+			void LoadUniform(const glm::mat4& arg);
 
 		};
 	}

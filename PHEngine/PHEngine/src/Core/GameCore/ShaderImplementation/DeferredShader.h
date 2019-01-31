@@ -15,13 +15,21 @@ namespace Game
          public ShaderBase
       {
 
-         Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_albedoTex, u_specularTex;
+         Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_albedoTex, u_normalTex, u_specularTex;
 
       public:
 
          DeferredShader(std::string&& vsPath, std::string&& fsPath);
 
          virtual ~DeferredShader();
+
+         void SetTransformMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+
+         void SetAlbedoTextureSlot(int32_t slot);
+
+         void SetNormalTextureSlot(int32_t slot);
+
+         void SetSpecularTextureSlot(int32_t slot);
 
       protected:
 

@@ -30,9 +30,9 @@ namespace Graphics
 			return m_instance;
 		}
 
-		VertexArrayObject& GetBuffer()
+		VertexArrayObject* GetBuffer()
 		{
-			return m_vao;
+			return &m_vao;
 		}
 
 	};

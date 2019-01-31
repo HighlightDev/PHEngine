@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+#include "Core/GameCore/ShaderImplementation/DeferredShader.h"
+
+using namespace Game::ShaderImpl;
+
 namespace Graphics
 {
 	namespace Renderer
@@ -19,7 +23,10 @@ namespace Graphics
 
 			uint32_t m_gBufferFBO;
 
+         std::shared_ptr<DeferredShader> m_shader;
+
 		public:
+
 			DeferredRenderer(int32_t windowWidth, int32_t windowHeight);
 
 			~DeferredRenderer();
@@ -35,6 +42,11 @@ namespace Graphics
 			void BindNormalTexture(int32_t slot);
 
 			void BindAlbedoWithSpecularTexture(int32_t slot);
+
+         inline std::shared_ptr<DeferredShader> GetDeferredShader() const
+         {
+            return m_shader;
+         }
 
 		private:
 

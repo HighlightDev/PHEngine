@@ -10,6 +10,7 @@ namespace Graphics
          : PrimitiveSceneProxy(relativeMatrix, skin, albedoTex, normalMapTex, specularMapTex)
          , m_shader(std::dynamic_pointer_cast<StaticMeshShader>(shader))
       {
+         m_IsDeferred = true;
       }
 
       StaticMeshSceneProxy::~StaticMeshSceneProxy()

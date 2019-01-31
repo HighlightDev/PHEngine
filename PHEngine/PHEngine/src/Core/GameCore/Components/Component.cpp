@@ -27,4 +27,9 @@ namespace Game
 		m_owner = ownerActor;
 	}
 
+   void Component::RemoveOwner()
+   {
+      m_owner = nullptr;
+   }
+
 }

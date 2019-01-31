@@ -27,6 +27,8 @@ namespace Graphics
          std::shared_ptr<ITexture> m_normalMapTex;
          std::shared_ptr<ITexture> m_specularMapTex;
 
+         bool m_IsDeferred = false;
+
       public:
 
          PrimitiveSceneProxy(glm::mat4& relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ITexture> albedoTex,
@@ -35,11 +37,16 @@ namespace Graphics
 
          virtual ~PrimitiveSceneProxy();
 
+         inline bool IsDeferred() const
+         {
+            return m_IsDeferred;
+         }
+
          virtual std::shared_ptr<ShaderBase> GetShader() = 0;
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) = 0;
 
-         virtual glm::mat4 GetMatrix() const
+         virtual glm::mat4 GetMatrix()
          {
             return m_relativeMatrix;
          }

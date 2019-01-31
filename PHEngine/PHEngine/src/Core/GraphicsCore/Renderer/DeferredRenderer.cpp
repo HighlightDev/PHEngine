@@ -1,7 +1,12 @@
 #include "DeferredRenderer.h"
+#include "Core/ResourceManagerCore/Pool/ShaderPool.h"
+#include "Core/CommonCore/FolderManager.h"
 
 #include <gl/glew.h>
 #include <iostream>
+
+using namespace Resources;
+using namespace Common;
 
 namespace Graphics
 {
@@ -28,6 +33,9 @@ namespace Graphics
 
 		void DeferredRenderer::Init()
 		{
+         std::string deferredShaderPath = FolderManager::GetInstance()->GetShadersPath() + "deferredBasePassVS.glsl" + "," + FolderManager::GetInstance()->GetShadersPath() + "deferredBasePassFS.glsl";
+         m_shader = std::dynamic_pointer_cast<DeferredShader>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader>(deferredShaderPath));
+
 			// Create all empty images and attach them to gBuffer Framebuffer Object
 
 			glGenFramebuffers(1, &m_gBufferFBO);
@@ -66,7 +74,10 @@ namespace Graphics
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_albedoWithSpecularBuffer, 0);
 
          if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            std::cout << "Framebuffer not complete!" << std::endl;
+            std::cout << "Framebuffer is not complete!" << std::endl;
+
+         uint32_t attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+         glDrawBuffers(3, attachments);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
@@ -85,6 +96,8 @@ namespace Graphics
 		void DeferredRenderer::StopDR()
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+         uint32_t attachment = GL_COLOR_ATTACHMENT0;
+         glDrawBuffers(1, &attachment);
 		}
 
 		void DeferredRenderer::DestroyFramebuffer()

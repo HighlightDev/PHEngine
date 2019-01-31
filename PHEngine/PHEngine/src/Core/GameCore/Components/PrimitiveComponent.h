@@ -25,6 +25,9 @@ namespace Game
 
 	public:
 
+      // Id of scene proxy, this value may change
+      size_t SceneProxyComponentId = 0;
+
 		PrimitiveComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale);
 
 		virtual ~PrimitiveComponent();
@@ -35,6 +38,8 @@ namespace Game
 		}
 
       virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() = 0;
+
+      virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix) override;
 
 	};
 

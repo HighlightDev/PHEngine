@@ -24,7 +24,7 @@ namespace Game
 
 			virtual ~ResolveTextureShader();
 
-			void SetTextureShader(int32_t slot);
+			void SetTextureSlot(int32_t slot);
 
 		protected:
 
