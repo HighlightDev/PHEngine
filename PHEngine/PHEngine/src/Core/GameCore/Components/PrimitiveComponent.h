@@ -25,6 +25,8 @@ namespace Game
 
 	public:
 
+      static size_t TotalSceneComponentIndex;
+
       // Id of scene proxy, this value may change
       size_t SceneProxyComponentId = 0;
 

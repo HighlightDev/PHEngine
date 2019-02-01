@@ -1,9 +1,15 @@
 #include "ScreenQuad.h"
 #include "Core/GraphicsCore/OpenGL/VertexBufferObject.h"
 #include "Core/GraphicsCore/OpenGL/VertexBufferObjectBase.h"
+#include "Core/ResourceManagerCore/Pool/ShaderPool.h"
+#include "Core/CommonCore/FolderManager.h"
 
 #include <memory>
 #include <vector>
+#include <utility>
+
+using namespace Common;
+using namespace Resources;
 
 namespace Graphics
 {
@@ -15,13 +21,16 @@ namespace Graphics
 		Init();
 	}
 
-
 	ScreenQuad::~ScreenQuad()
 	{
+      ShaderPool::GetInstance()->TryToFreeMemory(m_resolveTexShader);
 	}
 
 	void ScreenQuad::Init()
 	{
+      std::string resolveTexShaderPath = Common::FolderManager::GetInstance()->GetShadersPath() + "resolveTextureVS.glsl" + "," + Common::FolderManager::GetInstance()->GetShadersPath() + "resolveTextureFS.glsl";
+      m_resolveTexShader = std::dynamic_pointer_cast<ResolveTextureShader>(ShaderPool::GetInstance()->GetOrAllocateResource<ResolveTextureShader>(resolveTexShaderPath));
+
 		/*Screen fill quad*/
 		std::vector<float> vertices = { -1.0f, -1.0f, 0.0f ,
 			 1.0f, -1.0f, 0.0f ,

@@ -281,6 +281,7 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredShadingGBuffer.h" />
     <ClInclude Include="src\Core\GameCore\Scene.h" />
     <ClInclude Include="src\Core\GraphicsCore\RenderData\SkyboxRenderData.h" />
     <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\SkyboxSceneProxy.h" />
@@ -292,7 +293,7 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredShader.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\Common\ScreenQuad.h" />
-    <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredRenderer.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredShadingSceneRenderer.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\StaticMeshComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\SceneComponent.h" />
     <ClInclude Include="src\Core\GameCore\FirstPersonCamera.h" />
@@ -610,7 +611,7 @@
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredShader.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Common\ScreenQuad.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\Renderer\DeferredRenderer.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Renderer\DeferredShadingSceneRenderer.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\SceneComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\FirstPersonCamera.cpp" />
     <ClCompile Include="src\Core\GameCore\CameraBase.cpp" />

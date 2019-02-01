@@ -1,8 +1,10 @@
 #include "Engine.h"
 
 Engine::Engine()
+   : m_scene()
+   , m_sceneRenderer(&m_scene)
 {
-
+   m_scene.AddTestActors();
 }
 
 Engine::~Engine()
@@ -12,13 +14,13 @@ Engine::~Engine()
 void Engine::TickWindow()
 {
    // This should be on game thread
-   scene.Tick(0.05f);
+   m_scene.Tick_GameThread(0.05f);
 
    // This should be on render thread
-   scene.Render();
+   m_sceneRenderer.BasePassRender_RenderThread();
 }
 
 void Engine::MouseMove()
 {
-	scene.CameraRotate();
+   m_scene.CameraRotate();
 }

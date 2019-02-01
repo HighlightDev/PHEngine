@@ -5,6 +5,8 @@
 namespace Game
 {
 
+   size_t  PrimitiveComponent::TotalSceneComponentIndex = 0;
+
 	PrimitiveComponent::PrimitiveComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
 		: SceneComponent(std::move(translation), std::move(rotation), std::move(scale))
 	{
