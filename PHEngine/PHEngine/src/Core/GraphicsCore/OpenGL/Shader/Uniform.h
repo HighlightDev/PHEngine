@@ -7,11 +7,53 @@
 #include <glm\mat2x2.hpp>
 #include <glm\mat3x3.hpp>
 #include <glm\mat4x4.hpp>
+#include <vector>
 
 namespace Graphics
 {
 	namespace OpenGL
 	{
+      
+      struct UniformArray
+      {
+      private:
+
+         std::vector<int32_t> m_uniformLocations;
+
+      public:
+
+         UniformArray() {}
+
+         explicit UniformArray(int32_t programDescriptor, size_t uniformsCount, std::string&& uniformName);
+
+         ~UniformArray();
+
+         void LoadUniform(size_t uniformIndex, bool arg);
+
+         void LoadUniform(size_t uniformIndex, float arg);
+
+         void LoadUniform(size_t uniformIndex, int32_t arg);
+
+         void LoadUniform(size_t uniformIndex, const glm::vec2& arg);
+
+         void LoadUniform(size_t uniformIndex, glm::vec2&& arg);
+
+         void LoadUniform(size_t uniformIndex, const glm::vec3& arg);
+
+         void LoadUniform(size_t uniformIndex, glm::vec3&& arg);
+
+         void LoadUniform(size_t uniformIndex, const glm::vec4& arg);
+
+         void LoadUniform(size_t uniformIndex, glm::vec4&& arg);
+
+         void LoadUniform(size_t uniformIndex, const glm::mat2& arg);
+
+         void LoadUniform(size_t uniformIndex, const glm::mat3& arg);
+
+         void LoadUniform(size_t uniformIndex, const glm::mat4& arg);
+
+      };
+
 		struct Uniform
 		{
 		private:

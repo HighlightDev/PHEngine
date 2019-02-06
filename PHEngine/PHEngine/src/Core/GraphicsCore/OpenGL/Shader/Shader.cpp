@@ -11,15 +11,19 @@ namespace Graphics
 {
 	namespace OpenGL
 	{
-		template void Shader::Predefine<glm::vec2>(ShaderType, std::string&&, glm::vec2&&);
-		template void Shader::Predefine<glm::vec3>(ShaderType, std::string&&, glm::vec3&&);
-		template void Shader::Predefine<glm::vec4>(ShaderType, std::string&&, glm::vec4&&);
-		template void Shader::Predefine<glm::mat2>(ShaderType, std::string&&, glm::mat2&&);
-		template void Shader::Predefine<glm::mat3>(ShaderType, std::string&&, glm::mat3&&);
-		template void Shader::Predefine<glm::mat4>(ShaderType, std::string&&, glm::mat4&&);
-		template void Shader::Predefine<int32_t>(ShaderType, std::string&&, int32_t&&);
-		template void Shader::Predefine<float>(ShaderType, std::string&&, float&&);
-		template void Shader::Predefine<double>(ShaderType, std::string&&, double&&);
+		template void Shader::Predefine<glm::vec2>(ShaderType, const std::string&, glm::vec2&&);
+		template void Shader::Predefine<glm::vec3>(ShaderType, const std::string&, glm::vec3&&);
+		template void Shader::Predefine<glm::vec4>(ShaderType, const std::string&, glm::vec4&&);
+		template void Shader::Predefine<glm::mat2>(ShaderType, const std::string&, glm::mat2&&);
+		template void Shader::Predefine<glm::mat3>(ShaderType, const std::string&, glm::mat3&&);
+		template void Shader::Predefine<glm::mat4>(ShaderType, const std::string&, glm::mat4&&);
+		template void Shader::Predefine<int32_t>(ShaderType, const std::string&, int32_t&&);
+		template void Shader::Predefine<float>(ShaderType, const std::string&, float&&);
+		template void Shader::Predefine<double>(ShaderType, const std::string&, double&&);
+
+#if DEBUG
+      bool Shader::bParentAccessUniformLocationsInvoked = false;
+#endif
 
 		Shader::Shader(std::string&& shaderName, std::string&& vertexShaderFile, std::string&& fragmentShaderFile, std::string&& geometryShaderFile)
 			: m_shaderName(std::move(shaderName))
@@ -49,8 +53,14 @@ namespace Graphics
 			if (m_shaderCompiledSuccessfully)
 			{
 				const bool bLinkedSuccessfully = LinkShaders();
-				if (bLinkedSuccessfully)
-					AccessAllUniformLocations();
+            if (bLinkedSuccessfully)
+            {
+               AccessAllUniformLocations();
+#if DEBUG
+               if (!bParentAccessUniformLocationsInvoked)
+                  throw std::exception("Didn't called parent method AccessAllUniformLocations in derived method.");
+#endif
+            }
 			}
 		}
 
@@ -313,6 +323,21 @@ namespace Graphics
 			}
 		}
 
+      UniformArray Shader::GetUniformArray(std::string&& uniformName, size_t countOfUniforms)
+      {
+         try
+         {
+            return UniformArray(m_shaderProgramID, countOfUniforms, std::move(uniformName));
+         }
+         catch (std::invalid_argument innerEx)
+         {
+            std::string message;
+            EngineUtility::StringStreamWrapper::ToString("Shader with name", m_shaderName, " could not bind uniform(s);", "Inner exception message :", '\n', innerEx.what());
+
+            throw std::invalid_argument(EngineUtility::StringStreamWrapper::FlushString());
+         }
+      }
+
 		void Shader::LoadSubroutineIndex(ShaderType shaderType, int32_t countIndices, int32_t subroutineIndex)
 		{
 			glUniformSubroutinesuiv((int32_t)shaderType, countIndices, (uint32_t*)subroutineIndex);
@@ -442,10 +467,10 @@ namespace Graphics
 		}
 
 		template <typename ValueType>
-		void Shader::Predefine(ShaderType shaderType, std::string&& name, ValueType&& value)
+		void Shader::Predefine(ShaderType shaderType, const std::string& name, ValueType&& value)
 		{
 			std::string formatedValue = MacroConverter<ValueType>::GetValue(std::forward<ValueType>(value));
-			m_defineParameters.emplace_back(ShaderPredefine(std::move(name), std::move(formatedValue), shaderType));
+			m_defineParameters.emplace_back(ShaderPredefine(name, formatedValue, shaderType));
 		}
 
 	}

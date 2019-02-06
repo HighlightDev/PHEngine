@@ -36,7 +36,7 @@ namespace Game
 			return ComponentType::SCENE_COMPONENT;
 		}
 
-		// This method works every time when this component has dirty transform
+		/* This method works every time when this component has dirty transform */
 		virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix);
 
       inline void SetScene(Scene* scene)

@@ -21,6 +21,9 @@ namespace Graphics
 
 		void ShaderBase::AccessAllUniformLocations()
 		{
+#if DEBUG
+         Shader::bParentAccessUniformLocationsInvoked = true;
+#endif
 			if (m_shaderCompiledSuccessfully)
 			{
 				std::cout << GetCompileLogInfo() << std::endl;

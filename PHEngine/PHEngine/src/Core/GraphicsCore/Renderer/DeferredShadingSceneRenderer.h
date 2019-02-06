@@ -1,9 +1,11 @@
 #pragma once
 
 #include <stdint.h>
+#include <glm/mat4x4.hpp>
 
 #include "Core/GameCore/Scene.h"
 #include "Core/GameCore/ShaderImplementation/DeferredShader.h"
+#include "Core/GameCore/ShaderImplementation/DeferredLightShader.h"
 #include "Core/GraphicsCore/Renderer/DeferredShadingGBuffer.h"
 
 using namespace Game::ShaderImpl;
@@ -21,7 +23,8 @@ namespace Graphics
 
          std::unique_ptr<DeferredShadingGBuffer> m_gbuffer;
 
-         std::shared_ptr<DeferredShader> m_shader;
+         std::shared_ptr<DeferredShader> m_deferredBaseShader;
+         std::shared_ptr<DeferredLightShader> m_deferredLightShader;
 
       public:
 
@@ -29,7 +32,13 @@ namespace Graphics
 
 			~DeferredShadingSceneRenderer();
 
-         void BasePassRender_RenderThread();
+         void RenderScene_RenderThread();
+
+         void DeferredLightPass_RenderThread();
+
+         void DeferredBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& deferredPrimitives, const glm::mat4& viewMatrix);
+
+         void ForwardBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& forwardedPrimitives, const glm::mat4& viewMatrix);
 
 		};
 

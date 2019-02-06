@@ -13,9 +13,9 @@ namespace Graphics
 			std::string m_Value;
 			ShaderType m_ShaderType;
 
-			ShaderPredefine(std::string&& name, std::string&& value);
+			ShaderPredefine(const std::string& name, std::string value);
 
-			ShaderPredefine(std::string&& name, std::string&& value, ShaderType shaderType);
+			ShaderPredefine(const std::string& name, std::string value, ShaderType shaderType);
 
 			~ShaderPredefine();
 		};

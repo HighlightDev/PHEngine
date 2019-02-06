@@ -33,7 +33,7 @@ namespace Game
 		if (m_rotation.z > 360.0f)
 			m_rotation.z -= 360.0f;
 
-		SetRotation(m_rotation);
+      bTransformationDirty = true;
 	}
 
    std::shared_ptr<PrimitiveSceneProxy> StaticMeshComponent::CreateSceneProxy()

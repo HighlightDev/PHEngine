@@ -25,10 +25,10 @@ namespace Graphics
 		template <>
 		struct MacroConverter<int32_t>
 		{
-			static std::string&& GetValue(int32_t&& value)
+			static std::string GetValue(int32_t&& value)
 			{
 				EngineUtility::StringStreamWrapper::ToString(value);
-				return std::move(EngineUtility::StringStreamWrapper::FlushString());
+				return EngineUtility::StringStreamWrapper::FlushString();
 			}
 		};
 
@@ -38,7 +38,7 @@ namespace Graphics
 			static std::string GetValue(glm::vec2&& value)
 			{
 				EngineUtility::StringStreamWrapper::ToString("vec2(", value.x, ", ", value.y, ")");
-				std::string result = std::move(EngineUtility::StringStreamWrapper::FlushString());
+				std::string result = EngineUtility::StringStreamWrapper::FlushString();
 				return result;
 			}
 		};
@@ -49,7 +49,7 @@ namespace Graphics
 			static std::string GetValue(glm::vec3&& value)
 			{
 				EngineUtility::StringStreamWrapper::ToString("vec3(", value.x, ", ", value.y, value.z, ")");
-				return std::move(EngineUtility::StringStreamWrapper::FlushString());
+				return EngineUtility::StringStreamWrapper::FlushString();
 			}
 		};
 
@@ -59,7 +59,7 @@ namespace Graphics
 			static std::string GetValue(glm::vec4&& value)
 			{
 				EngineUtility::StringStreamWrapper::ToString("vec4(", value.x, ", ", value.y, value.z, value.w, ")");
-				return std::move(EngineUtility::StringStreamWrapper::FlushString());
+				return EngineUtility::StringStreamWrapper::FlushString();
 			}
 		};
 	}

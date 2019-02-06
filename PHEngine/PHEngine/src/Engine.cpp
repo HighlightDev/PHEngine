@@ -17,7 +17,7 @@ void Engine::TickWindow()
    m_scene.Tick_GameThread(0.05f);
 
    // This should be on render thread
-   m_sceneRenderer.BasePassRender_RenderThread();
+   m_sceneRenderer.RenderScene_RenderThread();
 }
 
 void Engine::MouseMove()

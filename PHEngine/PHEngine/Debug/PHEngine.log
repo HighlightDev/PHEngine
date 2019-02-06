@@ -1,4 +1,22 @@
-﻿  DeferredShadingSceneRenderer.cpp
+﻿  Actor.cpp
+  PrimitiveComponent.cpp
+  SkyboxComponent.cpp
+  StaticMeshComponent.cpp
+  Scene.cpp
+  DeferredLightShader.cpp
+  DeferredShader.cpp
+  ResolveTextureShader.cpp
+  SkyboxShader.cpp
+  StaticMeshShader.cpp
+  ScreenQuad.cpp
+  Shader.cpp
+  ShaderBase.cpp
+  Uniform.cpp
+  PrimitiveSceneProxy.cpp
+  SkyboxSceneProxy.cpp
+  StaticMeshSceneProxy.cpp
+  DeferredShadingSceneRenderer.cpp
+  ShaderPool.cpp
   Engine.cpp
   Generating Code...
   PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

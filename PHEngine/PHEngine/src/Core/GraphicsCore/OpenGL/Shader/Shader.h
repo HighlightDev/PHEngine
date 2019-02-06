@@ -22,6 +22,9 @@ namespace Graphics
 			virtual ~Shader();
 
 		private:
+#if DEBUG
+         static bool bParentAccessUniformLocationsInvoked;
+#endif
 
 			std::string m_vsPath;
 			std::string m_fsPath;
@@ -67,10 +70,12 @@ namespace Graphics
 
 			Uniform GetUniform(std::string&& uniformName);
 
+         UniformArray GetUniformArray(std::string&& uniformName, size_t countOfUniforms);
+
 			void LoadSubroutineIndex(ShaderType shaderType, int32_t countIndices, int32_t subroutineIndex);
 
 			template <typename ValueType>
-			void Predefine(ShaderType shaderType, std::string&& name, ValueType&& value);
+			void Predefine(ShaderType shaderType, const std::string& name, ValueType&& value);
 
 		public:
 

@@ -17,6 +17,6 @@ void main()
 	float specularFactor = texture(specular, tex_coords).r;
 	
 	gBuffer_Position = world_position;
-	gBuffer_Normal = world_normal;
+	gBuffer_Normal = normalize(world_normal);
 	gBuffer_AlbedoNSpecular = vec4(albedoColor, specularFactor);
 }

@@ -26,38 +26,27 @@ namespace Graphics
          : m_scene(scene)
          , m_gbuffer(std::make_unique<DeferredShadingGBuffer>(GlobalProperties::GetInstance()->GetInputData().GetWindowWidth(), GlobalProperties::GetInstance()->GetInputData().GetWindowHeight()))
       {
-         std::string deferredShaderPath = FolderManager::GetInstance()->GetShadersPath() + "deferredBasePassVS.glsl" + "," + FolderManager::GetInstance()->GetShadersPath() + "deferredBasePassFS.glsl";
-         m_shader = std::dynamic_pointer_cast<DeferredShader>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader>(deferredShaderPath));
+         const auto& folderManager = FolderManager::GetInstance();
+
+         std::string deferredBaseShaderPath = folderManager->GetShadersPath() + "deferredBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
+         std::string deferredLightShaderPath = folderManager->GetShadersPath() + "deferredLightPassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredLightPassFS.glsl";
+         m_deferredBaseShader = std::dynamic_pointer_cast<DeferredShader>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader>(deferredBaseShaderPath));
+         m_deferredLightShader = std::dynamic_pointer_cast<DeferredLightShader>(ShaderPool::GetInstance()-> template GetOrAllocateResource<DeferredLightShader>(deferredLightShaderPath));
       }
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()
 		{
 		}
 
-      void DeferredShadingSceneRenderer::BasePassRender_RenderThread()
+      void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& deferredPrimitives, const glm::mat4& viewMatrix)
       {
-         glEnable(GL_DEPTH_TEST);
-
-         glm::mat4 viewMatrix = m_scene->GetCamera()->GetViewMatrix();
-
-         std::vector<std::shared_ptr<PrimitiveSceneProxy>> drawDeferredShadedPrimitives;
-         std::vector<std::shared_ptr<PrimitiveSceneProxy>> drawForwardShadedPrimitives;
-
-         for (auto& proxy : m_scene->SceneProxies)
-         {
-            if (proxy->IsDeferred())
-               drawDeferredShadedPrimitives.push_back(proxy);
-            else
-               drawForwardShadedPrimitives.push_back(proxy);
-         }
-
-         {
+         {                                                                                                                                   
             // Deferred shading collect info
             m_gbuffer->BindDeferredGBuffer();
-            auto deferredShadingShader = m_shader;
+            auto deferredShadingShader = m_deferredBaseShader;
 
             deferredShadingShader->ExecuteShader();
-            for (auto& proxy : drawDeferredShadedPrimitives)
+            for (auto& proxy : deferredPrimitives)
             {
                const glm::mat4& worldMatrix = proxy->GetMatrix();
                deferredShadingShader->SetTransformMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
@@ -71,35 +60,75 @@ namespace Graphics
 
             m_gbuffer->UnbindDeferredGBuffer();
          }
+      }
 
+      void DeferredShadingSceneRenderer::DeferredLightPass_RenderThread()
+      {
          {
-            // Forward shading
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(0, 0, 0, 0);
 
-            ScreenQuad::GetInstance()->GetResolveTexShader()->ExecuteShader();
-            m_gbuffer->BindNormalTexture(0);
-            ScreenQuad::GetInstance()->GetResolveTexShader()->SetTextureSlot(0);
+            m_deferredLightShader->ExecuteShader();
+            
+            m_gbuffer->BindPositionTexture(0);
+            m_gbuffer->BindAlbedoWithSpecularTexture(1);
+            m_gbuffer->BindNormalTexture(2);
+
+            m_deferredLightShader->SetGBufferPosition(0);
+            m_deferredLightShader->SetGBufferAlbedoNSpecular(1);
+            m_deferredLightShader->SetGBufferNormal(2);
+            m_deferredLightShader->SetDirLight(m_scene->m_dirLightSources);
             ScreenQuad::GetInstance()->GetBuffer()->RenderVAO(GL_TRIANGLES);
-            ScreenQuad::GetInstance()->GetResolveTexShader()->StopShader();
-
-            // Resolve depth buffer from gBuffer to default frame buffer
-
-            int32_t windowWidth = GlobalProperties::GetInstance()->GetInputData().GetWindowWidth();
-            int32_t windowHeight = GlobalProperties::GetInstance()->GetInputData().GetWindowHeight();
-
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gbuffer->GetFramebufferDesc());
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            glBlitFramebuffer(0, 0, windowWidth, windowHeight, 0, 0, windowWidth, windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-            for (auto& proxy : drawForwardShadedPrimitives)
-            {
-               const glm::mat4& worldMatrix = proxy->GetMatrix();
-               proxy->Render(viewMatrix, m_scene->ProjectionMatrix);
-            }
-
+            m_deferredLightShader->StopShader();
          }
+      }
+
+      void DeferredShadingSceneRenderer::ForwardBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& forwardedPrimitives, const glm::mat4& viewMatrix)
+      {
+         // Resolve depth buffer from gBuffer to default frame buffer
+
+         int32_t windowWidth = GlobalProperties::GetInstance()->GetInputData().GetWindowWidth();
+         int32_t windowHeight = GlobalProperties::GetInstance()->GetInputData().GetWindowHeight();
+
+         glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gbuffer->GetFramebufferDesc());
+         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+         glBlitFramebuffer(0, 0, windowWidth, windowHeight, 0, 0, windowWidth, windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+         for (auto& proxy : forwardedPrimitives)
+         {
+            proxy->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
+         }
+      }
+
+      void DeferredShadingSceneRenderer::RenderScene_RenderThread()
+      {
+         glEnable(GL_DEPTH_TEST);
+
+         const glm::mat4& viewMatrix = m_scene->GetCamera()->GetViewMatrix();
+
+         std::vector<std::shared_ptr<PrimitiveSceneProxy>> drawDeferredShadedPrimitives;
+         std::vector<std::shared_ptr<PrimitiveSceneProxy>> drawForwardShadedPrimitives;
+
+         for (auto& proxy : m_scene->SceneProxies)
+         {
+            if (proxy->IsDeferred())
+               drawDeferredShadedPrimitives.push_back(proxy);
+            else
+               drawForwardShadedPrimitives.push_back(proxy);
+         }
+
+         const bool bIsForwardShadedPrimitives = drawForwardShadedPrimitives.size() > 0;
+
+         DeferredBasePass_RenderThread(drawDeferredShadedPrimitives, viewMatrix);
+
+         DeferredLightPass_RenderThread();
+
+         if (bIsForwardShadedPrimitives)
+         {
+            ForwardBasePass_RenderThread(drawForwardShadedPrimitives, viewMatrix);
+         }
+
       }
 	}
 }

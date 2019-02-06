@@ -22,9 +22,9 @@ namespace Game
    }
 
    template <typename PrimitiveType>
-   void Scene::CreateAndAddComponent_GameThread(ComponentData* componentData, Actor* addComponentToThisActor)
+   void Scene::CreateAndAddComponent_GameThread(ComponentData& componentData, Actor* addComponentToThisActor)
    {
-      auto component = ComponentCreatorFactory<PrimitiveType>::CreateComponent(*componentData);
+      auto component = ComponentCreatorFactory<PrimitiveType>::CreateComponent(componentData);
       ComponentType type = component->GetComponentType();
       if (type & ComponentType::SCENE_COMPONENT)
       {
@@ -100,12 +100,16 @@ namespace Game
       const float aspectRatio = 16.0f / 9.0f;
       ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
 
+      m_dirLightSources.emplace_back(std::move(DirectionalLight(glm::vec3(1, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f))));
+
+      const auto& folderManager = Common::FolderManager::GetInstance();
       // HOUSE
       {
-         StaticMeshComponentData mData(FolderManager::GetInstance()->GetModelPath() + "City_House_2_BI.obj", glm::vec3(), glm::vec3(), glm::vec3(1), Common::FolderManager::GetInstance()->GetShadersPath() + "testVS.glsl",
-            Common::FolderManager::GetInstance()->GetShadersPath() + "testFS.glsl", FolderManager::GetInstance()->GetAlbedoTexturePath() + "city_house_2_Col.png");
-         Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
-         CreateAndAddComponent_GameThread<StaticMeshComponent>(&mData, houseActor);
+         StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(), glm::vec3(), glm::vec3(1), folderManager->GetShadersPath() + "testVS.glsl",
+            folderManager->GetShadersPath() + "testFS.glsl", folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png", folderManager->GetNormalMapPath() + "city_house_2_Nor.png",
+            folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
+         Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+         CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
          AllActors.push_back(houseActor);
       }
 
@@ -114,18 +118,18 @@ namespace Game
          float SKYBOX_SIZE = 50.0f;
 
          StringStreamWrapper::ToString(
-            FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "right.png", ",",
-            FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "left.png", ",",
-            FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "top.png", ",",
-            FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "bottom.png", ",",
-            FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "back.png", ",",
-            FolderManager::GetInstance()->GetCubemapTexturePath(), "Day/", "front.png");
+            folderManager->GetCubemapTexturePath(), "Day/", "right.png", ",",
+            folderManager->GetCubemapTexturePath(), "Day/", "left.png", ",",
+            folderManager->GetCubemapTexturePath(), "Day/", "top.png", ",",
+            folderManager->GetCubemapTexturePath(), "Day/", "bottom.png", ",",
+            folderManager->GetCubemapTexturePath(), "Day/", "back.png", ",",
+            folderManager->GetCubemapTexturePath(), "Day/", "front.png");
          auto dTexPath = StringStreamWrapper::FlushString();
 
-         SkyboxComponentData mData(SKYBOX_SIZE, 5.0f, std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxVS.glsl"),
-            std::move(FolderManager::GetInstance()->GetShadersPath() + "tSkyboxFS.glsl"), std::move(dTexPath));
+         SkyboxComponentData mData(SKYBOX_SIZE, 5.0f, std::move(folderManager->GetShadersPath() + "tSkyboxVS.glsl"),
+            std::move(folderManager->GetShadersPath() + "tSkyboxFS.glsl"), std::move(dTexPath));
          Actor* skyboxActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
-         CreateAndAddComponent_GameThread<SkyboxComponent>(&mData, skyboxActor);
+         CreateAndAddComponent_GameThread<SkyboxComponent>(mData, skyboxActor);
          AllActors.push_back(skyboxActor);
       }
    }

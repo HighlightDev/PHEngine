@@ -18,6 +18,5 @@ namespace Graphics
       PrimitiveSceneProxy::~PrimitiveSceneProxy()
       {
       }
-
    }
 }

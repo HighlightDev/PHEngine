@@ -281,6 +281,7 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredLightShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredShadingGBuffer.h" />
     <ClInclude Include="src\Core\GameCore\Scene.h" />
     <ClInclude Include="src\Core\GraphicsCore\RenderData\SkyboxRenderData.h" />
@@ -601,6 +602,7 @@
     <ClInclude Include="src\Core\GraphicsCore\RenderData\StaticMeshRenderData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredLightShader.cpp" />
     <ClCompile Include="src\Core\GameCore\Scene.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\SkyboxSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\SpotLight.cpp" />
