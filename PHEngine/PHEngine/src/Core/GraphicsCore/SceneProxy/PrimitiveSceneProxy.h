@@ -31,7 +31,7 @@ namespace Graphics
 
       public:
 
-         PrimitiveSceneProxy(glm::mat4& relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ITexture> albedoTex,
+         PrimitiveSceneProxy(glm::mat4 relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ITexture> albedoTex,
             std::shared_ptr<ITexture> normalMapTex = std::shared_ptr<ITexture>(),
             std::shared_ptr<ITexture> specularMapTex = std::shared_ptr<ITexture>());
 

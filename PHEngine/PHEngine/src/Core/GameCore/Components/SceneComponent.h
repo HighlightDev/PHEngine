@@ -27,6 +27,8 @@ namespace Game
 
 		SceneComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale);
 
+      SceneComponent();
+
 		~SceneComponent();
 
 		virtual void Tick(float deltaTime) override;

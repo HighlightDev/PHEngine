@@ -1,4 +1,5 @@
 #include "DeferredLightShader.h"
+#include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
 
 namespace Game
 {
@@ -47,6 +48,25 @@ namespace Game
       void DeferredLightShader::SetGBufferPosition(int32_t slot)
       {
          u_gBuffer_Position.LoadUniform(slot);
+      }
+
+      void DeferredLightShader::SetLightsInfo(std::vector<std::shared_ptr<LightSceneProxy>> lightsProxies)
+      {
+         size_t dirLightProxyIndex = 0;
+         for (size_t lightProxyIndex = 0; lightProxyIndex < lightsProxies.size(); ++lightProxyIndex)
+         {
+            if (lightsProxies[lightProxyIndex]->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT && dirLightProxyIndex < DIR_LIGHT_COUNT)
+            {
+               auto sharedLightProxy = lightsProxies[lightProxyIndex];
+               DirectionalLightSceneProxy* dirLProxyPtr = static_cast<DirectionalLightSceneProxy*>(sharedLightProxy.get());
+               u_DirLightAmbientColor.LoadUniform(dirLightProxyIndex, dirLProxyPtr->AmbientColor);
+               u_DirLightDiffuseColor.LoadUniform(dirLightProxyIndex, dirLProxyPtr->DiffuseColor);
+               u_DirLightSpecularColor.LoadUniform(dirLightProxyIndex, dirLProxyPtr->SpecularColor);
+               u_DirLightDirection.LoadUniform(dirLightProxyIndex, dirLProxyPtr->GetDirection());
+
+               dirLightProxyIndex++;
+            }
+         }
       }
 
       void DeferredLightShader::SetDirLight(std::vector<DirectionalLight>& directionalLight)

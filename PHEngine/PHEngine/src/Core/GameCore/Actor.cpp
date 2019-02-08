@@ -35,7 +35,7 @@ namespace Game
 				glm::mat4 rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
 				for (auto& component : m_allComponents)
 				{
-					if (component->GetComponentType() & ComponentType::SCENE_COMPONENT)
+					if ((component->GetComponentType() & ComponentType::SCENE_COMPONENT) == ComponentType::SCENE_COMPONENT)
 					{
 						SceneComponent* sceneComp = static_cast<SceneComponent*>(component.get());
 						sceneComp->UpdateRelativeMatrix(rootRelativeMatrix);
@@ -62,7 +62,7 @@ namespace Game
 			glm::mat4 rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
 			for (auto& component : m_allComponents)
 			{
-				if (component->GetComponentType() & ComponentType::SCENE_COMPONENT)
+				if ((component->GetComponentType() & ComponentType::SCENE_COMPONENT) == ComponentType::SCENE_COMPONENT)
 				{
 					SceneComponent* sceneComp = static_cast<SceneComponent*>(component.get());
 					if (sceneComp->GetIsTransformationDirty())
@@ -83,11 +83,11 @@ namespace Game
 
       for (auto& component : m_allComponents)
       {
-         if (component->GetComponentType() & ComponentType::PRIMITIVE_COMPONENT)
+         if ((component->GetComponentType() & ComponentType::PRIMITIVE_COMPONENT) == ComponentType::PRIMITIVE_COMPONENT)
          {
             PrimitiveComponent* compPtr = static_cast<PrimitiveComponent*>(component.get());
-            if (compPtr->SceneProxyComponentId > removedProxyIndex)
-               --compPtr->SceneProxyComponentId;
+            if (compPtr->PrimitiveProxyComponentId > removedProxyIndex)
+               --compPtr->PrimitiveProxyComponentId;
          }
       }
    }

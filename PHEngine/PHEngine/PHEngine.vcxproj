@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -281,16 +281,23 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\DirectionalLightComponentData.h" />
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\LightComponentData.h" />
+    <ClInclude Include="src\Core\GraphicsCore\RenderData\DirectionalLightRenderData.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.h" />
+    <ClInclude Include="src\Core\GameCore\Components\DirectionalLightComponent.h" />
+    <ClInclude Include="src\Core\GameCore\Components\LightComponent.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredLightShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredShadingGBuffer.h" />
     <ClInclude Include="src\Core\GameCore\Scene.h" />
     <ClInclude Include="src\Core\GraphicsCore\RenderData\SkyboxRenderData.h" />
-    <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\SkyboxSceneProxy.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\Light\SpotLight.h" />
     <ClInclude Include="src\Core\GraphicsCore\Light\PointLight.h" />
     <ClInclude Include="src\Core\GraphicsCore\Light\DirectionalLight.h" />
     <ClInclude Include="src\Core\GraphicsCore\Light\LightBase.h" />
-    <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\PrimitiveSceneProxy.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\PrimitiveSceneProxy.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredShader.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\Common\ScreenQuad.h" />
@@ -598,18 +605,22 @@
     <ClInclude Include="src\Core\ResourceManagerCore\Pool\TexturePool.h" />
     <ClInclude Include="src\Core\GameCore\Components\StaticMeshComponent.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.h" />
-    <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\StaticMeshSceneProxy.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\StaticMeshSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\RenderData\StaticMeshRenderData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\LightComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredLightShader.cpp" />
     <ClCompile Include="src\Core\GameCore\Scene.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\SkyboxSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\SpotLight.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\PointLight.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\DirectionalLight.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\LightBase.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\PrimitiveSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\PrimitiveSceneProxy.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredShader.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Common\ScreenQuad.cpp" />
@@ -662,7 +673,7 @@
     <ClCompile Include="src\Core\ResourceManagerCore\Pool\TexturePool.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\StaticMeshComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\StaticMeshSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\StaticMeshSceneProxy.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

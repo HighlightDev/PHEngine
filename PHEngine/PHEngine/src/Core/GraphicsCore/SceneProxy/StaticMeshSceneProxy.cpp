@@ -5,10 +5,9 @@ namespace Graphics
    namespace Proxy
    {
 
-      StaticMeshSceneProxy::StaticMeshSceneProxy(glm::mat4& relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ShaderBase> shader, std::shared_ptr<ITexture> albedoTex, std::shared_ptr<ITexture> normalMapTex,
-         std::shared_ptr<ITexture> specularMapTex)
-         : PrimitiveSceneProxy(relativeMatrix, skin, albedoTex, normalMapTex, specularMapTex)
-         , m_shader(std::dynamic_pointer_cast<StaticMeshShader>(shader))
+      StaticMeshSceneProxy::StaticMeshSceneProxy(const StaticMeshComponent* component)
+         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, component->GetRenderData().m_albedo, component->GetRenderData().m_normalMapTex, component->GetRenderData().m_specularMapTex)
+         , m_shader(std::dynamic_pointer_cast<StaticMeshShader>(component->GetRenderData().m_shader))
       {
          m_IsDeferred = true;
       }

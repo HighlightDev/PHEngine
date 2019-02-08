@@ -18,6 +18,8 @@ namespace Game
 
       void DeferredShader::AccessAllUniformLocations()
       {
+         Base::AccessAllUniformLocations();
+
          u_worldMatrix = GetUniform("worldMatrix");
          u_viewMatrix = GetUniform("viewMatrix");
          u_projectionMatrix = GetUniform("projectionMatrix");

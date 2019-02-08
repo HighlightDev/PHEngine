@@ -42,10 +42,10 @@ namespace Game
 
 		virtual ComponentType GetComponentType() override
 		{
-			return ComponentType::SCENE_COMPONENT;
+			return ComponentType::SKYBOX_COMPONENT;
 		}
 
-      virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() override;
+      virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() const override;
 
 		inline void SetRotateSpeed(float rotateSpeed)
 		{
@@ -57,6 +57,10 @@ namespace Game
 			return m_rotateSpeed;
 		}
 
+      SkyboxRenderData GetRenderData() const {
+
+         return m_renderData;
+      }
 	};
 
 }

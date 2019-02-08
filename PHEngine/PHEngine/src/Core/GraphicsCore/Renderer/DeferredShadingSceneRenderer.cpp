@@ -1,7 +1,7 @@
 #include "DeferredShadingSceneRenderer.h"
 #include "Core/ResourceManagerCore/Pool/ShaderPool.h"
 #include "Core/CommonCore/FolderManager.h"
-#include "Core/GraphicsCore/PrimitiveProxy/PrimitiveSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/PrimitiveSceneProxy.h"
 #include "Core/GameCore/GlobalProperties.h"
 #include "Core/GameCore/CameraBase.h"
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
@@ -77,7 +77,8 @@ namespace Graphics
             m_deferredLightShader->SetGBufferPosition(0);
             m_deferredLightShader->SetGBufferAlbedoNSpecular(1);
             m_deferredLightShader->SetGBufferNormal(2);
-            m_deferredLightShader->SetDirLight(m_scene->m_dirLightSources);
+
+            m_deferredLightShader->SetLightsInfo(m_scene->LightProxies);
             ScreenQuad::GetInstance()->GetBuffer()->RenderVAO(GL_TRIANGLES);
             m_deferredLightShader->StopShader();
          }

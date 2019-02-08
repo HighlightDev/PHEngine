@@ -35,7 +35,12 @@ namespace Game
 
 		virtual void Tick(float deltaTime) override;
 
-      virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() override;
+      virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() const override;
+
+      inline StaticMeshRenderData GetRenderData() const {
+
+         return m_renderData;
+      }
 	};
 
 }

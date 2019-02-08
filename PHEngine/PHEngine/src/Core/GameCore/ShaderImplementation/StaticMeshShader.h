@@ -17,6 +17,8 @@ namespace Game
 		class StaticMeshShader :
 			public ShaderBase
 		{
+         using Base = ShaderBase;
+
 			#define MAX_LIGHT_COUNT 1
 
 			Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_albedo, u_normalMap, u_specularMap, u_materialAmbient,

@@ -5,12 +5,11 @@ namespace Graphics
    namespace Proxy
    {
 
-      SkyboxSceneProxy::SkyboxSceneProxy(glm::mat4& relativeMatrix, std::shared_ptr<Skin> skyboxMesh,
-         std::shared_ptr<ShaderBase> skyboxShader, std::shared_ptr<ITexture> dayTexture, std::shared_ptr<ITexture> nightTexture)
-         : PrimitiveSceneProxy(relativeMatrix, skyboxMesh, std::shared_ptr<ITexture>())
-         , m_skyboxShader(std::dynamic_pointer_cast<SkyboxShader>(skyboxShader))
-         , m_dayTexture(dayTexture)
-         , m_nightTexture(nightTexture)
+      SkyboxSceneProxy::SkyboxSceneProxy(const SkyboxComponent* component)
+         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, std::shared_ptr<ITexture>(), std::shared_ptr<ITexture>())
+         , m_skyboxShader(std::dynamic_pointer_cast<SkyboxShader>(component->GetRenderData().m_shader))
+         , m_dayTexture(component->GetRenderData().m_dayTex)
+         , m_nightTexture(component->GetRenderData().m_nightTex)
       {
          m_IsDeferred = false;
       }

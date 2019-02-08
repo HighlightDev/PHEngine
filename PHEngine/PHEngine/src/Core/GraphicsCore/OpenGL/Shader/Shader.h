@@ -21,10 +21,11 @@ namespace Graphics
 
 			virtual ~Shader();
 
-		private:
 #if DEBUG
          static bool bParentAccessUniformLocationsInvoked;
 #endif
+
+		private:
 
 			std::string m_vsPath;
 			std::string m_fsPath;

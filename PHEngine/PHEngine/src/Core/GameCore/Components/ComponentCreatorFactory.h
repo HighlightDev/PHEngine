@@ -4,7 +4,8 @@
 
 #include "Component.h"
 #include "SkyboxComponent.h"
-#include "Core/GameCore/Components/StaticMeshComponent.h"
+#include "StaticMeshComponent.h"
+#include "DirectionalLightComponent.h"
 #include "ComponentType.h"
 #include "Core/ResourceManagerCore/Pool/TexturePool.h"
 #include "Core/ResourceManagerCore/Pool/ShaderPool.h"
@@ -12,6 +13,7 @@
 #include "Core/GameCore/Components/ComponentData/ComponentData.h"
 #include "Core/GameCore/Components/ComponentData/SkyboxComponentData.h"
 #include "Core/GameCore/Components/ComponentData/StaticMeshComponentData.h"
+#include "Core/GameCore/Components/ComponentData/DirectionalLightComponentData.h"
 
 using namespace Resources;
 
@@ -98,6 +100,24 @@ namespace Game
             StaticMeshRenderData renderData(skin, staticMeshShader, albedo, normalMap, specularMap);
 
             resultComponent = std::make_shared<StaticMeshComponent>(std::move(mData.m_translation), std::move(mData.m_rotation), std::move(mData.m_scale), renderData);
+         }
+
+         return resultComponent;
+      }
+   };
+
+   // Directional light component
+   template <>
+   struct ComponentCreatorFactory<DirectionalLightComponent>
+   {
+      static std::shared_ptr<Component> CreateComponent(ComponentData& data)
+      {
+         std::shared_ptr<Component> resultComponent;
+         if (data.GetType() == ComponentType::DIR_LIGHT_COMPONENT)
+         {
+            DirectionalLightComponentData& mData = static_cast<DirectionalLightComponentData&>(data);
+            DirectionalLightRenderData renderData(mData.Direction, mData.Ambient, mData.Diffuse, mData.Specular);
+            resultComponent = std::make_shared<DirectionalLightComponent>(std::move(mData.Translation), std::move(mData.Rotation), std::move(mData.Scale), renderData);
          }
 
          return resultComponent;

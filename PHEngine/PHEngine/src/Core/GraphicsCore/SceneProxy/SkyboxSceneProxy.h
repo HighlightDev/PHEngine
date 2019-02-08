@@ -2,8 +2,10 @@
 
 #include "PrimitiveSceneProxy.h"
 #include "Core/GameCore/ShaderImplementation/SkyboxShader.h"
+#include "Core/GameCore/Components/SkyboxComponent.h"
 
 using namespace Game::ShaderImpl;
+using namespace Game;
 
 namespace Graphics
 {
@@ -25,8 +27,7 @@ namespace Graphics
 
       public:
 
-         SkyboxSceneProxy(glm::mat4& relativeMatrix, std::shared_ptr<Skin> skyboxMesh,
-            std::shared_ptr<ShaderBase> skyboxShader, std::shared_ptr<ITexture> dayTexture, std::shared_ptr<ITexture> nightTexture);
+         SkyboxSceneProxy(const SkyboxComponent* component);
 
          ~SkyboxSceneProxy();
 

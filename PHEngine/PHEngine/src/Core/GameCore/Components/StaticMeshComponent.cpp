@@ -1,5 +1,5 @@
 #include "StaticMeshComponent.h"
-#include "Core/GraphicsCore/PrimitiveProxy/StaticMeshSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/StaticMeshSceneProxy.h"
 
 #include <memory>
 
@@ -22,7 +22,7 @@ namespace Game
 	{
 		Base::Tick(deltaTime);
 
-		m_rotation += 0.02f;
+		/*m_rotation += 0.02f;
 
 		if (m_rotation.x > 360.0f)
 			m_rotation.x -= 360.0f;
@@ -31,15 +31,14 @@ namespace Game
 			m_rotation.y -= 360.0f;
 
 		if (m_rotation.z > 360.0f)
-			m_rotation.z -= 360.0f;
+			m_rotation.z -= 360.0f;*/
 
       bTransformationDirty = true;
 	}
 
-   std::shared_ptr<PrimitiveSceneProxy> StaticMeshComponent::CreateSceneProxy()
+   std::shared_ptr<PrimitiveSceneProxy> StaticMeshComponent::CreateSceneProxy() const
    {
-      return std::make_shared<StaticMeshSceneProxy>(m_relativeMatrix, m_renderData.m_skin,
-         m_renderData.m_shader, m_renderData.m_albedo, m_renderData.m_normalMapTex, m_renderData.m_specularMapTex);
+      return std::make_shared<StaticMeshSceneProxy>(this);
    }
 
 }

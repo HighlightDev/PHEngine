@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Core/GameCore/Actor.h"
-#include "Core/GraphicsCore/PrimitiveProxy/PrimitiveSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/PrimitiveSceneProxy.h"
+#include "Core/GameCore/Components/LightComponent.h"
 #include "Core/GameCore/Components/Component.h"
 #include "Core/GameCore/Components/ComponentData/ComponentData.h"
 #include "Core/GraphicsCore/Light/DirectionalLight.h"
@@ -19,6 +20,8 @@ namespace Game
       std::vector<Actor*> AllActors;
 
       std::vector<std::shared_ptr<PrimitiveSceneProxy>> SceneProxies;
+
+      std::vector<std::shared_ptr<LightSceneProxy>> LightProxies;
 
       glm::mat4 ProjectionMatrix;
 
@@ -39,7 +42,9 @@ namespace Game
 
       void Tick_GameThread(float delta);
 
-      void OnUpdatePrimitiveTransform_GameThread(size_t primitiveSceneProxyIndex, glm::mat4& newRelativeMatrix);
+      void OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, glm::mat4& newRelativeMatrix);
+
+      void OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, glm::mat4& newRelativeMatrix);
 
       template <typename PrimitiveType>
       void CreateAndAddComponent_GameThread(ComponentData& componentData, Actor* addComponentToThisActor);

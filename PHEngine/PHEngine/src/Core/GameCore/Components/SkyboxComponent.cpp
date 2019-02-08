@@ -1,6 +1,6 @@
 #include "SkyboxComponent.h"
 #include "Core/UtilityCore/EngineMath.h"
-#include "Core/GraphicsCore/PrimitiveProxy/SkyboxSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/SkyboxSceneProxy.h"
 
 #include <glm/vec3.hpp>
 
@@ -28,8 +28,8 @@ namespace Game
 		SetRotationAxisY(m_rotation.y + deltaTime * m_rotateSpeed);
 	}
 
-   std::shared_ptr<PrimitiveSceneProxy> SkyboxComponent::CreateSceneProxy()
+   std::shared_ptr<PrimitiveSceneProxy> SkyboxComponent::CreateSceneProxy() const
    {
-      return std::make_shared<SkyboxSceneProxy>(m_relativeMatrix, m_renderData.m_skin, m_renderData.m_shader, m_renderData.m_dayTex, m_renderData.m_nightTex);
+      return std::make_shared<SkyboxSceneProxy>(this);
    }
 }

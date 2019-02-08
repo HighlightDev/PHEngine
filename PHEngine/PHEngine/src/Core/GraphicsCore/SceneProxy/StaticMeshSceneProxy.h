@@ -1,7 +1,9 @@
 #pragma once
 #include "PrimitiveSceneProxy.h"
+#include "Core/GameCore/Components/StaticMeshComponent.h"
 #include "Core/GameCore/ShaderImplementation/StaticMeshShader.h"
 
+using namespace Game;
 using namespace Game::ShaderImpl;
 
 namespace Graphics
@@ -20,8 +22,7 @@ namespace Graphics
          using Base = PrimitiveSceneProxy;
 
       public:
-         StaticMeshSceneProxy(glm::mat4& relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ShaderBase> shader, std::shared_ptr<ITexture> albedoTex, std::shared_ptr<ITexture> normalMapTex,
-            std::shared_ptr<ITexture> specularMapTex);
+         StaticMeshSceneProxy(const StaticMeshComponent* component);
 
          ~StaticMeshSceneProxy();
 

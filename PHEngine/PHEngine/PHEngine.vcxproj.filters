@@ -1342,9 +1342,6 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\PrimitiveSceneProxy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\GraphicsCore\Light\LightBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1355,12 +1352,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\GraphicsCore\Light\SpotLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\StaticMeshSceneProxy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\GraphicsCore\PrimitiveProxy\SkyboxSceneProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\GraphicsCore\RenderData\StaticMeshRenderData.h">
@@ -1379,6 +1370,36 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredLightShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\Components\LightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\Components\DirectionalLightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\PrimitiveSceneProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\StaticMeshSceneProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\DirectionalLightComponentData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\LightComponentData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\RenderData\DirectionalLightRenderData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1536,9 +1557,6 @@
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\PrimitiveSceneProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\Light\LightBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1551,12 +1569,6 @@
     <ClCompile Include="src\Core\GraphicsCore\Light\SpotLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\StaticMeshSceneProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\GraphicsCore\PrimitiveProxy\SkyboxSceneProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\GameCore\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1564,6 +1576,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredLightShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GameCore\Components\LightComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GameCore\Components\DirectionalLightComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\PrimitiveSceneProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\StaticMeshSceneProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

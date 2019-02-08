@@ -15,6 +15,8 @@ namespace Game
          public ShaderBase
       {
 
+         using Base = ShaderBase;
+
          Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_albedoTex, u_normalTex, u_specularTex;
 
       public:

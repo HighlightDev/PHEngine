@@ -7,6 +7,7 @@
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
 #include "Core/GameCore/CameraBase.h"
 #include "Core/GameCore/FirstPersonCamera.h"
+#include "Core/GameCore/Components/DirectionalLightComponent.h"
 
 using namespace Graphics::Texture;
 using namespace Common;
@@ -26,16 +27,23 @@ namespace Game
    {
       auto component = ComponentCreatorFactory<PrimitiveType>::CreateComponent(componentData);
       ComponentType type = component->GetComponentType();
-      if (type & ComponentType::SCENE_COMPONENT)
+      if ((type & ComponentType::SCENE_COMPONENT) == SCENE_COMPONENT)
       {
          SceneComponent* sceneComponentPtr = static_cast<SceneComponent*>(component.get());
          sceneComponentPtr->SetScene(this);
-         if (type & ComponentType::PRIMITIVE_COMPONENT)
+         if ((type & ComponentType::PRIMITIVE_COMPONENT) == PRIMITIVE_COMPONENT)
          {
             PrimitiveComponent* componentPtr = static_cast<PrimitiveComponent*>(sceneComponentPtr);
-            componentPtr->SceneProxyComponentId = PrimitiveComponent::TotalSceneComponentIndex++;
-            auto sceneProxyUnique = std::move(componentPtr->CreateSceneProxy());
-            SceneProxies.push_back(sceneProxyUnique);
+            componentPtr->PrimitiveProxyComponentId = PrimitiveComponent::TotalPrimitiveSceneProxyIndex++;
+            auto sceneProxyShared = componentPtr->CreateSceneProxy();
+            SceneProxies.push_back(sceneProxyShared);
+         }
+         else if ((type & ComponentType::LIGHT_COMPONENT) == LIGHT_COMPONENT)
+         {
+            LightComponent* componentPtr = static_cast<LightComponent*>(sceneComponentPtr);
+            componentPtr->LightSceneProxyId = LightComponent::TotalLightSceneProxyId++;
+            auto lightProxyShared = componentPtr->CreateSceneProxy();
+            LightProxies.push_back(lightProxyShared);
          }
       }
 
@@ -47,10 +55,10 @@ namespace Game
       ComponentType type = component->GetComponentType();
 
       // Remove corresponding primitive proxy
-      if (type & ComponentType::PRIMITIVE_COMPONENT)
+      if ((type & ComponentType::PRIMITIVE_COMPONENT) == PRIMITIVE_COMPONENT)
       {
          PrimitiveComponent* componentPtr = static_cast<PrimitiveComponent*>(component.get());
-         const size_t removeProxyIndex = componentPtr->SceneProxyComponentId;
+         const size_t removeProxyIndex = componentPtr->PrimitiveProxyComponentId;
          std::shared_ptr<PrimitiveSceneProxy> removeProxy = SceneProxies.at(removeProxyIndex);
       
          // Remove proxy index offset
@@ -63,7 +71,26 @@ namespace Game
          if (proxyIt != SceneProxies.end())
          {
             SceneProxies.erase(proxyIt);
-            PrimitiveComponent::TotalSceneComponentIndex--;
+            PrimitiveComponent::TotalPrimitiveSceneProxyIndex--;
+         }
+      }
+      if ((type & ComponentType::LIGHT_COMPONENT) == LIGHT_COMPONENT)
+      {
+         LightComponent* componentPtr = static_cast<LightComponent*>(component.get());
+         const size_t removeProxyIndex = componentPtr->LightSceneProxyId;
+         std::shared_ptr<LightSceneProxy> removeProxy = LightProxies.at(removeProxyIndex);
+
+         // Remove proxy index offset
+         for (auto& actor : AllActors)
+         {
+            actor->RemoveComponentIndexOffset(removeProxyIndex);
+         }
+
+         auto proxyIt = std::find(LightProxies.begin(), LightProxies.end(), removeProxy);
+         if (proxyIt != LightProxies.end())
+         {
+            LightProxies.erase(proxyIt);
+            LightComponent::TotalLightSceneProxyId--;
          }
       }
 
@@ -74,11 +101,19 @@ namespace Game
       }
    }
 
-   void Scene::OnUpdatePrimitiveTransform_GameThread(size_t primitiveSceneProxyIndex, glm::mat4& newRelativeMatrix)
+   void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, glm::mat4& newRelativeMatrix)
    {
       if (primitiveSceneProxyIndex < SceneProxies.size())
       {
          SceneProxies[primitiveSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
+      }
+   }
+
+   void Scene::OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, glm::mat4& newRelativeMatrix)
+   {
+      if (lightSceneProxyIndex < LightProxies.size())
+      {
+         LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
       }
    }
 
@@ -99,6 +134,17 @@ namespace Game
    {
       const float aspectRatio = 16.0f / 9.0f;
       ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
+
+      // DirectionalLight
+      {
+         DirectionalLightComponentData mData(glm::vec3(0), glm::vec3(0), glm::vec3(1),
+            glm::vec3(1, 0, 0),
+            glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f));
+         Actor* dirLightActor = new Actor(new SceneComponent());
+         CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData, dirLightActor);
+         AllActors.push_back(dirLightActor);
+      }
+
 
       m_dirLightSources.emplace_back(std::move(DirectionalLight(glm::vec3(1, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f))));
 

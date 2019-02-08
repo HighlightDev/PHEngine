@@ -2,11 +2,13 @@
 #include "Core/GraphicsCore/OpenGL/Shader/ShaderBase.h"
 #include "Core/GraphicsCore/OpenGL/Shader/Uniform.h"
 #include "Core/GraphicsCore/Light/DirectionalLight.h"
+#include "Core/GraphicsCore/SceneProxy/LightSceneProxy.h"
 
 #include <string>
 
 using namespace Graphics::OpenGL;
 using namespace Graphics::Light;
+using namespace Graphics::Proxy;
 
 #define DIR_LIGHT_COUNT 1
 
@@ -42,6 +44,8 @@ namespace Game
          void SetGBufferPosition(int32_t slot);
 
          void SetDirLight(std::vector<DirectionalLight>& directionalLight);
+
+         void SetLightsInfo(std::vector<std::shared_ptr<LightSceneProxy>> lightsProxies);
 
       protected:
 

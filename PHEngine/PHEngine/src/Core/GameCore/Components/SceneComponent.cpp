@@ -8,6 +8,17 @@ using namespace EngineUtility;
 namespace Game
 {
 
+   SceneComponent::SceneComponent()
+      : Component()
+      , bTransformationDirty(true)
+      , m_translation(0)
+      , m_rotation(0)
+      , m_scale(1)
+      , m_relativeMatrix(1)
+   {
+
+   }
+
 	SceneComponent::SceneComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
 		: Component()
 		, bTransformationDirty(true)
