@@ -1,9 +1,19 @@
-﻿  StaticMeshComponent.cpp
+﻿  PointLightComponent.cpp
+  DirectionalLightSceneProxy.cpp
+  DirectionalLightComponent.cpp
+  LightComponent.cpp
+  DeferredLightShader.cpp
   Scene.cpp
-  DeferredShader.cpp
-  StaticMeshShader.cpp
+  PointLightSceneProxy.cpp
+  SkyboxSceneProxy.cpp
   DeferredShadingSceneRenderer.cpp
-  StaticMeshSceneProxy.cpp
+  SceneComponent.cpp
+  SkyboxComponent.cpp
+  PrimitiveComponent.cpp
+  Component.cpp
+  Actor.cpp
   Engine.cpp
+  StaticMeshComponent.cpp
+  StaticMeshSceneProxy.cpp
   Generating Code...
-  PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib
+  PHEngine.vcxproj -> D:\VisualStudioProjects\PHEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

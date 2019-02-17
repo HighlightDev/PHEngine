@@ -26,7 +26,7 @@ namespace Game
    {
       Base::UpdateRelativeMatrix(parentRelativeMatrix);
 
-      SetRotationAxisY(m_rotation.y + 0.05f);
+      SetRotationAxisY(m_rotation.y + 1);
    }
 
 }

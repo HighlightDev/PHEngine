@@ -281,9 +281,13 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\Components\PointLightComponent.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\DirectionalLightComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\LightComponentData.h" />
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\PointLightComponentData.h" />
     <ClInclude Include="src\Core\GraphicsCore\RenderData\DirectionalLightRenderData.h" />
+    <ClInclude Include="src\Core\GraphicsCore\RenderData\LightRenderData.h" />
+    <ClInclude Include="src\Core\GraphicsCore\RenderData\PointLightRenderData.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.h" />
     <ClInclude Include="src\Core\GameCore\Components\DirectionalLightComponent.h" />
@@ -292,6 +296,7 @@
     <ClInclude Include="src\Core\GraphicsCore\Renderer\DeferredShadingGBuffer.h" />
     <ClInclude Include="src\Core\GameCore\Scene.h" />
     <ClInclude Include="src\Core\GraphicsCore\RenderData\SkyboxRenderData.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\PointLightSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\Light\SpotLight.h" />
     <ClInclude Include="src\Core\GraphicsCore\Light\PointLight.h" />
@@ -609,12 +614,14 @@
     <ClInclude Include="src\Core\GraphicsCore\RenderData\StaticMeshRenderData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GameCore\Components\PointLightComponent.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\LightComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredLightShader.cpp" />
     <ClCompile Include="src\Core\GameCore\Scene.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\PointLightSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\SpotLight.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\PointLight.cpp" />
