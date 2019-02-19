@@ -1,19 +1,2 @@
-﻿  PointLightComponent.cpp
-  DirectionalLightSceneProxy.cpp
-  DirectionalLightComponent.cpp
-  LightComponent.cpp
-  DeferredLightShader.cpp
-  Scene.cpp
-  PointLightSceneProxy.cpp
-  SkyboxSceneProxy.cpp
-  DeferredShadingSceneRenderer.cpp
-  SceneComponent.cpp
-  SkyboxComponent.cpp
-  PrimitiveComponent.cpp
-  Component.cpp
-  Actor.cpp
-  Engine.cpp
-  StaticMeshComponent.cpp
-  StaticMeshSceneProxy.cpp
-  Generating Code...
-  PHEngine.vcxproj -> D:\VisualStudioProjects\PHEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib
+﻿  ShadowMapAtlasFactory.cpp
+  PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

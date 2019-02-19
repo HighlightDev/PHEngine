@@ -5,10 +5,8 @@
 #include "Core/GameCore/Components/LightComponent.h"
 #include "Core/GameCore/Components/Component.h"
 #include "Core/GameCore/Components/ComponentData/ComponentData.h"
-#include "Core/GraphicsCore/Light/DirectionalLight.h"
 
 using namespace Graphics::Proxy;
-using namespace Graphics::Light;
 
 namespace Game
 {
@@ -24,8 +22,6 @@ namespace Game
       std::vector<std::shared_ptr<LightSceneProxy>> LightProxies;
 
       glm::mat4 ProjectionMatrix;
-
-      std::vector<DirectionalLight> m_dirLightSources;
 
    private:
 

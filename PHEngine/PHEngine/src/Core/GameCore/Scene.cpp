@@ -145,9 +145,6 @@ namespace Game
          AllActors.push_back(dirLightActor);
       }
 
-
-      m_dirLightSources.emplace_back(std::move(DirectionalLight(glm::vec3(1, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f))));
-
       const auto& folderManager = Common::FolderManager::GetInstance();
       // HOUSE
       {

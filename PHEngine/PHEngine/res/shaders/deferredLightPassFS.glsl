@@ -12,6 +12,11 @@ uniform vec3 DirLightDiffuseColor[DIR_LIGHT_COUNT];
 uniform vec3 DirLightSpecularColor[DIR_LIGHT_COUNT];
 uniform vec3 DirLightDirection[DIR_LIGHT_COUNT];
 
+uniform vec3 PointLightDiffuseColor[POINT_LIGHT_COUNT];
+uniform vec3 PointLightSpecularColor[POINT_LIGHT_COUNT];
+uniform vec3 PointLightPosition[POINT_LIGHT_COUNT];
+uniform vec3 PointLightAttenuation[POINT_LIGHT_COUNT];
+
 in VS_OUT
 {
 	vec2 tex_coords;
@@ -24,6 +29,13 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 	vec3 resultDiffuseColor = vec3(0);
 
 	/* POINT LIGHTS */
+	for (uint pointLightIndex = 0; pointLightIndex < POINT_LIGHT_COUNT; ++pointLightIndex)
+	{
+		vec3 nToLightVec = normalize(PointLightPosition[pointLightIndex] - worldPos);
+		float nDotP = dot(nToLightVec, nWorldNormal);
+		float diffuseFactor = max(nDotP, 0.0);
+		resultDiffuseColor += PointLightDiffuseColor[pointLightIndex] * diffuseFactor;
+	}
 
 	/* DIRECTIONAL LIGHTS */
 	for (uint dirLightIndex = 0; dirLightIndex < DIR_LIGHT_COUNT; ++dirLightIndex)
@@ -31,7 +43,7 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 		vec3 direction = -normalize(DirLightDirection[dirLightIndex]);
 		float nDotD = dot(direction, nWorldNormal);
 		float diffuseFactor = max(nDotD, 0.0);
-		resultDiffuseColor += DirLightDiffuseColor[0] * diffuseFactor;
+		resultDiffuseColor += DirLightDiffuseColor[dirLightIndex] * diffuseFactor;
 	}
 	/* SPOT LIGHTS */
 

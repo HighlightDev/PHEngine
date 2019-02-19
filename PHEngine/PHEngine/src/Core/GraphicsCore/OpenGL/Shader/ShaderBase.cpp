@@ -12,7 +12,7 @@ namespace Graphics
 		void ShaderBase::SetShaderPredefine()
 		{
 			// Implement in derived shaders
-			throw std::exception("Not implemented. Must be overridden be derived classes");
+			throw std::exception("Not implemented. Must be overridden by derived classes");
 		}
 
 		ShaderBase::~ShaderBase()

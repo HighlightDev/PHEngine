@@ -1,5 +1,6 @@
 #include "DeferredLightShader.h"
 #include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 
 namespace Game
 {
@@ -25,6 +26,12 @@ namespace Game
          u_DirLightDiffuseColor = GetUniformArray("DirLightDiffuseColor", DIR_LIGHT_COUNT);
          u_DirLightSpecularColor = GetUniformArray("DirLightSpecularColor", DIR_LIGHT_COUNT);
          u_DirLightDirection = GetUniformArray("DirLightDirection", DIR_LIGHT_COUNT);
+
+         u_PointLightDiffuseColor = GetUniformArray("PointLightDiffuseColor", POINT_LIGHT_COUNT);
+         u_PointLightSpecularColor = GetUniformArray("PointLightSpecularColor", POINT_LIGHT_COUNT);
+         u_PointLightPosition = GetUniformArray("PointLightPosition", POINT_LIGHT_COUNT);
+         u_PointLightAttenuation = GetUniformArray("PointLightAttenuation", POINT_LIGHT_COUNT);
+
          u_gBuffer_Position = GetUniform("gBuffer_Position");
          u_gBuffer_Normal = GetUniform("gBuffer_Normal");
          u_gBuffer_AlbedoNSpecular = GetUniform("gBuffer_AlbedoNSpecular");
@@ -32,7 +39,8 @@ namespace Game
 
       void DeferredLightShader::SetShaderPredefine()
       {
-         Predefine(FragmentShader, "DIR_LIGHT_COUNT", 1);
+         Predefine(FragmentShader, "DIR_LIGHT_COUNT", DIR_LIGHT_COUNT);
+         Predefine(FragmentShader, "POINT_LIGHT_COUNT", POINT_LIGHT_COUNT);
       }
 
       void DeferredLightShader::SetGBufferAlbedoNSpecular(int32_t slot)
@@ -67,18 +75,22 @@ namespace Game
                dirLightProxyIndex++;
             }
          }
-      }
 
-      void DeferredLightShader::SetDirLight(std::vector<DirectionalLight>& directionalLight)
-      {
-         for (size_t dirLightIndex = 0; dirLightIndex < directionalLight.size(); ++dirLightIndex)
+         size_t pointLightProxyIndex = 0;
+         for (size_t lightProxyIndex = 0; lightProxyIndex < lightsProxies.size(); ++lightProxyIndex)
          {
-            u_DirLightAmbientColor.LoadUniform(dirLightIndex, directionalLight[dirLightIndex].Ambient);
-            u_DirLightDiffuseColor.LoadUniform(dirLightIndex, directionalLight[dirLightIndex].Diffuse);
-            u_DirLightSpecularColor.LoadUniform(dirLightIndex, directionalLight[dirLightIndex].Specular);
-            u_DirLightDirection.LoadUniform(dirLightIndex, directionalLight[dirLightIndex].Direction);
+            if (lightsProxies[lightProxyIndex]->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT && dirLightProxyIndex < POINT_LIGHT_COUNT)
+            {
+               auto sharedLightProxy = lightsProxies[lightProxyIndex];
+               PointLightSceneProxy* pointLProxyPtr = static_cast<PointLightSceneProxy*>(sharedLightProxy.get());
+               u_PointLightDiffuseColor.LoadUniform(pointLightProxyIndex, pointLProxyPtr->DiffuseColor);
+               u_PointLightSpecularColor.LoadUniform(pointLightProxyIndex, pointLProxyPtr->SpecularColor);
+               u_PointLightPosition.LoadUniform(pointLightProxyIndex, pointLProxyPtr->GetPosition());
+               u_PointLightAttenuation.LoadUniform(pointLightProxyIndex, pointLProxyPtr->GetAttenuation());
+
+               pointLightProxyIndex++;
+            }
          }
-        
       }
 
    }
