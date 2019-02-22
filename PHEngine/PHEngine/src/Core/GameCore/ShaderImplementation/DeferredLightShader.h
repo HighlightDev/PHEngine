@@ -9,7 +9,7 @@ using namespace Graphics::OpenGL;
 using namespace Graphics::Proxy;
 
 #define DIR_LIGHT_COUNT 1
-#define POINT_LIGHT_COUNT 0
+#define POINT_LIGHT_COUNT 1
 
 namespace Game
 {

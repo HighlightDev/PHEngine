@@ -26,12 +26,12 @@ namespace Game
 
       std::vector<std::shared_ptr<Game::Component>> m_allComponents;
 
-		Actor(Game::SceneComponent* rootComponent);
+		Actor(Game::SceneComponent* rootComponent = nullptr);
 
 		virtual ~Actor();
 
 		// Tick is executed on game thread
-		void Tick(float deltaTime);
+		virtual void Tick(float deltaTime);
 
 		void AddComponent(std::shared_ptr<Game::Component> component);
 

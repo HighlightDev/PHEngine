@@ -23,6 +23,8 @@ namespace Game
 
       glm::mat4 ProjectionMatrix;
 
+      std::vector<std::shared_ptr<PrimitiveSceneProxy>> ShadowGroupPrimitives;
+
    private:
 
       class CameraBase* m_camera;

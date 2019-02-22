@@ -6,60 +6,91 @@
 #include <vector>
 #include <glm/vec2.hpp>
 
-struct ShadowMapAtlasCell
+namespace Graphics
 {
-   int32_t X;
-   int32_t Y;
-   int32_t Width;
-   int32_t Height;
 
-   ShadowMapAtlasCell(int32_t x, int32_t y, int32_t width, int32_t height)
-      : X(x)
-      , Y(y)
-      , Width(width)
-      , Height(height)
+   struct ShadowMapAtlasCell
    {
-   }
+      int32_t X;
+      int32_t Y;
+      int32_t Width;
+      int32_t Height;
 
-   ShadowMapAtlasCell() = default;
-};
+      ShadowMapAtlasCell(int32_t x, int32_t y, int32_t width, int32_t height)
+         : X(x)
+         , Y(y)
+         , Width(width)
+         , Height(height)
+      {
+      }
 
-struct ShadowMapAtlas
-{
-   std::vector<ShadowMapAtlasCell> Cells;
+      ShadowMapAtlasCell() = default;
 
-   /* Flag is true when memory for shadowmap was already allocated,
-      to reuse space, you should first deallocate possessed memory space */
-   bool bInvalidated = false;
+      inline int32_t GetSquareValue() const {
 
-   void AllocateReservedMemory();
+         return Width * Height;
+      }
 
-   void DeallocateMemory();
-};
+      bool operator==(const ShadowMapAtlasCell& cell) const {
 
-class ShadowMapAtlasFactory
-{
-   static std::unique_ptr<ShadowMapAtlasFactory> m_instance;
+         return cell.X == this->X && cell.Y == this->Y && cell.Width == this->Width && cell.Height == this->Height;
+      }
+   };
 
-   std::unordered_map<ShadowMapAtlas, std::vector<glm::ivec2>> m_reservations;
-
-public:
-
-   ShadowMapAtlasFactory();
-
-   ~ShadowMapAtlasFactory();
-
-   static std::unique_ptr<ShadowMapAtlasFactory>& GetInstance()
+   struct ShadowMapAtlas
    {
-      if (!m_instance)
-         m_instance = std::make_unique<ShadowMapAtlasFactory>();
 
-      return m_instance;
-   }
+   private:
 
-   void PushShadowMapSpace(glm::ivec2 size, ShadowMapAtlas& atlas);
+      int32_t shadow_map_size;
 
-   void ReserveShadowMapSpace(ShadowMapAtlas& atlas);
-};
+   public:
+      std::vector<ShadowMapAtlasCell> Cells;
 
+      std::vector<glm::ivec2> Reservations;
+
+      /* Flag is true when memory for shadowmap was already allocated,
+         to reuse space, you should first deallocate possessed memory space */
+      bool bInvalidated = false;
+
+      void AllocateReservedMemory();
+
+      void DeallocateMemory();
+
+      void PushShadowMapSpace(glm::ivec2 size);
+
+   private:
+
+      void ShrinkReservedMemory();
+   };
+
+   class ShadowMapAtlasFactory
+   {
+
+      static std::unique_ptr<ShadowMapAtlasFactory> m_instance;
+
+   public:
+
+      enum { SHADOW_MAP_SIZE = 1 << 13 };
+
+      ShadowMapAtlasFactory();
+
+      ~ShadowMapAtlasFactory();
+
+      static std::unique_ptr<ShadowMapAtlasFactory>& GetInstance()
+      {
+         if (!m_instance)
+            m_instance = std::make_unique<ShadowMapAtlasFactory>();
+
+         return m_instance;
+      }
+
+      void ReserveShadowMapSpace(ShadowMapAtlas& atlas);
+
+   private:
+
+      void SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell);
+   };
+
+}
 

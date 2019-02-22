@@ -1,6 +1,7 @@
 #version 400
 
 #define DIR_LIGHT_COUNT 1
+#define POINT_LIGHT_COUNT 1
 layout (location = 0) out vec4 FragColor;
 
 uniform sampler2D gBuffer_Position;

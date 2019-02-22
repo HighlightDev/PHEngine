@@ -47,6 +47,10 @@ namespace Game
 				UpdateComponentsTransform();
 			}
 		}
+      else
+      {
+         UpdateComponentsTransform();
+      }
 	}
 
 	void Actor::UpdateComponentsTransform() 
@@ -59,7 +63,12 @@ namespace Game
 				parentRelativeMatrix = m_parent->GetRootComponent()->GetRelativeMatrix();
 
 			// Update all components that have transformation
-			glm::mat4 rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
+         glm::mat4 rootRelativeMatrix(1);
+         if (m_rootComponent)
+         {
+            rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
+         }
+         
 			for (auto& component : m_allComponents)
 			{
 				if ((component->GetComponentType() & ComponentType::SCENE_COMPONENT) == ComponentType::SCENE_COMPONENT)

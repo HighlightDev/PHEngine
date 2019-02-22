@@ -8,6 +8,7 @@
 #include "Core/GameCore/CameraBase.h"
 #include "Core/GameCore/FirstPersonCamera.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
+#include "Core/GraphicsCore/Shadow/ShadowMapAtlasFactory.h"
 
 using namespace Graphics::Texture;
 using namespace Common;
@@ -20,6 +21,15 @@ namespace Game
    Scene::Scene()
       : m_camera(new FirstPersonCamera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10)))
    {
+      ShadowMapAtlas atlas;
+      atlas.PushShadowMapSpace(glm::ivec2(1024, 1024));
+      atlas.PushShadowMapSpace(glm::ivec2(512, 512));
+      atlas.PushShadowMapSpace(glm::ivec2(256, 256));
+      atlas.PushShadowMapSpace(glm::ivec2(256, 256));
+      atlas.PushShadowMapSpace(glm::ivec2(2048, 2048));
+
+      ShadowMapAtlasFactory::GetInstance()->ReserveShadowMapSpace(atlas);
+      atlas.AllocateReservedMemory();
    }
 
    template <typename PrimitiveType>

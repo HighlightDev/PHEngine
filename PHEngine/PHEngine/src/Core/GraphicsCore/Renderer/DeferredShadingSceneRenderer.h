@@ -40,6 +40,8 @@ namespace Graphics
 
          void ForwardBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& forwardedPrimitives, const glm::mat4& viewMatrix);
 
+         void DepthPass();
+
 		};
 
 	}

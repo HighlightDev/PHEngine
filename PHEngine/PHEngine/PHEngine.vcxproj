@@ -281,6 +281,8 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.h" />
+    <ClInclude Include="src\Core\GameCore\PlayerController.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.h" />
     <ClInclude Include="src\Core\GameCore\Components\PointLightComponent.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\DirectionalLightComponentData.h" />
@@ -613,6 +615,8 @@
     <ClInclude Include="src\Core\GraphicsCore\RenderData\StaticMeshRenderData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.cpp" />
+    <ClCompile Include="src\Core\GameCore\PlayerController.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\PointLightComponent.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.cpp" />
