@@ -7,10 +7,12 @@
 #include "Core/ResourceManagerCore/Pool/PoolBase.h"
 #include "Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h"
 #include "Core/GameCore/GlobalProperties.h"
+#include "GuiMain.h"
 
 using namespace Game;
 
 bool bMouseMove = false;
+bool bKeyDown = false;
 
 void get_window_pos(GLFWwindow* window)
 {
@@ -29,6 +31,41 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	GlobalProperties::GetInstance()->GetInputData().SetMouseY(yPos);
 
 	bMouseMove = true;
+}
+
+/*! @brief The function signature for keyboard key callbacks.
+ *
+ *  This is the function signature for keyboard key callback functions.
+ *
+ *  @param[in] window The window that received the event.
+ *  @param[in] key The [keyboard key](@ref keys) that was pressed or released.
+ *  @param[in] scancode The system-specific scancode of the key.
+ *  @param[in] action `GLFW_PRESS`, `GLFW_RELEASE` or `GLFW_REPEAT`.
+ *  @param[in] mods Bit field describing which [modifier keys](@ref mods) were
+ *  held down.
+ *
+ *  @sa @ref input_key
+ *  @sa glfwSetKeyCallback
+ *
+ *  @since Added in version 1.0.
+ *  @glfw3 Added window handle, scancode and modifier mask parameters.
+ *
+ *  @ingroup input
+ */
+
+void key_pressed_callback(GLFWwindow* window, int32_t key, int32_t scancode, int32_t actionType, int32_t modifierKey)
+{
+   if (actionType == GLFW_PRESS)
+   {
+      if (key == 'w' || key == 'W')
+      {
+         bKeyDown = true;
+      }
+   }
+   else if (actionType == GLFW_RELEASE)
+   {
+      bKeyDown = false;
+   }
 }
 
 void get_screen_rezolution()
@@ -72,6 +109,7 @@ int32_t main(int32_t argc, char** argv)
 	get_window_pos(window);
 
 	glfwSetCursorPosCallback(window, cursor_position_callback);
+   glfwSetKeyCallback(window, key_pressed_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	GLenum initResult = glewInit();
@@ -99,6 +137,10 @@ int32_t main(int32_t argc, char** argv)
 			engine.MouseMove();
 			bMouseMove = false;
 		}
+      if (bKeyDown)
+      {
+         engine.KeyDown();
+      }
 	}
 
 	glfwTerminate();

@@ -37,6 +37,11 @@ namespace Graphics
          PostConstructor();
 
          glDisable(GL_CLIP_DISTANCE0);
+         glEnable(GL_CULL_FACE);
+         glCullFace(GL_BACK);
+
+         glm::mat4 viewMatrixNoTranslation = viewMatrix;
+         viewMatrixNoTranslation[3] = glm::vec4(0.0f, 0.0f, 0.0f, viewMatrixNoTranslation[3].w);
 
          m_skyboxShader->ExecuteShader();
 
@@ -48,12 +53,14 @@ namespace Graphics
          {
             m_nightTexture->BindTexture(1);
          }
-         m_skyboxShader->SetTransformMatrices(m_relativeMatrix, viewMatrix, projectionMatrix);
+         m_skyboxShader->SetTransformMatrices(m_relativeMatrix, viewMatrixNoTranslation, projectionMatrix);
          m_skyboxShader->SetTextures(0, 1);
          //CastToSkyboxShader()->SetDayCycleValue(sunDirection.Normalized().Y);
          //CastToSkyboxShader()->SetMist(m_mist);
          m_skin->GetBuffer()->RenderVAO(GL_TRIANGLES);
          m_skyboxShader->StopShader();
+
+         glDisable(GL_CULL_FACE);
       }
    }
 }

@@ -1,9 +1,2 @@
-﻿  ProjectedShadowInfo.cpp
-  ShadowMapAtlasFactory.cpp
-  LightComponent.cpp
-  Scene.cpp
-  DeferredShadingSceneRenderer.cpp
-  PrimitiveComponent.cpp
-  Engine.cpp
-  Generating Code...
-  PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib
+﻿  SkyboxSceneProxy.cpp
+  PHEngine.vcxproj -> D:\VisualStudioProjects\PHEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

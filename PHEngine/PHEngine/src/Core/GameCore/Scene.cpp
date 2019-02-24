@@ -140,6 +140,15 @@ namespace Game
       m_camera->Rotate();
    }
 
+   void Scene::CameraMove()
+   {
+      FirstPersonCamera* camera = static_cast<FirstPersonCamera*>(m_camera);
+      if (camera)
+      {
+         camera->moveCamera(0);
+      }
+   }
+
    void Scene::AddTestActors()
    {
       const float aspectRatio = 16.0f / 9.0f;

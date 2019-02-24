@@ -21,5 +21,7 @@ public:
 	void TickWindow();
 
 	void MouseMove();
+
+   void KeyDown();
 };
 

@@ -52,6 +52,8 @@ namespace Game
       // TEMP
       void CameraRotate();
 
+      void CameraMove();
+
       void AddTestActors();
 
       ~Scene();

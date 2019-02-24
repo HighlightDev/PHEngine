@@ -24,3 +24,8 @@ void Engine::MouseMove()
 {
    m_scene.CameraRotate();
 }
+
+void Engine::KeyDown()
+{
+   m_scene.CameraMove();
+}
