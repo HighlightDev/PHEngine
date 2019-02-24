@@ -281,6 +281,8 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\InterThreadCommunicationMgr.h" />
+    <ClInclude Include="src\Core\GraphicsCore\RenderData\WaterPlaneRenderData.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.h" />
     <ClInclude Include="src\Core\GameCore\PlayerController.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.h" />
@@ -613,8 +615,10 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\StaticMeshSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\RenderData\StaticMeshRenderData.h" />
+    <ClInclude Include="src\Core\GameCore\Components\WaterPlaneComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\InterThreadCommunicationMgr.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.cpp" />
     <ClCompile Include="src\Core\GameCore\PlayerController.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.cpp" />
@@ -683,6 +687,7 @@
     <ClCompile Include="src\Core\GameCore\Components\StaticMeshComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\StaticMeshShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\StaticMeshSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\WaterPlaneComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

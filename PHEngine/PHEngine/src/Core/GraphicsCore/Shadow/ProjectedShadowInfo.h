@@ -8,8 +8,8 @@ namespace Graphics
 
    struct ProjectedShadowInfo
    {
-      glm::mat4x4 ProjectionViewMatrix;
-
+      glm::mat4x4 ShadowViewMatrix;
+      glm::mat4x4 ShadowProjectionMatrix;
       glm::vec3 offset;
 
       ProjectedShadowInfo();

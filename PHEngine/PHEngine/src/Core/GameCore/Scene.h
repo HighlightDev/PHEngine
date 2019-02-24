@@ -5,8 +5,10 @@
 #include "Core/GameCore/Components/LightComponent.h"
 #include "Core/GameCore/Components/Component.h"
 #include "Core/GameCore/Components/ComponentData/ComponentData.h"
+#include "Core/InterThreadCommunicationMgr.h"
 
 using namespace Graphics::Proxy;
+using namespace Thread;
 
 namespace Game
 {
@@ -27,11 +29,13 @@ namespace Game
 
    private:
 
+      InterThreadCommunicationMgr& m_interThreadMgr;
+
       class CameraBase* m_camera;
 
    public:
 
-      Scene();
+      Scene(InterThreadCommunicationMgr& interThreadMgr);
 
       inline class CameraBase* GetCamera()
       {

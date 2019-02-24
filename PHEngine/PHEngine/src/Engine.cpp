@@ -1,8 +1,9 @@
 #include "Engine.h"
 
 Engine::Engine()
-   : m_scene()
-   , m_sceneRenderer(&m_scene)
+   : m_interThreadMgr()
+   , m_scene(m_interThreadMgr)
+   , m_sceneRenderer(m_interThreadMgr, &m_scene)
 {
    m_scene.AddTestActors();
 }
@@ -13,11 +14,21 @@ Engine::~Engine()
 
 void Engine::TickWindow()
 {
-   // This should be on game thread
-   m_scene.Tick_GameThread(0.05f);
+   /* GAME THREAD*/
+   {
+      // This should be executed on game thread
 
-   // This should be on render thread
-   m_sceneRenderer.RenderScene_RenderThread();
+      SPIN_GAME_THREAD_JOBS(m_interThreadMgr);
+      m_scene.Tick_GameThread(0.05f);
+   }
+
+   /* RENDER THREAD */
+   {
+      // This should be executed on render thread
+
+      SPIN_RENDER_THREAD_JOBS(m_interThreadMgr);
+      m_sceneRenderer.RenderScene_RenderThread();
+   }
 }
 
 void Engine::MouseMove()

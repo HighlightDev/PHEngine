@@ -22,8 +22,9 @@ namespace Graphics
 	namespace Renderer
 	{
 
-      DeferredShadingSceneRenderer::DeferredShadingSceneRenderer(Scene* const scene)
-         : m_scene(scene)
+      DeferredShadingSceneRenderer::DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene)
+         : m_interThreadMgr(interThreadMgr)
+         , m_scene(scene)
          , m_gbuffer(std::make_unique<DeferredShadingGBuffer>(GlobalProperties::GetInstance()->GetInputData().GetWindowWidth(), GlobalProperties::GetInstance()->GetInputData().GetWindowHeight()))
       {
          const auto& folderManager = FolderManager::GetInstance();

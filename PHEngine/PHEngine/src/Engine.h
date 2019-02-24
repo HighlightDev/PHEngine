@@ -10,10 +10,14 @@ class Engine
 {
    // TODO: INSIDE WORLD
 
+   InterThreadCommunicationMgr m_interThreadMgr;
+
    Scene m_scene;
+
    DeferredShadingSceneRenderer m_sceneRenderer;
 
 public:
+
 	Engine();
 
 	~Engine();

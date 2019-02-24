@@ -18,8 +18,9 @@ using namespace Graphics;
 namespace Game
 {
 
-   Scene::Scene()
-      : m_camera(new FirstPersonCamera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10)))
+   Scene::Scene(InterThreadCommunicationMgr& interThreadMgr)
+      : m_interThreadMgr(interThreadMgr)
+      , m_camera(new FirstPersonCamera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10)))
    {
       ShadowMapAtlas atlas;
       atlas.PushShadowMapSpace(glm::ivec2(1024, 1024));
@@ -115,7 +116,12 @@ namespace Game
    {
       if (primitiveSceneProxyIndex < SceneProxies.size())
       {
-         SceneProxies[primitiveSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
+         ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr,
+            [=]()
+         {
+            auto transformMatrix = newRelativeMatrix; 
+            SceneProxies[primitiveSceneProxyIndex]->SetTransformationMatrix(transformMatrix);
+         });
       }
    }
 
@@ -123,7 +129,12 @@ namespace Game
    {
       if (lightSceneProxyIndex < LightProxies.size())
       {
-         LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
+         ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr,
+            [=]() 
+         {
+            auto transformMatrix = newRelativeMatrix;
+            LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(transformMatrix);
+         });
       }
    }
 

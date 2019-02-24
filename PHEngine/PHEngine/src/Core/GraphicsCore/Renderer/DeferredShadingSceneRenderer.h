@@ -7,9 +7,11 @@
 #include "Core/GameCore/ShaderImplementation/DeferredShader.h"
 #include "Core/GameCore/ShaderImplementation/DeferredLightShader.h"
 #include "Core/GraphicsCore/Renderer/DeferredShadingGBuffer.h"
+#include "Core/InterThreadCommunicationMgr.h"
 
 using namespace Game::ShaderImpl;
 using namespace Game;
+using namespace Thread;
 
 namespace Graphics
 {
@@ -18,6 +20,8 @@ namespace Graphics
 
 		class DeferredShadingSceneRenderer
 		{
+         InterThreadCommunicationMgr& m_interThreadMgr;
+
          /* Scene to render */
          Scene* const m_scene;
 
@@ -28,7 +32,7 @@ namespace Graphics
 
       public:
 
-         DeferredShadingSceneRenderer(Scene* const scene);
+         DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene);
 
 			~DeferredShadingSceneRenderer();
 
