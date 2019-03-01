@@ -1,2 +1,5 @@
-﻿  InterThreadCommunicationMgr.cpp
+﻿  Scene.cpp
+  StaticMeshComponent.cpp
+  StaticMeshSceneProxy.cpp
+  Generating Code...
   PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

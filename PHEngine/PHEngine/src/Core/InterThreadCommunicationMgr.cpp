@@ -37,7 +37,7 @@ namespace Thread
       std::lock_guard<std::mutex> lock(m_gameThreadMutex);
       while (m_gameThreadJobs.size() > 0)
       {
-         auto job = m_gameThreadJobs.back();
+         auto job = m_gameThreadJobs.front();
          job();
          m_gameThreadJobs.pop();
          
@@ -60,7 +60,7 @@ namespace Thread
       std::lock_guard<std::mutex> lock(m_renderThreadMutex);
       while (m_renderThreadJobs.size() > 0)
       {
-         auto job = m_renderThreadJobs.back();
+         auto job = m_renderThreadJobs.front();
          job();
          m_renderThreadJobs.pop();
 

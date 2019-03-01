@@ -17,5 +17,10 @@ namespace Graphics
       {
       }
 
+      void LightSceneProxy::SetTransformationMatrix(const glm::mat4& relativeMatrix)
+      {
+         m_relativeMatrix = relativeMatrix;
+      }
+
    }
 }

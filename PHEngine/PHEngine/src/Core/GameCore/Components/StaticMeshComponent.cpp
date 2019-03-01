@@ -41,4 +41,9 @@ namespace Game
       return std::make_shared<StaticMeshSceneProxy>(this);
    }
 
+   ComponentType StaticMeshComponent::GetComponentType() const
+   {
+      return ComponentType::STATIC_MESH_COMPONENT;
+   }
+
 }

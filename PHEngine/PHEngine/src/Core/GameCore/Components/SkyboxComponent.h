@@ -40,10 +40,7 @@ namespace Game
 
 		virtual void Tick(float deltaTime) override;
 
-		virtual ComponentType GetComponentType() override
-		{
-			return ComponentType::SKYBOX_COMPONENT;
-		}
+      virtual ComponentType GetComponentType() const override;
 
       virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() const override;
 

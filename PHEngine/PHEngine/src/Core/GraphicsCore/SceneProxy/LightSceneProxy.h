@@ -33,10 +33,7 @@ namespace Graphics
 
          virtual LightSceneProxyType GetLightProxyType() const = 0;
 
-         void SetTransformationMatrix(glm::mat4& relativeMatrix)
-         {
-            m_relativeMatrix = relativeMatrix;
-         }
+         void SetTransformationMatrix(const glm::mat4& relativeMatrix);
       };
 
    }

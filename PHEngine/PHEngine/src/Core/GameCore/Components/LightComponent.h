@@ -21,10 +21,7 @@ namespace Game
 
       size_t LightSceneProxyId = 0;
 
-      virtual ComponentType GetComponentType() override
-      {
-         return ComponentType::LIGHT_COMPONENT;
-      }
+      virtual ComponentType GetComponentType() const override;
 
       virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix) override;
 

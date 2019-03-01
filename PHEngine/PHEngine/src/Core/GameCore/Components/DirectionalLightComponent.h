@@ -26,10 +26,7 @@ namespace Game
 
       virtual ~DirectionalLightComponent();
 
-      virtual ComponentType GetComponentType() override
-      {
-         return DIR_LIGHT_COMPONENT;
-      }
+      virtual ComponentType GetComponentType() const override;
 
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const override;
 

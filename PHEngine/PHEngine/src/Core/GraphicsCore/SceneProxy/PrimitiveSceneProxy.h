@@ -51,7 +51,7 @@ namespace Graphics
             return m_relativeMatrix;
          }
 
-         void SetTransformationMatrix(glm::mat4& relativeMatrix)
+         void SetTransformationMatrix(const glm::mat4& relativeMatrix)
          {
             m_relativeMatrix = relativeMatrix;
          }

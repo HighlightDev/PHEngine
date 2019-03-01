@@ -32,4 +32,9 @@ namespace Game
    {
       return std::make_shared<SkyboxSceneProxy>(this);
    }
+
+   ComponentType SkyboxComponent::GetComponentType() const
+   {
+      return ComponentType::SKYBOX_COMPONENT;
+   }
 }

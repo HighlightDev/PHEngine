@@ -119,8 +119,7 @@ namespace Game
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr,
             [=]()
          {
-            auto transformMatrix = newRelativeMatrix; 
-            SceneProxies[primitiveSceneProxyIndex]->SetTransformationMatrix(transformMatrix);
+            SceneProxies[primitiveSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
          });
       }
    }
@@ -132,8 +131,7 @@ namespace Game
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr,
             [=]() 
          {
-            auto transformMatrix = newRelativeMatrix;
-            LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(transformMatrix);
+            LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
          });
       }
    }

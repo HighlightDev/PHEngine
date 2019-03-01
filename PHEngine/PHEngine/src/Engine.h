@@ -2,6 +2,7 @@
 
 #include "Core/GameCore/Scene.h"
 #include "Core/GraphicsCore/Renderer/DeferredShadingSceneRenderer.h"
+#include <thread>
 
 using namespace Game;
 using namespace Graphics::Renderer;
@@ -16,11 +17,17 @@ class Engine
 
    DeferredShadingSceneRenderer m_sceneRenderer;
 
+   std::thread m_gameThread;
+
 public:
 
 	Engine();
 
 	~Engine();
+
+   void GameThreadPulse();
+
+   void RenderThreadPulse();
 
 	void TickWindow();
 

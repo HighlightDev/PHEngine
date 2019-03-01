@@ -9,12 +9,10 @@ namespace Game
 	Component::Component()
 		: m_owner(nullptr)
 	{
-
 	}
 
 	Component::~Component()
 	{
-
 	}
 
 	void Component::Tick(float deltaTime)
@@ -30,6 +28,11 @@ namespace Game
    void Component::RemoveOwner()
    {
       m_owner = nullptr;
+   }
+
+   ComponentType Component::GetComponentType() const
+   {
+      return ComponentType::COMPONENT;
    }
 
 }

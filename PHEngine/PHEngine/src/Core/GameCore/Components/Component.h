@@ -16,7 +16,6 @@ namespace Game
 	// picked by actor
 	class Component
 	{
-
 		std::mutex m_lock;
 
 		Actor* m_owner;
@@ -27,10 +26,7 @@ namespace Game
 
 		virtual ~Component();
 
-		virtual ComponentType GetComponentType()
-		{
-			return ComponentType::COMPONENT;
-		}
+      virtual ComponentType GetComponentType() const;
 
 		// Game thread tick
 		virtual void Tick(float deltaTime);
@@ -39,11 +35,13 @@ namespace Game
 
       void RemoveOwner();
 
-      inline Actor* GetOwner()
-      {
-         return m_owner;
-      }
+      inline Actor* GetOwner();
 	};
+
+   inline Actor* Component::GetOwner()
+   {
+      return m_owner;
+   }
 
 }
 

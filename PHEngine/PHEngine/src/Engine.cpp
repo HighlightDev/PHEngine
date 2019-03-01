@@ -6,22 +6,31 @@ Engine::Engine()
    , m_sceneRenderer(m_interThreadMgr, &m_scene)
 {
    m_scene.AddTestActors();
+
+   m_gameThread = std::thread(std::bind(&Engine::GameThreadPulse, this));
+   m_gameThread.detach();
 }
 
 Engine::~Engine()
 {
 }
 
-void Engine::TickWindow()
+void Engine::GameThreadPulse()
 {
-   /* GAME THREAD*/
+   while (true)
    {
-      // This should be executed on game thread
+      /* GAME THREAD*/
+      {
+         // This should be executed on game thread
 
-      SPIN_GAME_THREAD_JOBS(m_interThreadMgr);
-      m_scene.Tick_GameThread(0.05f);
+         SPIN_GAME_THREAD_JOBS(m_interThreadMgr);
+         m_scene.Tick_GameThread(0.05f);
+      }
    }
+}
 
+void Engine::RenderThreadPulse()
+{
    /* RENDER THREAD */
    {
       // This should be executed on render thread
@@ -29,6 +38,11 @@ void Engine::TickWindow()
       SPIN_RENDER_THREAD_JOBS(m_interThreadMgr);
       m_sceneRenderer.RenderScene_RenderThread();
    }
+}
+
+void Engine::TickWindow()
+{
+   RenderThreadPulse();
 }
 
 void Engine::MouseMove()

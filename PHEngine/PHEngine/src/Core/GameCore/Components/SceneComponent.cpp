@@ -39,6 +39,11 @@ namespace Game
 	
 	}
 
+   ComponentType SceneComponent::GetComponentType() const 
+   {
+      return ComponentType::SCENE_COMPONENT;
+   }
+
 	void SceneComponent::UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix)
 	{
 		// Update current relative matrix
