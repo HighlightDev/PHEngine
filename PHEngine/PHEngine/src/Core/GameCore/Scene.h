@@ -53,6 +53,10 @@ namespace Game
 
       void RemoveComponent_GameThread(std::shared_ptr<Component> component);
 
+      void ExecuteOnRenderThread(std::function<void(void)> gameThreadJob) const;
+
+      void ExecuteOnGameThread(std::function<void(void)> renderThreadJob) const;
+
       // TEMP
       void CameraRotate();
 

@@ -112,6 +112,16 @@ namespace Game
       }
    }
 
+   void Scene::ExecuteOnRenderThread(std::function<void(void)> gameThreadJob) const
+   {
+      ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, gameThreadJob);
+   }
+
+   void Scene::ExecuteOnGameThread(std::function<void(void)> renderThreadJob) const
+   {
+      ENQUEUE_GAME_THREAD_JOB(m_interThreadMgr, renderThreadJob);
+   }
+
    void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, glm::mat4& newRelativeMatrix)
    {
       if (primitiveSceneProxyIndex < SceneProxies.size())

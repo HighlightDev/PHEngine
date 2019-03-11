@@ -26,24 +26,36 @@ namespace Graphics
 			m_textureParams.TexBufferHeight = texBufferWH.y;
 		}
 
+      void Texture2d::InitEmptyTexture()
+      {
+         glGenTextures(1, &m_texDescriptor);
+         glBindTexture(GL_TEXTURE_2D, m_texDescriptor);
+
+         glTexImage2D(GL_TEXTURE_2D, 0, m_textureParams.TexPixelInternalFormat, m_textureParams.TexBufferWidth, m_textureParams.TexBufferHeight, 0, m_textureParams.TexPixelFormat, m_textureParams.TexPixelType, 0);
+
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_textureParams.TexWrapMode);
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_textureParams.TexWrapMode);
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureParams.TexMagFilter);
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureParams.TexMinFilter);
+
+         glBindTexture(GL_TEXTURE_2D, 0);
+      }
+
 		Texture2d::Texture2d(TexParams&& textureParameters)
 			: ITexture()
+         , m_textureParams(std::move(textureParameters))
 			, m_mipmapState(nullptr)
 		{
-			m_textureParams = std::move(textureParameters);
-
-			glGenTextures(1, &m_texDescriptor);
-			glBindTexture(GL_TEXTURE_2D, m_texDescriptor);
-
-			glTexImage2D(GL_TEXTURE_2D, 0, m_textureParams.TexPixelInternalFormat, m_textureParams.TexBufferWidth, m_textureParams.TexBufferHeight, 0, m_textureParams.TexPixelFormat, m_textureParams.TexPixelType, 0);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_textureParams.TexWrapMode);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_textureParams.TexWrapMode);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureParams.TexMagFilter);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureParams.TexMinFilter);
-
-			glBindTexture(GL_TEXTURE_2D, 0);
+         InitEmptyTexture();
 		}
+
+      Texture2d::Texture2d(TexParams& textureParameters)
+         : ITexture()
+         , m_textureParams(textureParameters)
+         , m_mipmapState(nullptr)
+      {
+         InitEmptyTexture();
+      }
 
 		Texture2d::~Texture2d()
 		{

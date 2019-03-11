@@ -10,7 +10,7 @@ namespace Thread
 #define ENQUEUE_RENDER_THREAD_JOB(InterThreadMgrInstance, JOB) \
 InterThreadMgrInstance.PushRenderThreadJob(JOB)
 
-#define ENQUEUE_RENDER_GAME_JOB(InterThreadMgrInstance, JOB) \
+#define ENQUEUE_GAME_THREAD_JOB(InterThreadMgrInstance, JOB) \
 InterThreadMgrInstance.PushGameThreadJob(JOB)
 
 #define SPIN_RENDER_THREAD_JOBS(InterThreadMgrInstance) \

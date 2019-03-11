@@ -26,7 +26,9 @@ namespace Graphics
 
 			Texture2d(uint32_t texDescriptor, glm::ivec2 texBufferWH);
 
-			Texture2d(TexParams&& textureParameters);
+         Texture2d(TexParams&& textureParameters);
+
+         Texture2d(TexParams& textureParameters);
 
 			virtual ~Texture2d();
 
@@ -60,6 +62,8 @@ namespace Graphics
 			}
 
 		private:
+
+         void InitEmptyTexture();
 
 			uint32_t LoadTextureFromFile(std::string& pathToTex, int32_t texWrapMode = GL_REPEAT);
 

@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 #include <gl/glew.h>
+#include <stdint.h>
+#include <type_traits>
 
 namespace Graphics
 {
@@ -36,8 +38,44 @@ namespace Graphics
 			TexParams();
 
 			~TexParams();
-		};
 
+         bool operator==(const TexParams& other) const {
+            
+            return this->TexBufferWidth == other.TexBufferWidth
+               && this->TexBufferHeight == other.TexBufferHeight
+               && this->TexTarget == other.TexTarget
+               && this->TexMagFilter == other.TexMagFilter
+               && this->TexMinFilter == other.TexMinFilter
+               && this->TexMipLvl == other.TexMipLvl
+               && this->TexPixelInternalFormat == other.TexPixelInternalFormat
+               && this->TexPixelFormat == other.TexPixelFormat
+               && this->TexPixelType == other.TexPixelType
+               && this->TexWrapMode == other.TexWrapMode;
+         }
+        
+		};
 	}
+}
+
+namespace std
+{
+   using namespace Graphics::Texture;
+   template<>
+   struct hash<TexParams>
+   {
+      std::size_t operator()(const TexParams& k) const
+      {
+         return hash<int32_t>()(k.TexBufferWidth)
+         ^ hash<int32_t>()(k.TexBufferHeight)
+         ^ hash<int32_t>()(k.TexTarget)
+         ^ hash<int32_t>()(k.TexMagFilter)
+         ^ hash<int32_t>()(k.TexMinFilter)
+         ^ hash<int32_t>()(k.TexMipLvl)
+         ^ hash<int32_t>()(k.TexPixelInternalFormat)
+         ^ hash<int32_t>()(k.TexPixelFormat)
+         ^ hash<int32_t>()(k.TexPixelType)
+         ^ hash<int32_t>()(k.TexWrapMode);
+      }
+   };
 }
 
