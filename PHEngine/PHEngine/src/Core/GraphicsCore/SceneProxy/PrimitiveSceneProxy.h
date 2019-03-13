@@ -46,35 +46,19 @@ namespace Graphics
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) = 0;
 
-         virtual glm::mat4 GetMatrix()
-         {
-            return m_relativeMatrix;
-         }
+         virtual void StencilRender(glm::mat4& viewMatrix, glm::mat4& projectionMatrix);
 
-         void SetTransformationMatrix(const glm::mat4& relativeMatrix)
-         {
-            m_relativeMatrix = relativeMatrix;
-         }
+         virtual glm::mat4 GetMatrix() const;
 
-         virtual std::shared_ptr<Skin> GetSkin() const
-         {
-            return m_skin;
-         }
+         void SetTransformationMatrix(const glm::mat4& relativeMatrix);
 
-         virtual std::shared_ptr<ITexture> GetAlbedo() const
-         {
-            return m_albedoTex;
-         }
+         virtual std::shared_ptr<Skin> GetSkin() const;
 
-         virtual std::shared_ptr<ITexture> GetNormalMap() const
-         {
-            return m_normalMapTex;
-         }
+         virtual std::shared_ptr<ITexture> GetAlbedo() const;
 
-         virtual std::shared_ptr<ITexture> GetSpecularMap() const
-         {
-            return m_specularMapTex;
-         }
+         virtual std::shared_ptr<ITexture> GetNormalMap() const;
+
+         virtual std::shared_ptr<ITexture> GetSpecularMap() const;
          
       };
 

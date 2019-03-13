@@ -1444,6 +1444,9 @@
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\RenderTargetAllocationPolicy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -1669,6 +1672,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\RenderTargetAllocationPolicy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -35,7 +35,7 @@ namespace Thread
       typename Clock_t::time_point start_time = Clock_t::now();
 
       std::lock_guard<std::mutex> lock(m_gameThreadMutex);
-      while (m_gameThreadJobs.size() > 0)
+      while (AreGameJobsAwaiting())
       {
          auto job = m_gameThreadJobs.front();
          job();
@@ -58,7 +58,7 @@ namespace Thread
       typename Clock_t::time_point start_time = Clock_t::now();
 
       std::lock_guard<std::mutex> lock(m_renderThreadMutex);
-      while (m_renderThreadJobs.size() > 0)
+      while (AreRenderJobsAwaiting())
       {
          auto job = m_renderThreadJobs.front();
          job();

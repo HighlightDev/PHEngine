@@ -621,6 +621,7 @@
     <ClInclude Include="src\Core\GameCore\Components\WaterPlaneComponent.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\WaterPlaneSceneProxy.h" />
     <ClInclude Include="src\Core\GameCore\FramebufferImplementation\WaterPlaneFramebuffer.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\RenderTargetAllocationPolicy.cpp" />
@@ -698,6 +699,7 @@
     <ClCompile Include="src\Core\GameCore\Components\WaterPlaneComponent.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\WaterPlaneSceneProxy.cpp" />
     <ClCompile Include="src\Core\GameCore\FramebufferImplementation\WaterPlaneFramebuffer.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

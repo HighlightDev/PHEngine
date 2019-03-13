@@ -16,6 +16,8 @@
 #include "Core/GameCore/Components/ComponentData/StaticMeshComponentData.h"
 #include "Core/GameCore/Components/ComponentData/DirectionalLightComponentData.h"
 #include "Core/GameCore/Components/ComponentData/PointLightComponentData.h"
+#include "Core/GameCore/Components/WaterPlaneComponent.h"
+#include "Core/GameCore/Components/ComponentData/WaterPlaneComponentData.h"
 
 using namespace Resources;
 
@@ -141,6 +143,16 @@ namespace Game
          }
 
          return resultComponent;
+      }
+   };
+
+   // Water plane component
+   template <>
+   struct ComponentCreatorFactory<WaterPlaneComponent>
+   {
+      static std::shared_ptr<Component> CreateComponent(ComponentData& data)
+      {
+
       }
    };
 
