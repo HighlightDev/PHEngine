@@ -19,7 +19,7 @@ namespace Game
       {
       }
 
-      virtual ComponentType GetType() override {
+      virtual size_t GetType() override {
 
          return DIR_LIGHT_COMPONENT;
       }

@@ -23,9 +23,9 @@ namespace Game
 
 		}
 
-		virtual ComponentType GetType() override {
+		virtual size_t GetType() override {
 
-			return ComponentType::SKYBOX_COMPONENT;
+			return SKYBOX_COMPONENT;
 		}
 
 		float m_rotateSpeed;

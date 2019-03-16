@@ -37,19 +37,19 @@ namespace Game
    void Scene::CreateAndAddComponent_GameThread(ComponentData& componentData, Actor* addComponentToThisActor)
    {
       auto component = ComponentCreatorFactory<PrimitiveType>::CreateComponent(componentData);
-      ComponentType type = component->GetComponentType();
-      if ((type & ComponentType::SCENE_COMPONENT) == SCENE_COMPONENT)
+      size_t type = component->GetComponentType();
+      if ((type & SCENE_COMPONENT) == SCENE_COMPONENT)
       {
          SceneComponent* sceneComponentPtr = static_cast<SceneComponent*>(component.get());
          sceneComponentPtr->SetScene(this);
-         if ((type & ComponentType::PRIMITIVE_COMPONENT) == PRIMITIVE_COMPONENT)
+         if ((type & PRIMITIVE_COMPONENT) == PRIMITIVE_COMPONENT)
          {
             PrimitiveComponent* componentPtr = static_cast<PrimitiveComponent*>(sceneComponentPtr);
             componentPtr->PrimitiveProxyComponentId = PrimitiveComponent::TotalPrimitiveSceneProxyIndex++;
             auto sceneProxyShared = componentPtr->CreateSceneProxy();
             SceneProxies.push_back(sceneProxyShared);
          }
-         else if ((type & ComponentType::LIGHT_COMPONENT) == LIGHT_COMPONENT)
+         else if ((type & LIGHT_COMPONENT) == LIGHT_COMPONENT)
          {
             LightComponent* componentPtr = static_cast<LightComponent*>(sceneComponentPtr);
             componentPtr->LightSceneProxyId = LightComponent::TotalLightSceneProxyId++;
@@ -63,10 +63,10 @@ namespace Game
 
    void Scene::RemoveComponent_GameThread(std::shared_ptr<Component> component)
    {
-      ComponentType type = component->GetComponentType();
+       size_t type = component->GetComponentType();
 
       // Remove corresponding primitive proxy
-      if ((type & ComponentType::PRIMITIVE_COMPONENT) == PRIMITIVE_COMPONENT)
+      if ((type & PRIMITIVE_COMPONENT) == PRIMITIVE_COMPONENT)
       {
          PrimitiveComponent* componentPtr = static_cast<PrimitiveComponent*>(component.get());
          const size_t removeProxyIndex = componentPtr->PrimitiveProxyComponentId;
@@ -85,7 +85,7 @@ namespace Game
             PrimitiveComponent::TotalPrimitiveSceneProxyIndex--;
          }
       }
-      if ((type & ComponentType::LIGHT_COMPONENT) == LIGHT_COMPONENT)
+      if ((type & LIGHT_COMPONENT) == LIGHT_COMPONENT)
       {
          LightComponent* componentPtr = static_cast<LightComponent*>(component.get());
          const size_t removeProxyIndex = componentPtr->LightSceneProxyId;

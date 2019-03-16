@@ -33,7 +33,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == ComponentType::SKYBOX_COMPONENT)
+         if (data.GetType() == SKYBOX_COMPONENT)
          {
             SkyboxComponentData& mData = static_cast<SkyboxComponentData&>(data);
 
@@ -82,7 +82,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == ComponentType::STATIC_MESH_COMPONENT)
+         if (data.GetType() == STATIC_MESH_COMPONENT)
          {
             StaticMeshComponentData& mData = static_cast<StaticMeshComponentData&>(data);
 
@@ -117,7 +117,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == ComponentType::DIR_LIGHT_COMPONENT)
+         if (data.GetType() == DIR_LIGHT_COMPONENT)
          {
             DirectionalLightComponentData& mData = static_cast<DirectionalLightComponentData&>(data);
             DirectionalLightRenderData renderData(mData.Direction, mData.Ambient, mData.Diffuse, mData.Specular);
@@ -135,7 +135,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == ComponentType::POINT_LIGHT_COMPONENT)
+         if (data.GetType() == POINT_LIGHT_COMPONENT)
          {
             PointLightComponentData& mData = static_cast<PointLightComponentData&>(data);
             PointLightRenderData renderData(mData.Position,mData.Attenuation,mData.RadianceSqrRadius, mData.Ambient, mData.Diffuse, mData.Specular);

@@ -16,9 +16,9 @@ namespace Game
 	{
 	}
 
-   ComponentType PrimitiveComponent::GetComponentType() const
+   uint64_t PrimitiveComponent::GetComponentType() const
    {
-      return ComponentType::PRIMITIVE_COMPONENT;
+      return PRIMITIVE_COMPONENT;
    }
 
    void PrimitiveComponent::UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix)

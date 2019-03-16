@@ -22,8 +22,6 @@ namespace Game
    {
       Base::Tick(deltaTime);
 
-      if (m_playerActor)
-         m_playerActor->Tick(deltaTime);
    }
 
 }

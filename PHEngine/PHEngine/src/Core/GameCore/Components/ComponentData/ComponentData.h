@@ -10,7 +10,7 @@ namespace Game
 
 		ComponentData() { }
 
-		virtual ComponentType GetType() = 0;
+		virtual size_t GetType() = 0;
 	};
 
 }

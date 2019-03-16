@@ -17,7 +17,7 @@ namespace Game
 
    }
 
-   ComponentType LightComponent::GetComponentType() const
+   uint64_t LightComponent::GetComponentType() const
    {
       return LIGHT_COMPONENT;
    }

@@ -24,7 +24,7 @@ namespace Game
 
       virtual ~PointLightComponent();
 
-      virtual ComponentType GetComponentType() const override;
+      virtual uint64_t GetComponentType() const override;
 
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const override;
 

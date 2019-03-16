@@ -281,6 +281,9 @@
     <None Include="res\shaders\tSkyboxVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\Input\KeyboardBindings.h" />
+    <ClInclude Include="src\Core\GameCore\Components\InputComponent.h" />
+    <ClInclude Include="src\Core\GameCore\Input\Keys.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\RenderTargetAllocationPolicy.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Pool\RenderTargetPool.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Framebuffer\Framebuffer.h" />
@@ -624,6 +627,8 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GameCore\Input\KeyboardBindings.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\InputComponent.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\RenderTargetAllocationPolicy.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Pool\RenderTargetPool.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Framebuffer\Framebuffer.cpp" />

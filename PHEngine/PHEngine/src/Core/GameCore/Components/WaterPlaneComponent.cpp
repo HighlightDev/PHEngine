@@ -18,7 +18,7 @@ namespace Game
    {
    }
    
-   ComponentType WaterPlaneComponent::GetComponentType() const
+   uint64_t WaterPlaneComponent::GetComponentType() const
    {
       return WATER_PLANE_COMPONENT;
    }

@@ -39,9 +39,9 @@ namespace Game
 	
 	}
 
-   ComponentType SceneComponent::GetComponentType() const 
+   uint64_t SceneComponent::GetComponentType() const
    {
-      return ComponentType::SCENE_COMPONENT;
+      return SCENE_COMPONENT;
    }
 
 	void SceneComponent::UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix)

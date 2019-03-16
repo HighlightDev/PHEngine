@@ -3,7 +3,6 @@
 #include "ComponentType.h"
 
 #include <memory>
-#include <mutex>
 #include <vector>
 #include <glm/vec3.hpp>
 
@@ -16,8 +15,6 @@ namespace Game
 	// picked by actor
 	class Component
 	{
-		std::mutex m_lock;
-
 		Actor* m_owner;
 
 	public:
@@ -26,7 +23,7 @@ namespace Game
 
 		virtual ~Component();
 
-      virtual ComponentType GetComponentType() const;
+      virtual uint64_t GetComponentType() const;
 
 		// Game thread tick
 		virtual void Tick(float deltaTime);

@@ -29,7 +29,7 @@ namespace Game
       SetRotationAxisY(m_rotation.y + 1);
    }
 
-   ComponentType DirectionalLightComponent::GetComponentType() const
+   uint64_t DirectionalLightComponent::GetComponentType() const
    {
       return DIR_LIGHT_COMPONENT;
    }

@@ -91,8 +91,8 @@
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glm_static.lib;opengl32.lib;glfw3.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\lib\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glm_static.lib;opengl32.lib;glfw3.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;assimp-vc140-mt.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;BulletCollision.lib;BulletDynamics.lib;Bullet2FileLoader.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -105,8 +105,8 @@
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glm_static.lib;opengl32.lib;glfw3.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\lib\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glm_static.lib;opengl32.lib;glfw3.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;assimp-vc140-mt.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;BulletCollision.lib;BulletDynamics.lib;Bullet2FileLoader.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

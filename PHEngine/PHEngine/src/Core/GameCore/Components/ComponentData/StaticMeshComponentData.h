@@ -26,9 +26,9 @@ namespace Game
 		{
 		}
 
-		virtual ComponentType GetType() override {
+		virtual size_t GetType() override {
 
-			return ComponentType::STATIC_MESH_COMPONENT;
+			return STATIC_MESH_COMPONENT;
 		}
 
 		std::string m_pathToMesh;

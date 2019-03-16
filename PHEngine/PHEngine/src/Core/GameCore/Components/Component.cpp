@@ -30,9 +30,9 @@ namespace Game
       m_owner = nullptr;
    }
 
-   ComponentType Component::GetComponentType() const
+   uint64_t Component::GetComponentType() const
    {
-      return ComponentType::COMPONENT;
+      return COMPONENT;
    }
 
 }
