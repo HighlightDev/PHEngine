@@ -6,6 +6,7 @@
 
 #include "Core/GameCore/Components/Component.h"
 #include "Core/GameCore/Components/SceneComponent.h"
+#include "Core/GameCore/Components/InputComponent.h"
 
 namespace Game
 {
@@ -22,6 +23,8 @@ namespace Game
 
 		std::shared_ptr<Actor> m_parent;
 
+      std::shared_ptr<InputComponent> m_inputComponent;
+
 	public:
 
       std::vector<std::shared_ptr<Game::Component>> m_allComponents;
@@ -33,6 +36,8 @@ namespace Game
 		// Tick is executed on game thread
 		virtual void Tick(float deltaTime);
 
+      void AddInputComponent(std::shared_ptr<InputComponent> inputComponent);
+
 		void AddComponent(std::shared_ptr<Game::Component> component);
 
 		void RemoveComponent(std::shared_ptr<Game::Component> component);
@@ -43,10 +48,15 @@ namespace Game
 
 		void DetachActor(std::shared_ptr<Actor> actor);
 
-		inline std::shared_ptr<Game::SceneComponent>& GetRootComponent() {
+		inline std::shared_ptr<Game::SceneComponent> GetRootComponent() {
 
 			return m_rootComponent;
 		}
+
+      inline std::shared_ptr<InputComponent> GetInputComponent()
+      {
+         return m_inputComponent;
+      }
 
 		// If root component has dirty transformation -> update it and all attached actors + children components
 		void UpdateRootComponentTransform();

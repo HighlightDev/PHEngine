@@ -21,6 +21,8 @@ namespace Game
 
       // Game thread tick
       virtual void Tick(float deltaTime) override;
+
+      KeyboardBindings& GetKeyboardBindings();
    };
 
 }

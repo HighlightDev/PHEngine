@@ -1,4 +1,5 @@
 #include "InputComponent.h"
+#include "Core/GameCore/KeyboardInputManager.h"
 
 namespace Game
 {
@@ -17,12 +18,30 @@ namespace Game
       return INPUT_COMPONENT;
    }
 
+   KeyboardBindings& InputComponent::GetKeyboardBindings()
+   {
+      return m_keyboardBindings;
+   }
+
    // Game thread tick
    void InputComponent::Tick(float deltaTime)
    {
-      if (m_keyboardBindings.HasPressedKeys())
+      if (KeyboardInputManager::GetInstance()->HasKeyEvents())
       {
+         KeyboardInputManager::queue_t& keyEventsQueue = KeyboardInputManager::GetInstance()->GetKeyboardKeyEvents();
 
+         while (keyEventsQueue.size() > 0)
+         {
+            std::pair<Keys, size_t>& pair = keyEventsQueue.front();
+            if (pair.second == KEY_PRESSED)
+            {
+               m_keyboardBindings.KeyPress(pair.first);
+            }
+            else
+            {
+               m_keyboardBindings.KeyRelease(pair.first);
+            }
+         }
       }
    }
 

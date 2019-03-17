@@ -37,7 +37,7 @@ namespace Game
    void Scene::CreateAndAddComponent_GameThread(ComponentData& componentData, Actor* addComponentToThisActor)
    {
       auto component = ComponentCreatorFactory<PrimitiveType>::CreateComponent(componentData);
-      size_t type = component->GetComponentType();
+      uint64_t type = component->GetComponentType();
       if ((type & SCENE_COMPONENT) == SCENE_COMPONENT)
       {
          SceneComponent* sceneComponentPtr = static_cast<SceneComponent*>(component.get());
@@ -63,7 +63,7 @@ namespace Game
 
    void Scene::RemoveComponent_GameThread(std::shared_ptr<Component> component)
    {
-       size_t type = component->GetComponentType();
+       uint64_t type = component->GetComponentType();
 
       // Remove corresponding primitive proxy
       if ((type & PRIMITIVE_COMPONENT) == PRIMITIVE_COMPONENT)

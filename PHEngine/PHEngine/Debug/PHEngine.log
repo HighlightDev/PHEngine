@@ -1,6 +1,2 @@
-﻿  DirectionalLightComponent.cpp
-  LightComponent.cpp
-  SkyboxComponent.cpp
-  WaterPlaneComponent.cpp
-  Generating Code...
-  PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib
+﻿  Scene.cpp
+  PHEngine.vcxproj -> D:\VisualStudioProjects\PHEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

@@ -120,6 +120,11 @@ namespace Game
 		}
 	}
 
+   void Actor::AddInputComponent(std::shared_ptr<InputComponent> inputComponent)
+   {
+      m_inputComponent = inputComponent;
+   }
+
 	void Actor::AddComponent(std::shared_ptr<Game::Component> component)
 	{
 		component->SetOwner(this);
