@@ -6,6 +6,8 @@ namespace Game
 {
 
 	Actor::Actor(Game::SceneComponent* rootComponent)
+      : m_inputComponent(nullptr)
+      , m_movementComponent(nullptr)
 	{
 		m_rootComponent = std::shared_ptr<Game::SceneComponent>(rootComponent);
 	}
@@ -118,11 +120,22 @@ namespace Game
 			// tick all attached actors
 			actor->Tick(deltaTime);
 		}
+
+      if (m_inputComponent)
+         m_inputComponent->Tick(deltaTime);
+
+      if (m_movementComponent)
+         m_movementComponent->Tick(deltaTime);
 	}
 
    void Actor::AddInputComponent(std::shared_ptr<InputComponent> inputComponent)
    {
       m_inputComponent = inputComponent;
+   }
+
+   void Actor::AddMovementComponent(std::shared_ptr<MovementComponent> movementComponent)
+   {
+      m_movementComponent = movementComponent;
    }
 
 	void Actor::AddComponent(std::shared_ptr<Game::Component> component)
@@ -140,6 +153,16 @@ namespace Game
 			m_allComponents.erase(componentIt);
 		}
 	}
+
+   void Actor::RemoveMovementComponent()
+   {
+      m_movementComponent = std::shared_ptr<MovementComponent>(nullptr);
+   }
+
+   void Actor::RemoveInputComponent()
+   {
+      m_inputComponent = std::shared_ptr<InputComponent>(nullptr);
+   }
 
 	void Actor::SetParent(std::shared_ptr<Actor> actor)
 	{

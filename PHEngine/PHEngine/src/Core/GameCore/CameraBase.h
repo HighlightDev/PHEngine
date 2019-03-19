@@ -38,11 +38,11 @@ namespace Game
 
 		virtual void CameraTick(float DeltaTime) = 0;
 
-		virtual glm::vec3 GetEyeVector() = 0;
+		virtual glm::vec3 GetEyeVector() const = 0;
 
-		virtual glm::vec3 GetTargetVector() = 0;
+		virtual glm::vec3 GetTargetVector() const = 0;
 
-		virtual glm::vec3 GetLocalSpaceUpVector() = 0;
+		virtual glm::vec3 GetLocalSpaceUpVector() const = 0;
 
 		inline void SetLocalSpaceUpVector(glm::vec3& upVector)
 		{
@@ -64,44 +64,44 @@ namespace Game
 			m_rotateSensetivity = rotateSensetivity;
 		}
 
-		inline float GetCameraSensetivity()
+		inline float GetCameraSensetivity() const
 		{
 			return m_rotateSensetivity;
 		}
 
-		inline glm::vec3 GetLocalSpaceRightVector()
+		inline glm::vec3 GetLocalSpaceRightVector() const
 		{
 			return m_localSpaceRightVector;
 		}
 
-		inline glm::vec3 GetLocalSpaceForwardVector()
+		inline glm::vec3 GetLocalSpaceForwardVector() const
 		{
 			return m_localSpaceForwardVector;
 		}
 
-		inline glm::vec3 GetEyeSpaceForwardVector()
+		inline glm::vec3 GetEyeSpaceForwardVector() const
 		{
 			return m_eyeSpaceForwardVector;
 		}
 
-		inline glm::vec3 GetEyeSpaceRightVector()
+		inline glm::vec3 GetEyeSpaceRightVector() const
 		{
 			return m_eyeSpaceRightVector;
 		}
 
-		inline glm::mat4 GetViewMatrix()
+		inline glm::mat4 GetViewMatrix() const
 		{
 			return glm::lookAt(GetEyeVector(), GetTargetVector(), GetLocalSpaceUpVector());
 		}
 
-		inline glm::mat3 GetRotationMatrix()
+		inline glm::mat3 GetRotationMatrix() const
 		{
 			return m_rotationMatrix;
 		}
 
 		void Rotate();
 
-		glm::vec3 LerpPosition(float t, float t1, float t2, glm::vec3 position1, glm::vec3 position2);
+		glm::vec3 LerpPosition(float t, float t1, float t2, glm::vec3 position1, glm::vec3 position2) const;
 
 		/*inline FSphere GetCameraCollisionSphere()
 		{

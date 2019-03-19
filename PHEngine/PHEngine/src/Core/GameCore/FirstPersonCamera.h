@@ -22,23 +22,23 @@ namespace Game
 
 		}
 
-		virtual glm::vec3 GetEyeVector() override {
+		virtual glm::vec3 GetEyeVector()  const override {
 
 			return m_firstPersonCameraPosition;
 		}
 
-		virtual glm::vec3 GetTargetVector() override {
+		virtual glm::vec3 GetTargetVector()  const override {
 
 			auto targetVec = m_firstPersonCameraPosition + m_eyeSpaceForwardVector * m_cameraMoveSpeed;
 			return targetVec;
 		}
 
-		virtual glm::vec3 GetLocalSpaceUpVector() override {
+		virtual glm::vec3 GetLocalSpaceUpVector()  const override {
 
 			return m_localSpaceUpVector;
 		}
 
-		inline float GetCameraMoveSpeed() {
+		inline float GetCameraMoveSpeed()  const {
 
 			return m_cameraMoveSpeed;
 		}

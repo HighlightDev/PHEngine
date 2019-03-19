@@ -8,7 +8,9 @@
 #include "Core/GameCore/CameraBase.h"
 #include "Core/GameCore/FirstPersonCamera.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
+#include "Core/GameCore/Components/InputComponent.h"
 #include "Core/GraphicsCore/Shadow/ShadowMapAtlasFactory.h"
+#include "Core/GameCore/Components/ComponentData/InputComponentData.h"
 
 using namespace Graphics::Texture;
 using namespace Common;
@@ -22,15 +24,7 @@ namespace Game
       : m_interThreadMgr(interThreadMgr)
       , m_camera(new FirstPersonCamera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10)))
    {
-      ShadowMapAtlas atlas;
-      atlas.PushShadowMapSpace(glm::ivec2(1024, 1024));
-      atlas.PushShadowMapSpace(glm::ivec2(512, 512));
-      atlas.PushShadowMapSpace(glm::ivec2(256, 256));
-      atlas.PushShadowMapSpace(glm::ivec2(256, 256));
-      atlas.PushShadowMapSpace(glm::ivec2(2048, 2048));
-
-      ShadowMapAtlasFactory::GetInstance()->ReserveShadowMapSpace(atlas);
-      atlas.AllocateReservedMemory();
+      
    }
 
    template <typename PrimitiveType>
@@ -58,7 +52,20 @@ namespace Game
          }
       }
 
-      addComponentToThisActor->AddComponent(component);
+      if ((type & MOVEMENT_COMPONENT) == MOVEMENT_COMPONENT)
+      {
+         addComponentToThisActor->AddMovementComponent(std::dynamic_pointer_cast<MovementComponent>(component));
+      }
+      else if ((type & INPUT_COMPONENT) == INPUT_COMPONENT)
+      {
+         std::shared_ptr<InputComponent> inputComp = std::dynamic_pointer_cast<InputComponent>(component);
+         inputComp->SetOwner(addComponentToThisActor);
+         addComponentToThisActor->AddInputComponent(inputComp);
+      }
+      else
+      {
+         addComponentToThisActor->AddComponent(component);
+      }
    }
 
    void Scene::RemoveComponent_GameThread(std::shared_ptr<Component> component)
@@ -108,7 +115,18 @@ namespace Game
       Actor* ownerActor = component->GetOwner();
       if (ownerActor)
       {
-         ownerActor->RemoveComponent(component);
+         if ((type & MOVEMENT_COMPONENT) == MOVEMENT_COMPONENT)
+         {
+            ownerActor->RemoveMovementComponent();
+         }
+         else if ((type & INPUT_COMPONENT) == INPUT_COMPONENT)
+         {
+            ownerActor->RemoveInputComponent();
+         }
+         else
+         {
+            ownerActor->RemoveComponent(component);
+         }
       }
    }
 
@@ -152,6 +170,7 @@ namespace Game
       {
          actor->Tick(0.05f);
       }
+      m_playerController.Tick(delta);
    }
 
    void Scene::CameraRotate()
@@ -164,7 +183,7 @@ namespace Game
       FirstPersonCamera* camera = static_cast<FirstPersonCamera*>(m_camera);
       if (camera)
       {
-         camera->moveCamera(0);
+         //camera->moveCamera(0);
       }
    }
 
@@ -191,6 +210,13 @@ namespace Game
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
          Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
+
+         InputComponentData inputComponentData;
+         CreateAndAddComponent_GameThread<InputComponent>(inputComponentData, houseActor);
+         MovementComponentData movementComponentData(glm::vec3(0), m_camera);
+         CreateAndAddComponent_GameThread<MovementComponent>(movementComponentData, houseActor);
+
+         m_playerController.SetPlayerActor(houseActor);
          AllActors.push_back(houseActor);
       }
 

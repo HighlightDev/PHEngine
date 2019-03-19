@@ -1,52 +1,55 @@
 #include "PlayerController.h"
+#include "Core/GameCore/CameraBase.h"
 
 namespace Game
 {
 
    PlayerController::PlayerController()
-      : Actor()
    {
    }
-
 
    PlayerController::~PlayerController()
    {
    }
 
-   void PlayerController::SetPlayerActor(std::shared_ptr<Actor> playerActor)
+   void PlayerController::SetPlayerActor(Actor* playerActor)
    {
-
+      m_playerActor = playerActor;
    }
 
    void PlayerController::Tick(float deltaTime)
    {
       auto& bindings = m_playerActor->GetInputComponent()->GetKeyboardBindings();
 
-      std::shared_ptr<Actor> playerActor = m_playerActor;
-      std::shared_ptr<Game::SceneComponent> rootComponent = playerActor->GetRootComponent();
+      Actor* playerActor = m_playerActor;
+      std::shared_ptr<SceneComponent> rootComponent = playerActor->GetRootComponent();
+      std::shared_ptr<MovementComponent> movementComponent = playerActor->GetMovementComponent();
+
+      glm::vec3& velocity = movementComponent->Velocity;
+      float& speed = movementComponent->Speed;
+      const CameraBase* const camera = movementComponent->GetCamera();
 
       if (bindings.GetKeyState(Keys::W))
       {
-         glm::vec3 velocity = glm::vec3(0, 0, 1);
-         rootComponent->SetTranslation((velocity * 0.1f) + rootComponent->GetTranslation());
+         velocity = camera->GetEyeSpaceForwardVector() * glm::vec3(1, 0, 1); // truncate y-velocity
+
+         auto newPosition = (velocity * speed) + rootComponent->GetTranslation();
+
+         rootComponent->SetTranslation(newPosition);
       }
       else if (bindings.GetKeyState(Keys::A))
       {
-         glm::vec3 velocity = glm::vec3(-1, 0, 0);
-         rootComponent->SetTranslation((velocity * 0.1f) + rootComponent->GetTranslation());
+
       }
       else if (bindings.GetKeyState(Keys::D))
       {
-         glm::vec3 velocity = glm::vec3(1, 0, 1);
-         rootComponent->SetTranslation((velocity * 0.1f) + rootComponent->GetTranslation());
+
       }
       else if (bindings.GetKeyState(Keys::S))
       {
-         glm::vec3 velocity = glm::vec3(0, 0, -1);
-         rootComponent->SetTranslation((velocity * 0.1f) + rootComponent->GetTranslation());
+
       }
-          
-      Base::Tick(deltaTime);
+
 
    }
 

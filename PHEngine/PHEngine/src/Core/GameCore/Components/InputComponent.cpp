@@ -33,6 +33,7 @@ namespace Game
          while (keyEventsQueue.size() > 0)
          {
             std::pair<Keys, size_t>& pair = keyEventsQueue.front();
+            keyEventsQueue.pop();
             if (pair.second == KEY_PRESSED)
             {
                m_keyboardBindings.KeyPress(pair.first);

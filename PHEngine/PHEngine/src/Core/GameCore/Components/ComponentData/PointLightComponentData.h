@@ -21,7 +21,7 @@ namespace Game
       {
       }
 
-      virtual size_t GetType() override {
+      virtual uint64_t GetType() override {
 
          return POINT_LIGHT_COMPONENT;
       }

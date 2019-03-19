@@ -55,7 +55,7 @@ namespace Game
 		bTransformationDirty = true;
 	}
 
-	glm::vec3 CameraBase::LerpPosition(float t, float t1, float t2, glm::vec3 position1, glm::vec3 position2)
+	glm::vec3 CameraBase::LerpPosition(float t, float t1, float t2, glm::vec3 position1, glm::vec3 position2) const
 	{
 		glm::vec3 resultPosition = glm::vec3(0);
 

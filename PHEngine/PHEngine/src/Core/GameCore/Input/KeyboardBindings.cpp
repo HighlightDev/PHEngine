@@ -22,32 +22,27 @@ namespace Game
 
    void KeyboardBindings::AllocateKey(Keys key)
    {
-      keyboardMaskMap.emplace(std::make_pair(key, false));
+      keyboardMaskMap.emplace(std::make_pair(key, true));
    }
 
    void  KeyboardBindings::KeyPress(Keys key)
    {
       auto it = keyboardMaskMap.find(key);
-      if (it != keyboardMaskMap.end())
-         it->second = true;
+      if (it == keyboardMaskMap.end())
+         AllocateKey(key);
    }
 
    void KeyboardBindings::KeyRelease(Keys key)
    {
       auto it = keyboardMaskMap.find(key);
       if (it != keyboardMaskMap.end())
-         it->second = false;
+         keyboardMaskMap.erase(it);
    }
 
    bool KeyboardBindings::GetKeyState(Keys key)
    {
-      bool bEnabled = false;
-
       auto it = keyboardMaskMap.find(key);
-      if (it != keyboardMaskMap.end())
-         bEnabled = it->second;
-
-      return bEnabled;
+      return it != keyboardMaskMap.end();
    }
 
 }

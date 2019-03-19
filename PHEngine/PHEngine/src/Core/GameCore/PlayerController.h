@@ -5,13 +5,12 @@
 namespace Game
 {
 
-   class PlayerController :
-      public Actor
+   class PlayerController
    {
 
       using Base = Actor;
 
-      std::shared_ptr<Actor> m_playerActor;
+      Actor* m_playerActor;
 
    public:
 
@@ -19,14 +18,9 @@ namespace Game
 
       virtual ~PlayerController();
       
-      void SetPlayerActor(std::shared_ptr<Actor> playerActor);
+      void SetPlayerActor(Actor* playerActor);
 
-      virtual void Tick(float deltaTime) override;
-
-      // invoke when player's position or orientation should be changed
-      void UpdateTranslation();
-
-      void UpdateRotation();
+      void Tick(float deltaTime);
    };
 
 }

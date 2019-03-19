@@ -5,6 +5,7 @@
 #include "Core/GameCore/Components/LightComponent.h"
 #include "Core/GameCore/Components/Component.h"
 #include "Core/GameCore/Components/ComponentData/ComponentData.h"
+#include "Core/GameCore/PlayerController.h"
 #include "Core/InterThreadCommunicationMgr.h"
 
 using namespace Graphics::Proxy;
@@ -26,6 +27,8 @@ namespace Game
       glm::mat4 ProjectionMatrix;
 
       std::vector<std::shared_ptr<PrimitiveSceneProxy>> ShadowGroupPrimitives;
+
+      PlayerController m_playerController;
 
    private:
 

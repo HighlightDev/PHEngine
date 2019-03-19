@@ -18,6 +18,7 @@
 #include "Core/GameCore/Components/ComponentData/PointLightComponentData.h"
 #include "Core/GameCore/Components/WaterPlaneComponent.h"
 #include "Core/GameCore/Components/ComponentData/WaterPlaneComponentData.h"
+#include "Core/GameCore/Components/ComponentData/MovementComponentData.h"
 
 using namespace Resources;
 
@@ -153,6 +154,33 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
 
+      }
+   };
+
+   // Input component
+   template <>
+   struct ComponentCreatorFactory<InputComponent>
+   {
+      static std::shared_ptr<Component> CreateComponent(ComponentData& data)
+      {
+         return std::make_shared<InputComponent>();
+      }
+   };
+
+   // Movement component 
+   template <>
+   struct ComponentCreatorFactory<MovementComponent>
+   {
+      static std::shared_ptr<Component> CreateComponent(ComponentData& data)
+      {
+         std::shared_ptr<Component> resultComponent;
+         if (data.GetType() == MOVEMENT_COMPONENT)
+         {
+            MovementComponentData& mData = static_cast<MovementComponentData&>(data);
+            resultComponent = std::make_shared<MovementComponent>(mData.m_camera, mData.m_launchVelocity);
+         }
+
+         return resultComponent;
       }
    };
 

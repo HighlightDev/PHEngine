@@ -8,6 +8,7 @@
 #include "Core/ResourceManagerCore/Policy/MeshAllocationPolicy.h"
 #include "Core/GameCore/GlobalProperties.h"
 #include "GuiMain.h"
+#include "Core/GameCore/KeyboardInputManager.h"
 
 using namespace Game;
 
@@ -61,9 +62,13 @@ void key_pressed_callback(GLFWwindow* window, int32_t key, int32_t scancode, int
       {
          bKeyDown = true;
       }
+
+      KeyboardInputManager::GetInstance()->PushKeyEvent((Keys)key, KEY_PRESSED);
+
    }
    else if (actionType == GLFW_RELEASE)
    {
+      KeyboardInputManager::GetInstance()->PushKeyEvent((Keys)key, KEY_RELEASED);
       bKeyDown = false;
    }
 }

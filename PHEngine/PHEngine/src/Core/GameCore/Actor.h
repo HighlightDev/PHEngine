@@ -7,6 +7,7 @@
 #include "Core/GameCore/Components/Component.h"
 #include "Core/GameCore/Components/SceneComponent.h"
 #include "Core/GameCore/Components/InputComponent.h"
+#include "Core/GameCore/Components/MovementComponent.h"
 
 namespace Game
 {
@@ -25,6 +26,8 @@ namespace Game
 
       std::shared_ptr<InputComponent> m_inputComponent;
 
+      std::shared_ptr<MovementComponent> m_movementComponent;
+
 	public:
 
       std::vector<std::shared_ptr<Game::Component>> m_allComponents;
@@ -38,9 +41,15 @@ namespace Game
 
       void AddInputComponent(std::shared_ptr<InputComponent> inputComponent);
 
+      void AddMovementComponent(std::shared_ptr<MovementComponent> movementComponent);
+
 		void AddComponent(std::shared_ptr<Game::Component> component);
 
 		void RemoveComponent(std::shared_ptr<Game::Component> component);
+
+      void RemoveMovementComponent();
+
+      void RemoveInputComponent();
 
 		void SetParent(std::shared_ptr<Actor> actor);
 
@@ -56,6 +65,11 @@ namespace Game
       inline std::shared_ptr<InputComponent> GetInputComponent()
       {
          return m_inputComponent;
+      }
+
+      inline std::shared_ptr<MovementComponent> GetMovementComponent()
+      {
+         return m_movementComponent;
       }
 
 		// If root component has dirty transformation -> update it and all attached actors + children components
