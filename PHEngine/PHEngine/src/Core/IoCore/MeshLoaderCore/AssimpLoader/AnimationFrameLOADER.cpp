@@ -14,7 +14,6 @@ namespace Io
 			{
 			}
 
-
 			AnimationFrameLOADER::~AnimationFrameLOADER()
 			{
 			}

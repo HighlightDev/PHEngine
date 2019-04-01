@@ -85,7 +85,7 @@ private:
 
    void InitGBuffer()
    {
-      // Create all empty images and attach them to gBuffer Framebuffer Object
+      // Create all empty textures and attach them to gBuffer Framebuffer Object
 
       glGenFramebuffers(1, &m_gBufferFBO);
       glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferFBO);

@@ -17,6 +17,7 @@ namespace Io
 				glm::vec3 Scale;
 
 				AnimationFrameLOADER(double timeStart, glm::vec3&& translation, glm::quat&& rotation, glm::vec3&& scale);
+
 				~AnimationFrameLOADER();
 			};
 		}

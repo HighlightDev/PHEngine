@@ -19,11 +19,12 @@ namespace Game
 
    void PlayerController::Tick(float deltaTime)
    {
-      auto& bindings = m_playerActor->GetInputComponent()->GetKeyboardBindings();
+      if (!m_playerActor)
+         return; 
 
-      Actor* playerActor = m_playerActor;
-      std::shared_ptr<SceneComponent> rootComponent = playerActor->GetRootComponent();
-      std::shared_ptr<MovementComponent> movementComponent = playerActor->GetMovementComponent();
+      auto& bindings = m_playerActor->GetInputComponent()->GetKeyboardBindings();
+      std::shared_ptr<SceneComponent> rootComponent = m_playerActor->GetRootComponent();
+      std::shared_ptr<MovementComponent> movementComponent = m_playerActor->GetMovementComponent();
 
       glm::vec3& velocity = movementComponent->Velocity;
       float& speed = movementComponent->Speed;
@@ -39,15 +40,12 @@ namespace Game
       }
       else if (bindings.GetKeyState(Keys::A))
       {
-
       }
       else if (bindings.GetKeyState(Keys::D))
       {
-
       }
       else if (bindings.GetKeyState(Keys::S))
       {
-
       }
 
 

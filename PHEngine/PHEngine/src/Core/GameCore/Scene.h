@@ -18,6 +18,14 @@ namespace Game
    {
    public:
 
+      /*
+      
+      Physics environment 
+
+      */
+
+      //btDiscreteDynamicsWorld* m_dynamicsWorld;
+
       std::vector<Actor*> AllActors;
 
       std::vector<std::shared_ptr<PrimitiveSceneProxy>> SceneProxies;

@@ -25,7 +25,7 @@ namespace Resources
 		struct NullInnerType {};
 
 		template <typename T>
-		struct IfHasInnerType
+		struct DoIfHasInnerType
 		{
 			static sharedValue_t Allocation(KeyType& key)
 			{
@@ -34,7 +34,7 @@ namespace Resources
 		};
 
 		template <>
-		struct IfHasInnerType<NullInnerType>
+		struct DoIfHasInnerType<NullInnerType>
 		{
 			static sharedValue_t Allocation(KeyType& key)
 			{
@@ -134,7 +134,7 @@ namespace Resources
 			sharedValue_t resource = GetResource(key);
 			if (!resource)
 			{
-				resource = IfHasInnerType<InnerAllocationType>::Allocation(key);
+				resource = DoIfHasInnerType<InnerAllocationType>::Allocation(key);
 				std::pair<KeyType, sharedValue_t> pair = std::make_pair(key, resource);
 				resourceMap.emplace(std::move(pair));
 			}
