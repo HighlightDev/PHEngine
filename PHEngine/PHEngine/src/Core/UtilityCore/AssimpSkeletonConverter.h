@@ -2,9 +2,12 @@
 
 #include <assimp/matrix4x4.h>
 #include <glm/mat4x4.hpp>
+#include <vector>
 
 #include "Core/GraphicsCore/Animation/Bone.h"
 #include "Core/IoCore/MeshLoaderCore/AssimpLoader/SkeletonBoneLOADER.h"
+#include "Core/GraphicsCore/Animation/AnimationSequence.h"
+#include "Core/IoCore/MeshLoaderCore/AssimpLoader/AnimationLOADER.h"
 
 using namespace Graphics::Animation;
 using namespace Io::MeshLoader::Assimp;
@@ -19,9 +22,9 @@ namespace EngineUtility
 
 	public:
 
-		AssimpSkeletonConverter();
+		AssimpSkeletonConverter() = default;
 
-		~AssimpSkeletonConverter();
+		~AssimpSkeletonConverter() = default;
 
 		static std::unique_ptr<AssimpSkeletonConverter>& GetInstance()
 		{
@@ -32,6 +35,8 @@ namespace EngineUtility
 		}
 
 		Bone* ConvertAssimpBoneToEngineBone(SkeletonBoneBaseLOADER* rootBone);
+
+      const std::vector<AnimationSequence>& ConvertAssimpAnimationToEngineAnimation(const std::vector<AnimationLOADER>& srcAnimations) const;
 
 	private:
 

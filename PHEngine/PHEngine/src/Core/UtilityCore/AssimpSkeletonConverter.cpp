@@ -1,5 +1,6 @@
 #include "AssimpSkeletonConverter.h"
 #include "Core/IoCore/MeshLoaderCore/AssimpLoader/SkeletonBoneLOADER.h"
+#include "Core/GraphicsCore/Animation/AnimationFrame.h"
 
 namespace EngineUtility
 {
@@ -44,13 +45,26 @@ namespace EngineUtility
 		return resultBone;
 	}
 
-	AssimpSkeletonConverter::AssimpSkeletonConverter()
-	{
-	}
+   const std::vector<AnimationSequence>& AssimpSkeletonConverter::ConvertAssimpAnimationToEngineAnimation(const std::vector<AnimationLOADER>& srcAnimations) const
+   {
+      std::vector<AnimationSequence> dstAnimations;
 
+      for (auto& srcAnimation : srcAnimations)
+      {
+         std::vector<AnimationFrame> dstFrames;
+         for (auto& srcFrameCollection : srcAnimation.FramesBoneCollection)
+         {
+            AnimationFrame dstFrame(srcFrameCollection.BoneName);
+            for (auto& srcFrame : srcFrameCollection.Frames)
+            {
+               dstFrame.AddFrame(BoneTransform(srcFrame.Rotation, srcFrame.Translation, srcFrame.Scale), srcFrame.TimeStart);
+            }
+            dstFrames.emplace_back(std::move(dstFrame));
+         }
+         dstAnimations.emplace_back(std::move(AnimationSequence(srcAnimation.Name, dstFrames, srcAnimation.AnimationDuration)));
+      }
 
-	AssimpSkeletonConverter::~AssimpSkeletonConverter()
-	{
-	}
+      return dstAnimations;
+   }
 
 }

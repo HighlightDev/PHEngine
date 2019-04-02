@@ -1,6 +1,9 @@
 #pragma once
 
 #include "PrimitiveComponent.h"
+#include "Core/GraphicsCore/RenderData/SkeletalMeshRenderData.h"
+
+using namespace Graphics::Data;
 
 namespace Game
 {
@@ -15,7 +18,7 @@ namespace Game
 
    public:
 
-      SkeletalMeshComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, SkeletalMeshRenderData& renderData);
+      SkeletalMeshComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const SkeletalMeshRenderData& renderData);
 
       virtual ~SkeletalMeshComponent();
 

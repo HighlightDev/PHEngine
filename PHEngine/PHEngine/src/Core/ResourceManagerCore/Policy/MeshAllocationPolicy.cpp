@@ -31,7 +31,7 @@ namespace Resources
 
 	std::shared_ptr<Skin> MeshAllocationPolicy::AllocateMemory(std::string& arg)
 	{
-		static const int32_t countOfBonesInfluencingOnVertex = 3;
+		const int32_t countOfBonesInfluencingOnVertex = 3;
 
 		std::shared_ptr<Skin> resultSkin;
 

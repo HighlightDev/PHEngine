@@ -21,7 +21,7 @@ namespace Graphics
          {
          }
 
-         void AddFrame(BoneTransform boneFrameTransform, double frameTime)
+         void AddFrame(const BoneTransform& boneFrameTransform, double frameTime)
          {
             m_frames.emplace(std::make_pair(frameTime, std::move(boneFrameTransform)));
          }

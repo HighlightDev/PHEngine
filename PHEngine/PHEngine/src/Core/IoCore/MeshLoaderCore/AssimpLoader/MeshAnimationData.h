@@ -21,6 +21,11 @@ namespace Io
 				MeshAnimationData(aiAnimation** animations, size_t animationCount);
 
 				~MeshAnimationData();
+
+            inline const std::vector<AnimationLOADER>& GetAnimations() const {
+
+               return Animations;
+            }
 			};
 
 		}

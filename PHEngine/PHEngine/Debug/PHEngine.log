@@ -1,2 +1,3 @@
-﻿  AnimationHolder.cpp
-  PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib
+﻿  SkeletalMeshSceneProxy.cpp
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\sceneproxy\skeletalmeshsceneproxy.cpp(9): error C2512: 'Graphics::Proxy::PrimitiveSceneProxy': no appropriate default constructor available
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\sceneproxy\primitivesceneproxy.h(18): note: see declaration of 'Graphics::Proxy::PrimitiveSceneProxy'
