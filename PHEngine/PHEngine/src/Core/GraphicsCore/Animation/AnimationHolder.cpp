@@ -7,7 +7,7 @@ namespace Graphics
    namespace Animation
    {
 
-      AnimationHolder::AnimationHolder(const std::vector<AnimationSequence>& animationSequences)
+      AnimationHolder::AnimationHolder(std::shared_ptr<std::vector<AnimationSequence>> animationSequences)
          : m_animationSequences(animationSequences)
          , m_currentSequence(nullptr)
          , m_sequenceLoopTime(0.0)
@@ -20,7 +20,7 @@ namespace Graphics
 
       void AnimationHolder::SetAnimationByNameNoBlend(const std::string& animationName)
       {
-         auto currentSequenceIt = std::find_if(m_animationSequences.begin(), m_animationSequences.end(), [&](const AnimationSequence& animSequence) { return animSequence.GetName() == animationName; });
+         auto currentSequenceIt = std::find_if(m_animationSequences->begin(), m_animationSequences->end(), [&](const AnimationSequence& animSequence) { return animSequence.GetName() == animationName; });
          m_currentSequence = &(*currentSequenceIt);
          m_sequenceLoopTime = 0.0;
       }

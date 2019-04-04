@@ -15,9 +15,13 @@ namespace Game
          public ShaderBase
       {
 
+         const int32_t MaxWeights = 3;
+         const int32_t MaxBones = 55;
+
          using Base = ShaderBase;
 
-         Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_albedoTex, u_normalTex, u_specularTex;
+         Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_albedoTex, u_normalTex, u_specularTex, u_isSkeletal;
+         UniformArray u_boneMatrices;
 
       public:
 
@@ -32,6 +36,10 @@ namespace Game
          void SetNormalTextureSlot(int32_t slot);
 
          void SetSpecularTextureSlot(int32_t slot);
+
+         void SetSkinningMatrices(const std::vector<glm::mat4>& skinningMatrices);
+
+         void SetNotSkeletalMesh();
 
       protected:
 

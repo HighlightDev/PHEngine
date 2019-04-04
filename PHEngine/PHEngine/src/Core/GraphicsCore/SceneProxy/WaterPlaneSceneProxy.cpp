@@ -61,6 +61,11 @@ namespace Graphics
          return m_shader;
       }
 
+      uint64_t WaterPlaneSceneProxy::GetComponentType() const
+      {
+         return WATER_PLANE_COMPONENT;
+      }
+
       void WaterPlaneSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
       {
 

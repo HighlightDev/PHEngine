@@ -22,7 +22,7 @@ namespace Game
 
    public:
 
-      DirectionalLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, DirectionalLightRenderData& renderData);
+      DirectionalLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const DirectionalLightRenderData& renderData);
 
       virtual ~DirectionalLightComponent();
 
@@ -30,7 +30,7 @@ namespace Game
 
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const override;
 
-      inline DirectionalLightRenderData GetRenderData() const {
+      inline const DirectionalLightRenderData& GetRenderData() const {
 
          return m_renderData;
       }

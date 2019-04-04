@@ -36,7 +36,7 @@ namespace EngineUtility
 
 		Bone* ConvertAssimpBoneToEngineBone(SkeletonBoneBaseLOADER* rootBone);
 
-      const std::vector<AnimationSequence>& ConvertAssimpAnimationToEngineAnimation(const std::vector<AnimationLOADER>& srcAnimations) const;
+      std::vector<AnimationSequence> ConvertAssimpAnimationToEngineAnimation(const std::vector<AnimationLOADER>& srcAnimations) const;
 
 	private:
 

@@ -5,7 +5,7 @@
 namespace Game
 {
 
-   DirectionalLightComponent::DirectionalLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, DirectionalLightRenderData& renderData)
+   DirectionalLightComponent::DirectionalLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const DirectionalLightRenderData& renderData)
       : LightComponent(translation, rotation, scale)
       , m_renderData(renderData)
    {

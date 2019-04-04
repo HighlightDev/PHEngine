@@ -7,6 +7,7 @@
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
 #include "Core/GameCore/ShaderImplementation/DeferredShader.h"
 #include "Core/GameCore/GlobalProperties.h"
+#include "Core/GraphicsCore/SceneProxy/SkeletalMeshSceneProxy.h"
 
 #include <gl/glew.h>
 #include <iostream>
@@ -50,11 +51,23 @@ namespace Graphics
             for (auto& proxy : deferredPrimitives)
             {
                const glm::mat4& worldMatrix = proxy->GetMatrix();
+
+               uint64_t type = proxy->GetComponentType();
+
+               if (type == SKELETAL_MESH_COMPONENT)
+               {
+                  SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(proxy.get());
+                  deferredShadingShader->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
+               }
+               else
+               {
+                  deferredShadingShader->SetNotSkeletalMesh();
+               }
+
                deferredShadingShader->SetTransformMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
 
                proxy->GetAlbedo()->BindTexture(0);
                deferredShadingShader->SetAlbedoTextureSlot(0);
-
                proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
             }
             deferredShadingShader->StopShader();

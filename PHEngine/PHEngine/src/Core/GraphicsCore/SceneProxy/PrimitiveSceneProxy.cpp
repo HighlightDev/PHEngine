@@ -57,5 +57,10 @@ namespace Graphics
          return m_specularMapTex;
       }
 
+      uint64_t PrimitiveSceneProxy::GetComponentType() const
+      {
+         return PRIMITIVE_COMPONENT;
+      }
+
    }
 }

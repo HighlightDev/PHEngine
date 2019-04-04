@@ -36,6 +36,8 @@ namespace Graphics
          virtual std::shared_ptr<ShaderBase> GetShader() override;
 
          void PostConstructor();
+
+         virtual uint64_t GetComponentType() const override;
       };
 
    }

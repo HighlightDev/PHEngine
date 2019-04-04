@@ -6,7 +6,7 @@
 namespace Game
 {
 
-	StaticMeshComponent::StaticMeshComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, StaticMeshRenderData& renderData)
+	StaticMeshComponent::StaticMeshComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const StaticMeshRenderData& renderData)
 		: PrimitiveComponent(std::move(translation), std::move(rotation), std::move(scale))
       , m_renderData(renderData)
 	{

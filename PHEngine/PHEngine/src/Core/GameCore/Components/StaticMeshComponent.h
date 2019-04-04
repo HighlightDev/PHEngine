@@ -24,7 +24,7 @@ namespace Game
 
 	public:
 
-		StaticMeshComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, StaticMeshRenderData& renderData);
+		StaticMeshComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const StaticMeshRenderData& renderData);
 
 		virtual ~StaticMeshComponent();
 
@@ -34,7 +34,7 @@ namespace Game
 
       virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() const override;
 
-      inline StaticMeshRenderData GetRenderData() const {
+      inline const StaticMeshRenderData& GetRenderData() const {
 
          return m_renderData;
       }

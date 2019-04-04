@@ -34,7 +34,7 @@ namespace Game
 
 	public:
 
-		SkyboxComponent(float rotateSpeed, SkyboxRenderData& renderData);
+		SkyboxComponent(float rotateSpeed, const SkyboxRenderData& renderData);
 
 		virtual ~SkyboxComponent();
 
@@ -54,7 +54,7 @@ namespace Game
 			return m_rotateSpeed;
 		}
 
-      SkyboxRenderData GetRenderData() const {
+      inline const SkyboxRenderData& GetRenderData() const {
 
          return m_renderData;
       }

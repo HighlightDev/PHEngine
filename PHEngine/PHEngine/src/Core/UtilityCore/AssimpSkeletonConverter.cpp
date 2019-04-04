@@ -45,7 +45,7 @@ namespace EngineUtility
 		return resultBone;
 	}
 
-   const std::vector<AnimationSequence>& AssimpSkeletonConverter::ConvertAssimpAnimationToEngineAnimation(const std::vector<AnimationLOADER>& srcAnimations) const
+   std::vector<AnimationSequence> AssimpSkeletonConverter::ConvertAssimpAnimationToEngineAnimation(const std::vector<AnimationLOADER>& srcAnimations) const
    {
       std::vector<AnimationSequence> dstAnimations;
 

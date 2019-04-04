@@ -15,7 +15,7 @@ namespace Graphics
       class AnimationHolder
       {
 
-         std::vector<AnimationSequence> m_animationSequences;
+         std::shared_ptr<std::vector<AnimationSequence>> m_animationSequences;
 
          AnimationSequence* m_currentSequence;
 
@@ -28,7 +28,7 @@ namespace Graphics
 
       public:
 
-         AnimationHolder(const std::vector<AnimationSequence>& animationSequences);
+         AnimationHolder(std::shared_ptr<std::vector<AnimationSequence>> animationSequences);
 
          ~AnimationHolder();
 

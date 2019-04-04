@@ -20,6 +20,9 @@ namespace Game
       {
          Base::AccessAllUniformLocations();
 
+         u_isSkeletal = GetUniform("isSkeletal");
+         u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones);
+
          u_worldMatrix = GetUniform("worldMatrix");
          u_viewMatrix = GetUniform("viewMatrix");
          u_projectionMatrix = GetUniform("projectionMatrix");
@@ -30,6 +33,10 @@ namespace Game
 
       void DeferredShader::SetShaderPredefine()
       {
+         int32_t maxWeights = MaxWeights;
+         int32_t maxBones = MaxBones;
+         Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", std::move(maxWeights));
+         Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", std::move(maxBones));
       }
 
       void DeferredShader::SetTransformMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
@@ -52,6 +59,19 @@ namespace Game
       void DeferredShader::SetSpecularTextureSlot(int32_t slot)
       {
          u_specularTex.LoadUniform(slot);
+      }
+
+      void DeferredShader::SetSkinningMatrices(const std::vector<glm::mat4>& skinningMatrices)
+      {
+         for (size_t index = 0; index < skinningMatrices.size(); index++)
+            u_boneMatrices.LoadUniform(index, skinningMatrices[index]);
+
+         u_isSkeletal.LoadUniform(true);
+      }
+
+      void DeferredShader::SetNotSkeletalMesh()
+      {
+         u_isSkeletal.LoadUniform(false);
       }
 
    }

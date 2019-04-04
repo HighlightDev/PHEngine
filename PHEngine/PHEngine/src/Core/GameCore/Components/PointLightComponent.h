@@ -20,7 +20,7 @@ namespace Game
 
    public:
 
-      PointLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, PointLightRenderData& renderData);
+      PointLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const PointLightRenderData& renderData);
 
       virtual ~PointLightComponent();
 
@@ -28,7 +28,7 @@ namespace Game
 
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const override;
 
-      inline PointLightRenderData GetRenderData() const {
+      inline const PointLightRenderData& GetRenderData() const {
 
          return m_renderData;
       }

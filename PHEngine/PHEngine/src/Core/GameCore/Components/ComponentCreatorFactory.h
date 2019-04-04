@@ -11,14 +11,18 @@
 #include "Core/ResourceManagerCore/Pool/TexturePool.h"
 #include "Core/ResourceManagerCore/Pool/ShaderPool.h"
 #include "Core/ResourceManagerCore/Pool/MeshPool.h"
+#include "Core/ResourceManagerCore/Pool/AnimationPool.h"
 #include "Core/GameCore/Components/ComponentData/ComponentData.h"
 #include "Core/GameCore/Components/ComponentData/SkyboxComponentData.h"
 #include "Core/GameCore/Components/ComponentData/StaticMeshComponentData.h"
 #include "Core/GameCore/Components/ComponentData/DirectionalLightComponentData.h"
 #include "Core/GameCore/Components/ComponentData/PointLightComponentData.h"
+#include "Core/GameCore/Components/ComponentData/SkeletalMeshComponentData.h"
 #include "Core/GameCore/Components/WaterPlaneComponent.h"
 #include "Core/GameCore/Components/ComponentData/WaterPlaneComponentData.h"
 #include "Core/GameCore/Components/ComponentData/MovementComponentData.h"
+#include "Core/GameCore/Components/SkeletalMeshComponent.h"
+#include "Core/GameCore/ShaderImplementation/SkeletalMeshShader.h"
 
 using namespace Resources;
 
@@ -182,6 +186,46 @@ namespace Game
 
          return resultComponent;
       }
+   };
+
+   // Skeletal mesh component
+   template <>
+   struct ComponentCreatorFactory<SkeletalMeshComponent>
+   {
+
+      static std::shared_ptr<Component> CreateComponent(ComponentData& data)
+      {
+         std::shared_ptr<Component> resultComponent;
+
+         if (data.GetType() == SKELETAL_MESH_COMPONENT)
+         {
+            SkeletalMeshComponentData& mData = static_cast<SkeletalMeshComponentData&>(data);
+
+            typename MeshPool::sharedValue_t skin = MeshPool::GetInstance()->GetOrAllocateResource(mData.m_pathToMesh);
+
+            typename TexturePool::sharedValue_t albedo = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToAlbedo);
+            typename TexturePool::sharedValue_t normalMap;
+            typename TexturePool::sharedValue_t specularMap;
+
+            typename AnimationPool::sharedValue_t animations = AnimationPool::GetInstance()->GetOrAllocateResource(mData.m_pathToMesh);
+
+            if (mData.m_pathToNormalMap != "")
+               normalMap = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToNormalMap);
+
+            if (mData.m_pathToSpecularMap != "")
+               specularMap = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToSpecularMap);
+
+            std::string shaderPath = std::move(mData.m_vsShaderPath) + "," + std::move(mData.m_fsShaderPath);
+            ShaderPool::sharedValue_t skeletalMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<SkeletalMeshShader>(shaderPath);
+
+            SkeletalMeshRenderData renderData(skin, animations, skeletalMeshShader, albedo, normalMap, specularMap);
+             
+            resultComponent = std::make_shared<SkeletalMeshComponent>(std::move(mData.m_translation), std::move(mData.m_rotation), std::move(mData.m_scale), renderData);
+         }
+
+         return resultComponent;
+      }
+
    };
 
 }

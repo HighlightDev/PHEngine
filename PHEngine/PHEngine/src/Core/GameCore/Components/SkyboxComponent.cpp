@@ -8,7 +8,7 @@ namespace Game
 {
 	using namespace EngineUtility;
 
-	SkyboxComponent::SkyboxComponent(float rotateSpeed, SkyboxRenderData& renderData)
+	SkyboxComponent::SkyboxComponent(float rotateSpeed, const SkyboxRenderData& renderData)
 		: PrimitiveComponent(glm::vec3(), glm::vec3(), glm::vec3(1))
 		, m_rotateSpeed(rotateSpeed)
       , m_renderData(renderData)

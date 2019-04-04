@@ -42,7 +42,7 @@ namespace Game
 
       virtual void Tick(float deltaTime) override;
       
-      inline WaterPlaneRenderData GetRenderData() const {
+      inline const WaterPlaneRenderData& GetRenderData() const {
 
          return m_renderData;
       }

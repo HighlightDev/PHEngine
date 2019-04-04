@@ -21,16 +21,16 @@ namespace Graphics
       struct SkeletalMeshRenderData
       {
          std::shared_ptr<Skin> m_skin;
-         std::vector<AnimationSequence> m_animations;
+         std::shared_ptr<std::vector<AnimationSequence>> m_animations;
          std::shared_ptr<ShaderBase> m_shader;
          std::shared_ptr<ITexture> m_albedo;
          std::shared_ptr<ITexture> m_normalMapTex;
          std::shared_ptr<ITexture> m_specularMapTex;
 
-         SkeletalMeshRenderData(std::shared_ptr<Skin> staticMesh, std::vector<AnimationSequence> animations,
+         SkeletalMeshRenderData(std::shared_ptr<Skin> mesh, std::shared_ptr<std::vector<AnimationSequence>> animations,
             std::shared_ptr<ShaderBase> staticMeshShader, std::shared_ptr<ITexture> albedo,
             std::shared_ptr<ITexture> normalMapTex, std::shared_ptr<ITexture> specularMapTex)
-            : m_skin(staticMesh)
+            : m_skin(mesh)
             , m_animations(animations)
             , m_shader(staticMeshShader)
             , m_albedo(albedo)

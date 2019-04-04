@@ -220,6 +220,17 @@ namespace Game
          AllActors.push_back(houseActor);
       }
 
+      // SKELETAL MESH
+      {
+         SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(), glm::vec3(), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
+            folderManager->GetShadersPath() + "skeletalMeshFS.glsl", folderManager->GetAlbedoTexturePath() + "diffuse.png", folderManager->GetNormalMapPath() + "city_house_2_Nor.png",
+            folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
+         Actor* skeletActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+         CreateAndAddComponent_GameThread<SkeletalMeshComponent>(mData, skeletActor);
+
+         AllActors.push_back(skeletActor);
+      }
+
       // SKYBOX
       {
          float SKYBOX_SIZE = 50.0f;

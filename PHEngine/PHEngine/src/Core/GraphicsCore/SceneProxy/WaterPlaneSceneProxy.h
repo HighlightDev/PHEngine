@@ -39,6 +39,8 @@ namespace Graphics
 
          virtual std::shared_ptr<ShaderBase> GetShader() override;
 
+         virtual uint64_t GetComponentType() const override;
+
          void SetMoveFactor(float moveFactor);
          void SetWaveStrength(float waveStr);
          void SetTransparencyDepth(float transparencyDepth);

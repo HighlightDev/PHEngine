@@ -16,6 +16,8 @@ namespace Game
 
       SkeletalMeshRenderData m_renderData;
 
+      float m_animationDeltaTime;
+
    public:
 
       SkeletalMeshComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const SkeletalMeshRenderData& renderData);
@@ -28,10 +30,12 @@ namespace Game
 
       virtual std::shared_ptr<PrimitiveSceneProxy> CreateSceneProxy() const override;
 
-      inline SkeletalMeshRenderData GetRenderData() const {
+      inline const SkeletalMeshRenderData& GetRenderData() const {
 
          return m_renderData;
       }
+
+      float GetAnimationDeltaTime() const;
    };
 
 }

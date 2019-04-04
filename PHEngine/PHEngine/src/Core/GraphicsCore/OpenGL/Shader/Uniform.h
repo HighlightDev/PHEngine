@@ -22,7 +22,7 @@ namespace Graphics
 
       public:
 
-         UniformArray() {}
+         UniformArray() = default;
 
          explicit UniformArray(int32_t programDescriptor, size_t uniformsCount, std::string&& uniformName);
 

@@ -5,6 +5,7 @@
 #include "Core/GraphicsCore/OpenGL/Shader/ShaderBase.h"
 #include "Core/GraphicsCore/Mesh/Skin.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
+#include "Core/GameCore/Components/ComponentType.h"
 
 using namespace Graphics::OpenGL;
 using namespace Graphics::Mesh;
@@ -59,6 +60,8 @@ namespace Graphics
          virtual std::shared_ptr<ITexture> GetNormalMap() const;
 
          virtual std::shared_ptr<ITexture> GetSpecularMap() const;
+
+         virtual uint64_t GetComponentType() const;
          
       };
 

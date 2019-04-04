@@ -32,6 +32,11 @@ namespace Graphics
          return m_skyboxShader;
       }
 
+      uint64_t SkyboxSceneProxy::GetComponentType() const
+      {
+         return SKYBOX_COMPONENT;
+      }
+
       void SkyboxSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
       {
          PostConstructor();

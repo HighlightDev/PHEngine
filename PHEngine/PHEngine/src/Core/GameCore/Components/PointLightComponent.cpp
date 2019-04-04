@@ -4,7 +4,7 @@
 namespace Game
 {
 
-   PointLightComponent::PointLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, PointLightRenderData& renderData)
+   PointLightComponent::PointLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const PointLightRenderData& renderData)
       : LightComponent(translation, rotation, scale)
       , m_renderData(renderData)
    {
