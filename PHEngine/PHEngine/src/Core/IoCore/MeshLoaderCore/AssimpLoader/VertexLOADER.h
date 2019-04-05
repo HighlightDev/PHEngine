@@ -17,14 +17,14 @@ namespace Io
 			{
 
 				int32_t m_index;
-				std::vector<std::pair<std::tuple<aiBone&, int32_t>, float>> BoneWeightMap;
+				std::vector<std::pair<std::tuple<aiBone*, int32_t>, float>> BoneWeightMap;
 
 			public:
 
 				VertexLOADER(int32_t index);
 				~VertexLOADER();
 
-				void AddBoneWeight(std::pair<std::tuple<aiBone&, int32_t>, float>&& boneInfo);
+				void AddBoneWeight(const std::pair<std::tuple<aiBone*, int32_t>, float>& boneInfo);
 			};
 		}
 	}

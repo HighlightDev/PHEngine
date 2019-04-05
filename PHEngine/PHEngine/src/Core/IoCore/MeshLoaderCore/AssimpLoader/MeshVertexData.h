@@ -29,7 +29,7 @@ namespace Io
 
 				void LoadSkeleton();
 
-				void FillHierarchyRecursive(aiNode& parentNode, class SkeletonBoneLOADER* parentBone, int32_t& boneIdCounter);
+				void FillHierarchyRecursive(aiNode* parentNode, class SkeletonBoneLOADER*& parentBone, int32_t& boneIdCounter);
 
 				std::string GetSkeletonArmatureNodeName(aiNode& rootNode);
 
@@ -41,7 +41,7 @@ namespace Io
 
 				void TryToCollectSkinInfo(size_t startIndex, aiMesh& meshBeingCollected);
 
-				void CollectBlendables(int32_t vertexId, std::vector<VertexLOADER>& blendData, aiMesh& meshBeingCollected, std::vector<uint32_t>& countOfIndicesPerMesh);
+				void CollectBlendables(int32_t vertexId, std::vector<VertexLOADER*>*& blendData, aiMesh& meshBeingCollected, std::vector<uint32_t>& countOfIndicesPerMesh);
 
 			public:
 

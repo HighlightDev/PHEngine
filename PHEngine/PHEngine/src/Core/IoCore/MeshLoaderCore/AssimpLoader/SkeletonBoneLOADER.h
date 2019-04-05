@@ -15,18 +15,18 @@ namespace Io
 			class SkeletonBoneBaseLOADER
 			{
 			protected:
-				std::vector< SkeletonBoneLOADER> m_children;
+				std::vector<SkeletonBoneLOADER*> m_children;
 			public:
 				SkeletonBoneBaseLOADER();
 				virtual ~SkeletonBoneBaseLOADER();
 
-				void AddChildBone(SkeletonBoneLOADER& child);
+				void AddChildBone(SkeletonBoneLOADER* child);
 
-				inline std::vector<SkeletonBoneLOADER>& GetChildren();
+				inline std::vector<SkeletonBoneLOADER*>& GetChildren();
 
-				int32_t GetIdByBoneInHierarchy(aiBone& seekBone);
+				int32_t GetIdByBoneInHierarchy(aiBone* seekBone);
 
-				int32_t GetIdByBone(aiBone& seekBone, SkeletonBoneLOADER& currentSkeletonBone);
+				int32_t GetIdByBone(aiBone* seekBone, SkeletonBoneLOADER* currentSkeletonBone);
 			};
 
 			class SkeletonBoneLOADER : public SkeletonBoneBaseLOADER
@@ -34,18 +34,18 @@ namespace Io
 			private:
 
 				SkeletonBoneBaseLOADER* m_parent;
-				aiBone m_boneInfo;
+				aiBone* m_boneInfo;
 				int32_t m_boneId;
 
 			public:
 				SkeletonBoneLOADER(SkeletonBoneBaseLOADER* parent);
 				~SkeletonBoneLOADER();
 
-				void SetBoneInfo(aiBone& bone);
+				void SetBoneInfo(aiBone* bone);
 
 				void SetBoneId(int32_t id);
 
-				inline aiBone& GetBoneInfo();
+				inline aiBone* GetBoneInfo() const;
 
 				inline int32_t GetBoneId();
 

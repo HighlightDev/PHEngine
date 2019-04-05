@@ -22,10 +22,10 @@ namespace EngineUtility
 	{
 		for (auto& srcNode : srcParentNode->GetChildren())
 		{
-			Bone dstChildBone(srcNode.GetBoneId(), std::move(srcNode.GetBoneInfo().mName.C_Str()), &dstParentBone);
-			dstChildBone.SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(srcNode.GetBoneInfo().mOffsetMatrix));
+			Bone dstChildBone(srcNode->GetBoneId(), srcNode->GetBoneInfo()->mName.C_Str(), &dstParentBone);
+			dstChildBone.SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(srcNode->GetBoneInfo()->mOffsetMatrix));
 			dstParentBone.AddChild(std::move(dstChildBone));
-			IterateBoneTree(dstChildBone, &srcNode);
+			IterateBoneTree(dstChildBone, srcNode);
 		}
 	}
 
@@ -35,10 +35,10 @@ namespace EngineUtility
 
 		for (auto& bone : rootBone->GetChildren())
 		{
-			int32_t id = bone.GetBoneId();
-			Bone root(id, std::move(bone.GetBoneInfo().mName.C_Str()));
-			root.SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(bone.GetBoneInfo().mOffsetMatrix));
-			IterateBoneTree(root, &bone);
+			int32_t id = bone->GetBoneId();
+			Bone root(id, bone->GetBoneInfo()->mName.C_Str());
+			root.SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(bone->GetBoneInfo()->mOffsetMatrix));
+			IterateBoneTree(root, bone);
 			resultBone->AddChild(std::move(root));
 		}
 

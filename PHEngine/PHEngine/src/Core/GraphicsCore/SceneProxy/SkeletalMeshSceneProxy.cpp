@@ -17,6 +17,7 @@ namespace Graphics
          , m_animationHolder(m_animations)
          , m_animationDeltaTime(component->GetAnimationDeltaTime())
       {
+         m_IsDeferred = true;
       }
 
       SkeletalMeshSceneProxy::~SkeletalMeshSceneProxy()

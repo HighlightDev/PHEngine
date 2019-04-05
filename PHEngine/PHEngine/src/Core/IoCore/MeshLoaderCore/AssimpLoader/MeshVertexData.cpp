@@ -86,21 +86,28 @@ namespace Io
 				// collect blend weights and blend ids
 				if (bHasAnimation)
 				{
-					std::vector<VertexLOADER> blendData;
+					std::vector<VertexLOADER*> blendData;
 					for (size_t attributeIndex = 0; attributeIndex < countOfVertices; attributeIndex++)
 					{
 						for (size_t meshIndex = 0; meshIndex < m_scene->mNumMeshes; meshIndex++)
 						{
 							aiMesh* mesh = m_meshes[meshIndex];
-							CollectBlendables(attributeIndex, blendData, *mesh, countOfIndicesPerMesh);
+                     auto dataPtr = &blendData;
+							CollectBlendables(attributeIndex, dataPtr, *mesh, countOfIndicesPerMesh);
 						}
 					}
 
 					for (size_t blendableIndex = 0; blendableIndex < blendData.size(); blendableIndex++)
 					{
-						VertexLOADER& blendVertex = blendData[blendableIndex];
-						CollectBlendWeightsAndIndices(blendVertex, blendableIndex);
+						VertexLOADER* blendVertex = blendData[blendableIndex];
+						CollectBlendWeightsAndIndices(*blendVertex, blendableIndex);
 					}
+
+               for (size_t blendableIndex = 0; blendableIndex < blendData.size(); blendableIndex++)
+               {
+                  VertexLOADER* blendVertex = blendData[blendableIndex];
+                  delete blendVertex;
+               }
 				}
 			}
 
@@ -124,9 +131,9 @@ namespace Io
 							{
 								SkeletonBoneLOADER* skeletonBone = new SkeletonBoneLOADER(SkeletonRoot);
 								skeletonBone->SetBoneId(boneIdCounter++);
-								skeletonBone->SetBoneInfo(*bone);
-								FillHierarchyRecursive(*childNode, skeletonBone, boneIdCounter);
-								SkeletonRoot->AddChildBone(*skeletonBone);
+								skeletonBone->SetBoneInfo(bone);
+								FillHierarchyRecursive(childNode, skeletonBone, boneIdCounter);
+								SkeletonRoot->AddChildBone(skeletonBone);
 							}
 						}
 					}
@@ -134,18 +141,18 @@ namespace Io
 			}
 
 			template <int32_t count_bones_influence_vertex>
-			void MeshVertexData<count_bones_influence_vertex>::FillHierarchyRecursive(aiNode& parentNode, SkeletonBoneLOADER* parentBone, int32_t& boneIdCounter) {
+			void MeshVertexData<count_bones_influence_vertex>::FillHierarchyRecursive(aiNode* parentNode, SkeletonBoneLOADER*& parentBone, int32_t& boneIdCounter) {
 
-				size_t nodesCount = parentNode.mNumChildren;
+				size_t nodesCount = parentNode->mNumChildren;
 				for (size_t nodeIndex = 0; nodeIndex < nodesCount; nodeIndex++)
 				{
-					aiNode* childNode = parentNode.mChildren[nodeIndex];
+					aiNode* childNode = parentNode->mChildren[nodeIndex];
 					SkeletonBoneLOADER* childBone = new SkeletonBoneLOADER(parentBone);
-					parentBone->AddChildBone(*childBone);
+					parentBone->AddChildBone(childBone);
 					aiBone* boneInfo = GetBoneByName(std::string(childNode->mName.C_Str()));
-					childBone->SetBoneInfo(*boneInfo);
+					childBone->SetBoneInfo(boneInfo);
 					childBone->SetBoneId(boneIdCounter++);
-					FillHierarchyRecursive(*childNode, childBone, boneIdCounter);
+					FillHierarchyRecursive(childNode, childBone, boneIdCounter);
 				}
 			}
 
@@ -261,10 +268,10 @@ namespace Io
 			}
 
 			template <int32_t count_bones_influence_vertex>
-			void MeshVertexData<count_bones_influence_vertex>::CollectBlendables(int32_t vertexId, std::vector<VertexLOADER>& blendData, aiMesh& meshBeingCollected, std::vector<uint32_t>& countOfIndicesPerMesh) {
+			void MeshVertexData<count_bones_influence_vertex>::CollectBlendables(int32_t vertexId, std::vector<VertexLOADER*>*& blendData, aiMesh& meshBeingCollected, std::vector<uint32_t>& countOfIndicesPerMesh) {
 
-				VertexLOADER vertex(vertexId);
-				blendData.push_back(vertex);
+				VertexLOADER* vertex = new VertexLOADER(vertexId);
+				blendData->push_back(vertex);
 
 				aiBone** bonesInMesh = meshBeingCollected.mBones;
 				size_t bonesCount = meshBeingCollected.mNumBones;
@@ -284,12 +291,12 @@ namespace Io
 						}
 						if (weight.mVertexId == (vertexId + countOfIndicesPerMesh[i]))
 						{
-							int32_t boneId = SkeletonRoot->GetIdByBoneInHierarchy(*bone);
+							int32_t boneId = SkeletonRoot->GetIdByBoneInHierarchy(bone);
 							if (boneId >= 0)
 							{
-								std::tuple<aiBone&, int32_t> weightTuple = std::tuple<aiBone&, int32_t>(*bone, boneId);
-								std::pair<std::tuple<aiBone&, int32_t>, float> weightPair = std::make_pair<std::tuple<aiBone&, int32_t>, float>(std::move(weightTuple), std::move(weight.mWeight));
-								vertex.AddBoneWeight(std::move(weightPair));
+								std::tuple<aiBone*, int32_t> weightTuple = std::tuple<aiBone*, int32_t>(bone, boneId);
+								std::pair<std::tuple<aiBone*, int32_t>, float> weightPair = std::make_pair<std::tuple<aiBone*, int32_t>, float>(std::move(weightTuple), std::move(weight.mWeight));
+								vertex->AddBoneWeight(weightPair);
 							}
 							else
 							{
@@ -299,8 +306,8 @@ namespace Io
 					}
 				}
 
-				if (vertex.BoneWeightMap.size() == 0)
-					blendData.erase(blendData.end() - 1); // remove last inserted element
+				if (vertex->BoneWeightMap.size() == 0)
+					blendData->erase(blendData->end() - 1); // remove last inserted element
 			}
 
 			template <>

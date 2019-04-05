@@ -18,23 +18,23 @@ namespace Io
 
 			}
 
-			void SkeletonBoneBaseLOADER::AddChildBone(SkeletonBoneLOADER& child)
+			void SkeletonBoneBaseLOADER::AddChildBone(SkeletonBoneLOADER* child)
 			{
 				m_children.push_back(child);
 			}
 
-			std::vector<SkeletonBoneLOADER>& SkeletonBoneBaseLOADER::GetChildren()
+			std::vector<SkeletonBoneLOADER*>& SkeletonBoneBaseLOADER::GetChildren()
 			{
 				return m_children;
 			}
 
-			int32_t SkeletonBoneBaseLOADER::GetIdByBoneInHierarchy(aiBone& seekBone)
+			int32_t SkeletonBoneBaseLOADER::GetIdByBoneInHierarchy(aiBone* seekBone)
 			{
 				int32_t id = -1;
 
 				for (auto& child : m_children)
 				{
-					id = child.GetIdByBone(seekBone, child);
+					id = child->GetIdByBone(seekBone, child);
 					if (id >= 0)
 						break;
 				}
@@ -42,20 +42,20 @@ namespace Io
 				return id;
 			}
 
-			int32_t SkeletonBoneBaseLOADER::GetIdByBone(aiBone& seekBone, SkeletonBoneLOADER& currentSkeletonBone)
+			int32_t SkeletonBoneBaseLOADER::GetIdByBone(aiBone* seekBone, SkeletonBoneLOADER* currentSkeletonBone)
 			{
 				int32_t id = -1;
 
-				if (currentSkeletonBone.GetBoneInfo().mName == seekBone.mName)
+				if (currentSkeletonBone->GetBoneInfo()->mName == seekBone->mName)
 				{
-					id = currentSkeletonBone.GetBoneId();
+					id = currentSkeletonBone->GetBoneId();
 				}
 
 				if (id < 0)
 				{
-					for (auto& skeletonBone : currentSkeletonBone.GetChildren())
+					for (auto& skeletonBone : currentSkeletonBone->GetChildren())
 					{
-						id = skeletonBone.GetIdByBone(seekBone, skeletonBone);
+						id = skeletonBone->GetIdByBone(seekBone, skeletonBone);
 						if (id > 0)
 							return id;
 					}
@@ -76,7 +76,7 @@ namespace Io
 			{
 			}
 
-			void SkeletonBoneLOADER::SetBoneInfo(aiBone& bone)
+			void SkeletonBoneLOADER::SetBoneInfo(aiBone* bone)
 			{
 				m_boneInfo = bone;
 			}
@@ -86,7 +86,7 @@ namespace Io
 				m_boneId = id;
 			}
 
-			aiBone& SkeletonBoneLOADER::GetBoneInfo()
+			aiBone* SkeletonBoneLOADER::GetBoneInfo() const
 			{
 				return m_boneInfo;
 			}
@@ -105,7 +105,7 @@ namespace Io
 			{
 				for (auto& child : m_children)
 				{
-					child.CleanUp();
+					child->CleanUp();
 				}
 				m_children.clear();
 			}
