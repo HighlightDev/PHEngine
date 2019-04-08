@@ -40,9 +40,13 @@ namespace Graphics
             m_toBoneTranslation = translation;
             m_toBoneScale = scale;
 
-            m_toBoneSpace = glm::scale(m_toBoneSpace, scale);
-            m_toBoneSpace = glm::toMat4(rotation);
-            m_toBoneSpace = glm::translate(m_toBoneSpace, translation);
+            glm::mat4 identityMatrix(1);
+            glm::mat4 translationMatrix = glm::translate(identityMatrix, translation);
+            glm::mat4 scaleMatrix = glm::scale(identityMatrix, scale);
+            glm::mat4 rotationMatrix = glm::toMat4(rotation);
+
+            m_toBoneSpace = translationMatrix * rotationMatrix * scaleMatrix;
+            m_toBoneSpace = glm::transpose(m_toBoneSpace);
          }
 
          BoneTransform()

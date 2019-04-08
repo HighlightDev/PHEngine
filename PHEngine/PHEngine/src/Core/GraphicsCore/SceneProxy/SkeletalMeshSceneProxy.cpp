@@ -18,6 +18,7 @@ namespace Graphics
          , m_animationDeltaTime(component->GetAnimationDeltaTime())
       {
          m_IsDeferred = true;
+         m_animationHolder.SetAnimationByNameNoBlend(m_animations->at(0).GetName());
       }
 
       SkeletalMeshSceneProxy::~SkeletalMeshSceneProxy()

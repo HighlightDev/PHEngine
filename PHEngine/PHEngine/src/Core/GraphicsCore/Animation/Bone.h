@@ -16,7 +16,7 @@ namespace Graphics
 		{
 		protected:
 
-			std::vector<Bone> m_children;
+			std::vector<Bone*> m_children;
 
 			Bone* m_parent;
 
@@ -32,14 +32,14 @@ namespace Graphics
 
 			~Bone();
 
-			inline void AddChild(Bone&& child) {
+			inline void AddChild(Bone* child) {
 
-				m_children.emplace_back(child);
+				m_children.push_back(child);
 			}
 
-			inline void RemoveChild(Bone& child) {
+			inline void RemoveChild(Bone* child) {
 
-				auto it = std::find_if(m_children.begin(), m_children.end(), [&](Bone& bone) { return child.GetId() == bone.GetId(); });
+				auto it = std::find_if(m_children.begin(), m_children.end(), [&](Bone*& bone) { return child->GetId() == bone->GetId(); });
 				m_children.erase(it);
 			}
 
@@ -50,11 +50,11 @@ namespace Graphics
 
 			void CleanUp();
 
-			std::vector<glm::mat4>&& GetChildrenOffsetMatrices();
+			std::vector<glm::mat4> GetChildrenOffsetMatrices();
 
-			void IterateOffsetHierarchy(Bone& parentBone, std::vector<glm::mat4>& out_offsetMatrices);
+			void IterateOffsetHierarchy(Bone* parentBone, std::vector<glm::mat4>& out_offsetMatrices);
 
-			inline std::vector<Bone>& GetChildren() {
+			inline std::vector<Bone*>& GetChildren() {
 
 				return m_children;
 			}

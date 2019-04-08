@@ -36,22 +36,23 @@ namespace Io
 
 						if (positionKeysCount > keyIndex)
 						{
-							auto& position = channel->mPositionKeys[keyIndex].mValue;
+							const auto& position = channel->mPositionKeys[keyIndex].mValue;
 							translation = std::move(glm::vec3(position.x, position.y, position.z));
 							time = channel->mPositionKeys[keyIndex].mTime;
 						}
 						if (scaleKeysCount > keyIndex)
 						{
-							auto& scaling = channel->mScalingKeys[keyIndex].mValue;
+							const auto& scaling = channel->mScalingKeys[keyIndex].mValue;
 							scale = std::move(glm::vec3(scaling.x, scaling.y, scaling.z));
 							time = channel->mPositionKeys[keyIndex].mTime;
 						}
 						if (rotationKeysCount > keyIndex)
 						{
-							auto& rotating = channel->mRotationKeys[keyIndex].mValue;
+							const auto& rotating = channel->mRotationKeys[keyIndex].mValue;
 							rotation.x = rotating.x;
 							rotation.y = rotating.y;
 							rotation.z = rotating.z;
+                     rotation.w = rotating.w;
 							time = channel->mRotationKeys[keyIndex].mTime;
 						}
 

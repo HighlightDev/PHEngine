@@ -42,7 +42,7 @@ namespace EngineUtility
 
 		glm::mat4 ConvertAssimpMatrix4x4ToOpenTKMatrix4(aiMatrix4x4& srcMatrix);
 
-		void IterateBoneTree(Bone& dstParentBone, SkeletonBoneLOADER* srcParentNode);
+		void IterateBoneTree(Bone* dstParentBone, SkeletonBoneLOADER* srcParentNode);
 	};
 
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_map>
+#include <map>
 
 #include "BoneTransform.h"
 
@@ -11,7 +11,7 @@ namespace Graphics
 
       class AnimationFrame
       {
-         std::unordered_map<double, BoneTransform> m_frames;
+         std::map<double, BoneTransform> m_frames;
          std::string m_boneName;
 
       public:
@@ -31,7 +31,7 @@ namespace Graphics
             return m_boneName;
          }
 
-         const std::unordered_map<double, BoneTransform>& GetFrames() const
+         const std::map<double, BoneTransform>& GetFrames() const
          {
             return m_frames;
          }
@@ -40,7 +40,7 @@ namespace Graphics
          {
             std::vector<double> intervals;
 
-            for (std::unordered_map<double, BoneTransform>::const_iterator cit = m_frames.cbegin(); cit != m_frames.cend(); ++cit) {
+            for (std::map<double, BoneTransform>::const_iterator cit = m_frames.cbegin(); cit != m_frames.cend(); ++cit) {
                intervals.push_back(cit->first);
             }
 

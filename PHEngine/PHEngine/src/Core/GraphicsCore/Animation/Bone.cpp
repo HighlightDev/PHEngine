@@ -23,23 +23,24 @@ namespace Graphics
 			ClearChildren();
 		}
 
-		std::vector<glm::mat4>&& Bone::GetChildrenOffsetMatrices() {
+		std::vector<glm::mat4> Bone::GetChildrenOffsetMatrices() {
 
 			std::vector<glm::mat4> resultOffsetMatrices;
 
 			for (auto& child : m_children)
 			{
-				resultOffsetMatrices.emplace_back(std::move(child.GetOffsetMatrix()));
+				resultOffsetMatrices.emplace_back(std::move(child->GetOffsetMatrix()));
 				IterateOffsetHierarchy(child, resultOffsetMatrices);
 			}
-			return std::move(resultOffsetMatrices);
+
+			return resultOffsetMatrices;
 		}
 
-		void Bone::IterateOffsetHierarchy(Bone& parentBone, std::vector<glm::mat4>& out_offsetMatrices) {
+		void Bone::IterateOffsetHierarchy(Bone* parentBone, std::vector<glm::mat4>& out_offsetMatrices) {
 
-			for (auto& child : parentBone.m_children)
+			for (auto& child : parentBone->m_children)
 			{
-				out_offsetMatrices.emplace_back(std::move(child.GetOffsetMatrix()));
+				out_offsetMatrices.emplace_back(std::move(child->GetOffsetMatrix()));
 				IterateOffsetHierarchy(child, out_offsetMatrices);
 			}
 		}

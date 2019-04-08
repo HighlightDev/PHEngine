@@ -9,22 +9,22 @@ namespace EngineUtility
 
 	glm::mat4 AssimpSkeletonConverter::ConvertAssimpMatrix4x4ToOpenTKMatrix4(aiMatrix4x4& srcMatrix)
 	{
-		glm::mat4 dstMatrix(
-			srcMatrix.a1, srcMatrix.b1, srcMatrix.c1, srcMatrix.d1,
-			srcMatrix.a2, srcMatrix.b2, srcMatrix.c2, srcMatrix.d2,
-			srcMatrix.a3, srcMatrix.b3, srcMatrix.c3, srcMatrix.d3,
-			srcMatrix.a4, srcMatrix.b4, srcMatrix.c4, srcMatrix.d4);
+		glm::mat4 dstMatrix(srcMatrix.a1, srcMatrix.a2, srcMatrix.a3, srcMatrix.a4,
+         srcMatrix.b1, srcMatrix.b2, srcMatrix.b3, srcMatrix.b4,
+         srcMatrix.c1, srcMatrix.c2, srcMatrix.c3, srcMatrix.c4,
+         srcMatrix.d1, srcMatrix.d2, srcMatrix.d3, srcMatrix.d4);
 
 		return dstMatrix;
 	}
 
-	void AssimpSkeletonConverter::IterateBoneTree(Bone& dstParentBone, Io::MeshLoader::Assimp::SkeletonBoneLOADER* srcParentNode)
+	void AssimpSkeletonConverter::IterateBoneTree(Bone* dstParentBone, Io::MeshLoader::Assimp::SkeletonBoneLOADER* srcParentNode)
 	{
 		for (auto& srcNode : srcParentNode->GetChildren())
 		{
-			Bone dstChildBone(srcNode->GetBoneId(), srcNode->GetBoneInfo()->mName.C_Str(), &dstParentBone);
-			dstChildBone.SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(srcNode->GetBoneInfo()->mOffsetMatrix));
-			dstParentBone.AddChild(std::move(dstChildBone));
+         // SHOULD BE POINTER!!!
+			Bone* dstChildBone = new Bone(srcNode->GetBoneId(), srcNode->GetBoneInfo()->mName.C_Str(), dstParentBone);
+			dstChildBone->SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(srcNode->GetBoneInfo()->mOffsetMatrix));
+			dstParentBone->AddChild(dstChildBone);
 			IterateBoneTree(dstChildBone, srcNode);
 		}
 	}
@@ -36,10 +36,10 @@ namespace EngineUtility
 		for (auto& bone : rootBone->GetChildren())
 		{
 			int32_t id = bone->GetBoneId();
-			Bone root(id, bone->GetBoneInfo()->mName.C_Str());
-			root.SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(bone->GetBoneInfo()->mOffsetMatrix));
+			Bone* root = new Bone(id, bone->GetBoneInfo()->mName.C_Str());
+			root->SetOffsetMatrix(ConvertAssimpMatrix4x4ToOpenTKMatrix4(bone->GetBoneInfo()->mOffsetMatrix));
 			IterateBoneTree(root, bone);
-			resultBone->AddChild(std::move(root));
+			resultBone->AddChild(root);
 		}
 
 		return resultBone;

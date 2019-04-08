@@ -92,7 +92,7 @@ namespace Graphics
       std::vector<glm::mat4> AnimationHolder::GetAnimatedOffsetedMatrices(Bone* rootBone)
       {
          std::vector<glm::mat4> animatePoseMatrices = GetAnimatedNotOffsetedPoseMatricesList();
-         std::vector<glm::mat4> offsetMatrices(std::move(rootBone->GetChildrenOffsetMatrices()));
+         std::vector<glm::mat4> offsetMatrices(rootBone->GetChildrenOffsetMatrices());
          std::vector<glm::mat4> animateToBoneSpaceMatrices;
 
          glm::mat4 matrixOfRootBone(1);
@@ -115,9 +115,9 @@ namespace Graphics
       {
          for (auto& child : parentBone->GetChildren())
          {
-            glm::mat4 currentBoneMatrix = srcTransformation[child.GetId()] * parentMatrix;
+            glm::mat4 currentBoneMatrix = srcTransformation[child->GetId()] * parentMatrix;
             dstMatrices.push_back(currentBoneMatrix);
-            TransformFromLocalSpaceToBoneSpace(&child, currentBoneMatrix, srcTransformation, dstMatrices);
+            TransformFromLocalSpaceToBoneSpace(child, currentBoneMatrix, srcTransformation, dstMatrices);
          }
       }
    }
