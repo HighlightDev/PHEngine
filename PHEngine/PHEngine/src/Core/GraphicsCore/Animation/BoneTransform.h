@@ -46,7 +46,6 @@ namespace Graphics
             glm::mat4 rotationMatrix = glm::toMat4(rotation);
 
             m_toBoneSpace = translationMatrix * rotationMatrix * scaleMatrix;
-            m_toBoneSpace = glm::transpose(m_toBoneSpace);
          }
 
          BoneTransform()
@@ -61,7 +60,7 @@ namespace Graphics
          {
             vec3 lerpPosition = glm::lerp(lhv.m_toBoneTranslation, rhv.m_toBoneTranslation, blend);
             vec3 lerpScale = glm::lerp(lhv.m_toBoneScale, rhv.m_toBoneScale, blend);
-            glm::quat lerpRotation = glm::lerp(lhv.m_toBoneRotation, rhv.m_toBoneRotation, blend);
+            glm::quat lerpRotation = glm::slerp(lhv.m_toBoneRotation, rhv.m_toBoneRotation, blend);
             return BoneTransform(lerpRotation, lerpPosition, lerpScale);
          }
 

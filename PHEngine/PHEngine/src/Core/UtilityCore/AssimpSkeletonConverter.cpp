@@ -9,10 +9,10 @@ namespace EngineUtility
 
 	glm::mat4 AssimpSkeletonConverter::ConvertAssimpMatrix4x4ToOpenTKMatrix4(aiMatrix4x4& srcMatrix)
 	{
-		glm::mat4 dstMatrix(srcMatrix.a1, srcMatrix.a2, srcMatrix.a3, srcMatrix.a4,
-         srcMatrix.b1, srcMatrix.b2, srcMatrix.b3, srcMatrix.b4,
-         srcMatrix.c1, srcMatrix.c2, srcMatrix.c3, srcMatrix.c4,
-         srcMatrix.d1, srcMatrix.d2, srcMatrix.d3, srcMatrix.d4);
+		glm::mat4 dstMatrix(srcMatrix.a1, srcMatrix.b1, srcMatrix.c1, srcMatrix.d1,
+         srcMatrix.a2, srcMatrix.b2, srcMatrix.c2, srcMatrix.d2,
+         srcMatrix.a3, srcMatrix.b3, srcMatrix.c3, srcMatrix.d3,
+         srcMatrix.a4, srcMatrix.b4, srcMatrix.c4, srcMatrix.d4);
 
 		return dstMatrix;
 	}

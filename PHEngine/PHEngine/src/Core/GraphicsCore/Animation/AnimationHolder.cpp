@@ -105,7 +105,7 @@ namespace Graphics
          {
             const glm::mat4& animateMatrix = animateToBoneSpaceMatrices[i];
             const glm::mat4& offsetMatrix = offsetMatrices[i];
-            skinningMatrices.emplace_back(offsetMatrix * animateMatrix);
+            skinningMatrices.emplace_back(animateMatrix * offsetMatrix);
          }
 
          return skinningMatrices;
@@ -115,7 +115,7 @@ namespace Graphics
       {
          for (auto& child : parentBone->GetChildren())
          {
-            glm::mat4 currentBoneMatrix = srcTransformation[child->GetId()] * parentMatrix;
+            glm::mat4 currentBoneMatrix = parentMatrix * srcTransformation[child->GetId()];
             dstMatrices.push_back(currentBoneMatrix);
             TransformFromLocalSpaceToBoneSpace(child, currentBoneMatrix, srcTransformation, dstMatrices);
          }
