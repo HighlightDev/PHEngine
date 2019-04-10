@@ -15,7 +15,6 @@ namespace Io
 
 			SkeletonBoneBaseLOADER::~SkeletonBoneBaseLOADER()
 			{
-
 			}
 
 			void SkeletonBoneBaseLOADER::AddChildBone(SkeletonBoneLOADER* child)
@@ -64,6 +63,17 @@ namespace Io
 				return id;
 			}
 
+         void SkeletonBoneBaseLOADER::CleanUp()
+         {
+            for (size_t index = 0; index < m_children.size(); index++)
+            {
+               SkeletonBoneLOADER* child = m_children[index];
+               child->CleanUp();
+               delete child;
+            }
+            m_children.clear();
+         }
+
 			/********* SkeletonBoneLOADER ***************/
 
 			SkeletonBoneLOADER::SkeletonBoneLOADER(SkeletonBoneBaseLOADER* parent)
@@ -91,7 +101,7 @@ namespace Io
 				return m_boneInfo;
 			}
 
-			int32_t SkeletonBoneLOADER::GetBoneId()
+			int32_t SkeletonBoneLOADER::GetBoneId() const
 			{
 				return m_boneId;
 			}
@@ -103,9 +113,11 @@ namespace Io
 
 			void SkeletonBoneLOADER::CleanUp()
 			{
-				for (auto& child : m_children)
+				for (size_t index = 0; index < m_children.size(); index ++)
 				{
+               SkeletonBoneLOADER* child = m_children[index];
 					child->CleanUp();
+               delete child;
 				}
 				m_children.clear();
 			}

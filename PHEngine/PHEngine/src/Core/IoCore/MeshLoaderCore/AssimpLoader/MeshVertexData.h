@@ -37,11 +37,11 @@ namespace Io
 
 				aiBone* GetBoneByName(const std::string& name);
 
-				void CollectIndices(aiMesh& meshBeingCollected, uint32_t lastIndexBeenInterrupted);
+				void CollectIndices(aiMesh* meshBeingCollected, uint32_t lastIndexBeenInterrupted);
 
-				void TryToCollectSkinInfo(size_t startIndex, aiMesh& meshBeingCollected);
+				void TryToCollectSkinInfo(size_t startIndex, aiMesh* meshBeingCollected);
 
-				void CollectBlendables(int32_t vertexId, std::vector<VertexLOADER*>*& blendData, aiMesh& meshBeingCollected, std::vector<uint32_t>& countOfIndicesPerMesh);
+				void CollectBlendables(size_t vertexId, std::vector<VertexLOADER>& blendData, aiMesh* meshBeingCollected);
 
 			public:
 

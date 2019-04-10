@@ -24,7 +24,7 @@ namespace Io
 				VertexLOADER(int32_t index);
 				~VertexLOADER();
 
-				void AddBoneWeight(const std::pair<std::tuple<aiBone*, int32_t>, float>& boneInfo);
+				void AddBoneWeight(std::pair<std::tuple<aiBone*, int32_t>, float>&& boneInfo);
 			};
 		}
 	}

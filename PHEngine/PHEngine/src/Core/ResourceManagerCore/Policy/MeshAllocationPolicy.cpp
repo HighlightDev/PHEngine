@@ -89,6 +89,9 @@ namespace Resources
 			if (meshData.bHasAnimation)
 			{
 				Bone* rootBone = EngineUtility::AssimpSkeletonConverter::GetInstance()->ConvertAssimpBoneToEngineBone(meshData.SkeletonRoot);
+            meshData.SkeletonRoot->CleanUp();
+            delete meshData.SkeletonRoot;
+            meshData.SkeletonRoot = nullptr;
 				resultSkin = std::make_shared<AnimatedSkin>(std::move(vao), std::make_shared<Bone>(*rootBone));
 			}
 			else

@@ -27,6 +27,8 @@ namespace Io
 				int32_t GetIdByBoneInHierarchy(aiBone* seekBone);
 
 				int32_t GetIdByBone(aiBone* seekBone, SkeletonBoneLOADER* currentSkeletonBone);
+
+            void CleanUp();
 			};
 
 			class SkeletonBoneLOADER : public SkeletonBoneBaseLOADER
@@ -47,7 +49,7 @@ namespace Io
 
 				inline aiBone* GetBoneInfo() const;
 
-				inline int32_t GetBoneId();
+				inline int32_t GetBoneId() const;
 
 				inline SkeletonBoneBaseLOADER* GetParent();
 

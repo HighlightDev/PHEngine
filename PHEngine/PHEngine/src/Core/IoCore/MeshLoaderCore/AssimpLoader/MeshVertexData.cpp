@@ -2,6 +2,7 @@
 #include "SkeletonBoneLOADER.h"
 
 #include <tuple>
+#include <thread>
 
 namespace Io
 {
@@ -79,35 +80,63 @@ namespace Io
 					aiMesh* mesh = m_meshes[i];
 					size_t processedIndices = Indices->size();
 					countOfIndicesPerMesh.emplace_back(processedIndices);
-					CollectIndices(*mesh, processedIndices);
-					TryToCollectSkinInfo(countOfIndicesPerMesh[i], *mesh);
+					CollectIndices(mesh, processedIndices);
+					TryToCollectSkinInfo(countOfIndicesPerMesh[i], mesh);
 				}
 
-				// collect blend weights and blend ids
+				// collect blend weights and blend id's
 				if (bHasAnimation)
 				{
-					std::vector<VertexLOADER*> blendData;
-					for (size_t attributeIndex = 0; attributeIndex < countOfVertices; attributeIndex++)
-					{
-						for (size_t meshIndex = 0; meshIndex < m_scene->mNumMeshes; meshIndex++)
-						{
-							aiMesh* mesh = m_meshes[meshIndex];
-                     auto dataPtr = &blendData;
-							CollectBlendables(attributeIndex, dataPtr, *mesh, countOfIndicesPerMesh);
-						}
-					}
+					std::vector<VertexLOADER> blendData;
+
+               // Collect blend data concurrently, if possible
+               const size_t countOfAvailableThreads = std::thread::hardware_concurrency();
+               size_t countOfVerticesPerJob = countOfVertices / countOfAvailableThreads;
+
+               auto jobFunctor = [&](const size_t startIndex, const size_t endIndex, std::vector<VertexLOADER>& collectionOfBlendables) {
+
+                  for (size_t attributeIndex = startIndex; attributeIndex < endIndex; attributeIndex++)
+                  {
+                     for (size_t meshIndex = 0; meshIndex < m_scene->mNumMeshes; meshIndex++)
+                     {
+                        aiMesh* mesh = m_meshes[meshIndex];
+                        const size_t seekVertexId = (attributeIndex + countOfIndicesPerMesh[meshIndex]);
+                        CollectBlendables(seekVertexId, collectionOfBlendables, mesh);
+                     }
+                  }
+               };
+
+               std::vector<VertexLOADER>* jobBlendables = new std::vector<VertexLOADER>[countOfAvailableThreads];
+               std::vector<std::shared_ptr<std::thread>> jobs;
+
+               for (size_t jobIndex = 0; jobIndex < countOfAvailableThreads; jobIndex++)
+               {
+                  const size_t startIndex = jobIndex * countOfVerticesPerJob;
+                  const size_t endIndex = jobIndex == (countOfAvailableThreads - 1) ? countOfVertices : (jobIndex + 1) * countOfVerticesPerJob;
+
+                  std::vector<VertexLOADER>& currentJobVector = jobBlendables[jobIndex];
+                  std::shared_ptr<std::thread> job = std::make_shared<std::thread>(jobFunctor, startIndex, endIndex, std::ref<std::vector<VertexLOADER>>(currentJobVector));
+                  jobs.push_back(job);
+               }
+
+               for (auto& job : jobs)
+               {
+                  job->join();
+               }
+
+               for (size_t  index = 0; index < countOfAvailableThreads; index++)
+               {
+                 std::vector<VertexLOADER>& blendVector = jobBlendables[index];
+                  blendData.insert(blendData.end(), std::make_move_iterator(blendVector.begin()), std::make_move_iterator(blendVector.end()));
+               }
+
+               delete[] jobBlendables;
 
 					for (size_t blendableIndex = 0; blendableIndex < blendData.size(); blendableIndex++)
 					{
-						VertexLOADER* blendVertex = blendData[blendableIndex];
-						CollectBlendWeightsAndIndices(*blendVertex, blendableIndex);
+						VertexLOADER& blendVertex = blendData[blendableIndex];
+						CollectBlendWeightsAndIndices(blendVertex, blendableIndex);
 					}
-
-               for (size_t blendableIndex = 0; blendableIndex < blendData.size(); blendableIndex++)
-               {
-                  VertexLOADER* blendVertex = blendData[blendableIndex];
-                  delete blendVertex;
-               }
 				}
 			}
 
@@ -215,12 +244,12 @@ namespace Io
 			}
 
 			template <int32_t count_bones_influence_vertex>
-			void MeshVertexData<count_bones_influence_vertex>::CollectIndices(aiMesh& meshBeingCollected, uint32_t lastIndexBeenInterrupted) {
+			void MeshVertexData<count_bones_influence_vertex>::CollectIndices(aiMesh* meshBeingCollected, uint32_t lastIndexBeenInterrupted) {
 
-				size_t countOfFaces = meshBeingCollected.mNumFaces;
+				size_t countOfFaces = meshBeingCollected->mNumFaces;
 				for (size_t faceIndex = 0; faceIndex < countOfFaces; faceIndex++)
 				{
-					aiFace& face = meshBeingCollected.mFaces[faceIndex];
+					aiFace& face = meshBeingCollected->mFaces[faceIndex];
 					if (face.mNumIndices == 3) // triangulated face
 					{
 						Indices->emplace_back(face.mIndices[0] + lastIndexBeenInterrupted);
@@ -235,46 +264,49 @@ namespace Io
 			}
 
 			template <int32_t count_bones_influence_vertex>
-			void MeshVertexData<count_bones_influence_vertex>::TryToCollectSkinInfo(size_t startIndex, aiMesh& meshBeingCollected) {
+			void MeshVertexData<count_bones_influence_vertex>::TryToCollectSkinInfo(size_t startIndex, aiMesh* meshBeingCollected) {
 
-				for (size_t attribIndex = 0; attribIndex < meshBeingCollected.mNumVertices; ++attribIndex)
+            const bool bCollectNormals = meshBeingCollected->HasNormals() & bHasNormals;
+            const bool bCollectTexCoords = meshBeingCollected->HasTextureCoords(0) & bHasTextureCoordinates;
+            const bool bCollectTangBitang = meshBeingCollected->HasTangentsAndBitangents() & bHasTangentVertices;
+
+				for (size_t attribIndex = 0; attribIndex < meshBeingCollected->mNumVertices; ++attribIndex)
 				{
-					Verts->emplace_back(meshBeingCollected.mVertices[attribIndex].x);
-					Verts->emplace_back(meshBeingCollected.mVertices[attribIndex].y);
-					Verts->emplace_back(meshBeingCollected.mVertices[attribIndex].z);
+					Verts->emplace_back(meshBeingCollected->mVertices[attribIndex].x);
+					Verts->emplace_back(meshBeingCollected->mVertices[attribIndex].y);
+					Verts->emplace_back(meshBeingCollected->mVertices[attribIndex].z);
 
-					if (meshBeingCollected.HasNormals() && bHasNormals)
+					if (bCollectNormals)
 					{
-						N_Verts->emplace_back(meshBeingCollected.mNormals[attribIndex].x);
-						N_Verts->emplace_back(meshBeingCollected.mNormals[attribIndex].y);
-						N_Verts->emplace_back(meshBeingCollected.mNormals[attribIndex].z);
+						N_Verts->emplace_back(meshBeingCollected->mNormals[attribIndex].x);
+						N_Verts->emplace_back(meshBeingCollected->mNormals[attribIndex].y);
+						N_Verts->emplace_back(meshBeingCollected->mNormals[attribIndex].z);
 					}
-					if (meshBeingCollected.HasTextureCoords(0) && bHasTextureCoordinates)
+					if (bCollectTexCoords)
 					{
-						T_Verts->emplace_back(meshBeingCollected.mTextureCoords[0][attribIndex].x);
-						T_Verts->emplace_back(meshBeingCollected.mTextureCoords[0][attribIndex].y);
+						T_Verts->emplace_back(meshBeingCollected->mTextureCoords[0][attribIndex].x);
+						T_Verts->emplace_back(meshBeingCollected->mTextureCoords[0][attribIndex].y);
 					}
-					if (meshBeingCollected.HasTangentsAndBitangents() && bHasTangentVertices)
+					if (bCollectTangBitang)
 					{
-						Tangent_Verts->emplace_back(meshBeingCollected.mTangents[attribIndex].x);
-						Tangent_Verts->emplace_back(meshBeingCollected.mTangents[attribIndex].y);
-						Tangent_Verts->emplace_back(meshBeingCollected.mTangents[attribIndex].z);
+						Tangent_Verts->emplace_back(meshBeingCollected->mTangents[attribIndex].x);
+						Tangent_Verts->emplace_back(meshBeingCollected->mTangents[attribIndex].y);
+						Tangent_Verts->emplace_back(meshBeingCollected->mTangents[attribIndex].z);
 
-						Bitanget_Verts->emplace_back(meshBeingCollected.mBitangents[attribIndex].x);
-						Bitanget_Verts->emplace_back(meshBeingCollected.mBitangents[attribIndex].y);
-						Bitanget_Verts->emplace_back(meshBeingCollected.mBitangents[attribIndex].z);
+						Bitanget_Verts->emplace_back(meshBeingCollected->mBitangents[attribIndex].x);
+						Bitanget_Verts->emplace_back(meshBeingCollected->mBitangents[attribIndex].y);
+						Bitanget_Verts->emplace_back(meshBeingCollected->mBitangents[attribIndex].z);
 					}
 				}
 			}
 
 			template <int32_t count_bones_influence_vertex>
-			void MeshVertexData<count_bones_influence_vertex>::CollectBlendables(int32_t vertexId, std::vector<VertexLOADER*>*& blendData, aiMesh& meshBeingCollected, std::vector<uint32_t>& countOfIndicesPerMesh) {
+			void MeshVertexData<count_bones_influence_vertex>::CollectBlendables(size_t vertexId, std::vector<VertexLOADER>& blendData, aiMesh* meshBeingCollected) {
 
-				VertexLOADER* vertex = new VertexLOADER(vertexId);
-				blendData->push_back(vertex);
+				VertexLOADER vertex(vertexId);
 
-				aiBone** bonesInMesh = meshBeingCollected.mBones;
-				size_t bonesCount = meshBeingCollected.mNumBones;
+				aiBone** bonesInMesh = meshBeingCollected->mBones;
+				size_t bonesCount = meshBeingCollected->mNumBones;
 
 				for (size_t boneIndex = 0; boneIndex < bonesCount; boneIndex++)
 				{
@@ -284,19 +316,18 @@ namespace Io
 					for (size_t weightIndex = 0; weightIndex < weightsCount; weightIndex++)
 					{
 						aiVertexWeight& weight = bone->mWeights[weightIndex];
-						int32_t i = 0;
-						while (&meshBeingCollected != m_meshes[i])
-						{
-							i++;
-						}
-						if (weight.mVertexId == (vertexId + countOfIndicesPerMesh[i]))
+
+                  if (weight.mVertexId > vertexId) // skip iteration in case if current vertex id is too big
+                     weightIndex = weight.mVertexId;
+
+						if (weight.mVertexId == vertexId)
 						{
 							int32_t boneId = SkeletonRoot->GetIdByBoneInHierarchy(bone);
 							if (boneId >= 0)
 							{
 								std::tuple<aiBone*, int32_t> weightTuple = std::tuple<aiBone*, int32_t>(bone, boneId);
 								std::pair<std::tuple<aiBone*, int32_t>, float> weightPair = std::make_pair<std::tuple<aiBone*, int32_t>, float>(std::move(weightTuple), std::move(weight.mWeight));
-								vertex->AddBoneWeight(weightPair);
+								vertex.AddBoneWeight(std::move(weightPair));
 							}
 							else
 							{
@@ -306,14 +337,14 @@ namespace Io
 					}
 				}
 
-				if (vertex->BoneWeightMap.size() == 0)
-					blendData->erase(blendData->end() - 1); // remove last inserted element
+				if (vertex.BoneWeightMap.size() > 0)
+               blendData.emplace_back(std::move(vertex));
 			}
 
 			template <>
 			void MeshVertexData<3>::CollectBlendWeightsAndIndices(VertexLOADER& blendInfoVertex, size_t blendableIndex)
 			{
-				size_t currentVertexInfluenceCount = blendInfoVertex.BoneWeightMap.size();
+				const size_t currentVertexInfluenceCount = blendInfoVertex.BoneWeightMap.size();
 
 				if (currentVertexInfluenceCount == 1)
 				{
