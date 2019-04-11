@@ -49,9 +49,11 @@ namespace Io
 						bHasNormals = m_meshes[currentMeshIndex]->HasNormals();
 					if (!bHasTextureCoordinates)
 						bHasTextureCoordinates = m_meshes[currentMeshIndex]->HasTextureCoords(0);
+               if (!bHasTangentVertices)
+                  bHasTangentVertices = m_meshes[currentMeshIndex]->HasTangentsAndBitangents();
 
 					// If we have all necessary info already -> stop passing through array
-					if (bHasIndices && bHasNormals && bHasTextureCoordinates)
+					if (bHasIndices && bHasNormals && bHasTextureCoordinates && bHasTangentVertices)
 						break;
 				}
 

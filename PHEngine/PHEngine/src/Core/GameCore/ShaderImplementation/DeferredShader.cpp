@@ -27,8 +27,8 @@ namespace Game
          u_viewMatrix = GetUniform("viewMatrix");
          u_projectionMatrix = GetUniform("projectionMatrix");
          u_albedoTex = GetUniform("albedo");
-         u_normalTex = GetUniform("normal");
-         u_specularTex = GetUniform("specular");
+         u_normalTex = GetUniform("normalMap");
+         u_specularTex = GetUniform("specularMap");
       }
 
       void DeferredShader::SetShaderPredefine()

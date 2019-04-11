@@ -1,2 +1,4 @@
-﻿  MeshVertexData.cpp
+﻿  DirectionalLightComponent.cpp
+  LightComponent.cpp
+  Generating Code...
   PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

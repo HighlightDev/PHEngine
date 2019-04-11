@@ -15,7 +15,7 @@ namespace Io
 			template <int32_t count_bones_influence_vertex>
 			AssimpMeshLoader<count_bones_influence_vertex>::AssimpMeshLoader(std::string& modelFilePath)
 			{
-				m_scene = importer.ReadFile(modelFilePath, aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+				m_scene = importer.ReadFile(modelFilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 				if (!m_scene)
 					throw std::exception("Could not load scene from file!");
 			}

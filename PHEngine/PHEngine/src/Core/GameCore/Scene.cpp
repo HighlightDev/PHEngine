@@ -168,7 +168,7 @@ namespace Game
    {
       for (auto& actor : AllActors)
       {
-         actor->Tick(0.05f);
+         actor->Tick(delta);
       }
       m_playerController.Tick(delta);
    }
@@ -211,8 +211,8 @@ namespace Game
          Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
 
-         InputComponentData inputComponentData;
-         CreateAndAddComponent_GameThread<InputComponent>(inputComponentData, houseActor);
+         //InputComponentData inputComponentData;
+         //CreateAndAddComponent_GameThread<InputComponent>(inputComponentData, houseActor);
          MovementComponentData movementComponentData(glm::vec3(0), m_camera);
          CreateAndAddComponent_GameThread<MovementComponent>(movementComponentData, houseActor);
 

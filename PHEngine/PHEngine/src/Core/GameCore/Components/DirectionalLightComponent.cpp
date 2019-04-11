@@ -26,7 +26,7 @@ namespace Game
    {
       Base::UpdateRelativeMatrix(parentRelativeMatrix);
 
-      SetRotationAxisY(m_rotation.y + 1);
+      SetRotationAxisY(m_rotation.y + 0.01f);
    }
 
    uint64_t DirectionalLightComponent::GetComponentType() const

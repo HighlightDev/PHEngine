@@ -67,7 +67,9 @@ namespace Graphics
                deferredShadingShader->SetTransformMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
 
                proxy->GetAlbedo()->BindTexture(0);
+               proxy->GetNormalMap()->BindTexture(1);
                deferredShadingShader->SetAlbedoTextureSlot(0);
+               deferredShadingShader->SetNormalTextureSlot(1);
                proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
             }
             deferredShadingShader->StopShader();

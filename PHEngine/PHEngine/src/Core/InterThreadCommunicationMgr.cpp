@@ -70,8 +70,6 @@ namespace Thread
          typename Clock_t::time_point current_time = Clock_t::now();
          Clock_t::duration deltaTime = current_time - start_time;
 
-         std::cout << (deltaTime.count() / 1e+7) << std::endl;
-
          if (deltaTime.count() > 1e+7) // 0.01 seconds
             return;
       }

@@ -48,11 +48,11 @@ namespace Io
 				MeshVertexData(const aiScene* scene);
 				~MeshVertexData();
 
-				bool bHasIndices = false;
-				bool bHasNormals = false;
-				bool bHasTextureCoordinates = false;
-				bool bHasTangentVertices = false;
-				bool bHasAnimation = false;
+            bool bHasIndices = false;
+            bool bHasNormals = false;
+            bool bHasTextureCoordinates = false;
+            bool bHasTangentVertices = false;
+            bool bHasAnimation = false;
 
 				std::shared_ptr<std::vector<uint32_t>> Indices;
 

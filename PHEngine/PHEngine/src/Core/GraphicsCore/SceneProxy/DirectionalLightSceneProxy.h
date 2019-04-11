@@ -19,8 +19,7 @@ namespace Graphics
          
          glm::vec3 GetDirection() const
          {
-            glm::vec3 result = m_relativeMatrix * glm::vec4(m_direction, 0.0f);
-            return result;
+            return m_relativeMatrix * glm::vec4(m_direction, 0.0f);
          }
 
          DirectionalLightSceneProxy(const DirectionalLightComponent* component);

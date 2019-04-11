@@ -24,7 +24,7 @@ void Engine::GameThreadPulse()
          // This should be executed on game thread
 
          SPIN_GAME_THREAD_JOBS(m_interThreadMgr);
-         m_scene.Tick_GameThread(0.05f);
+         m_scene.Tick_GameThread(0.0005f);
       }
    }
 }
