@@ -20,8 +20,8 @@ using namespace Graphics::Proxy;
 
 namespace Graphics
 {
-	namespace Renderer
-	{
+   namespace Renderer
+   {
 
       DeferredShadingSceneRenderer::DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene)
          : m_interThreadMgr(interThreadMgr)
@@ -30,53 +30,74 @@ namespace Graphics
       {
          const auto& folderManager = FolderManager::GetInstance();
 
-         std::string deferredBaseShaderPath = folderManager->GetShadersPath() + "deferredBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
+         std::string deferredNonSkeletalBaseShaderPath = folderManager->GetShadersPath() + "deferredNonSkeletalBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
+         std::string deferredSkeletalBaseShaderPath = folderManager->GetShadersPath() + "deferredSkeletalBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
          std::string deferredLightShaderPath = folderManager->GetShadersPath() + "deferredLightPassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredLightPassFS.glsl";
-         m_deferredBaseShader = std::dynamic_pointer_cast<DeferredShader>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader>(deferredBaseShaderPath));
+
+         m_deferredBaseShaderNonSkeletal = std::dynamic_pointer_cast<DeferredShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<false>>(deferredNonSkeletalBaseShaderPath));
+         m_deferredBaseShaderSkeletal = std::dynamic_pointer_cast<DeferredShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<true>>(deferredSkeletalBaseShaderPath));
          m_deferredLightShader = std::dynamic_pointer_cast<DeferredLightShader>(ShaderPool::GetInstance()-> template GetOrAllocateResource<DeferredLightShader>(deferredLightShaderPath));
       }
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()
-		{
-		}
-
-      void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& deferredPrimitives, const glm::mat4& viewMatrix)
       {
-         {                                                                                                                                   
-            // Deferred shading collect info
-            m_gbuffer->BindDeferredGBuffer();
-            auto deferredShadingShader = m_deferredBaseShader;
+      }
 
-            deferredShadingShader->ExecuteShader();
+      void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& deferredPrimitives, const glm::mat4& viewMatrix)
+      {
+         {
+            std::vector<PrimitiveSceneProxy*> skeletalPrimitives, nonSkeletalPrimitives;
             for (auto& proxy : deferredPrimitives)
             {
-               const glm::mat4& worldMatrix = proxy->GetMatrix();
-
-               uint64_t type = proxy->GetComponentType();
-
-               if (type == SKELETAL_MESH_COMPONENT)
+               if (proxy->GetComponentType() == SKELETAL_MESH_COMPONENT)
                {
-                  SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(proxy.get());
-                  deferredShadingShader->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
+                  skeletalPrimitives.push_back(proxy);
                }
                else
                {
-                  deferredShadingShader->SetNotSkeletalMesh();
+                  nonSkeletalPrimitives.push_back(proxy);
                }
-
-               deferredShadingShader->SetTransformMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
-
-               proxy->GetAlbedo()->BindTexture(0);
-               proxy->GetNormalMap()->BindTexture(1);
-               deferredShadingShader->SetAlbedoTextureSlot(0);
-               deferredShadingShader->SetNormalTextureSlot(1);
-               proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
             }
-            deferredShadingShader->StopShader();
 
-            m_gbuffer->UnbindDeferredGBuffer();
-         }
+            // Deferred shading collect info
+            m_gbuffer->BindDeferredGBuffer();
+
+            if (skeletalPrimitives.size() > 0)
+            {
+               m_deferredBaseShaderSkeletal->ExecuteShader();
+               for (auto& proxy : skeletalPrimitives)
+               {
+                  SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(proxy);
+                  m_deferredBaseShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
+                  const glm::mat4& worldMatrix = proxy->GetMatrix();
+                  m_deferredBaseShaderSkeletal->SetTransformMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
+                  proxy->GetAlbedo()->BindTexture(0);
+                  proxy->GetNormalMap()->BindTexture(1);
+                  m_deferredBaseShaderSkeletal->SetAlbedoTextureSlot(0);
+                  m_deferredBaseShaderSkeletal->SetNormalTextureSlot(1);
+                  proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+               }
+               m_deferredBaseShaderSkeletal->StopShader();
+            }
+
+            if (nonSkeletalPrimitives.size() > 0)
+            {
+               for (auto& proxy : nonSkeletalPrimitives)
+               {
+                  m_deferredBaseShaderNonSkeletal->ExecuteShader();
+                  const glm::mat4& worldMatrix = proxy->GetMatrix();
+                  m_deferredBaseShaderNonSkeletal->SetTransformMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
+                  proxy->GetAlbedo()->BindTexture(0);
+                  proxy->GetNormalMap()->BindTexture(1);
+                  m_deferredBaseShaderNonSkeletal->SetAlbedoTextureSlot(0);
+                  m_deferredBaseShaderNonSkeletal->SetNormalTextureSlot(1);
+                  proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+               }
+            }
+
+         m_gbuffer->UnbindDeferredGBuffer();
       }
+   }
 
       void DeferredShadingSceneRenderer::DeferredLightPass_RenderThread()
       {
@@ -100,7 +121,7 @@ namespace Graphics
          }
       }
 
-      void DeferredShadingSceneRenderer::ForwardBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& forwardedPrimitives, const glm::mat4& viewMatrix)
+      void DeferredShadingSceneRenderer::ForwardBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& forwardedPrimitives, const glm::mat4& viewMatrix)
       {
          // Resolve depth buffer from gBuffer to default frame buffer
 
@@ -124,15 +145,15 @@ namespace Graphics
 
          const glm::mat4& viewMatrix = m_scene->GetCamera()->GetViewMatrix();
 
-         std::vector<std::shared_ptr<PrimitiveSceneProxy>> drawDeferredShadedPrimitives;
-         std::vector<std::shared_ptr<PrimitiveSceneProxy>> drawForwardShadedPrimitives;
+         std::vector<PrimitiveSceneProxy*> drawDeferredShadedPrimitives;
+         std::vector<PrimitiveSceneProxy*> drawForwardShadedPrimitives;
 
          for (auto& proxy : m_scene->SceneProxies)
          {
             if (proxy->IsDeferred())
-               drawDeferredShadedPrimitives.push_back(proxy);
+               drawDeferredShadedPrimitives.push_back(proxy.get());
             else
-               drawForwardShadedPrimitives.push_back(proxy);
+               drawForwardShadedPrimitives.push_back(proxy.get());
          }
 
          const bool bIsForwardShadedPrimitives = drawForwardShadedPrimitives.size() > 0;

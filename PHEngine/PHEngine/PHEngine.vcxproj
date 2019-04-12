@@ -286,10 +286,11 @@
     <None Include="res\shaders\buildingSpecialGShader.glsl" />
     <None Include="res\shaders\buildingSpecialVShader.glsl" />
     <None Include="res\shaders\buildingVShader.glsl" />
-    <None Include="res\shaders\deferredBasePassFS.glsl" />
-    <None Include="res\shaders\deferredBasePassVS.glsl" />
     <None Include="res\shaders\deferredLightPassFS.glsl" />
     <None Include="res\shaders\deferredLightPassVS.glsl" />
+    <None Include="res\shaders\deferredNonSkeletalBasePassVS.glsl" />
+    <None Include="res\shaders\deferredBasePassFS.glsl" />
+    <None Include="res\shaders\deferredSkeletalBasePassVS.glsl" />
     <None Include="res\shaders\depthOfFieldFS.glsl" />
     <None Include="res\shaders\depthOfFieldVS.glsl" />
     <None Include="res\shaders\envFS.glsl" />

@@ -27,7 +27,9 @@ namespace Graphics
 
          std::unique_ptr<DeferredShadingGBuffer> m_gbuffer;
 
-         std::shared_ptr<DeferredShader> m_deferredBaseShader;
+         std::shared_ptr<DeferredShader<false>> m_deferredBaseShaderNonSkeletal;
+         std::shared_ptr<DeferredShader<true>> m_deferredBaseShaderSkeletal;
+
          std::shared_ptr<DeferredLightShader> m_deferredLightShader;
 
       public:
@@ -40,9 +42,9 @@ namespace Graphics
 
          void DeferredLightPass_RenderThread();
 
-         void DeferredBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& deferredPrimitives, const glm::mat4& viewMatrix);
+         void DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& deferredPrimitives, const glm::mat4& viewMatrix);
 
-         void ForwardBasePass_RenderThread(std::vector<std::shared_ptr<PrimitiveSceneProxy>>& forwardedPrimitives, const glm::mat4& viewMatrix);
+         void ForwardBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& forwardedPrimitives, const glm::mat4& viewMatrix);
 
          void DepthPass();
 
