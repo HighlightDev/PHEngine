@@ -1734,9 +1734,6 @@
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\Light\LightBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

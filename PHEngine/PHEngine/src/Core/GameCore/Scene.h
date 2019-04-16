@@ -55,9 +55,9 @@ namespace Game
 
       void Tick_GameThread(float delta);
 
-      void OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, glm::mat4& newRelativeMatrix);
+      void OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const glm::mat4& newRelativeMatrix);
 
-      void OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, glm::mat4& newRelativeMatrix);
+      void OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const glm::mat4& newRelativeMatrix);
 
       template <typename PrimitiveType>
       void CreateAndAddComponent_GameThread(ComponentData& componentData, Actor* addComponentToThisActor);

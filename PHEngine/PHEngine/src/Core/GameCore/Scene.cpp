@@ -140,7 +140,7 @@ namespace Game
       ENQUEUE_GAME_THREAD_JOB(m_interThreadMgr, renderThreadJob);
    }
 
-   void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, glm::mat4& newRelativeMatrix)
+   void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const glm::mat4& newRelativeMatrix)
    {
       if (primitiveSceneProxyIndex < SceneProxies.size())
       {
@@ -152,12 +152,12 @@ namespace Game
       }
    }
 
-   void Scene::OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, glm::mat4& newRelativeMatrix)
+   void Scene::OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const glm::mat4& newRelativeMatrix)
    {
       if (lightSceneProxyIndex < LightProxies.size())
       {
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr,
-            [=]() 
+            [=]()
          {
             LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
          });

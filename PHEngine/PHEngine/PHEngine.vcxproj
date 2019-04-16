@@ -748,7 +748,6 @@
     <ClCompile Include="src\Core\GraphicsCore\Light\SpotLight.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Light\LightBase.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\PrimitiveSceneProxy.cpp" />
-    <ClCompile Include="src\Core\GameCore\ShaderImplementation\DeferredShader.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Common\ScreenQuad.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Renderer\DeferredShadingSceneRenderer.cpp" />

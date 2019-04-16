@@ -4,6 +4,7 @@
 
 #include "Core/GameCore/Components/SceneComponent.h"
 #include "Core/GraphicsCore/SceneProxy/LightSceneProxy.h"
+#include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
 
 using namespace Graphics::Proxy;
 
@@ -21,13 +22,15 @@ namespace Game
 
       size_t LightSceneProxyId = 0;
 
+      ProjectedShadowInfo* ShadowInfo = nullptr;
+
       virtual uint64_t GetComponentType() const override;
 
       virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix) override;
 
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const = 0;
 
-      LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale);
+      LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const ShadowMapAtlasCell* shadowAtlasCell = nullptr);
 
       virtual ~LightComponent();
    };

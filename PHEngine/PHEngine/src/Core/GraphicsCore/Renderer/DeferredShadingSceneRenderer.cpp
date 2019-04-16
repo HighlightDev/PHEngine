@@ -8,6 +8,9 @@
 #include "Core/GameCore/ShaderImplementation/DeferredShader.h"
 #include "Core/GameCore/GlobalProperties.h"
 #include "Core/GraphicsCore/SceneProxy/SkeletalMeshSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
+#include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
 
 #include <gl/glew.h>
 #include <iostream>
@@ -41,6 +44,41 @@ namespace Graphics
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()
       {
+      }
+
+      void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowDependentPrimitives, std::vector<LightSceneProxy*>& lightSourcesProxy)
+      {
+
+         for (auto& lightProxy : lightSourcesProxy)
+         {
+            const ProjectedShadowInfo* const shadowInfo = lightProxy->GetShadowInfo();
+            if (shadowInfo)
+            {
+               if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
+               {
+                  const DirectionalLightSceneProxy* dirLightSceneProxy = static_cast<DirectionalLightSceneProxy*>(lightProxy);
+
+                  // bind depth shader
+                  for (auto& primitive : shadowDependentPrimitives)
+                  {
+                     // WHAT IF PRIMITIVE IS SKELETAL MESH????!!!!
+
+                     const auto& worldMatrix = primitive->GetMatrix();
+                     const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
+                     const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
+
+                     primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                  }
+                  // unbind depth shader
+               }
+               else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
+               {
+                  const PointLightSceneProxy* pointLightSceneProxy = static_cast<PointLightSceneProxy*>(lightProxy);
+
+               }
+            }
+         }
+
       }
 
       void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& deferredPrimitives, const glm::mat4& viewMatrix)

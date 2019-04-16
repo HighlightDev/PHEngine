@@ -3,16 +3,25 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
+#include "Core/GraphicsCore/Shadow/ShadowMapAtlasFactory.h"
+
 namespace Graphics
 {
 
    struct ProjectedShadowInfo
    {
-      glm::mat4x4 ShadowViewMatrix;
-      glm::mat4x4 ShadowProjectionMatrix;
-      glm::vec3 offset;
+   private:
 
-      ProjectedShadowInfo();
+      ShadowMapAtlasCell m_shadowAtlasCell;
+
+   public:
+
+      std::vector<glm::mat4x4> ShadowViewMatrices;
+      std::vector<glm::mat4x4> ShadowProjectionMatrices;
+
+      glm::vec4 GetPosOffsetShadowMapAtlas() const;
+
+      ProjectedShadowInfo(const ShadowMapAtlasCell& shadowAtlasCell);
 
       ~ProjectedShadowInfo();
    };

@@ -21,14 +21,14 @@ namespace Graphics
       std::vector<ShadowMapAtlasCell>& cells = atlas.Cells;
       std::vector<glm::ivec2>& reservations = atlas.Reservations;
 
-      std::vector<ShadowMapAtlasCell> emptyChunks = { ShadowMapAtlasCell(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
+      std::vector<ShadowMapAtlasCell> emptyChunks = { ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
 
       for (std::vector<glm::ivec2>::const_iterator it = reservations.cbegin(); it != reservations.cend(); ++it)
       {
          // If atlas is empty - just push at the beginning
          if (cells.size() == 0)
          {
-            ShadowMapAtlasCell newCell(0, 0, it->x, it->y);
+            ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, it->x, it->y);
 
             cells.push_back(newCell);
             auto firstEmptyChunkIt = emptyChunks.begin();
@@ -42,7 +42,7 @@ namespace Graphics
                {
                   // enough space for cell in empty chunk
 
-                  ShadowMapAtlasCell newCell(rit->X, rit->Y, it->x, it->y);
+                  ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, rit->X, rit->Y, it->x, it->y);
 
                   cells.push_back(newCell);
                   auto emptuChunkIt = std::find(emptyChunks.begin(), emptyChunks.end(), *rit);
@@ -58,9 +58,9 @@ namespace Graphics
 
    void ShadowMapAtlasFactory::SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell)
    {
-      ShadowMapAtlasCell leftBottomCell = ShadowMapAtlasCell(splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      ShadowMapAtlasCell rightBottomCell = ShadowMapAtlasCell(splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      ShadowMapAtlasCell rightTopCell = ShadowMapAtlasCell(splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
+      ShadowMapAtlasCell leftBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
+      ShadowMapAtlasCell rightBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
+      ShadowMapAtlasCell rightTopCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
 
       // Remove splitting empty chunk because it was split
       emptyChunks.erase(splittingEmptyChunkIt);
@@ -77,34 +77,46 @@ namespace Graphics
       std::sort(emptyChunks.begin(), emptyChunks.end(), sortFunctor);
    }
 
-   void ShadowMapAtlas::PushShadowMapSpace(glm::ivec2 size)
+   int32_t ShadowMapAtlas::PushShadowMapSpace(glm::ivec2 size)
    {
-      if (bInvalidated)
-         return;
+      int32_t spaceIndex = -1;
 
-      if (Reservations.size() == 0)
-         Reservations.push_back(size);
-      else
+      if (!bInvalidated)
       {
-
-         const auto calcSquare = [](const glm::ivec2& quad) -> int32_t {  return (quad.x * quad.y); };
-         bool bInserted = false;
-
-         // Inserting new reservation size according to ascending rule
-         for (auto cit = Reservations.cbegin(); cit != Reservations.end(); ++cit)
+         if (Reservations.size() == 0)
          {
-            if (calcSquare((*cit)) <= calcSquare(size))
+            Reservations.push_back(size);
+            spaceIndex = 0;
+         }
+         else
+         {
+
+            const auto calcSquare = [](const glm::ivec2& quad) -> int32_t {  return (quad.x * quad.y); };
+            bool bInserted = false;
+
+            // Inserting new reservation size according to ascending rule
+            int32_t index = 0;
+            for (auto cit = Reservations.cbegin(); cit != Reservations.end(); ++cit, index++)
             {
-               Reservations.insert(cit, size);
-               bInserted = true;
-               break;
+               if (calcSquare((*cit)) <= calcSquare(size))
+               {
+                  Reservations.insert(cit, size);
+                  bInserted = true;
+                  spaceIndex = index;
+                  break;
+               }
+            }
+
+            // If new reservation size is the lowest - just insert it in the end
+            if (!bInserted)
+            {
+               Reservations.push_back(size);
+               spaceIndex = static_cast<int32_t>(Reservations.size() - 1);
             }
          }
-
-         // If new reservation size is the lowest - just insert it in the end
-         if (!bInserted)
-            Reservations.push_back(size);
       }
+
+      return spaceIndex;
    }
 
    void ShadowMapAtlas::AllocateReservedMemory()
