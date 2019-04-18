@@ -40,7 +40,7 @@ namespace Graphics
 
          void SetTransformationMatrix(const glm::mat4& relativeMatrix);
 
-         virtual const ProjectedShadowInfo* GetShadowInfo() const {
+         virtual ProjectedShadowInfo* GetShadowInfo() const {
 
             return m_shadowInfo;
          }

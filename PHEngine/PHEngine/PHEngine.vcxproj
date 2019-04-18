@@ -353,6 +353,8 @@
     <None Include="res\shaders\waterVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\DebugCore\TextureRenderer.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\DepthShader.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\SkeletalMeshComponentData.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\SkeletalMeshShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\SkeletalMeshSceneProxy.h" />
@@ -715,8 +717,12 @@
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\WaterPlaneSceneProxy.h" />
     <ClInclude Include="src\Core\GameCore\FramebufferImplementation\WaterPlaneFramebuffer.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\TextureRendererShader.h" />
+    <ClInclude Include="src\Core\GameCore\Event\TEvent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\DebugCore\TextureRenderer.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\DepthShader.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\SkeletalMeshShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\SkeletalMeshSceneProxy.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\AnimationAllocationPolicy.cpp" />
@@ -804,6 +810,8 @@
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\WaterPlaneSceneProxy.cpp" />
     <ClCompile Include="src\Core\GameCore\FramebufferImplementation\WaterPlaneFramebuffer.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\TextureRendererShader.cpp" />
+    <ClCompile Include="src\Core\GameCore\Event\TEvent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

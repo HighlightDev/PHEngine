@@ -1582,6 +1582,18 @@
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\SkeletalMeshComponentData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\DebugCore\TextureRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\TextureRendererShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\DepthShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\Event\TEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -1843,6 +1855,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\SkeletalMeshShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DebugCore\TextureRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\DepthShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\TextureRendererShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GameCore\Event\TEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,6 +17,7 @@ namespace Resources
 		using key_t = KeyType;
 		using policy_t = AllocationPolicyType;
 		using sharedValue_t = std::shared_ptr<ValueType>;
+      using resourceMap_t = std::unordered_map<KeyType, sharedValue_t>;
 
 	private:
 		
@@ -157,9 +158,9 @@ namespace Resources
 			return referenceCount;
 		}
 
-		int32_t GetResourcesCount()
+		size_t GetResourcesCount()
 		{
-			int32_t resourceCount = resourceMap.size();
+			size_t resourceCount = resourceMap.size();
 
 			return resourceCount;
 		}

@@ -52,5 +52,6 @@ void Engine::MouseMove()
 
 void Engine::KeyDown()
 {
-   m_scene.CameraMove();
+   m_sceneRenderer.PushRenderTargetToTextureRenderer();
+   //m_scene.CameraMove();
 }

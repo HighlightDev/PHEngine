@@ -8,10 +8,12 @@
 #include "Core/GameCore/ShaderImplementation/DeferredLightShader.h"
 #include "Core/GraphicsCore/Renderer/DeferredShadingGBuffer.h"
 #include "Core/InterThreadCommunicationMgr.h"
+#include "Core/DebugCore/TextureRenderer.h"
 
 using namespace Game::ShaderImpl;
 using namespace Game;
 using namespace Thread;
+using namespace Debug;
 
 namespace Graphics
 {
@@ -32,13 +34,9 @@ namespace Graphics
 
          std::shared_ptr<DeferredLightShader> m_deferredLightShader;
 
-      public:
+         TextureRenderer m_textureRenderer;
 
-         DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene);
-
-			~DeferredShadingSceneRenderer();
-
-         void RenderScene_RenderThread();
+         void DebugFramePanelsPass();
 
          void DeferredLightPass_RenderThread();
 
@@ -48,6 +46,15 @@ namespace Graphics
 
          void DepthPass(std::vector<PrimitiveSceneProxy*>& shadowDependentPrimitives, std::vector<LightSceneProxy*>& lightSourcesProxy);
 
+      public:
+
+         DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene);
+
+			~DeferredShadingSceneRenderer();
+
+         void RenderScene_RenderThread();
+
+         void PushRenderTargetToTextureRenderer();
 		};
 
 	}

@@ -18,6 +18,7 @@ namespace Graphics
 
       std::vector<glm::mat4x4> ShadowViewMatrices;
       std::vector<glm::mat4x4> ShadowProjectionMatrices;
+      glm::vec3 Offset;
 
       glm::vec4 GetPosOffsetShadowMapAtlas() const;
 

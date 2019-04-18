@@ -4,6 +4,8 @@
 #include "Core/GraphicsCore/Texture/TexParams.h"
 #include "Core/ResourceManagerCore/Policy/RenderTargetAllocationPolicy.h"
 
+#include <iterator>
+
 using namespace Graphics::Texture;
 
 namespace Resources
@@ -20,7 +22,7 @@ namespace Resources
 
       RenderTargetPool();
 
-      virtual ~RenderTargetPool();
+      std::shared_ptr<ITexture> GetRenderTargetAt(size_t index) const;
 
       static std::unique_ptr<RenderTargetPool>& GetInstance() {
 

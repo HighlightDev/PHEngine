@@ -1,6 +1,10 @@
 #include "DirectionalLightComponent.h"
 
 #include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
+#include "Core/GameCore/Scene.h"
+#include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
+
+using namespace Graphics;
 
 namespace Game
 {
@@ -9,12 +13,12 @@ namespace Game
       : LightComponent(translation, rotation, scale)
       , m_renderData(renderData)
    {
-
+      EventBase::GetInstance()->AddListener(this);
    }
 
    DirectionalLightComponent::~DirectionalLightComponent()
    {
-
+      EventBase::GetInstance()->RemoveListener(this);
    }
 
    std::shared_ptr<LightSceneProxy> DirectionalLightComponent::CreateSceneProxy() const
@@ -32,6 +36,18 @@ namespace Game
    uint64_t DirectionalLightComponent::GetComponentType() const
    {
       return DIR_LIGHT_COMPONENT;
+   }
+
+   void DirectionalLightComponent::ProcessEvent(const EventBase::EventData_t& data)
+   {
+      m_scene->ExecuteOnRenderThread([=]()
+      {
+         ProjectedShadowInfo* shadowInfo = m_scene->LightProxies[LightSceneProxyId]->GetShadowInfo();
+         if (shadowInfo)
+         {
+            shadowInfo->Offset = data;
+         }
+      });
    }
 
 }

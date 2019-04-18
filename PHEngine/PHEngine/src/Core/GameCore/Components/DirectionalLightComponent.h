@@ -3,18 +3,21 @@
 #include "LightComponent.h"
 #include "Core/GraphicsCore/SceneProxy/LightSceneProxy.h"
 #include "Core/GraphicsCore/RenderData/DirectionalLightRenderData.h"
+#include "Core/GameCore/Event/TEvent.h"
 
 using namespace Graphics::Proxy;
 using namespace Graphics::Data;
+using namespace Event;
 
 namespace Game
 {
 
    class DirectionalLightComponent :
-      public LightComponent
+      public LightComponent, public CameraMovedEvent
    {
 
       using Base = LightComponent;
+      using EventBase = CameraMovedEvent;
 
    protected:
 
@@ -36,6 +39,10 @@ namespace Game
       }
 
       virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix) override;
+
+   protected:
+
+      virtual void ProcessEvent(const EventBase::EventData_t& data) override;
    };
 
 }

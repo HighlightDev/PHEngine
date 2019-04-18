@@ -1,2 +1,16 @@
-﻿  DeferredShadingSceneRenderer.cpp
+﻿  DirectionalLightComponent.cpp
+  LightComponent.cpp
+  PointLightComponent.cpp
+  PrimitiveComponent.cpp
+  SkeletalMeshComponent.cpp
+  WaterPlaneComponent.cpp
+  Scene.cpp
+  DeferredLightShader.cpp
+  DeferredShadingSceneRenderer.cpp
+  DirectionalLightSceneProxy.cpp
+  LightSceneProxy.cpp
+  PointLightSceneProxy.cpp
+  ProjectedShadowInfo.cpp
+  Engine.cpp
+  Generating Code...
   PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

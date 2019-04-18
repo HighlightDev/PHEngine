@@ -206,5 +206,16 @@ namespace Graphics
          }
 
       }
+
+      void DeferredShadingSceneRenderer::DebugFramePanelsPass()
+      {
+         glDisable(GL_DEPTH_TEST);
+         m_textureRenderer.RenderFrames();
+      }
+
+      void DeferredShadingSceneRenderer::PushRenderTargetToTextureRenderer()
+      {
+         m_textureRenderer.PushDebugRenderTarget();
+      }
 	}
 }

@@ -28,7 +28,7 @@ namespace Graphics
 
          virtual LightSceneProxyType GetLightProxyType() const override;
 
-         virtual const ProjectedShadowInfo* GetShadowInfo() const;
+         virtual ProjectedShadowInfo* GetShadowInfo() const;
       };
 
    }
