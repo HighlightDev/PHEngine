@@ -469,7 +469,6 @@
     <None Include="res\shaders\terrainFragmentShader.glsl" />
     <None Include="res\shaders\terrainVertexShader.glsl" />
     <None Include="res\shaders\uiFS.glsl" />
-    <None Include="res\shaders\uiVS.glsl" />
     <None Include="res\shaders\waterFS.glsl" />
     <None Include="res\shaders\waterReflectionEntityFS.glsl" />
     <None Include="res\shaders\waterReflectionEntityVS.glsl" />
@@ -482,7 +481,6 @@
     <None Include="res\shaders\waterVS.glsl" />
     <None Include="res\shaders\basicFS.glsl" />
     <None Include="res\shaders\basicShadowFS.glsl" />
-    <None Include="res\shaders\basicShadowVS.glsl" />
     <None Include="res\shaders\basicVS.glsl" />
     <None Include="res\shaders\bloomFS.glsl" />
     <None Include="res\shaders\bloomVS.glsl" />
@@ -494,6 +492,9 @@
     <None Include="res\shaders\deferredNonSkeletalBasePassVS.glsl" />
     <None Include="res\shaders\deferredSkeletalBasePassVS.glsl" />
     <None Include="res\shaders\deferredBasePassFS.glsl" />
+    <None Include="res\shaders\uiVS.glsl" />
+    <None Include="res\shaders\basicShadowNonSkeletalVS.glsl" />
+    <None Include="res\shaders\basicShadowSkeletalVS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h">
@@ -1483,9 +1484,6 @@
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\PointLightSceneProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\GameCore\PlayerController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1592,6 +1590,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\GameCore\Event\TEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1788,9 +1789,6 @@
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\PointLightSceneProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\GameCore\PlayerController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1867,6 +1865,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GameCore\Event\TEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

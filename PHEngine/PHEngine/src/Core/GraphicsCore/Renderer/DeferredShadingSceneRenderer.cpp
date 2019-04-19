@@ -16,7 +16,7 @@
 #include <iostream>
 
 using namespace Resources;
-using namespace Common;
+using namespace Common; 
 using namespace Graphics;
 using namespace Graphics::Renderer;
 using namespace Graphics::Proxy;
@@ -36,17 +36,21 @@ namespace Graphics
          std::string deferredNonSkeletalBaseShaderPath = folderManager->GetShadersPath() + "deferredNonSkeletalBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
          std::string deferredSkeletalBaseShaderPath = folderManager->GetShadersPath() + "deferredSkeletalBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
          std::string deferredLightShaderPath = folderManager->GetShadersPath() + "deferredLightPassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredLightPassFS.glsl";
+         std::string depthSkeletalShaderPath = folderManager->GetShadersPath() + "basicShadowSkeletalVS.glsl" + "," + folderManager->GetShadersPath() + "basicShadowFS.glsl";
+         std::string depthNonSkeletalShaderPath = folderManager->GetShadersPath() + "basicShadowNonSkeletalVS.glsl" + "," + folderManager->GetShadersPath() + "basicShadowFS.glsl";
 
          m_deferredBaseShaderNonSkeletal = std::dynamic_pointer_cast<DeferredShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<false>>(deferredNonSkeletalBaseShaderPath));
          m_deferredBaseShaderSkeletal = std::dynamic_pointer_cast<DeferredShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<true>>(deferredSkeletalBaseShaderPath));
          m_deferredLightShader = std::dynamic_pointer_cast<DeferredLightShader>(ShaderPool::GetInstance()-> template GetOrAllocateResource<DeferredLightShader>(deferredLightShaderPath));
+         m_depthShaderSkeletal = std::dynamic_pointer_cast<DepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<true>>(depthSkeletalShaderPath));;
+         m_depthShaderNonSkeletal = std::dynamic_pointer_cast<DepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<false>>(depthNonSkeletalShaderPath));;
       }
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()
       {
       }
 
-      void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowDependentPrimitives, std::vector<LightSceneProxy*>& lightSourcesProxy)
+      void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, std::vector<LightSceneProxy*>& lightSourcesProxy)
       {
 
          for (auto& lightProxy : lightSourcesProxy)
@@ -58,18 +62,35 @@ namespace Graphics
                {
                   const DirectionalLightSceneProxy* dirLightSceneProxy = static_cast<DirectionalLightSceneProxy*>(lightProxy);
 
-                  // bind depth shader
-                  for (auto& primitive : shadowDependentPrimitives)
+                  // Non - skeletal primitives
+                  if (shadowNonSkeletalMeshPrimitives.size() > 0)
                   {
-                     // WHAT IF PRIMITIVE IS SKELETAL MESH????!!!!
+                     m_depthShaderNonSkeletal->ExecuteShader();
+                     for (auto& primitive : shadowNonSkeletalMeshPrimitives)
+                     {
+                        const auto& worldMatrix = primitive->GetMatrix();
+                        const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
+                        const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
 
-                     const auto& worldMatrix = primitive->GetMatrix();
-                     const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
-                     const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
-
-                     primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                        primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                     }
+                     m_depthShaderNonSkeletal->StopShader();
                   }
-                  // unbind depth shader
+
+                  // Skeletal primitives
+                  if (shadowSkeletalMeshPrimitives.size() > 0)
+                  {
+                     m_depthShaderSkeletal->ExecuteShader();
+                     for (auto& primitive : shadowSkeletalMeshPrimitives)
+                     {
+                        const auto& worldMatrix = primitive->GetMatrix();
+                        const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
+                        const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
+
+                        primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                     }
+                     m_depthShaderSkeletal->StopShader();
+                  }
                }
                else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
                {
@@ -78,32 +99,18 @@ namespace Graphics
                }
             }
          }
-
       }
 
-      void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& deferredPrimitives, const glm::mat4& viewMatrix)
+      void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& nonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& skeletalMeshPrimitives, const glm::mat4& viewMatrix)
       {
          {
-            std::vector<PrimitiveSceneProxy*> skeletalPrimitives, nonSkeletalPrimitives;
-            for (auto& proxy : deferredPrimitives)
-            {
-               if (proxy->GetComponentType() == SKELETAL_MESH_COMPONENT)
-               {
-                  skeletalPrimitives.push_back(proxy);
-               }
-               else
-               {
-                  nonSkeletalPrimitives.push_back(proxy);
-               }
-            }
-
             // Deferred shading collect info
             m_gbuffer->BindDeferredGBuffer();
 
-            if (skeletalPrimitives.size() > 0)
+            if (skeletalMeshPrimitives.size() > 0)
             {
                m_deferredBaseShaderSkeletal->ExecuteShader();
-               for (auto& proxy : skeletalPrimitives)
+               for (auto& proxy : skeletalMeshPrimitives)
                {
                   SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(proxy);
                   m_deferredBaseShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
@@ -118,9 +125,9 @@ namespace Graphics
                m_deferredBaseShaderSkeletal->StopShader();
             }
 
-            if (nonSkeletalPrimitives.size() > 0)
+            if (nonSkeletalMeshPrimitives.size() > 0)
             {
-               for (auto& proxy : nonSkeletalPrimitives)
+               for (auto& proxy : nonSkeletalMeshPrimitives)
                {
                   m_deferredBaseShaderNonSkeletal->ExecuteShader();
                   const glm::mat4& worldMatrix = proxy->GetMatrix();
@@ -196,7 +203,20 @@ namespace Graphics
 
          const bool bIsForwardShadedPrimitives = drawForwardShadedPrimitives.size() > 0;
 
-         DeferredBasePass_RenderThread(drawDeferredShadedPrimitives, viewMatrix);
+         std::vector<PrimitiveSceneProxy*> skeletalPrimitives, nonSkeletalPrimitives;
+         for (auto& proxy : drawDeferredShadedPrimitives)
+         {
+            if (proxy->GetComponentType() == SKELETAL_MESH_COMPONENT)
+            {
+               skeletalPrimitives.push_back(proxy);
+            }
+            else
+            {
+               nonSkeletalPrimitives.push_back(proxy);
+            }
+         }
+
+         DeferredBasePass_RenderThread(nonSkeletalPrimitives, skeletalPrimitives, viewMatrix);
 
          DeferredLightPass_RenderThread();
 

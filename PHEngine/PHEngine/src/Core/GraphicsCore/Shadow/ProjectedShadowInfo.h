@@ -3,7 +3,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-#include "Core/GraphicsCore/Shadow/ShadowMapAtlasFactory.h"
+#include "Core/GraphicsCore/Shadow/TextureAtlasFactory.h"
 
 namespace Graphics
 {

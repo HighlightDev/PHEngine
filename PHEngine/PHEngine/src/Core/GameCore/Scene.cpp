@@ -9,7 +9,7 @@
 #include "Core/GameCore/FirstPersonCamera.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
 #include "Core/GameCore/Components/InputComponent.h"
-#include "Core/GraphicsCore/Shadow/ShadowMapAtlasFactory.h"
+#include "Core/GraphicsCore/Shadow/TextureAtlasFactory.h"
 #include "Core/GameCore/Components/ComponentData/InputComponentData.h"
 
 using namespace Graphics::Texture;
@@ -192,11 +192,20 @@ namespace Game
       const float aspectRatio = 16.0f / 9.0f;
       ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
 
+      // TEMPORARY
+      TextureAtlas dirLightShadowMapAtlas;
+      int32_t shadowMapIndex = dirLightShadowMapAtlas.PushShadowMapSpace(glm::ivec2(1024, 1024));
+      TextureAtlasFactory::GetInstance()->ReserveShadowMapSpace(dirLightShadowMapAtlas);
+      dirLightShadowMapAtlas.AllocateReservedMemory();
+
       // DirectionalLight
       {
+         
+         ProjectedShadowInfo* dirLightInfo = new ProjectedShadowInfo(dirLightShadowMapAtlas.Cells[shadowMapIndex]);
+
          DirectionalLightComponentData mData(glm::vec3(0), glm::vec3(0), glm::vec3(1),
             glm::vec3(1, 0, 0),
-            glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f));
+            glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), dirLightInfo);
          Actor* dirLightActor = new Actor(new SceneComponent());
          CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData, dirLightActor);
          AllActors.push_back(dirLightActor);

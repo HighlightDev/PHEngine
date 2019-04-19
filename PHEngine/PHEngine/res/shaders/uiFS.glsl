@@ -1,7 +1,7 @@
 #version 400
 
-#define zNearPlane 
-#define zFarPlane
+#define zNearPlane 1
+#define zFarPlane 100
 layout (location = 0) out vec4 FragColor;
 
 in vec2 texCoords;

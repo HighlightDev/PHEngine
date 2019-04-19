@@ -277,7 +277,8 @@
     <None Include="Dependencies\GLM\include\glm\gtx\wrap.inl" />
     <None Include="res\shaders\basicFS.glsl" />
     <None Include="res\shaders\basicShadowFS.glsl" />
-    <None Include="res\shaders\basicShadowVS.glsl" />
+    <None Include="res\shaders\basicShadowNonSkeletalVS.glsl" />
+    <None Include="res\shaders\basicShadowSkeletalVS.glsl" />
     <None Include="res\shaders\basicVS.glsl" />
     <None Include="res\shaders\bloomFS.glsl" />
     <None Include="res\shaders\bloomVS.glsl" />
@@ -383,7 +384,7 @@
     <ClInclude Include="src\Core\GraphicsCore\RenderData\WaterPlaneRenderData.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.h" />
     <ClInclude Include="src\Core\GameCore\PlayerController.h" />
-    <ClInclude Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.h" />
     <ClInclude Include="src\Core\GameCore\Components\PointLightComponent.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\DirectionalLightComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\LightComponentData.h" />
@@ -741,7 +742,7 @@
     <ClCompile Include="src\Core\InterThreadCommunicationMgr.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.cpp" />
     <ClCompile Include="src\Core\GameCore\PlayerController.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\Shadow\ShadowMapAtlasFactory.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\PointLightComponent.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.cpp" />

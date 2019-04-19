@@ -22,6 +22,16 @@ namespace Graphics
 			};
 		};
 
+      template <>
+      struct MacroConverter<float>
+      {
+         static std::string GetValue(float&& value)
+         {
+            EngineUtility::StringStreamWrapper::ToString(value);
+            return EngineUtility::StringStreamWrapper::FlushString();
+         }
+      };
+
 		template <>
 		struct MacroConverter<int32_t>
 		{

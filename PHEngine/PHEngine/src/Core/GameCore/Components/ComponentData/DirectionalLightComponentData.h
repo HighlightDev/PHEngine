@@ -10,8 +10,8 @@ namespace Game
       public LightComponentData
 	{
 
-      DirectionalLightComponentData(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
-         : LightComponentData(ambient, diffuse, specular)
+      DirectionalLightComponentData(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, ProjectedShadowInfo* shadowInfo)
+         : LightComponentData(ambient, diffuse, specular, shadowInfo)
          , Direction(direction)
          , Translation(translation)
          , Rotation(rotation)

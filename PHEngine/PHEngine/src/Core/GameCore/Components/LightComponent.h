@@ -30,7 +30,7 @@ namespace Game
 
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const = 0;
 
-      LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const ShadowMapAtlasCell* shadowAtlasCell = nullptr);
+      LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, ProjectedShadowInfo* shadowInfo = nullptr);
 
       virtual ~LightComponent();
    };

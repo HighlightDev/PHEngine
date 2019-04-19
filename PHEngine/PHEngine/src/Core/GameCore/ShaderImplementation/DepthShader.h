@@ -11,7 +11,11 @@ namespace Game
    namespace ShaderImpl
    {
 
-      class DepthShader :
+      template <bool IsSkeletalMesh>
+      class DepthShader;
+
+      template <>
+      class DepthShader<false> :
          public ShaderBase
       {
          using Base = ShaderBase;
@@ -23,6 +27,34 @@ namespace Game
          DepthShader(std::string&& vsPath, std::string&& fsPath);
 
          void SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+
+      protected:
+
+         virtual void AccessAllUniformLocations() override;
+
+         virtual void SetShaderPredefine() override;
+
+      };
+
+      template <>
+      class DepthShader<true> :
+         public ShaderBase
+      {
+         const int32_t MaxWeights = 3;
+         const int32_t MaxBones = 55;
+
+         using Base = ShaderBase;
+
+         Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix;
+         UniformArray u_boneMatrices;
+
+      public:
+
+         DepthShader(std::string&& vsPath, std::string&& fsPath);
+
+         void SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+
+         void SetSkinningMatrices(const std::vector<glm::mat4>& skinningMatrices);
 
       protected:
 

@@ -125,7 +125,7 @@ namespace Game
          if (data.GetType() == DIR_LIGHT_COMPONENT)
          {
             DirectionalLightComponentData& mData = static_cast<DirectionalLightComponentData&>(data);
-            DirectionalLightRenderData renderData(mData.Direction, mData.Ambient, mData.Diffuse, mData.Specular);
+            DirectionalLightRenderData renderData(mData.Direction, mData.Ambient, mData.Diffuse, mData.Specular, mData.ShadowInfo);
             resultComponent = std::make_shared<DirectionalLightComponent>(std::move(mData.Translation), std::move(mData.Rotation), std::move(mData.Scale), renderData);
          }
 
@@ -143,7 +143,7 @@ namespace Game
          if (data.GetType() == POINT_LIGHT_COMPONENT)
          {
             PointLightComponentData& mData = static_cast<PointLightComponentData&>(data);
-            PointLightRenderData renderData(mData.Position,mData.Attenuation,mData.RadianceSqrRadius, mData.Ambient, mData.Diffuse, mData.Specular);
+            PointLightRenderData renderData(mData.Position,mData.Attenuation,mData.RadianceSqrRadius, mData.Ambient, mData.Diffuse, mData.Specular, mData.ShadowInfo);
             resultComponent = std::make_shared<PointLightComponent>(std::move(mData.Translation), std::move(mData.Rotation), std::move(mData.Scale), renderData);
          }
 

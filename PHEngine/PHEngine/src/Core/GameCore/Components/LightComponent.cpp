@@ -6,11 +6,10 @@ namespace Game
 
    size_t LightComponent::TotalLightSceneProxyId = 0;
 
-   LightComponent::LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const ShadowMapAtlasCell* shadowAtlasCell)
+   LightComponent::LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, ProjectedShadowInfo* shadowInfo)
       : SceneComponent(translation, rotation, scale)
-      , ShadowInfo(shadowAtlasCell ? new ProjectedShadowInfo(*shadowAtlasCell) : nullptr)
+      , ShadowInfo(shadowInfo ? shadowInfo : nullptr)
    {
-
    }
 
    LightComponent::~LightComponent()
