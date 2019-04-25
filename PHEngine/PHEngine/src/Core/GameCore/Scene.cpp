@@ -193,15 +193,16 @@ namespace Game
       ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
 
       // TEMPORARY
-      TextureAtlas dirLightShadowMapAtlas;
-      int32_t shadowMapIndex = dirLightShadowMapAtlas.PushShadowMapSpace(glm::ivec2(1024, 1024));
-      TextureAtlasFactory::GetInstance()->ReserveShadowMapSpace(dirLightShadowMapAtlas);
-      dirLightShadowMapAtlas.AllocateReservedMemory();
+      auto req1 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1000, 1000));
+      auto req2 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(500, 500));
+      auto req3 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(256, 256));
+      auto req4 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(2000, 2000));
+      TextureAtlasFactory::GetInstance()->ReserveShadowMapSpace();
 
       // DirectionalLight
       {
          
-         ProjectedShadowInfo* dirLightInfo = new ProjectedShadowInfo(dirLightShadowMapAtlas.Cells[shadowMapIndex]);
+         ProjectedShadowInfo* dirLightInfo = nullptr;
 
          DirectionalLightComponentData mData(glm::vec3(0), glm::vec3(0), glm::vec3(1),
             glm::vec3(1, 0, 0),

@@ -5,6 +5,13 @@
 
 namespace Graphics
 {
+   size_t LazyTextureAtlasObtainer::m_requestId = 0;
+
+   LazyTextureAtlasObtainer::LazyTextureAtlasObtainer()
+   {
+      LazyTextureAtlasObtainer::m_requestId += 1;
+      MyRequestId = m_requestId;
+   }
 
    std::unique_ptr<TextureAtlasFactory> TextureAtlasFactory::m_instance;
 
@@ -16,107 +23,110 @@ namespace Graphics
    {
    }
 
-   void TextureAtlasFactory::ReserveShadowMapSpace(TextureAtlas& atlas)
+   void TextureAtlasFactory::AddTextureAtlasReservation(size_t requestId, glm::ivec2 size)
    {
-      std::vector<ShadowMapAtlasCell>& cells = atlas.Cells;
-      std::vector<glm::ivec2>& reservations = atlas.Reservations;
-
-      std::vector<ShadowMapAtlasCell> emptyChunks = { ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
-
-      for (std::vector<glm::ivec2>::const_iterator it = reservations.cbegin(); it != reservations.cend(); ++it)
+      if (Reservations.size() == 0)
       {
-         // If atlas is empty - just push at the beginning
-         if (cells.size() == 0)
-         {
-            ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, it->x, it->y);
+         Reservations.emplace_back(std::make_pair(requestId, size));
+      }
+      else
+      {
+         const auto calcSquare = [](const glm::ivec2& quad) -> int32_t {  return (quad.x * quad.y); };
+         bool bInserted = false;
 
-            cells.push_back(newCell);
-            auto firstEmptyChunkIt = emptyChunks.begin();
-            SplitChunk(emptyChunks, firstEmptyChunkIt, newCell);
-         }
-         else
+         // Inserting new reservation size according to ascending rule
+         int32_t index = 0;
+         for (auto cit = Reservations.cbegin(); cit != Reservations.end(); ++cit, index++)
          {
-            for (std::vector<ShadowMapAtlasCell>::reverse_iterator rit = emptyChunks.rbegin(); rit != emptyChunks.rend(); ++rit)
+            if (calcSquare((cit->second)) <= calcSquare(size))
             {
-               if (rit->GetSquareValue() >= (it->x * it->y))
+               Reservations.insert(cit, std::make_pair(cit->first, size));
+               bInserted = true;
+               break;
+            }
+         }
+
+         // If new reservation size is the lowest - just insert it in the end
+         if (!bInserted)
+         {
+            Reservations.emplace_back(std::make_pair(requestId, size));
+         }
+      }
+   }
+
+   LazyTextureAtlasObtainer TextureAtlasFactory::AddTextureAtlasRequest(glm::ivec2 size)
+   {
+      LazyTextureAtlasObtainer obtainer;
+      AddTextureAtlasReservation(obtainer.MyRequestId, size);
+      return obtainer;
+   }
+
+   void TextureAtlasFactory::ReserveShadowMapSpace()
+   {
+      //  TODO::MUST ADD TEXTURE ATLAS FOR RESERVED SPACE
+
+      for (auto& reservation : Reservations)
+      {
+         if (m_textureAtlases.size() == 0)
+         {
+            TextureAtlas atlas;
+
+
+
+            m_textureAtlases.emplace_back(atlas);
+         }
+      }
+
+      for (auto& atlas : m_textureAtlases)
+      {
+         std::vector<ShadowMapAtlasCell>& cells = atlas->Cells;
+         std::vector<glm::ivec2>& reservations = atlas.Reservations;
+
+         std::vector<ShadowMapAtlasCell> emptyChunks = { ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
+
+         for (std::vector<glm::ivec2>::const_iterator it = reservations.cbegin(); it != reservations.cend(); ++it)
+         {
+            // If atlas is empty - just push at the beginning
+            if (cells.size() == 0)
+            {
+               ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, it->x, it->y);
+
+               cells.push_back(newCell);
+               auto firstEmptyChunkIt = emptyChunks.begin();
+               SplitChunk(emptyChunks, firstEmptyChunkIt, newCell);
+            }
+            else
+            {
+               bool bInserted = false;
+               for (std::vector<ShadowMapAtlasCell>::reverse_iterator rit = emptyChunks.rbegin(); rit != emptyChunks.rend(); ++rit)
                {
-                  // enough space for cell in empty chunk
+                  if (rit->GetSquareValue() >= (it->x * it->y))
+                  {
+                     // enough space for cell in empty chunk
 
-                  ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, rit->X, rit->Y, it->x, it->y);
+                     bInserted = true;
+                     ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, rit->X, rit->Y, it->x, it->y);
 
-                  cells.push_back(newCell);
-                  auto emptuChunkIt = std::find(emptyChunks.begin(), emptyChunks.end(), *rit);
-                  SplitChunk(emptyChunks, emptuChunkIt, newCell);
-                  break;
+                     cells.push_back(newCell);
+                     auto emptuChunkIt = std::find(emptyChunks.begin(), emptyChunks.end(), *rit);
+                     SplitChunk(emptyChunks, emptuChunkIt, newCell);
+                     break;
+                  }
+               }
+               if (!bInserted)
+               {
+                  // TODO::MUST CREATE NEW TEXTURE ATLAS
                }
             }
          }
       }
 
-      reservations.clear();
+      Reservations.clear();
    }
 
-   void TextureAtlasFactory::SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell)
+   std::shared_ptr<TextureAtlas> TextureAtlasFactory::GetTextureAtlasByRequestId(size_t requestId)
    {
-      ShadowMapAtlasCell leftBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      ShadowMapAtlasCell rightBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      ShadowMapAtlasCell rightTopCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
-
-      // Remove splitting empty chunk because it was split
-      emptyChunks.erase(splittingEmptyChunkIt);
-
-      auto sortFunctor = [](const ShadowMapAtlasCell& atlasCell1, const ShadowMapAtlasCell& atlasCell2) -> bool
-      {
-         return ((atlasCell1.Height * atlasCell1.Width) > (atlasCell2.Height * atlasCell2.Width));
-      };
-
-      emptyChunks.emplace_back(leftBottomCell);
-      emptyChunks.emplace_back(rightTopCell);
-      emptyChunks.emplace_back(rightBottomCell);
-
-      std::sort(emptyChunks.begin(), emptyChunks.end(), sortFunctor);
-   }
-
-   int32_t TextureAtlas::PushShadowMapSpace(glm::ivec2 size)
-   {
-      int32_t spaceIndex = -1;
-
-      if (!bInvalidated)
-      {
-         if (Reservations.size() == 0)
-         {
-            Reservations.push_back(size);
-            spaceIndex = 0;
-         }
-         else
-         {
-
-            const auto calcSquare = [](const glm::ivec2& quad) -> int32_t {  return (quad.x * quad.y); };
-            bool bInserted = false;
-
-            // Inserting new reservation size according to ascending rule
-            int32_t index = 0;
-            for (auto cit = Reservations.cbegin(); cit != Reservations.end(); ++cit, index++)
-            {
-               if (calcSquare((*cit)) <= calcSquare(size))
-               {
-                  Reservations.insert(cit, size);
-                  bInserted = true;
-                  spaceIndex = index;
-                  break;
-               }
-            }
-
-            // If new reservation size is the lowest - just insert it in the end
-            if (!bInserted)
-            {
-               Reservations.push_back(size);
-               spaceIndex = static_cast<int32_t>(Reservations.size() - 1);
-            }
-         }
-      }
-
-      return spaceIndex;
+      return std::make_shared<TextureAtlas>();
    }
 
    void TextureAtlas::AllocateReservedMemory()
@@ -166,6 +176,27 @@ namespace Graphics
       }
 
       shadow_map_size = shadowMapSize;
+   }
+
+   void TextureAtlasFactory::SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell)
+   {
+      ShadowMapAtlasCell leftBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
+      ShadowMapAtlasCell rightBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
+      ShadowMapAtlasCell rightTopCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
+
+      // Remove splitting empty chunk because it was split
+      emptyChunks.erase(splittingEmptyChunkIt);
+
+      auto sortFunctor = [](const ShadowMapAtlasCell& atlasCell1, const ShadowMapAtlasCell& atlasCell2) -> bool
+      {
+         return ((atlasCell1.Height * atlasCell1.Width) > (atlasCell2.Height * atlasCell2.Width));
+      };
+
+      emptyChunks.emplace_back(leftBottomCell);
+      emptyChunks.emplace_back(rightTopCell);
+      emptyChunks.emplace_back(rightBottomCell);
+
+      std::sort(emptyChunks.begin(), emptyChunks.end(), sortFunctor);
    }
 
 }

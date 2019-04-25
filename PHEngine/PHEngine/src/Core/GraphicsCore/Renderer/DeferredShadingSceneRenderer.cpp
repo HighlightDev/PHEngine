@@ -71,6 +71,7 @@ namespace Graphics
                         const auto& worldMatrix = primitive->GetMatrix();
                         const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
                         const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
+                        m_depthShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
 
                         primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
                      }
@@ -83,10 +84,14 @@ namespace Graphics
                      m_depthShaderSkeletal->ExecuteShader();
                      for (auto& primitive : shadowSkeletalMeshPrimitives)
                      {
+                        SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(primitive);
+
                         const auto& worldMatrix = primitive->GetMatrix();
                         const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
                         const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
-
+                        m_depthShaderSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
+                        m_depthShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
+                         
                         primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
                      }
                      m_depthShaderSkeletal->StopShader();

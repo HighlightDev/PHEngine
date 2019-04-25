@@ -3,7 +3,6 @@
 #include <memory>
 #include <unordered_map>
 #include <stdint.h>
-#include <vector>
 #include <glm/vec2.hpp>
 #include <vector>
 
@@ -57,8 +56,6 @@ namespace Graphics
    public:
       std::vector<ShadowMapAtlasCell> Cells;
 
-      std::vector<glm::ivec2> Reservations;
-
       /* Flag is true when memory for shadowmap was already allocated,
          to reuse space, you should first deallocate possessed memory space */
       bool bInvalidated = false;
@@ -74,12 +71,16 @@ namespace Graphics
       void ShrinkReservedMemory();
    };
 
+   class TextureAtlasObtainer;
+
    class TextureAtlasFactory
    {
 
       static std::unique_ptr<TextureAtlasFactory> m_instance;
 
-      std::vector<TextureAtlas> m_textureAtlases;
+      std::vector<std::shared_ptr<TextureAtlas>> m_textureAtlases;
+
+      std::vector<std::pair<size_t, glm::ivec2>> Reservations;
 
    public:
 
@@ -97,13 +98,33 @@ namespace Graphics
          return m_instance;
       }
 
-      void ReserveShadowMapSpace(TextureAtlas& atlas);
+      void ReserveShadowMapSpace();
 
-      //void AddTextureAtlasReservation(glm::ivec2 size);
+      LazyTextureAtlasObtainer AddTextureAtlasRequest(glm::ivec2 size);
+
+      std::shared_ptr<TextureAtlas> GetTextureAtlasByRequestId(size_t requestId);
 
    private:
 
+      void AddTextureAtlasReservation(size_t requestId, glm::ivec2 size);
+
       void SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell);
+   };
+
+   class LazyTextureAtlasObtainer
+   {
+      static size_t m_requestId;
+
+   public:
+
+      size_t MyRequestId;
+
+      LazyTextureAtlasObtainer();
+
+      std::shared_ptr<TextureAtlas> GetTextureAtlas()
+      {
+         return TextureAtlasFactory::GetInstance()->GetTextureAtlasByRequestId(m_requestId);
+      }
    };
 
 }
