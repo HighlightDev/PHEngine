@@ -63,5 +63,5 @@ PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewShader
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewUseProgram imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewGetSubroutineIndex imported
 PHEngine.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewUniformSubroutinesuiv imported
-glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\vc120.pdb'; linking object as if no debug info
-  Gui.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\Gui.exe
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'D:\VisualStudioProjects\PHEngine\PHEngine\PHEngine\bin\Debug\vc120.pdb'; linking object as if no debug info
+  Gui.vcxproj -> D:\VisualStudioProjects\PHEngine\PHEngine\PHEngine\bin\Debug\Gui.exe

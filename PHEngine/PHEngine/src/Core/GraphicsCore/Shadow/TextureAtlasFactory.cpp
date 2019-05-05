@@ -65,61 +65,82 @@ namespace Graphics
    {
       //  TODO::MUST ADD TEXTURE ATLAS FOR RESERVED SPACE
 
-      for (auto& reservation : Reservations)
+
+      auto getRelevantEmptyChunk = [](const std::vector<ShadowMapAtlasCell>& emptyChunks, const glm::ivec2& reservation)
       {
-         if (m_textureAtlases.size() == 0)
+         size_t reverseIndex = emptyChunks.size() - 1;
+         std::vector<ShadowMapAtlasCell>::const_iterator result = emptyChunks.end();
+         for (auto rit = emptyChunks.rbegin(); rit != emptyChunks.rend(); ++rit, --reverseIndex)
          {
-            TextureAtlas atlas;
-
-
-
-            m_textureAtlases.emplace_back(atlas);
+            if (rit->Width >= reservation.x && rit->Height >= reservation.y)
+            {
+               // enough space for cell in empty chunk
+               result = emptyChunks.begin() + reverseIndex;
+            }
          }
-      }
 
-      for (auto& atlas : m_textureAtlases)
+         return result;
+      };
+
+      while (Reservations.size())
       {
-         std::vector<ShadowMapAtlasCell>& cells = atlas->Cells;
-         std::vector<glm::ivec2>& reservations = atlas.Reservations;
-
+         TextureAtlas atlas;
+         std::vector<ShadowMapAtlasCell>& cells = atlas.Cells;
          std::vector<ShadowMapAtlasCell> emptyChunks = { ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
-
-         for (std::vector<glm::ivec2>::const_iterator it = reservations.cbegin(); it != reservations.cend(); ++it)
+         for (std::vector<std::pair<size_t, glm::ivec2>>::iterator it = Reservations.begin(); it != Reservations.end(); ++it)
          {
-            // If atlas is empty - just push at the beginning
-            if (cells.size() == 0)
+            auto relevantChunkIt = getRelevantEmptyChunk(emptyChunks, it->second);
+            if (relevantChunkIt != emptyChunks.end())
             {
-               ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, it->x, it->y);
-
+               ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, relevantChunkIt->X, relevantChunkIt->Y, it->second.x, it->second.y);
                cells.push_back(newCell);
-               auto firstEmptyChunkIt = emptyChunks.begin();
-               SplitChunk(emptyChunks, firstEmptyChunkIt, newCell);
-            }
-            else
-            {
-               bool bInserted = false;
-               for (std::vector<ShadowMapAtlasCell>::reverse_iterator rit = emptyChunks.rbegin(); rit != emptyChunks.rend(); ++rit)
-               {
-                  if (rit->GetSquareValue() >= (it->x * it->y))
-                  {
-                     // enough space for cell in empty chunk
-
-                     bInserted = true;
-                     ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, rit->X, rit->Y, it->x, it->y);
-
-                     cells.push_back(newCell);
-                     auto emptuChunkIt = std::find(emptyChunks.begin(), emptyChunks.end(), *rit);
-                     SplitChunk(emptyChunks, emptuChunkIt, newCell);
-                     break;
-                  }
-               }
-               if (!bInserted)
-               {
-                  // TODO::MUST CREATE NEW TEXTURE ATLAS
-               }
+               SplitChunk(emptyChunks, relevantChunkIt, newCell);
             }
          }
+         m_textureAtlases.push_back(std::make_shared<TextureAtlas>(atlas));
       }
+
+      //for (auto& atlas : m_textureAtlases)
+      //{
+      //   std::vector<ShadowMapAtlasCell>& cells = atlas->Cells;
+      //   std::vector<glm::ivec2>& reservations = atlas.Reservations;
+
+      //   for (std::vector<glm::ivec2>::const_iterator it = reservations.cbegin(); it != reservations.cend(); ++it)
+      //   {
+      //      // If atlas is empty - just push at the beginning
+      //      if (cells.size() == 0)
+      //      {
+      //         ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, it->x, it->y);
+
+      //         cells.push_back(newCell);
+      //         auto firstEmptyChunkIt = emptyChunks.begin();
+      //         SplitChunk(emptyChunks, firstEmptyChunkIt, newCell);
+      //      }
+      //      else
+      //      {
+      //         bool bInserted = false;
+      //         for (std::vector<ShadowMapAtlasCell>::reverse_iterator rit = emptyChunks.rbegin(); rit != emptyChunks.rend(); ++rit)
+      //         {
+      //            if (rit->GetSquareValue() >= (it->x * it->y))
+      //            {
+      //               // enough space for cell in empty chunk
+
+      //               bInserted = true;
+      //               ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, rit->X, rit->Y, it->x, it->y);
+
+      //               cells.push_back(newCell);
+      //               auto emptuChunkIt = std::find(emptyChunks.begin(), emptyChunks.end(), *rit);
+      //               SplitChunk(emptyChunks, emptuChunkIt, newCell);
+      //               break;
+      //            }
+      //         }
+      //         if (!bInserted)
+      //         {
+      //            // TODO::MUST CREATE NEW TEXTURE ATLAS
+      //         }
+      //      }
+      //   }
+      //}
 
       Reservations.clear();
    }
@@ -178,7 +199,7 @@ namespace Graphics
       shadow_map_size = shadowMapSize;
    }
 
-   void TextureAtlasFactory::SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell)
+   void TextureAtlasFactory::SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::const_iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell)
    {
       ShadowMapAtlasCell leftBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
       ShadowMapAtlasCell rightBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);

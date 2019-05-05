@@ -71,7 +71,7 @@ namespace Graphics
       void ShrinkReservedMemory();
    };
 
-   class TextureAtlasObtainer;
+   class LazyTextureAtlasObtainer;
 
    class TextureAtlasFactory
    {
@@ -108,7 +108,7 @@ namespace Graphics
 
       void AddTextureAtlasReservation(size_t requestId, glm::ivec2 size);
 
-      void SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell);
+      void SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::const_iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell);
    };
 
    class LazyTextureAtlasObtainer
