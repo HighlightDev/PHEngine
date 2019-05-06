@@ -63,19 +63,17 @@ namespace Graphics
 
    void TextureAtlasFactory::ReserveShadowMapSpace()
    {
-      //  TODO::MUST ADD TEXTURE ATLAS FOR RESERVED SPACE
-
-
-      auto getRelevantEmptyChunk = [](const std::vector<ShadowMapAtlasCell>& emptyChunks, const glm::ivec2& reservation)
+      auto getRelevantEmptyChunk = [](const std::vector<TextureAtlasCell>& emptyChunks, const glm::ivec2& reservation)
       {
          size_t reverseIndex = emptyChunks.size() - 1;
-         std::vector<ShadowMapAtlasCell>::const_iterator result = emptyChunks.end();
+         std::vector<TextureAtlasCell>::const_iterator result = emptyChunks.end();
          for (auto rit = emptyChunks.rbegin(); rit != emptyChunks.rend(); ++rit, --reverseIndex)
          {
             if (rit->Width >= reservation.x && rit->Height >= reservation.y)
             {
                // enough space for cell in empty chunk
                result = emptyChunks.begin() + reverseIndex;
+               break;
             }
          }
 
@@ -85,69 +83,39 @@ namespace Graphics
       while (Reservations.size())
       {
          TextureAtlas atlas;
-         std::vector<ShadowMapAtlasCell>& cells = atlas.Cells;
-         std::vector<ShadowMapAtlasCell> emptyChunks = { ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
+         std::map<size_t, TextureAtlasCell>& cells = atlas.Cells;
+         std::vector<TextureAtlasCell> emptyChunks = { TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
          for (std::vector<std::pair<size_t, glm::ivec2>>::iterator it = Reservations.begin(); it != Reservations.end(); ++it)
          {
             auto relevantChunkIt = getRelevantEmptyChunk(emptyChunks, it->second);
             if (relevantChunkIt != emptyChunks.end())
             {
-               ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, relevantChunkIt->X, relevantChunkIt->Y, it->second.x, it->second.y);
-               cells.push_back(newCell);
+               TextureAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, relevantChunkIt->X, relevantChunkIt->Y, it->second.x, it->second.y);
+               cells.emplace(std::make_pair(it->first, newCell));
                SplitChunk(emptyChunks, relevantChunkIt, newCell);
             }
          }
          m_textureAtlases.push_back(std::make_shared<TextureAtlas>(atlas));
       }
 
-      //for (auto& atlas : m_textureAtlases)
-      //{
-      //   std::vector<ShadowMapAtlasCell>& cells = atlas->Cells;
-      //   std::vector<glm::ivec2>& reservations = atlas.Reservations;
-
-      //   for (std::vector<glm::ivec2>::const_iterator it = reservations.cbegin(); it != reservations.cend(); ++it)
-      //   {
-      //      // If atlas is empty - just push at the beginning
-      //      if (cells.size() == 0)
-      //      {
-      //         ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, it->x, it->y);
-
-      //         cells.push_back(newCell);
-      //         auto firstEmptyChunkIt = emptyChunks.begin();
-      //         SplitChunk(emptyChunks, firstEmptyChunkIt, newCell);
-      //      }
-      //      else
-      //      {
-      //         bool bInserted = false;
-      //         for (std::vector<ShadowMapAtlasCell>::reverse_iterator rit = emptyChunks.rbegin(); rit != emptyChunks.rend(); ++rit)
-      //         {
-      //            if (rit->GetSquareValue() >= (it->x * it->y))
-      //            {
-      //               // enough space for cell in empty chunk
-
-      //               bInserted = true;
-      //               ShadowMapAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, rit->X, rit->Y, it->x, it->y);
-
-      //               cells.push_back(newCell);
-      //               auto emptuChunkIt = std::find(emptyChunks.begin(), emptyChunks.end(), *rit);
-      //               SplitChunk(emptyChunks, emptuChunkIt, newCell);
-      //               break;
-      //            }
-      //         }
-      //         if (!bInserted)
-      //         {
-      //            // TODO::MUST CREATE NEW TEXTURE ATLAS
-      //         }
-      //      }
-      //   }
-      //}
-
       Reservations.clear();
    }
 
-   std::shared_ptr<TextureAtlas> TextureAtlasFactory::GetTextureAtlasByRequestId(size_t requestId)
+   std::shared_ptr<TextureAtlasCell> TextureAtlasFactory::GetTextureAtlasCellByRequestId(size_t requestId)
    {
-      return std::make_shared<TextureAtlas>();
+      std::shared_ptr<TextureAtlasCell> result;
+
+      for (auto& atlas : m_textureAtlases)
+      {
+         std::map<size_t, TextureAtlasCell>::const_iterator it = atlas->Cells.find(requestId);
+         if (it != atlas->Cells.end())
+         {
+            result = std::make_shared<TextureAtlasCell>(it->second);
+            break;
+         }
+      }
+
+      return result;
    }
 
    void TextureAtlas::AllocateReservedMemory()
@@ -177,8 +145,8 @@ namespace Graphics
 
       for (auto cit = Cells.cbegin(); cit != Cells.cend(); ++cit)
       {
-         max.x = std::max(cit->X + cit->Width, max.x);
-         max.y = std::max(cit->Y + cit->Height, max.y);
+         max.x = std::max(cit->second.X + cit->second.Width, max.x);
+         max.y = std::max(cit->second.Y + cit->second.Height, max.y);
       }
 
       int32_t shadowMapSize = TextureAtlasFactory::SHADOW_MAP_SIZE;
@@ -199,16 +167,16 @@ namespace Graphics
       shadow_map_size = shadowMapSize;
    }
 
-   void TextureAtlasFactory::SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::const_iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell)
+   void TextureAtlasFactory::SplitChunk(std::vector<TextureAtlasCell>& emptyChunks, std::vector<TextureAtlasCell>::const_iterator splittingEmptyChunkIt, TextureAtlasCell& splitCenterCell)
    {
-      ShadowMapAtlasCell leftBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      ShadowMapAtlasCell rightBottomCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      ShadowMapAtlasCell rightTopCell = ShadowMapAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
+      TextureAtlasCell leftBottomCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
+      TextureAtlasCell rightBottomCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
+      TextureAtlasCell rightTopCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
 
       // Remove splitting empty chunk because it was split
       emptyChunks.erase(splittingEmptyChunkIt);
 
-      auto sortFunctor = [](const ShadowMapAtlasCell& atlasCell1, const ShadowMapAtlasCell& atlasCell2) -> bool
+      auto sortFunctor = [](const TextureAtlasCell& atlasCell1, const TextureAtlasCell& atlasCell2) -> bool
       {
          return ((atlasCell1.Height * atlasCell1.Width) > (atlasCell2.Height * atlasCell2.Width));
       };
@@ -218,6 +186,11 @@ namespace Graphics
       emptyChunks.emplace_back(rightBottomCell);
 
       std::sort(emptyChunks.begin(), emptyChunks.end(), sortFunctor);
+   }
+
+   std::shared_ptr<TextureAtlasCell> LazyTextureAtlasObtainer::GetTextureAtlasCell()
+   {
+      return TextureAtlasFactory::GetInstance()->GetTextureAtlasCellByRequestId(m_requestId);
    }
 
 }

@@ -197,6 +197,14 @@ namespace Game
       auto req2 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(500, 500));
       auto req3 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(256, 256));
       auto req4 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(2000, 2000));
+      auto req5 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1000, 1000));
+      auto req6 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(500, 500));
+      auto req7 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(256, 256));
+      auto req8 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(2000, 2000));
+      auto req9 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1000, 1000));
+      auto req10 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(500, 500));
+      auto req11 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(256, 256));
+      auto req12 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(2000, 2000));
       TextureAtlasFactory::GetInstance()->ReserveShadowMapSpace();
 
       // DirectionalLight

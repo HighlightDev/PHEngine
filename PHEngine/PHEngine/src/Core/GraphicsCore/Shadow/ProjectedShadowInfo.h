@@ -12,7 +12,7 @@ namespace Graphics
    {
    private:
 
-      ShadowMapAtlasCell m_shadowAtlasCell;
+      TextureAtlasCell m_shadowAtlasCell;
 
    public:
 
@@ -22,7 +22,7 @@ namespace Graphics
 
       glm::vec4 GetPosOffsetShadowMapAtlas() const;
 
-      ProjectedShadowInfo(const ShadowMapAtlasCell& shadowAtlasCell);
+      ProjectedShadowInfo(const TextureAtlasCell& shadowAtlasCell);
 
       ~ProjectedShadowInfo();
    };

@@ -3,7 +3,7 @@
 namespace Graphics
 {
 
-   ProjectedShadowInfo::ProjectedShadowInfo(const ShadowMapAtlasCell& shadowAtlasCell)
+   ProjectedShadowInfo::ProjectedShadowInfo(const TextureAtlasCell& shadowAtlasCell)
       : m_shadowAtlasCell(shadowAtlasCell)
    {
    }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
+#include <map>
 #include <stdint.h>
 #include <glm/vec2.hpp>
 #include <vector>
@@ -9,7 +9,7 @@
 namespace Graphics
 {
 
-   struct ShadowMapAtlasCell
+   struct TextureAtlasCell
    {
 
       int32_t TotalShadowMapHeight;
@@ -20,7 +20,7 @@ namespace Graphics
       int32_t Width;
       int32_t Height;
 
-      ShadowMapAtlasCell(int32_t totalShadowMapHeight, int32_t totalShadowMapWidth, int32_t x, int32_t y, int32_t width, int32_t height)
+      TextureAtlasCell(int32_t totalShadowMapHeight, int32_t totalShadowMapWidth, int32_t x, int32_t y, int32_t width, int32_t height)
          : TotalShadowMapHeight(totalShadowMapHeight)
          , TotalShadowMapWidth(totalShadowMapWidth)
          , X(x)
@@ -30,14 +30,14 @@ namespace Graphics
       {
       }
 
-      ShadowMapAtlasCell() = default;
+      TextureAtlasCell() = default;
 
       inline int32_t GetSquareValue() const {
 
          return Width * Height;
       }
 
-      bool operator==(const ShadowMapAtlasCell& cell) const {
+      bool operator==(const TextureAtlasCell& cell) const {
 
          return cell.X == this->X && cell.Y == this->Y &&
             cell.Width == this->Width && cell.Height == this->Height &&
@@ -54,7 +54,7 @@ namespace Graphics
       int32_t shadow_map_size;
 
    public:
-      std::vector<ShadowMapAtlasCell> Cells;
+      std::map<size_t, TextureAtlasCell> Cells;
 
       /* Flag is true when memory for shadowmap was already allocated,
          to reuse space, you should first deallocate possessed memory space */
@@ -63,8 +63,6 @@ namespace Graphics
       void AllocateReservedMemory();
 
       void DeallocateMemory();
-
-      int32_t PushShadowMapSpace(glm::ivec2 size);
 
    private:
 
@@ -102,13 +100,13 @@ namespace Graphics
 
       LazyTextureAtlasObtainer AddTextureAtlasRequest(glm::ivec2 size);
 
-      std::shared_ptr<TextureAtlas> GetTextureAtlasByRequestId(size_t requestId);
+      std::shared_ptr<TextureAtlasCell> GetTextureAtlasCellByRequestId(size_t requestId);
 
    private:
 
       void AddTextureAtlasReservation(size_t requestId, glm::ivec2 size);
 
-      void SplitChunk(std::vector<ShadowMapAtlasCell>& emptyChunks, std::vector<ShadowMapAtlasCell>::const_iterator splittingEmptyChunkIt, ShadowMapAtlasCell& splitCenterCell);
+      void SplitChunk(std::vector<TextureAtlasCell>& emptyChunks, std::vector<TextureAtlasCell>::const_iterator splittingEmptyChunkIt, TextureAtlasCell& splitCenterCell);
    };
 
    class LazyTextureAtlasObtainer
@@ -121,10 +119,7 @@ namespace Graphics
 
       LazyTextureAtlasObtainer();
 
-      std::shared_ptr<TextureAtlas> GetTextureAtlas()
-      {
-         return TextureAtlasFactory::GetInstance()->GetTextureAtlasByRequestId(m_requestId);
-      }
+      std::shared_ptr<TextureAtlasCell> GetTextureAtlasCell();
    };
 
 }
