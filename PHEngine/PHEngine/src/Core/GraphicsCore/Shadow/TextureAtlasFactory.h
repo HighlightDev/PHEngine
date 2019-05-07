@@ -1,4 +1,6 @@
 #pragma once
+#include "Core/GraphicsCore/Texture/TexParams.h"
+#include "Core/GraphicsCore/Texture/ITexture.h"
 
 #include <memory>
 #include <map>
@@ -6,12 +8,13 @@
 #include <glm/vec2.hpp>
 #include <vector>
 
+using namespace Graphics::Texture;
+
 namespace Graphics
 {
 
    struct TextureAtlasCell
    {
-
       int32_t TotalShadowMapHeight;
       int32_t TotalShadowMapWidth;
 
@@ -46,25 +49,50 @@ namespace Graphics
       }
    };
 
-   struct TextureAtlas
+   struct TextureAtlasCellResource
    {
-
    private:
+
+      TextureAtlasCell m_atlasCell;
+
+      std::shared_ptr<ITexture> m_atlasResource;
+
+   public:
+
+      TextureAtlasCellResource(const TextureAtlasCell& cell, const std::shared_ptr<ITexture>& resource)
+         : m_atlasCell(cell)
+         , m_atlasResource(resource)
+      {
+      }
+
+      inline TextureAtlasCell GetAtlasCell() const
+      {
+         return m_atlasCell;
+      }
+
+      inline std::shared_ptr<ITexture> GetAtlasResource() const
+      {
+         return m_atlasResource;
+      }
+   };
+
+   class TextureAtlas
+   {
+      friend class TextureAtlasFactory;
 
       int32_t shadow_map_size;
 
-   public:
       std::map<size_t, TextureAtlasCell> Cells;
 
+      std::shared_ptr<ITexture> m_atlasTexture;
+
       /* Flag is true when memory for shadowmap was already allocated,
-         to reuse space, you should first deallocate possessed memory space */
+   to reuse space, you should first deallocate possessed memory space */
       bool bInvalidated = false;
 
       void AllocateReservedMemory();
 
       void DeallocateMemory();
-
-   private:
 
       void ShrinkReservedMemory();
    };
@@ -73,6 +101,7 @@ namespace Graphics
 
    class TextureAtlasFactory
    {
+      friend class LazyTextureAtlasObtainer;
 
       static std::unique_ptr<TextureAtlasFactory> m_instance;
 
@@ -96,13 +125,13 @@ namespace Graphics
          return m_instance;
       }
 
-      void ReserveShadowMapSpace();
+      void AllocateTextureAtlasSpace();
 
       LazyTextureAtlasObtainer AddTextureAtlasRequest(glm::ivec2 size);
 
-      std::shared_ptr<TextureAtlasCell> GetTextureAtlasCellByRequestId(size_t requestId);
-
    private:
+
+      std::shared_ptr<TextureAtlasCellResource> GetTextureAtlasCellByRequestId(size_t requestId);
 
       void AddTextureAtlasReservation(size_t requestId, glm::ivec2 size);
 
@@ -119,7 +148,7 @@ namespace Graphics
 
       LazyTextureAtlasObtainer();
 
-      std::shared_ptr<TextureAtlasCell> GetTextureAtlasCell();
+      std::shared_ptr<TextureAtlasCellResource> GetTextureAtlasCellResource();
    };
 
 }

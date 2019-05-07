@@ -1,7 +1,10 @@
 #include "TextureAtlasFactory.h"
+#include "Core/ResourceManagerCore/Pool/RenderTargetPool.h"
 
 #include <algorithm>
 #include <GL/glew.h>
+
+using namespace Resources;
 
 namespace Graphics
 {
@@ -61,7 +64,7 @@ namespace Graphics
       return obtainer;
    }
 
-   void TextureAtlasFactory::ReserveShadowMapSpace()
+   void TextureAtlasFactory::AllocateTextureAtlasSpace()
    {
       auto getRelevantEmptyChunk = [](const std::vector<TextureAtlasCell>& emptyChunks, const glm::ivec2& reservation)
       {
@@ -85,7 +88,9 @@ namespace Graphics
          TextureAtlas atlas;
          std::map<size_t, TextureAtlasCell>& cells = atlas.Cells;
          std::vector<TextureAtlasCell> emptyChunks = { TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE) };
-         for (std::vector<std::pair<size_t, glm::ivec2>>::iterator it = Reservations.begin(); it != Reservations.end(); ++it)
+
+         auto it = Reservations.begin();
+         while (it != Reservations.end())
          {
             auto relevantChunkIt = getRelevantEmptyChunk(emptyChunks, it->second);
             if (relevantChunkIt != emptyChunks.end())
@@ -93,24 +98,32 @@ namespace Graphics
                TextureAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, relevantChunkIt->X, relevantChunkIt->Y, it->second.x, it->second.y);
                cells.emplace(std::make_pair(it->first, newCell));
                SplitChunk(emptyChunks, relevantChunkIt, newCell);
+
+               it = Reservations.erase(it);
+            }
+            else
+            {
+               ++it;
             }
          }
+         atlas.ShrinkReservedMemory();
+         atlas.AllocateReservedMemory();
          m_textureAtlases.push_back(std::make_shared<TextureAtlas>(atlas));
       }
 
       Reservations.clear();
    }
 
-   std::shared_ptr<TextureAtlasCell> TextureAtlasFactory::GetTextureAtlasCellByRequestId(size_t requestId)
+   std::shared_ptr<TextureAtlasCellResource> TextureAtlasFactory::GetTextureAtlasCellByRequestId(size_t requestId)
    {
-      std::shared_ptr<TextureAtlasCell> result;
+      std::shared_ptr<TextureAtlasCellResource> result;
 
       for (auto& atlas : m_textureAtlases)
       {
          std::map<size_t, TextureAtlasCell>::const_iterator it = atlas->Cells.find(requestId);
          if (it != atlas->Cells.end())
          {
-            result = std::make_shared<TextureAtlasCell>(it->second);
+            result = std::make_shared<TextureAtlasCellResource>(it->second, atlas->m_atlasTexture);
             break;
          }
       }
@@ -120,23 +133,20 @@ namespace Graphics
 
    void TextureAtlas::AllocateReservedMemory()
    {
-      ShrinkReservedMemory();
-
-      //glGenFramebuffers(1, &m_gBufferFBO);
-      //glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferFBO);
-
-      //// Depth texture
-      //glGenTextures(1, &m_depthBuffer);
-      //glBindTexture(GL_TEXTURE_2D, m_depthBuffer);
-      //glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, m_windowWidth, m_windowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-      //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthBuffer, 0);
+      if (!m_atlasTexture)
+      {
+         TexParams shadowMapParams(shadow_map_size, shadow_map_size, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, 0, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT, GL_REPEAT);
+         m_atlasTexture = RenderTargetPool::GetInstance()->GetOrAllocateResource(shadowMapParams);
+      }
    }
 
    void TextureAtlas::DeallocateMemory()
    {
-
+      if (!m_atlasTexture)
+      {
+         RenderTargetPool::GetInstance()->TryToFreeMemory(m_atlasTexture);
+         m_atlasTexture = std::shared_ptr<ITexture>(nullptr);
+      }
    }
 
    void TextureAtlas::ShrinkReservedMemory()
@@ -165,6 +175,12 @@ namespace Graphics
       }
 
       shadow_map_size = shadowMapSize;
+
+      for (auto it = Cells.begin(); it != Cells.end(); ++it)
+      {
+         it->second.TotalShadowMapWidth = shadow_map_size;
+         it->second.TotalShadowMapHeight = shadow_map_size;
+      }
    }
 
    void TextureAtlasFactory::SplitChunk(std::vector<TextureAtlasCell>& emptyChunks, std::vector<TextureAtlasCell>::const_iterator splittingEmptyChunkIt, TextureAtlasCell& splitCenterCell)
@@ -188,7 +204,7 @@ namespace Graphics
       std::sort(emptyChunks.begin(), emptyChunks.end(), sortFunctor);
    }
 
-   std::shared_ptr<TextureAtlasCell> LazyTextureAtlasObtainer::GetTextureAtlasCell()
+   std::shared_ptr<TextureAtlasCellResource> LazyTextureAtlasObtainer::GetTextureAtlasCellResource()
    {
       return TextureAtlasFactory::GetInstance()->GetTextureAtlasCellByRequestId(m_requestId);
    }

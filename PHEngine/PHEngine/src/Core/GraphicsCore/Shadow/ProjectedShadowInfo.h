@@ -4,6 +4,9 @@
 #include <glm/mat4x4.hpp>
 
 #include "Core/GraphicsCore/Shadow/TextureAtlasFactory.h"
+#include "Core/GraphicsCore/Texture/ITexture.h"
+
+using namespace Graphics::Texture;
 
 namespace Graphics
 {
@@ -12,7 +15,7 @@ namespace Graphics
    {
    private:
 
-      TextureAtlasCell m_shadowAtlasCell;
+      std::shared_ptr<TextureAtlasCellResource> m_shadowAtlasCellResource;
 
    public:
 
@@ -22,7 +25,9 @@ namespace Graphics
 
       glm::vec4 GetPosOffsetShadowMapAtlas() const;
 
-      ProjectedShadowInfo(const TextureAtlasCell& shadowAtlasCell);
+      std::shared_ptr<ITexture> GetAtlasResource() const;
+
+      ProjectedShadowInfo(const std::shared_ptr<TextureAtlasCellResource>& shadowAtlasCell);
 
       ~ProjectedShadowInfo();
    };

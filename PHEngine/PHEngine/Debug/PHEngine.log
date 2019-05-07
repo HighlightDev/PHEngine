@@ -1,16 +1,2 @@
-﻿  SkeletalMeshComponent.cpp
-  ProjectedShadowInfo.cpp
-  PointLightComponent.cpp
-  DirectionalLightSceneProxy.cpp
-  LightSceneProxy.cpp
-  DirectionalLightComponent.cpp
-  LightComponent.cpp
-  DeferredLightShader.cpp
-  Scene.cpp
-  PointLightSceneProxy.cpp
-  DeferredShadingSceneRenderer.cpp
-  PrimitiveComponent.cpp
-  Engine.cpp
-  WaterPlaneComponent.cpp
-  Generating Code...
+﻿  Engine.cpp
   PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib
