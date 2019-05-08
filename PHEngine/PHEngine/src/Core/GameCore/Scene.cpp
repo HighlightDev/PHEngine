@@ -192,25 +192,10 @@ namespace Game
       const float aspectRatio = 16.0f / 9.0f;
       ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
 
-      // TEMPORARY
-      auto req1 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1000, 1000));
-      auto req2 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(500, 500));
-      auto req3 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(256, 256));
-      auto req4 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(2000, 2000));
-      auto req5 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1000, 1000));
-      auto req6 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(500, 500));
-      auto req7 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(256, 256));
-      auto req8 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(2000, 2000));
-      auto req9 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1000, 1000));
-      auto req10 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(500, 500));
-      auto req11 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(256, 256));
-      auto req12 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(2000, 2000));
-      TextureAtlasFactory::GetInstance()->AllocateTextureAtlasSpace();
-
       // DirectionalLight
       {
-         
-         ProjectedShadowInfo* dirLightInfo = nullptr;
+         auto directionalLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1024, 1024));
+         ProjectedShadowInfo* dirLightInfo = new ProjectedShadowInfo(directionalLightTextureAtlasRequest);
 
          DirectionalLightComponentData mData(glm::vec3(0), glm::vec3(0), glm::vec3(1),
             glm::vec3(1, 0, 0),
@@ -268,6 +253,8 @@ namespace Game
          CreateAndAddComponent_GameThread<SkyboxComponent>(mData, skyboxActor);
          AllActors.push_back(skyboxActor);
       }
+
+      TextureAtlasFactory::GetInstance()->AllocateTextureAtlasSpace();
    }
 
    Scene::~Scene()

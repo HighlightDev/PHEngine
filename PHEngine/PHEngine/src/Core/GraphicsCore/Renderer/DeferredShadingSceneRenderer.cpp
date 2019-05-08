@@ -50,17 +50,19 @@ namespace Graphics
       {
       }
 
-      void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, std::vector<LightSceneProxy*>& lightSourcesProxy)
+      void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
 
          for (auto& lightProxy : lightSourcesProxy)
          {
+            LightSceneProxy* proxyPtr = lightProxy.get();
+
             const ProjectedShadowInfo* const shadowInfo = lightProxy->GetShadowInfo();
             if (shadowInfo)
             {
                if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
                {
-                  const DirectionalLightSceneProxy* dirLightSceneProxy = static_cast<DirectionalLightSceneProxy*>(lightProxy);
+                  const DirectionalLightSceneProxy* dirLightSceneProxy = static_cast<DirectionalLightSceneProxy*>(proxyPtr);
 
                   // Non - skeletal primitives
                   if (shadowNonSkeletalMeshPrimitives.size() > 0)
@@ -71,6 +73,7 @@ namespace Graphics
                         const auto& worldMatrix = primitive->GetMatrix();
                         const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
                         const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
+
                         m_depthShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
 
                         primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
@@ -99,7 +102,7 @@ namespace Graphics
                }
                else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
                {
-                  const PointLightSceneProxy* pointLightSceneProxy = static_cast<PointLightSceneProxy*>(lightProxy);
+                  const PointLightSceneProxy* pointLightSceneProxy = static_cast<PointLightSceneProxy*>(proxyPtr);
 
                }
             }
@@ -220,6 +223,9 @@ namespace Graphics
                nonSkeletalPrimitives.push_back(proxy);
             }
          }
+
+         // TEST VERSION OF DEPTH COLLECTING
+         DepthPass(nonSkeletalPrimitives, skeletalPrimitives, m_scene->LightProxies);
 
          DeferredBasePass_RenderThread(nonSkeletalPrimitives, skeletalPrimitives, viewMatrix);
 

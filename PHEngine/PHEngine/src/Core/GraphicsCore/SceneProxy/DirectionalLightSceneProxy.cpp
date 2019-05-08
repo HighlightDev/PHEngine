@@ -13,8 +13,8 @@ namespace Graphics
       {
          if (this->m_shadowInfo)
          {
-            m_shadowInfo->ShadowProjectionMatrices.push_back(glm::ortho(-200, 200, -200, 200, 1, 400));
-            m_shadowInfo->ShadowViewMatrices.push_back(glm::mat4(1));
+            // init
+            m_shadowInfo->ShadowProjectionMatrices[0] = glm::ortho(-200, 200, -200, 200, 1, 400);
          }
       }
 
@@ -30,11 +30,19 @@ namespace Graphics
 
       ProjectedShadowInfo* DirectionalLightSceneProxy::GetShadowInfo() const
       {
-         //if (this->m_shadowInfo)
-         //{
-         //   // Build view matrix
-         //   m_shadowInfo->ShadowViewMatrices[0] = glm::lookAt(glm::vec3(), glm::vec3(), glm::vec3());
-         //}
+         if (this->m_shadowInfo)
+         {
+            // Build view matrix
+
+            glm::vec3 normLightDir = glm::normalize(m_direction);
+
+            glm::vec3 targetPositon = m_shadowInfo->Offset;
+            glm::vec3 lightTranslatedPosition = -(normLightDir * 300.0f);
+            glm::vec3 shadowCastPosition(targetPositon + lightTranslatedPosition);
+
+            m_shadowInfo->ShadowViewMatrices[0] = glm::lookAt(glm::vec3(0, 10, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+               //glm::lookAt(shadowCastPosition, targetPositon, glm::vec3(0, 1, 0));
+         }
 
          return m_shadowInfo;
       }

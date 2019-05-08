@@ -15,19 +15,20 @@ namespace Graphics
    {
    private:
 
-      std::shared_ptr<TextureAtlasCellResource> m_shadowAtlasCellResource;
+      LazyTextureAtlasObtainer m_shadowAtlasCellResource;
 
    public:
 
       std::vector<glm::mat4x4> ShadowViewMatrices;
       std::vector<glm::mat4x4> ShadowProjectionMatrices;
+      glm::mat4 ShadowBiasMatrix;
       glm::vec3 Offset;
 
       glm::vec4 GetPosOffsetShadowMapAtlas() const;
 
       std::shared_ptr<ITexture> GetAtlasResource() const;
 
-      ProjectedShadowInfo(const std::shared_ptr<TextureAtlasCellResource>& shadowAtlasCell);
+      ProjectedShadowInfo(const LazyTextureAtlasObtainer & shadowAtlasCellResource);
 
       ~ProjectedShadowInfo();
    };

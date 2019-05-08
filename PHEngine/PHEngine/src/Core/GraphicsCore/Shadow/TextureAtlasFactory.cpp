@@ -106,9 +106,12 @@ namespace Graphics
                ++it;
             }
          }
-         atlas.ShrinkReservedMemory();
-         atlas.AllocateReservedMemory();
-         m_textureAtlases.push_back(std::make_shared<TextureAtlas>(atlas));
+         if (atlas.Cells.size())
+         {
+            atlas.ShrinkReservedMemory();
+            atlas.AllocateReservedMemory();
+            m_textureAtlases.push_back(std::make_shared<TextureAtlas>(atlas));
+         }
       }
 
       Reservations.clear();
@@ -187,7 +190,7 @@ namespace Graphics
    {
       TextureAtlasCell leftBottomCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
       TextureAtlasCell rightBottomCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      TextureAtlasCell rightTopCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
+      TextureAtlasCell rightTopCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
 
       // Remove splitting empty chunk because it was split
       emptyChunks.erase(splittingEmptyChunkIt);
@@ -204,7 +207,7 @@ namespace Graphics
       std::sort(emptyChunks.begin(), emptyChunks.end(), sortFunctor);
    }
 
-   std::shared_ptr<TextureAtlasCellResource> LazyTextureAtlasObtainer::GetTextureAtlasCellResource()
+   std::shared_ptr<TextureAtlasCellResource> LazyTextureAtlasObtainer::GetTextureAtlasCellResource() const
    {
       return TextureAtlasFactory::GetInstance()->GetTextureAtlasCellByRequestId(m_requestId);
    }

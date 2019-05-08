@@ -148,7 +148,7 @@ namespace Graphics
 
       LazyTextureAtlasObtainer();
 
-      std::shared_ptr<TextureAtlasCellResource> GetTextureAtlasCellResource();
+      std::shared_ptr<TextureAtlasCellResource> GetTextureAtlasCellResource() const;
    };
 
 }

@@ -3,9 +3,12 @@
 namespace Graphics
 {
 
-   ProjectedShadowInfo::ProjectedShadowInfo(const std::shared_ptr<TextureAtlasCellResource>& shadowAtlasCellResource)
+   ProjectedShadowInfo::ProjectedShadowInfo(const LazyTextureAtlasObtainer& shadowAtlasCellResource)
       : m_shadowAtlasCellResource(shadowAtlasCellResource)
+      , ShadowBiasMatrix(0.5f, 0, 0, 0, 0, 0.5f, 0, 0, 0, 0, 0.5f, 0, 0.5f, 0.5f, 0.5f, 1)
    {
+      ShadowProjectionMatrices.push_back(glm::mat4(1));
+      ShadowViewMatrices.push_back(glm::mat4(1));
    }
 
    ProjectedShadowInfo::~ProjectedShadowInfo()
@@ -14,24 +17,31 @@ namespace Graphics
 
    std::shared_ptr<ITexture> ProjectedShadowInfo::GetAtlasResource() const {
 
-      return m_shadowAtlasCellResource->GetAtlasResource();
+      std::shared_ptr<ITexture> result;
+      auto resourceObtainer = m_shadowAtlasCellResource.GetTextureAtlasCellResource();
+      if (resourceObtainer)
+      {
+         result = resourceObtainer->GetAtlasResource();
+      }
+      return result;
    }
 
    glm::vec4 ProjectedShadowInfo::GetPosOffsetShadowMapAtlas() const
    {
-      glm::vec4 result;
+      glm::vec4 resultOffset;
 
-      if (m_shadowAtlasCellResource)
+      auto resourceObtainer = m_shadowAtlasCellResource.GetTextureAtlasCellResource();
+      if (resourceObtainer)
       {
-         float x_start = (float)m_shadowAtlasCellResource->GetAtlasCell().X / (float)m_shadowAtlasCellResource->GetAtlasCell().TotalShadowMapWidth;
-         float y_start = (float)m_shadowAtlasCellResource->GetAtlasCell().Y / (float)m_shadowAtlasCellResource->GetAtlasCell().TotalShadowMapHeight;
-         float x_offset = (float)m_shadowAtlasCellResource->GetAtlasCell().Width / (float)m_shadowAtlasCellResource->GetAtlasCell().TotalShadowMapWidth;
-         float y_offset = (float)m_shadowAtlasCellResource->GetAtlasCell().Height / (float)m_shadowAtlasCellResource->GetAtlasCell().TotalShadowMapHeight;
+         float x_start = (float)resourceObtainer->GetAtlasCell().X / (float)resourceObtainer->GetAtlasCell().TotalShadowMapWidth;
+         float y_start = (float)resourceObtainer->GetAtlasCell().Y / (float)resourceObtainer->GetAtlasCell().TotalShadowMapHeight;
+         float x_offset = (float)resourceObtainer->GetAtlasCell().Width / (float)resourceObtainer->GetAtlasCell().TotalShadowMapWidth;
+         float y_offset = (float)resourceObtainer->GetAtlasCell().Height / (float)resourceObtainer->GetAtlasCell().TotalShadowMapHeight;
 
-
-         result = glm::vec4(x_start, y_start, x_offset, y_offset);
+         resultOffset = glm::vec4(x_start, y_start, x_offset, y_offset);
       }
-      return result;
+
+      return resultOffset;
    }
 
 }
