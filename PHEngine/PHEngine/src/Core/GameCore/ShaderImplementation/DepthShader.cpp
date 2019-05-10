@@ -13,9 +13,10 @@ namespace Game
 
       void DepthShader<false>::AccessAllUniformLocations() {
 
+         ShaderBase::AccessAllUniformLocations();
          u_worldMatrix = GetUniform("worldMatrix");
-         u_viewMatrix = GetUniform("viewMatrix");
-         u_projectionMatrix = GetUniform("projectionMatrix");
+         u_viewMatrix = GetUniform("shadowViewMatrix");
+         u_projectionMatrix = GetUniform("shadowProjectionMatrix");
       }
 
       void DepthShader<false>::SetShaderPredefine() { }
@@ -31,10 +32,11 @@ namespace Game
 
       void DepthShader<true>::AccessAllUniformLocations()
       {
+         ShaderBase::AccessAllUniformLocations();
          u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones);
          u_worldMatrix = GetUniform("worldMatrix");
-         u_viewMatrix = GetUniform("viewMatrix");
-         u_projectionMatrix = GetUniform("projectionMatrix");
+         u_viewMatrix = GetUniform("shadowViewMatrix");
+         u_projectionMatrix = GetUniform("shadowProjectionMatrix");
       }
 
       DepthShader<true>::DepthShader(std::string&& vsPath, std::string&& fsPath)
@@ -43,7 +45,14 @@ namespace Game
          Init();
       }
 
-      void DepthShader<true>::SetShaderPredefine() { }
+      void DepthShader<true>::SetShaderPredefine() 
+      {
+         Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", MaxWeights);
+         Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", MaxBones);
+
+#undef MaxWeights
+#undef MaxBones
+      }
 
       void DepthShader<true>::SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
       {

@@ -69,13 +69,18 @@ namespace Debug
       resultMatrix = glm::scale(resultMatrix, glm::vec3(0.2f, 0.25f, 1.0f));
       resultMatrix = glm::translate(resultMatrix, glm::vec3(translation.x, translation.y, 0.0f));
 
+      // test
+
+      //resultMatrix = glm::mat4(1);
+
       return resultMatrix;
    }
 
    void TextureRenderer::Render(std::shared_ptr<ITexture> renderTexture, size_t index)
    {
       int32_t texturePixelFormat = renderTexture->GetTextureParameters().TexPixelFormat;
-      bool bDepthTexture = texturePixelFormat == GL_DEPTH_COMPONENT;
+      const bool bDepthTexture = false;
+         //texturePixelFormat == GL_DEPTH_COMPONENT;
 
       const glm::mat4& screenSpaceMatrix = GetScreenSpaceMatrix(index);
       m_shader->ExecuteShader();

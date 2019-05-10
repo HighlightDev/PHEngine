@@ -42,8 +42,8 @@ namespace Graphics
          m_deferredBaseShaderNonSkeletal = std::dynamic_pointer_cast<DeferredShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<false>>(deferredNonSkeletalBaseShaderPath));
          m_deferredBaseShaderSkeletal = std::dynamic_pointer_cast<DeferredShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<true>>(deferredSkeletalBaseShaderPath));
          m_deferredLightShader = std::dynamic_pointer_cast<DeferredLightShader>(ShaderPool::GetInstance()-> template GetOrAllocateResource<DeferredLightShader>(deferredLightShaderPath));
-         m_depthShaderSkeletal = std::dynamic_pointer_cast<DepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<true>>(depthSkeletalShaderPath));;
-         m_depthShaderNonSkeletal = std::dynamic_pointer_cast<DepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<false>>(depthNonSkeletalShaderPath));;
+         m_depthShaderSkeletal = std::dynamic_pointer_cast<DepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<true>>(depthSkeletalShaderPath));
+         m_depthShaderNonSkeletal = std::dynamic_pointer_cast<DepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<false>>(depthNonSkeletalShaderPath));
       }
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()
@@ -52,7 +52,6 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
-
          for (auto& lightProxy : lightSourcesProxy)
          {
             LightSceneProxy* proxyPtr = lightProxy.get();
@@ -60,6 +59,8 @@ namespace Graphics
             const ProjectedShadowInfo* const shadowInfo = lightProxy->GetShadowInfo();
             if (shadowInfo)
             {
+               shadowInfo->BindShadowFramebuffer();
+
                if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
                {
                   const DirectionalLightSceneProxy* dirLightSceneProxy = static_cast<DirectionalLightSceneProxy*>(proxyPtr);
@@ -71,8 +72,10 @@ namespace Graphics
                      for (auto& primitive : shadowNonSkeletalMeshPrimitives)
                      {
                         const auto& worldMatrix = primitive->GetMatrix();
-                        const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
-                        const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
+                        const auto& viewMatrix = m_scene->GetCamera()->GetViewMatrix();
+                           //shadowInfo->ShadowViewMatrices[0];
+                        const auto& projectionMatrix = m_scene->ProjectionMatrix;
+                           //shadowInfo->ShadowProjectionMatrices[0];
 
                         m_depthShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
 
@@ -90,8 +93,10 @@ namespace Graphics
                         SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(primitive);
 
                         const auto& worldMatrix = primitive->GetMatrix();
-                        const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
-                        const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
+                        const auto& viewMatrix = m_scene->GetCamera()->GetViewMatrix();
+                        //shadowInfo->ShadowViewMatrices[0];
+                        const auto& projectionMatrix = m_scene->ProjectionMatrix;
+                        //shadowInfo->ShadowProjectionMatrices[0];
                         m_depthShaderSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
                         m_depthShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
                          
@@ -105,6 +110,7 @@ namespace Graphics
                   const PointLightSceneProxy* pointLightSceneProxy = static_cast<PointLightSceneProxy*>(proxyPtr);
 
                }
+               glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
          }
       }
@@ -236,6 +242,8 @@ namespace Graphics
             ForwardBasePass_RenderThread(drawForwardShadedPrimitives, viewMatrix);
          }
 
+         DebugFramePanelsPass();
+
       }
 
       void DeferredShadingSceneRenderer::DebugFramePanelsPass()
@@ -246,6 +254,10 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::PushRenderTargetToTextureRenderer()
       {
+         m_textureRenderer.PushDebugRenderTarget();
+         m_textureRenderer.PushDebugRenderTarget();
+         m_textureRenderer.PushDebugRenderTarget();
+         m_textureRenderer.PushDebugRenderTarget();
          m_textureRenderer.PushDebugRenderTarget();
       }
 	}

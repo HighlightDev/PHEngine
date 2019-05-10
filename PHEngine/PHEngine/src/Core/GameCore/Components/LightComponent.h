@@ -22,15 +22,13 @@ namespace Game
 
       size_t LightSceneProxyId = 0;
 
-      ProjectedShadowInfo* ShadowInfo = nullptr;
-
       virtual uint64_t GetComponentType() const override;
 
       virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix) override;
 
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const = 0;
 
-      LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, ProjectedShadowInfo* shadowInfo = nullptr);
+      LightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale);
 
       virtual ~LightComponent();
    };

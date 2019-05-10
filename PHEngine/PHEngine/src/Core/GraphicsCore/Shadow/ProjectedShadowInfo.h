@@ -17,6 +17,12 @@ namespace Graphics
 
       LazyTextureAtlasObtainer m_shadowAtlasCellResource;
 
+      mutable uint32_t m_framebufferDesc;
+
+      void AllocateFramebuffer() const;
+
+      void DeallocateFramebuffer() const;
+
    public:
 
       std::vector<glm::mat4x4> ShadowViewMatrices;
@@ -27,6 +33,8 @@ namespace Graphics
       glm::vec4 GetPosOffsetShadowMapAtlas() const;
 
       std::shared_ptr<ITexture> GetAtlasResource() const;
+
+      void BindShadowFramebuffer() const;
 
       ProjectedShadowInfo(const LazyTextureAtlasObtainer & shadowAtlasCellResource);
 

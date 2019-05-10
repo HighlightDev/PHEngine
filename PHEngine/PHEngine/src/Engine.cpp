@@ -9,6 +9,8 @@ Engine::Engine()
 {
    m_scene.AddTestActors();
 
+   m_sceneRenderer.PushRenderTargetToTextureRenderer();
+
    m_gameThread = std::thread(std::bind(&Engine::GameThreadPulse, this));
    m_gameThread.detach();
 }
@@ -54,6 +56,5 @@ void Engine::MouseMove()
 
 void Engine::KeyDown()
 {
-   //m_sceneRenderer.PushRenderTargetToTextureRenderer();
    m_scene.CameraMove();
 }

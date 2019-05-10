@@ -99,7 +99,7 @@ int32_t main(int32_t argc, char** argv)
 		return -1;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "PHEngine", NULL, NULL);
+	window = glfwCreateWindow(1024, 800, "PHEngine", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();

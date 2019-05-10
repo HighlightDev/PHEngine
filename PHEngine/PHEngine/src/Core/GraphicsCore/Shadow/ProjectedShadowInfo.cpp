@@ -7,12 +7,49 @@ namespace Graphics
       : m_shadowAtlasCellResource(shadowAtlasCellResource)
       , ShadowBiasMatrix(0.5f, 0, 0, 0, 0, 0.5f, 0, 0, 0, 0, 0.5f, 0, 0.5f, 0.5f, 0.5f, 1)
    {
+      m_framebufferDesc = std::numeric_limits<uint32_t>::max();
       ShadowProjectionMatrices.push_back(glm::mat4(1));
       ShadowViewMatrices.push_back(glm::mat4(1));
+      auto resourceObtainer = m_shadowAtlasCellResource.GetTextureAtlasCellResource();
+      if (resourceObtainer)
+      {
+         AllocateFramebuffer();
+      }
    }
 
    ProjectedShadowInfo::~ProjectedShadowInfo()
    {
+      DeallocateFramebuffer();
+   }
+
+   void ProjectedShadowInfo::AllocateFramebuffer() const
+   {
+      glGenFramebuffers(1, &m_framebufferDesc);
+
+      glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferDesc);
+      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasResource()->GetTextureDescriptor(), 0);
+      glDrawBuffer(GL_NONE);
+      glReadBuffer(GL_NONE);
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+   }
+
+   void ProjectedShadowInfo::DeallocateFramebuffer() const
+   {
+      glDeleteFramebuffers(1, &m_framebufferDesc);
+   }
+
+   void ProjectedShadowInfo::BindShadowFramebuffer() const
+   {
+      if (m_framebufferDesc == std::numeric_limits<uint32_t>::max()) // not allocated framebuffer
+      {
+         AllocateFramebuffer();
+      }
+
+      glm::ivec2 rezolution = m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasResource()->GetTextureRezolution();
+      glViewport(0, 0, rezolution.x, rezolution.y);
+      glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferDesc);
+      glClear(GL_DEPTH_BUFFER_BIT);
+      glDrawBuffer(GL_NONE);
    }
 
    std::shared_ptr<ITexture> ProjectedShadowInfo::GetAtlasResource() const {

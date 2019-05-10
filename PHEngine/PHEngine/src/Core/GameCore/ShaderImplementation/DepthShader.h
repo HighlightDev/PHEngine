@@ -36,13 +36,13 @@ namespace Game
 
       };
 
+#define MaxWeights 3
+#define MaxBones 55
+
       template <>
       class DepthShader<true> :
          public ShaderBase
       {
-         const int32_t MaxWeights = 3;
-         const int32_t MaxBones = 55;
-
          using Base = ShaderBase;
 
          Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix;

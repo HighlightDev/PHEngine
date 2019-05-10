@@ -8,7 +8,7 @@ namespace Graphics
    {
 
       DirectionalLightSceneProxy::DirectionalLightSceneProxy(const DirectionalLightComponent* component)
-         : LightSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().Ambient, component->GetRenderData().Diffuse, component->GetRenderData().Specular, component->ShadowInfo)
+         : LightSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().Ambient, component->GetRenderData().Diffuse, component->GetRenderData().Specular, component->GetRenderData().ShadowInfo)
          , m_direction(component->GetRenderData().Direction)
       {
          if (this->m_shadowInfo)
