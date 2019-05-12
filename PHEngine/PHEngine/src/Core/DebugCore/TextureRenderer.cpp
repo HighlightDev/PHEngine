@@ -79,8 +79,7 @@ namespace Debug
    void TextureRenderer::Render(std::shared_ptr<ITexture> renderTexture, size_t index)
    {
       int32_t texturePixelFormat = renderTexture->GetTextureParameters().TexPixelFormat;
-      const bool bDepthTexture = false;
-         //texturePixelFormat == GL_DEPTH_COMPONENT;
+      const bool bDepthTexture = texturePixelFormat == GL_DEPTH_COMPONENT;
 
       const glm::mat4& screenSpaceMatrix = GetScreenSpaceMatrix(index);
       m_shader->ExecuteShader();

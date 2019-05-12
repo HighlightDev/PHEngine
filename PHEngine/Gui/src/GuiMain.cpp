@@ -99,7 +99,15 @@ int32_t main(int32_t argc, char** argv)
 		return -1;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(1024, 800, "PHEngine", NULL, NULL);
+
+   get_screen_rezolution();
+
+   auto width = GlobalProperties::GetInstance()->GetInputData().GetScreenWidth();
+   auto height = GlobalProperties::GetInstance()->GetInputData().GetScreenHeight();
+
+	// window = glfwCreateWindow(width, height, "PHEngine", NULL, NULL);
+   window = glfwCreateWindow(1200, 900, "PHEngine", NULL, NULL);
+   
 	if (!window)
 	{
 		glfwTerminate();
@@ -109,7 +117,6 @@ int32_t main(int32_t argc, char** argv)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
-	get_screen_rezolution();
 	get_window_size(window);
 	get_window_pos(window);
 

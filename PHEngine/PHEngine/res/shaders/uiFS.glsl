@@ -20,7 +20,7 @@ void main(void){
 
     vec4 color = texture(uiTexture, texCoords);
 
-   if (bPerspectiveDepthTexture)
+   if (false)
    {
        float depth = (2.0 * color.r) - 1.0;
        float linearDepth = ToLinearDepth(depth);

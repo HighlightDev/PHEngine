@@ -72,10 +72,8 @@ namespace Graphics
                      for (auto& primitive : shadowNonSkeletalMeshPrimitives)
                      {
                         const auto& worldMatrix = primitive->GetMatrix();
-                        const auto& viewMatrix = m_scene->GetCamera()->GetViewMatrix();
-                           //shadowInfo->ShadowViewMatrices[0];
-                        const auto& projectionMatrix = m_scene->ProjectionMatrix;
-                           //shadowInfo->ShadowProjectionMatrices[0];
+                        const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
+                        const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
 
                         m_depthShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
 
@@ -93,10 +91,8 @@ namespace Graphics
                         SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(primitive);
 
                         const auto& worldMatrix = primitive->GetMatrix();
-                        const auto& viewMatrix = m_scene->GetCamera()->GetViewMatrix();
-                        //shadowInfo->ShadowViewMatrices[0];
-                        const auto& projectionMatrix = m_scene->ProjectionMatrix;
-                        //shadowInfo->ShadowProjectionMatrices[0];
+                        const auto& viewMatrix = shadowInfo->ShadowViewMatrices[0];
+                        const auto& projectionMatrix = shadowInfo->ShadowProjectionMatrices[0];
                         m_depthShaderSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
                         m_depthShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
                          
@@ -230,7 +226,6 @@ namespace Graphics
             }
          }
 
-         // TEST VERSION OF DEPTH COLLECTING
          DepthPass(nonSkeletalPrimitives, skeletalPrimitives, m_scene->LightProxies);
 
          DeferredBasePass_RenderThread(nonSkeletalPrimitives, skeletalPrimitives, viewMatrix);
@@ -254,10 +249,6 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::PushRenderTargetToTextureRenderer()
       {
-         m_textureRenderer.PushDebugRenderTarget();
-         m_textureRenderer.PushDebugRenderTarget();
-         m_textureRenderer.PushDebugRenderTarget();
-         m_textureRenderer.PushDebugRenderTarget();
          m_textureRenderer.PushDebugRenderTarget();
       }
 	}

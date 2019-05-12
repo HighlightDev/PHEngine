@@ -720,6 +720,7 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\TextureRendererShader.h" />
     <ClInclude Include="src\Core\GameCore\Event\TEvent.h" />
+    <ClInclude Include="src\Core\GameCore\ThirdPersonCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\DebugCore\TextureRenderer.cpp" />
@@ -813,6 +814,7 @@
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\WaterPlaneShader.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\TextureRendererShader.cpp" />
     <ClCompile Include="src\Core\GameCore\Event\TEvent.cpp" />
+    <ClCompile Include="src\Core\GameCore\ThirdPersonCamera.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
