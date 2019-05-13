@@ -34,5 +34,7 @@ public:
 	void MouseMove();
 
    void KeyDown();
+
+   void PushFrame();
 };
 

@@ -7,6 +7,7 @@
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
 #include "Core/GameCore/CameraBase.h"
 #include "Core/GameCore/FirstPersonCamera.h"
+#include "Core/GameCore/ThirdPersonCamera.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
 #include "Core/GameCore/Components/InputComponent.h"
 #include "Core/GraphicsCore/Shadow/TextureAtlasFactory.h"
@@ -22,7 +23,8 @@ namespace Game
 
    Scene::Scene(InterThreadCommunicationMgr& interThreadMgr)
       : m_interThreadMgr(interThreadMgr)
-      , m_camera(new FirstPersonCamera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10)))
+      //, m_camera(new FirstPersonCamera(glm::vec3(0, 0, 1), glm::vec3(0, 0, -10)))
+      , m_camera(new ThirdPersonCamera(glm::vec3(0.5f, -0.8f, 0), 20))
    {
       
    }
@@ -166,6 +168,7 @@ namespace Game
 
    void Scene::Tick_GameThread(float delta)
    {
+      m_camera->Tick(delta);
       for (auto& actor : AllActors)
       {
          actor->Tick(delta);
@@ -180,17 +183,16 @@ namespace Game
 
    void Scene::CameraMove()
    {
-      FirstPersonCamera* camera = static_cast<FirstPersonCamera*>(m_camera);
-      if (camera)
+      if (m_camera->GetCameraType() == CameraBase::CameraType::FIRST_PERSON)
       {
-         camera->moveCamera(0);
+         static_cast<FirstPersonCamera*>(m_camera)->MoveCamera(0);
       }
    }
 
    void Scene::AddTestActors()
    {
       const float aspectRatio = 16.0f / 9.0f;
-      ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 100);
+      ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 500);
 
       // DirectionalLight
       {
@@ -213,13 +215,6 @@ namespace Game
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
          Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
-
-         //InputComponentData inputComponentData;
-         //CreateAndAddComponent_GameThread<InputComponent>(inputComponentData, houseActor);
-         MovementComponentData movementComponentData(glm::vec3(0), m_camera);
-         CreateAndAddComponent_GameThread<MovementComponent>(movementComponentData, houseActor);
-
-         m_playerController.SetPlayerActor(houseActor);
          AllActors.push_back(houseActor);
       }
 
@@ -231,7 +226,19 @@ namespace Game
          Actor* skeletActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkeletalMeshComponent>(mData, skeletActor);
 
+         InputComponentData inputComponentData;
+         CreateAndAddComponent_GameThread<InputComponent>(inputComponentData, skeletActor);
+         MovementComponentData movementComponentData(glm::vec3(0), m_camera);
+         CreateAndAddComponent_GameThread<MovementComponent>(movementComponentData, skeletActor);
+
+         m_playerController.SetPlayerActor(skeletActor);
+
          AllActors.push_back(skeletActor);
+
+         if (m_camera->GetCameraType() == CameraBase::CameraType::THIRD_PERSON)
+         {
+            static_cast<ThirdPersonCamera*>(m_camera)->SetThirdPersonTarget(skeletActor);
+         }
       }
 
       // SKYBOX

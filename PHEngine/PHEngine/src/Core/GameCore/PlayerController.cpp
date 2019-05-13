@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "Core/GameCore/CameraBase.h"
+#include "COre/GameCore/ThirdPersonCamera.h"
 
 namespace Game
 {
@@ -30,15 +31,25 @@ namespace Game
 
          glm::vec3& velocity = movementComponent->Velocity;
          float& speed = movementComponent->Speed;
-         const CameraBase* const camera = movementComponent->GetCamera();
+         CameraBase* const camera = movementComponent->GetCamera();
 
          if (bindings.GetKeyState(Keys::W))
          {
-            velocity = camera->GetEyeSpaceForwardVector() * glm::vec3(1, 0, 1); // truncate y-velocity
+            velocity = camera->GetEyeSpaceForwardVector() * glm::vec3(1, 1, 1); // truncate y-velocity
 
             auto newPosition = (velocity * speed) + rootComponent->GetTranslation();
 
             rootComponent->SetTranslation(newPosition);
+
+            if (camera->GetCameraType() == CameraBase::CameraType::THIRD_PERSON)
+            {
+               // TEST FAST VERSION
+               auto myCamera = static_cast<ThirdPersonCamera*>(camera);
+               if (myCamera->GetThirdPersonTarget() == m_playerActor)
+               {
+                  myCamera->SetThirdPersonTargetTransformationDirty();
+               }
+            }
          }
          else if (bindings.GetKeyState(Keys::A))
          {

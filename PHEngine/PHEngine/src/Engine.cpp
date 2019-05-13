@@ -58,3 +58,8 @@ void Engine::KeyDown()
 {
    m_scene.CameraMove();
 }
+
+void Engine::PushFrame()
+{
+   m_sceneRenderer.PushRenderTargetToTextureRenderer();
+}

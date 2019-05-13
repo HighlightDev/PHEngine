@@ -13,6 +13,17 @@ namespace Game
 
 	class CameraBase
 	{
+   public:
+
+      enum class CameraType
+      {
+         FIRST_PERSON,
+         THIRD_PERSON,
+         UNINITIALIZED
+      };
+
+   private:
+
 		float m_rotateSensetivity;
 
 	protected:
@@ -25,6 +36,7 @@ namespace Game
 		glm::mat3 m_rotationMatrix;
 		
 		bool bTransformationDirty = false;
+      CameraType m_cameraType;
 
 		void UpdateRotationMatrix(int32_t deltaX, int32_t deltaY);
 
@@ -36,13 +48,18 @@ namespace Game
 
 		virtual ~CameraBase();
 
-		virtual void CameraTick(float DeltaTime) = 0;
+		virtual void Tick(float DeltaTime) = 0;
 
 		virtual glm::vec3 GetEyeVector() const = 0;
 
 		virtual glm::vec3 GetTargetVector() const = 0;
 
 		virtual glm::vec3 GetLocalSpaceUpVector() const = 0;
+
+      inline CameraType GetCameraType() const {
+
+         return m_cameraType;
+      }
 
 		inline void SetLocalSpaceUpVector(glm::vec3& upVector)
 		{
@@ -101,7 +118,7 @@ namespace Game
 
 		void Rotate();
 
-		glm::vec3 LerpPosition(float t, float t1, float t2, glm::vec3 position1, glm::vec3 position2) const;
+		glm::vec3 LerpPosition(float t, float t1, float t2, const glm::vec3& position1, const glm::vec3& position2) const;
 
 		/*inline FSphere GetCameraCollisionSphere()
 		{

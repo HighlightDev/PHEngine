@@ -10,7 +10,7 @@ namespace Game
       public Component
    {
 
-      class CameraBase const * const m_mainCamera;
+      class CameraBase* const m_mainCamera;
 
    public:
 
@@ -18,13 +18,13 @@ namespace Game
 
       float Speed;
 
-      MovementComponent(class  CameraBase const* const mainCamera, glm::vec3 launchVelocity);
+      MovementComponent(class  CameraBase* const mainCamera, glm::vec3 launchVelocity);
 
       virtual ~MovementComponent();
 
       virtual uint64_t GetComponentType() const override;
 
-      class  CameraBase const* const GetCamera() const;
+      class  CameraBase* const GetCamera() const;
    };
 
 }

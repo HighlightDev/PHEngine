@@ -64,14 +64,10 @@ namespace Debug
       glm::mat4 resultMatrix = glm::mat4(1);
 
       glm::vec2 Origin = glm::vec2(-0.75f, -0.7f);
-      glm::vec2 translation = glm::vec2(Origin.x, (layoutIndex * 0.5f) + (0.15f * layoutIndex) + Origin.y);
+      glm::vec2 translation = glm::vec2(Origin.x, ((float)(layoutIndex) * 0.5f) + (0.15f * (float)(layoutIndex)) + Origin.y);
 
-      resultMatrix = glm::scale(resultMatrix, glm::vec3(0.2f, 0.25f, 1.0f));
       resultMatrix = glm::translate(resultMatrix, glm::vec3(translation.x, translation.y, 0.0f));
-
-      // test
-
-      //resultMatrix = glm::mat4(1);
+      resultMatrix = glm::scale(resultMatrix, glm::vec3(0.2f, 0.25f, 1.0f));
 
       return resultMatrix;
    }

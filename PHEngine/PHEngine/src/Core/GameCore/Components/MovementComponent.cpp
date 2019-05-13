@@ -5,11 +5,11 @@
 namespace Game
 {
 
-   MovementComponent::MovementComponent(CameraBase const* const mainCamera, glm::vec3 launchVelocity)
+   MovementComponent::MovementComponent(CameraBase* const mainCamera, glm::vec3 launchVelocity)
       : Component()
       , m_mainCamera(mainCamera)
       , Velocity(launchVelocity)
-      , Speed(0.05f)
+      , Speed(0.005f)
    {
    }
 
@@ -17,7 +17,7 @@ namespace Game
    {
    }
 
-   const CameraBase* const MovementComponent::GetCamera() const
+   CameraBase* const MovementComponent::GetCamera() const
    {
       return m_mainCamera;
    }

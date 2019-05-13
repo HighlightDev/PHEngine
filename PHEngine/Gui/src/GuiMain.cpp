@@ -14,6 +14,7 @@ using namespace Game;
 
 bool bMouseMove = false;
 bool bKeyDown = false;
+bool bPushFrame = false;
 
 void get_window_pos(GLFWwindow* window)
 {
@@ -62,6 +63,10 @@ void key_pressed_callback(GLFWwindow* window, int32_t key, int32_t scancode, int
       {
          bKeyDown = true;
       }
+      else if (key == 'P' || key == 'p')
+      {
+         bPushFrame = true;
+      }
 
       KeyboardInputManager::GetInstance()->PushKeyEvent((Keys)key, KEY_PRESSED);
 
@@ -70,6 +75,7 @@ void key_pressed_callback(GLFWwindow* window, int32_t key, int32_t scancode, int
    {
       KeyboardInputManager::GetInstance()->PushKeyEvent((Keys)key, KEY_RELEASED);
       bKeyDown = false;
+      bPushFrame = false;
    }
 }
 
@@ -152,6 +158,11 @@ int32_t main(int32_t argc, char** argv)
       if (bKeyDown)
       {
          engine.KeyDown();
+      }
+      if (bPushFrame)
+      {
+         engine.PushFrame();
+         bPushFrame = false;
       }
 	}
 

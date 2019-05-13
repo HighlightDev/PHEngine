@@ -14,6 +14,7 @@ namespace Game
 		, m_eyeSpaceRightVector(std::move(glm::vec3(1, 0, 0)))
 		, m_eyeSpaceForwardVector(std::move(glm::vec3(0, 0, 1)))
 		, m_rotationMatrix(std::move(glm::mat3(1)))
+      , m_cameraType(CameraType::UNINITIALIZED)
 	{
 		
 	}
@@ -55,7 +56,7 @@ namespace Game
 		bTransformationDirty = true;
 	}
 
-	glm::vec3 CameraBase::LerpPosition(float t, float t1, float t2, glm::vec3 position1, glm::vec3 position2) const
+	glm::vec3 CameraBase::LerpPosition(float t, float t1, float t2, const glm::vec3& position1, const glm::vec3& position2) const
 	{
 		glm::vec3 resultPosition = glm::vec3(0);
 
