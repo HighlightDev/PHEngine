@@ -1,7 +1,14 @@
-.vs/
 *.pdb
-*.exe
+
 *.ilk
 *.idb
 *.tlog
+
+# Executables
+*.exe
+*.out
+*.app
+
+.vs/
+
 
