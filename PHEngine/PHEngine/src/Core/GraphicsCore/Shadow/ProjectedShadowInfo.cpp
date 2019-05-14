@@ -6,6 +6,7 @@ namespace Graphics
    ProjectedShadowInfo::ProjectedShadowInfo(const LazyTextureAtlasObtainer& shadowAtlasCellResource)
       : m_shadowAtlasCellResource(shadowAtlasCellResource)
       , ShadowBiasMatrix(0.5f, 0, 0, 0, 0, 0.5f, 0, 0, 0, 0, 0.5f, 0, 0.5f, 0.5f, 0.5f, 1)
+      , Offset(0)
    {
       m_framebufferDesc = std::numeric_limits<uint32_t>::max();
       ShadowProjectionMatrices.push_back(glm::mat4(1));

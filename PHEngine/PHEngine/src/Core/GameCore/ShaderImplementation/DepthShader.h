@@ -36,9 +36,6 @@ namespace Game
 
       };
 
-#define MaxWeights 3
-#define MaxBones 55
-
       template <>
       class DepthShader<true> :
          public ShaderBase

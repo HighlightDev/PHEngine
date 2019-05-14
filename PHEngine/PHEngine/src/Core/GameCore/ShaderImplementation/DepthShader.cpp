@@ -30,6 +30,9 @@ namespace Game
 
       /*     SKELETAL MESH DEPTH SHADER   */
 
+#define MaxWeights 3
+#define MaxBones 55
+
       void DepthShader<true>::AccessAllUniformLocations()
       {
          ShaderBase::AccessAllUniformLocations();
@@ -49,10 +52,10 @@ namespace Game
       {
          Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", MaxWeights);
          Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", MaxBones);
+      }
 
 #undef MaxWeights
 #undef MaxBones
-      }
 
       void DepthShader<true>::SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
       {

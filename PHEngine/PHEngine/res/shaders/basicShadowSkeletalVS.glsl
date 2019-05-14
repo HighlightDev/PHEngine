@@ -3,8 +3,8 @@
 #define MaxWeights 3
 #define MaxBones 55
 layout (location = 0) in vec3 vertex_position;
-layout (location = 1) in vec3 blendWeights;
-layout (location = 2) in ivec3 blendIndices;
+layout (location = 6) in vec3 blendWeights;
+layout (location = 7) in ivec3 blendIndices;
 
 uniform mat4 worldMatrix;
 uniform mat4 shadowViewMatrix;

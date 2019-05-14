@@ -1,6 +1,7 @@
 #include "PlayerController.h"
 #include "Core/GameCore/CameraBase.h"
 #include "COre/GameCore/ThirdPersonCamera.h"
+#include "Core/GameCore/Event/TEvent.h"
 
 namespace Game
 {
@@ -50,6 +51,8 @@ namespace Game
                   myCamera->SetThirdPersonTargetTransformationDirty();
                }
             }
+
+            Event::CameraMovedEvent::GetInstance()->SendEvent(newPosition);
          }
          else if (bindings.GetKeyState(Keys::A))
          {

@@ -14,7 +14,7 @@ namespace Graphics
          if (this->m_shadowInfo)
          {
             // init
-            m_shadowInfo->ShadowProjectionMatrices[0] = glm::ortho(-200, 200, -200, 200, 1, 400);
+            m_shadowInfo->ShadowProjectionMatrices[0] = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 200.0f);
          }
       }
 
@@ -32,16 +32,15 @@ namespace Graphics
       {
          if (this->m_shadowInfo)
          {
-            // Build view matrix
-
-            glm::vec3 normLightDir = glm::normalize(m_direction);
-
+            // Build shadow view matrix
+            glm::vec3 normLightDir = glm::normalize(GetDirection());
+            
+            // Target is the player, keep collecting shadow info when player is moving all around the level
             glm::vec3 targetPositon = m_shadowInfo->Offset;
-            glm::vec3 lightTranslatedPosition = -(normLightDir * 300.0f);
+            glm::vec3 lightTranslatedPosition = -(normLightDir * 10.0f);
             glm::vec3 shadowCastPosition(targetPositon + lightTranslatedPosition);
 
-            m_shadowInfo->ShadowViewMatrices[0] = glm::lookAt(glm::vec3(0, 10, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-               //glm::lookAt(shadowCastPosition, targetPositon, glm::vec3(0, 1, 0));
+            m_shadowInfo->ShadowViewMatrices[0] = glm::lookAt(shadowCastPosition, targetPositon, glm::vec3(0, 1, 0));
          }
 
          return m_shadowInfo;
