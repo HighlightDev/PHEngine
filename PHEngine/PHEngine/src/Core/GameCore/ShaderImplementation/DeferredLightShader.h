@@ -32,9 +32,15 @@ namespace Game
          UniformArray u_PointLightPosition;
          UniformArray u_PointLightAttenuation;
 
+         UniformArray u_DirectionalLightShadowMaps;
+         UniformArray u_DirectionalLightShadowMatrices;
+         UniformArray u_DirectionalLightAtlasOffset;
+         Uniform u_DirectionalLightShadowMapCount;
+
          Uniform u_gBuffer_Position;
          Uniform u_gBuffer_Normal;
          Uniform u_gBuffer_AlbedoNSpecular;
+
       public:
 
          DeferredLightShader(std::string&& vsPath, std::string&& fsPath);
@@ -48,6 +54,13 @@ namespace Game
          void SetGBufferPosition(int32_t slot);
 
          void SetLightsInfo(std::vector<std::shared_ptr<LightSceneProxy>> lightsProxies);
+
+         void SetDirectionalLightShadowMapSlot(size_t index, int32_t slot);
+         void SetDirectionalLightShadowMapSlot(size_t index, int32_t slot, const glm::vec4& atlasOffset);
+
+         void SetDirectionalLightShadowMapCount(int32_t count);
+
+         void SetDirectionalLightShadowMatrix(size_t index, const glm::mat4& shadowMatrix);
 
       protected:
 

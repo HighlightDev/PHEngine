@@ -53,6 +53,22 @@ namespace Graphics
       glDrawBuffer(GL_NONE);
    }
 
+   std::vector<glm::mat4> ProjectedShadowInfo::GetShadowMatrix() const
+   {
+      std::vector<glm::mat4> shadowMatrices;
+
+      for (size_t i = 0; i < ShadowViewMatrices.size(); i++)
+      {
+         glm::mat4 toShadowSpaceMatrix(1);
+         toShadowSpaceMatrix *= ShadowViewMatrices[i];
+         toShadowSpaceMatrix *= ShadowProjectionMatrices[i];
+         toShadowSpaceMatrix *= ShadowBiasMatrix;
+         shadowMatrices.push_back(toShadowSpaceMatrix);
+      }
+
+      return shadowMatrices;
+   }
+
    std::shared_ptr<ITexture> ProjectedShadowInfo::GetAtlasResource() const {
 
       std::shared_ptr<ITexture> result;

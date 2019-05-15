@@ -74,6 +74,8 @@ namespace Graphics
 
 			void LoadUniform(int32_t arg);
 
+         void LoadUniform(size_t arg);
+
 			void LoadUniform(const glm::vec2& arg);
 
 			void LoadUniform(glm::vec2&& arg);

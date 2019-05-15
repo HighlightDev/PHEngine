@@ -36,6 +36,8 @@ namespace Graphics
 
       void BindShadowFramebuffer() const;
 
+      std::vector<glm::mat4> GetShadowMatrix() const;
+
       ProjectedShadowInfo(const LazyTextureAtlasObtainer & shadowAtlasCellResource);
 
       ~ProjectedShadowInfo();

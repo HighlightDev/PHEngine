@@ -35,6 +35,11 @@ namespace Game
          u_gBuffer_Position = GetUniform("gBuffer_Position");
          u_gBuffer_Normal = GetUniform("gBuffer_Normal");
          u_gBuffer_AlbedoNSpecular = GetUniform("gBuffer_AlbedoNSpecular");
+
+         u_DirectionalLightShadowMaps = GetUniformArray("DirLightShadowMaps", DIR_LIGHT_COUNT);
+         u_DirectionalLightShadowMatrices = GetUniformArray("DirLightShadowMatrices", DIR_LIGHT_COUNT);
+         u_DirectionalLightAtlasOffset = GetUniformArray("DirLightShadowAtlasOffset", DIR_LIGHT_COUNT);
+         u_DirectionalLightShadowMapCount = GetUniform("DirLightShadowMapCount");
       }
 
       void DeferredLightShader::SetShaderPredefine()
@@ -56,6 +61,27 @@ namespace Game
       void DeferredLightShader::SetGBufferPosition(int32_t slot)
       {
          u_gBuffer_Position.LoadUniform(slot);
+      }
+
+      void DeferredLightShader::SetDirectionalLightShadowMapSlot(size_t index, int32_t slot, const glm::vec4& atlasOffset)
+      {
+         u_DirectionalLightShadowMaps.LoadUniform(index, slot);
+         u_DirectionalLightAtlasOffset.LoadUniform(index, atlasOffset);
+      }
+
+      void DeferredLightShader::SetDirectionalLightShadowMapSlot(size_t index, int32_t slot)
+      {
+         u_DirectionalLightShadowMaps.LoadUniform(index, slot);
+      }
+
+      void DeferredLightShader::SetDirectionalLightShadowMapCount(int32_t count)
+      {
+         u_DirectionalLightShadowMapCount.LoadUniform(count);
+      }
+
+      void DeferredLightShader::SetDirectionalLightShadowMatrix(size_t index, const glm::mat4& shadowMatrix)
+      {
+         u_DirectionalLightShadowMatrices.LoadUniform(index, shadowMatrix);
       }
 
       void DeferredLightShader::SetLightsInfo(std::vector<std::shared_ptr<LightSceneProxy>> lightsProxies)

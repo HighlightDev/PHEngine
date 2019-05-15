@@ -160,6 +160,12 @@ namespace Graphics
 				return;
 			glUniform1i(uniformLocation, arg);
 		}
+      void Uniform::LoadUniform(size_t arg)
+      {
+         if (uniformLocation == -1)
+            return;
+         glUniform1ui(uniformLocation, arg);
+      }
 		void Uniform::LoadUniform(const glm::vec2& arg)
 		{
 			if (uniformLocation == -1)

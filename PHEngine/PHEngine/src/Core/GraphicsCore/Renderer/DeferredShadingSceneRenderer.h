@@ -40,7 +40,7 @@ namespace Graphics
 
          void DebugFramePanelsPass();
 
-         void DeferredLightPass_RenderThread();
+         void DeferredLightPass_RenderThread(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy);
 
          void DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& nonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& skeletalMeshPrimitives, const glm::mat4& viewMatrix);
 

@@ -154,14 +154,34 @@ namespace Graphics
       }
    }
 
-      void DeferredShadingSceneRenderer::DeferredLightPass_RenderThread()
+      void DeferredShadingSceneRenderer::DeferredLightPass_RenderThread(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
          {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(0, 0, 0, 0);
 
+            // TODO: Make some check if light source (point or spot light) is too far from current view position
+
             m_deferredLightShader->ExecuteShader();
-            
+
+            // SHADOWS
+            size_t dirShadowMapSlot = 3, dirShadowMapIndex = 0, dirShadowMapCount = 0;
+            for (auto& lightProxy : lightSourcesProxy)
+            {
+               if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
+               {
+                  ProjectedShadowInfo* shadowInfo = lightProxy->GetShadowInfo();
+                  shadowInfo->GetAtlasResource()->BindTexture(dirShadowMapIndex);
+                  m_deferredLightShader->SetDirectionalLightShadowMapSlot(dirShadowMapIndex, dirShadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
+                  m_deferredLightShader->SetDirectionalLightShadowMatrix(dirShadowMapIndex, shadowInfo->GetShadowMatrix()[0]);
+                  dirShadowMapCount++;
+               }
+               dirShadowMapIndex++;
+               dirShadowMapSlot++;
+            }
+            m_deferredLightShader->SetDirectionalLightShadowMapCount(dirShadowMapCount);
+            // SHADOWS
+
             m_gbuffer->BindPositionTexture(0);
             m_gbuffer->BindAlbedoWithSpecularTexture(1);
             m_gbuffer->BindNormalTexture(2);
@@ -230,7 +250,7 @@ namespace Graphics
 
          DeferredBasePass_RenderThread(nonSkeletalPrimitives, skeletalPrimitives, viewMatrix);
 
-         DeferredLightPass_RenderThread();
+         DeferredLightPass_RenderThread(m_scene->LightProxies);
 
          if (bIsForwardShadedPrimitives)
          {
