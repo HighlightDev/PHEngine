@@ -52,13 +52,19 @@ namespace Game
 		const float yawRad = DEG_TO_RAD(m_rotation.y);
 		const float rollRad = DEG_TO_RAD(m_rotation.z);
 
-		glm::mat4 worldMatrix(1);
-		worldMatrix = glm::scale(worldMatrix, m_scale);
-		worldMatrix = glm::rotate(worldMatrix, pitchRad, AXIS_RIGHT);
-		worldMatrix = glm::rotate(worldMatrix, yawRad, AXIS_UP);
-		worldMatrix = glm::rotate(worldMatrix, rollRad, AXIS_FORWARD);
-		worldMatrix = glm::translate(worldMatrix, m_translation);
-		worldMatrix = parentRelativeMatrix * worldMatrix;
+		glm::mat4 worldMatrix(1), identityMatrix(1);
+      glm::mat4 scaleMatrix = glm::scale(identityMatrix, m_scale);
+      glm::mat4 rotationMatrixX = glm::rotate(identityMatrix, pitchRad, AXIS_RIGHT);
+      glm::mat4 rotationMatrixY = glm::rotate(identityMatrix, yawRad, AXIS_UP);
+      glm::mat4 rotationMatrixZ = glm::rotate(identityMatrix, rollRad, AXIS_FORWARD);
+	   glm::mat4 translationMatrix = glm::translate(identityMatrix, m_translation);
+      worldMatrix *= parentRelativeMatrix;
+      worldMatrix *= scaleMatrix;
+      worldMatrix *= rotationMatrixX;
+      worldMatrix *= rotationMatrixY;
+      worldMatrix *= rotationMatrixZ;
+      worldMatrix *= translationMatrix;
+     
 
 		m_relativeMatrix = std::move(worldMatrix);
 

@@ -34,7 +34,7 @@ namespace Game
 				}
 
 				// Update all components that have transformation
-				glm::mat4 rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
+				glm::mat4 rootRelativeMatrix = m_rootComponent->GetRelativeMatrix();
 				for (auto& component : m_allComponents)
 				{
 					if ((component->GetComponentType() & SCENE_COMPONENT) == SCENE_COMPONENT)

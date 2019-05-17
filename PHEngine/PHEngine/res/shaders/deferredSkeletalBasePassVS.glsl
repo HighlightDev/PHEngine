@@ -31,7 +31,7 @@ void main(void)
 	vertex_shader_result.world_bitangent = (worldMatrix * vec4(bitangent, 0.0)).xyz;
 	vertex_shader_result.tex_coords = texCoord;
 
-	vec4 worldPosition = vec4(position, 1.0);
+	vec4 localSpacePosition = vec4(position, 1.0);
 
 	vec4 localSpaceSkinnedVertex = vec4(0);
 	 for (int i = 0; i < MaxWeights; i++)
@@ -41,10 +41,10 @@ void main(void)
 			continue;
 
 		float blendWeight = blendWeights[i];
-		localSpaceSkinnedVertex += ((bonesMatrices[blendIndex]  * worldPosition) * blendWeight);
+		localSpaceSkinnedVertex += ((bonesMatrices[blendIndex]  * localSpacePosition) * blendWeight);
 	}
 
-	worldPosition = worldMatrix * localSpaceSkinnedVertex;
+	vec4 worldPosition = worldMatrix * localSpaceSkinnedVertex;
 
 	vertex_shader_result.world_position = worldPosition.xyz;
 

@@ -171,7 +171,7 @@ namespace Graphics
                if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
                {
                   ProjectedShadowInfo* shadowInfo = lightProxy->GetShadowInfo();
-                  shadowInfo->GetAtlasResource()->BindTexture(dirShadowMapIndex);
+                  shadowInfo->GetAtlasResource()->BindTexture(dirShadowMapSlot);
                   m_deferredLightShader->SetDirectionalLightShadowMapSlot(dirShadowMapIndex, dirShadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
                   m_deferredLightShader->SetDirectionalLightShadowMatrix(dirShadowMapIndex, shadowInfo->GetShadowMatrix()[0]);
                   dirShadowMapCount++;
@@ -231,7 +231,7 @@ namespace Graphics
                drawForwardShadedPrimitives.push_back(proxy.get());
          }
 
-         const bool bIsForwardShadedPrimitives = drawForwardShadedPrimitives.size() > 0;
+         const bool bIsForwardShadedPrimitives = false; drawForwardShadedPrimitives.size() > 0;
 
          std::vector<PrimitiveSceneProxy*> skeletalPrimitives, nonSkeletalPrimitives;
          for (auto& proxy : drawDeferredShadedPrimitives)

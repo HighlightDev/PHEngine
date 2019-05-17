@@ -113,7 +113,7 @@ namespace Game
 			return m_scale;
 		}
 
-		inline 	glm::mat4 GetRelativeMatrix() const
+		inline glm::mat4 GetRelativeMatrix() const
 		{
 			return m_relativeMatrix;
 		}

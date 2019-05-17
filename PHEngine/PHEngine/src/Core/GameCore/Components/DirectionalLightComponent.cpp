@@ -29,8 +29,13 @@ namespace Game
    void DirectionalLightComponent::UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix)
    {
       Base::UpdateRelativeMatrix(parentRelativeMatrix);
+   }
 
-      SetRotationAxisY(m_rotation.y + 0.01f);
+   void DirectionalLightComponent::Tick(float deltaTime)
+   {
+      Base::Tick(deltaTime);
+
+      // SetRotationAxisY(m_rotation.y + 0.01f);
    }
 
    uint64_t DirectionalLightComponent::GetComponentType() const

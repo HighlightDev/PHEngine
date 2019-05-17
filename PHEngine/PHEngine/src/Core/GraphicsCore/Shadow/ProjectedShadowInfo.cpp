@@ -5,7 +5,11 @@ namespace Graphics
 
    ProjectedShadowInfo::ProjectedShadowInfo(const LazyTextureAtlasObtainer& shadowAtlasCellResource)
       : m_shadowAtlasCellResource(shadowAtlasCellResource)
-      , ShadowBiasMatrix(0.5f, 0, 0, 0, 0, 0.5f, 0, 0, 0, 0, 0.5f, 0, 0.5f, 0.5f, 0.5f, 1)
+      , ShadowBiasMatrix(
+         0.5f, 0, 0, 0,
+         0, 0.5f, 0, 0,
+         0, 0, 0.5f, 0, 
+         0.5f, 0.5f, 0.5f, 1)
       , Offset(0)
    {
       m_framebufferDesc = std::numeric_limits<uint32_t>::max();
@@ -62,7 +66,7 @@ namespace Graphics
          glm::mat4 toShadowSpaceMatrix(1);
          toShadowSpaceMatrix *= ShadowViewMatrices[i];
          toShadowSpaceMatrix *= ShadowProjectionMatrices[i];
-         toShadowSpaceMatrix *= ShadowBiasMatrix;
+         //toShadowSpaceMatrix *= ShadowBiasMatrix;
          shadowMatrices.push_back(toShadowSpaceMatrix);
       }
 

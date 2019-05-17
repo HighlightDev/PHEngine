@@ -12,6 +12,14 @@ namespace Graphics
 
 		struct TexParams
 		{
+      private:
+
+         size_t UniqueIndex;
+
+         static size_t unique_index;
+
+      public:
+
 			int32_t TexBufferWidth;
 			int32_t TexBufferHeight;
 			int32_t TexTarget;
@@ -33,7 +41,8 @@ namespace Graphics
 				int32_t texPixelInternalFormat = GL_RGB,
 				int32_t texPixelFormat = GL_RGB,
 				int32_t texPixelType = GL_UNSIGNED_BYTE,
-				int32_t texWrapMode = GL_REPEAT);
+				int32_t texWrapMode = GL_REPEAT,
+            bool bUnique_resource = false);
 
 			TexParams();
 
@@ -41,7 +50,8 @@ namespace Graphics
 
          bool operator==(const TexParams& other) const {
             
-            return this->TexBufferWidth == other.TexBufferWidth
+            return this->UniqueIndex == other.UniqueIndex
+               && this->TexBufferWidth == other.TexBufferWidth
                && this->TexBufferHeight == other.TexBufferHeight
                && this->TexTarget == other.TexTarget
                && this->TexMagFilter == other.TexMagFilter

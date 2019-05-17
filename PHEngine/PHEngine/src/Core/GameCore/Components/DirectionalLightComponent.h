@@ -40,6 +40,8 @@ namespace Game
 
       virtual void UpdateRelativeMatrix(glm::mat4& parentRelativeMatrix) override;
 
+      virtual void Tick(float deltaTime) override;
+
    protected:
 
       virtual void ProcessEvent(const EventBase::EventData_t& data) override;

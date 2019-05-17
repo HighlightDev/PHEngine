@@ -192,7 +192,7 @@ namespace Game
    void Scene::AddTestActors()
    {
       const float aspectRatio = 16.0f / 9.0f;
-      ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 500);
+      ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 1000);
 
       // DirectionalLight
       {
@@ -210,20 +210,20 @@ namespace Game
       const auto& folderManager = Common::FolderManager::GetInstance();
       // HOUSE
       {
-         StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(10, 10, 10), glm::vec3(), glm::vec3(1), folderManager->GetShadersPath() + "testVS.glsl",
+         StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(0), glm::vec3(), glm::vec3(5), folderManager->GetShadersPath() + "testVS.glsl",
             folderManager->GetShadersPath() + "testFS.glsl", folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png", folderManager->GetNormalMapPath() + "city_house_2_Nor.png",
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
-         Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+         Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
          AllActors.push_back(houseActor);
       }
 
       // SKELETAL MESH
       {
-         SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(), glm::vec3(270, 0, 0), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
+         SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
             folderManager->GetShadersPath() + "skeletalMeshFS.glsl", folderManager->GetAlbedoTexturePath() + "diffuse.png", folderManager->GetNormalMapPath() + "city_house_2_Nor.png",
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
-         Actor* skeletActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+         Actor* skeletActor = new Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkeletalMeshComponent>(mData, skeletActor);
 
          InputComponentData inputComponentData;
@@ -243,7 +243,7 @@ namespace Game
 
       // SKYBOX
       {
-         float SKYBOX_SIZE = 50.0f;
+         float SKYBOX_SIZE = 550.0f;
 
          StringStreamWrapper::ToString(
             folderManager->GetCubemapTexturePath(), "Day/", "right.png", ",",
