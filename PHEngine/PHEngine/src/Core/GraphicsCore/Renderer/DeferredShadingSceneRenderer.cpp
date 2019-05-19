@@ -137,9 +137,9 @@ namespace Graphics
 
             if (nonSkeletalMeshPrimitives.size() > 0)
             {
+               m_deferredBaseShaderNonSkeletal->ExecuteShader();
                for (auto& proxy : nonSkeletalMeshPrimitives)
                {
-                  m_deferredBaseShaderNonSkeletal->ExecuteShader();
                   const glm::mat4& worldMatrix = proxy->GetMatrix();
                   m_deferredBaseShaderNonSkeletal->SetTransformMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
                   proxy->GetAlbedo()->BindTexture(0);
@@ -148,6 +148,7 @@ namespace Graphics
                   m_deferredBaseShaderNonSkeletal->SetNormalTextureSlot(1);
                   proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
                }
+               m_deferredBaseShaderNonSkeletal->StopShader();
             }
 
          m_gbuffer->UnbindDeferredGBuffer();
@@ -157,11 +158,7 @@ namespace Graphics
       void DeferredShadingSceneRenderer::DeferredLightPass_RenderThread(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
          {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(0, 0, 0, 0);
-
             // TODO: Make some check if light source (point or spot light) is too far from current view position
-
             m_deferredLightShader->ExecuteShader();
 
             // SHADOWS
@@ -231,7 +228,7 @@ namespace Graphics
                drawForwardShadedPrimitives.push_back(proxy.get());
          }
 
-         const bool bIsForwardShadedPrimitives = false; drawForwardShadedPrimitives.size() > 0;
+         const bool bIsForwardShadedPrimitives = drawForwardShadedPrimitives.size() > 0;
 
          std::vector<PrimitiveSceneProxy*> skeletalPrimitives, nonSkeletalPrimitives;
          for (auto& proxy : drawDeferredShadedPrimitives)

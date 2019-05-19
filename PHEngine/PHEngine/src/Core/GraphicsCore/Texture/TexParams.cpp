@@ -33,7 +33,7 @@ namespace Graphics
 		}
 
 		TexParams::TexParams()
-			: TexParams(false, 0, 0)
+			: TexParams(0, 0)
 		{
 		}
 

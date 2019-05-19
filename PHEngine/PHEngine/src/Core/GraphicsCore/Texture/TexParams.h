@@ -12,13 +12,6 @@ namespace Graphics
 
 		struct TexParams
 		{
-      private:
-
-         size_t UniqueIndex;
-
-         static size_t unique_index;
-
-      public:
 
 			int32_t TexBufferWidth;
 			int32_t TexBufferHeight;
@@ -48,6 +41,16 @@ namespace Graphics
 
 			~TexParams();
 
+      private:
+
+         friend struct std::hash<TexParams>;
+
+         static size_t unique_index;
+
+         size_t UniqueIndex;
+
+      public:
+
          bool operator==(const TexParams& other) const {
             
             return this->UniqueIndex == other.UniqueIndex
@@ -75,7 +78,8 @@ namespace std
    {
       std::size_t operator()(const TexParams& k) const
       {
-         return hash<int32_t>()(k.TexBufferWidth)
+         return hash<int32_t>()(k.UniqueIndex)
+         ^  hash<int32_t>()(k.TexBufferWidth)
          ^ hash<int32_t>()(k.TexBufferHeight)
          ^ hash<int32_t>()(k.TexTarget)
          ^ hash<int32_t>()(k.TexMagFilter)

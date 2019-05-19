@@ -54,6 +54,8 @@ public:
    void UnbindDeferredGBuffer() {
 
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      glClearColor(0, 0, 0, 0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       uint32_t attachment = GL_COLOR_ATTACHMENT0;
       glDrawBuffers(1, &attachment);
    }

@@ -102,7 +102,7 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 		    litFactor = 1.0 - CalcShadowFactor(DirLightShadowMaps[dirLightIndex], shadowmapSize, shadowCoordinatesAndDepth);
 		}
 
-		resultDiffuseColor += DirLightDiffuseColor[dirLightIndex] * diffuseFactor;
+		resultDiffuseColor += DirLightDiffuseColor[dirLightIndex] * diffuseFactor * litFactor;
 	}
 	/* SPOT LIGHTS */
 
@@ -125,8 +125,8 @@ void main()
 	vec3 ambientColor = GetAmbientColor();
 	vec4 totalColor = vec4(albedoAndSpecular.rgb * (diffuseColor + ambientColor), 1);
 
-	FragColor = totalColor;
+	 FragColor = totalColor;
 	//FragColor = vec4(worldPos, 1.0);
 	//FragColor = vec4(worldNormal, 1.0);
-	//FragColor = albedoAndSpecular;
+	//FragColor = texture(gBuffer_AlbedoNSpecular, fs_in.tex_coords);
 }
