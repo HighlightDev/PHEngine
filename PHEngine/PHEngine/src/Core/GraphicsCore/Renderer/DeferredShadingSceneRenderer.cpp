@@ -52,6 +52,7 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
+         bool bFirstIteration = true;
          for (auto& lightProxy : lightSourcesProxy)
          {
             LightSceneProxy* proxyPtr = lightProxy.get();
@@ -59,7 +60,8 @@ namespace Graphics
             const ProjectedShadowInfo* const shadowInfo = lightProxy->GetShadowInfo();
             if (shadowInfo)
             {
-               shadowInfo->BindShadowFramebuffer();
+               shadowInfo->BindShadowFramebuffer(bFirstIteration);
+               bFirstIteration = false;
 
                if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
                {

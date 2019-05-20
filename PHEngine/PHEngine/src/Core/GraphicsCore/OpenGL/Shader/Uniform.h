@@ -18,6 +18,12 @@ namespace Graphics
       {
       private:
 
+#if DEBUG
+   
+         // info for debug 
+         std::string m_uniformName;
+
+#endif
          std::vector<int32_t> m_uniformLocations;
 
       public:

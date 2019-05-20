@@ -34,7 +34,7 @@ namespace Graphics
 
       std::shared_ptr<ITexture> GetAtlasResource() const;
 
-      void BindShadowFramebuffer() const;
+      void BindShadowFramebuffer(bool clearDepthBuffer) const;
 
       std::vector<glm::mat4> GetShadowMatrix() const;
 

@@ -43,7 +43,7 @@ namespace Graphics
          {
             if (calcSquare((cit->second)) <= calcSquare(size))
             {
-               Reservations.insert(cit, std::make_pair(cit->first, size));
+               Reservations.insert(cit, std::make_pair(requestId, size));
                bInserted = true;
                break;
             }
@@ -96,7 +96,7 @@ namespace Graphics
             if (relevantChunkIt != emptyChunks.end())
             {
                TextureAtlasCell newCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, relevantChunkIt->X, relevantChunkIt->Y, it->second.x, it->second.y);
-               cells.emplace(std::make_pair(it->first, newCell));
+               cells.insert(std::make_pair(it->first, newCell));
                SplitChunk(emptyChunks, relevantChunkIt, newCell);
 
                it = Reservations.erase(it);
@@ -209,7 +209,7 @@ namespace Graphics
 
    std::shared_ptr<TextureAtlasCellResource> LazyTextureAtlasObtainer::GetTextureAtlasCellResource() const
    {
-      return TextureAtlasFactory::GetInstance()->GetTextureAtlasCellByRequestId(m_requestId);
+      return TextureAtlasFactory::GetInstance()->GetTextureAtlasCellByRequestId(MyRequestId);
    }
 
 }

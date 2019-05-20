@@ -205,6 +205,16 @@ namespace Game
          Actor* dirLightActor = new Actor(new SceneComponent());
          CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData, dirLightActor);
          AllActors.push_back(dirLightActor);
+
+         auto directionalLightTextureAtlasRequest1 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1024, 1024));
+         ProjectedShadowInfo* dirLightInfo1 = new ProjectedShadowInfo(directionalLightTextureAtlasRequest1);
+
+         DirectionalLightComponentData mData1(glm::vec3(0), glm::vec3(0), glm::vec3(1),
+            glm::vec3(-1, 0, 0),
+            glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), dirLightInfo1);
+         Actor* dirLightActor1 = new Actor(new SceneComponent());
+         CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData1, dirLightActor1);
+         AllActors.push_back(dirLightActor1);
       }
 
       const auto& folderManager = Common::FolderManager::GetInstance();

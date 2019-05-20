@@ -8,8 +8,10 @@
 using namespace Graphics::OpenGL;
 using namespace Graphics::Proxy;
 
-#define DIR_LIGHT_COUNT 1
+#define DIR_LIGHT_COUNT 2
 #define POINT_LIGHT_COUNT 1
+#define SHADOWMAP_BIAS 0.005f
+#define PCF_SAMPLES 2
 
 namespace Game
 {

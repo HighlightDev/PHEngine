@@ -46,6 +46,8 @@ namespace Game
       {
          Predefine(FragmentShader, "DIR_LIGHT_COUNT", DIR_LIGHT_COUNT);
          Predefine(FragmentShader, "POINT_LIGHT_COUNT", POINT_LIGHT_COUNT);
+         Predefine(FragmentShader, "SHADOWMAP_BIAS", SHADOWMAP_BIAS);
+         Predefine(FragmentShader, "PCF_SAMPLES", PCF_SAMPLES);
       }
 
       void DeferredLightShader::SetGBufferAlbedoNSpecular(int32_t slot)

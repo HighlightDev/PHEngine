@@ -43,17 +43,20 @@ namespace Graphics
       glDeleteFramebuffers(1, &m_framebufferDesc);
    }
 
-   void ProjectedShadowInfo::BindShadowFramebuffer() const
+   void ProjectedShadowInfo::BindShadowFramebuffer(bool clearDepthBuffer) const
    {
       if (m_framebufferDesc == std::numeric_limits<uint32_t>::max()) // not allocated framebuffer
       {
          AllocateFramebuffer();
       }
 
-      glm::ivec2 rezolution = m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasResource()->GetTextureRezolution();
-      glViewport(0, 0, rezolution.x, rezolution.y);
+      auto atlas_cell = m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasCell();
+      glViewport(atlas_cell.X, atlas_cell.Y, atlas_cell.Width, atlas_cell.Height);
       glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferDesc);
-      glClear(GL_DEPTH_BUFFER_BIT);
+      if (clearDepthBuffer)
+      {
+         glClear(GL_DEPTH_BUFFER_BIT);
+      }
       glDrawBuffer(GL_NONE);
    }
 
@@ -64,9 +67,10 @@ namespace Graphics
       for (size_t i = 0; i < ShadowViewMatrices.size(); i++)
       {
          glm::mat4 toShadowSpaceMatrix(1);
-         toShadowSpaceMatrix *= ShadowViewMatrices[i];
+         
+         toShadowSpaceMatrix *= ShadowBiasMatrix;
          toShadowSpaceMatrix *= ShadowProjectionMatrices[i];
-         //toShadowSpaceMatrix *= ShadowBiasMatrix;
+         toShadowSpaceMatrix *= ShadowViewMatrices[i];
          shadowMatrices.push_back(toShadowSpaceMatrix);
       }
 

@@ -3,6 +3,7 @@
 
 #include <gl/glew.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 using namespace EngineUtility;
 
@@ -15,6 +16,10 @@ namespace Graphics
       UniformArray::UniformArray(int32_t programDescriptor, size_t uniformsCount, std::string&& uniformName)
       {
          std::string uniformNamePart = uniformName;
+
+#if DEBUG
+         m_uniformName = uniformName;
+#endif
 
          for (size_t i = 0; i < uniformsCount; i++)
          {
@@ -30,6 +35,14 @@ namespace Graphics
 
       void UniformArray::LoadUniform(size_t uniformIndex, bool arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -39,6 +52,14 @@ namespace Graphics
 
       void UniformArray::LoadUniform(size_t uniformIndex, float arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -47,6 +68,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, int32_t arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -55,6 +84,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, const glm::vec2& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -63,6 +100,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, glm::vec2&& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -71,6 +116,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, const glm::vec3& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -79,6 +132,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, glm::vec3&& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -87,6 +148,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, const glm::vec4& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -95,6 +164,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, glm::vec4&& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -103,6 +180,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, const glm::mat2& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -111,6 +196,14 @@ namespace Graphics
       }
       void UniformArray::LoadUniform(size_t uniformIndex, const glm::mat3& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
@@ -120,6 +213,14 @@ namespace Graphics
 
       void UniformArray::LoadUniform(size_t uniformIndex, const glm::mat4& arg)
       {
+#if DEBUG
+         if (uniformIndex >= m_uniformLocations.size())
+         {
+            std::cout << "Out of uniform array bounds. Uniform name is : " << m_uniformName << std::endl;
+            return;
+         }
+#endif
+
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
          if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
