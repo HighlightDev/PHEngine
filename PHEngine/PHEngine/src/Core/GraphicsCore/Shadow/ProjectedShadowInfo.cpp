@@ -5,6 +5,8 @@ namespace Graphics
 
    ProjectedShadowInfo::ProjectedShadowInfo(const LazyTextureAtlasObtainer& shadowAtlasCellResource)
       : m_shadowAtlasCellResource(shadowAtlasCellResource)
+      , m_framebufferDesc(std::numeric_limits<uint32_t>::max())
+      , m_shadowFramebuffer(nullptr)
       , ShadowBiasMatrix(
          0.5f, 0, 0, 0,
          0, 0.5f, 0, 0,
@@ -12,14 +14,8 @@ namespace Graphics
          0.5f, 0.5f, 0.5f, 1)
       , Offset(0)
    {
-      m_framebufferDesc = std::numeric_limits<uint32_t>::max();
       ShadowProjectionMatrices.push_back(glm::mat4(1));
       ShadowViewMatrices.push_back(glm::mat4(1));
-      auto resourceObtainer = m_shadowAtlasCellResource.GetTextureAtlasCellResource();
-      if (resourceObtainer)
-      {
-         AllocateFramebuffer();
-      }
    }
 
    ProjectedShadowInfo::~ProjectedShadowInfo()
@@ -29,34 +25,28 @@ namespace Graphics
 
    void ProjectedShadowInfo::AllocateFramebuffer() const
    {
-      glGenFramebuffers(1, &m_framebufferDesc);
-
-      glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferDesc);
-      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasResource()->GetTextureDescriptor(), 0);
+      m_shadowFramebuffer = std::make_shared<ShadowFramebuffer>(m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasResource());
+      m_shadowFramebuffer->BindFramebuffer(1);
       glDrawBuffer(GL_NONE);
       glReadBuffer(GL_NONE);
-      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      m_shadowFramebuffer->UnbindFramebuffer();
    }
 
    void ProjectedShadowInfo::DeallocateFramebuffer() const
-   {
-      glDeleteFramebuffers(1, &m_framebufferDesc);
+   { 
+      m_shadowFramebuffer->CleanUp();
    }
 
    void ProjectedShadowInfo::BindShadowFramebuffer(bool clearDepthBuffer) const
    {
-      if (m_framebufferDesc == std::numeric_limits<uint32_t>::max()) // not allocated framebuffer
+      if (!m_shadowFramebuffer)
       {
          AllocateFramebuffer();
       }
 
       auto atlas_cell = m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasCell();
-      glViewport(atlas_cell.X, atlas_cell.Y, atlas_cell.Width, atlas_cell.Height);
-      glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferDesc);
-      if (clearDepthBuffer)
-      {
-         glClear(GL_DEPTH_BUFFER_BIT);
-      }
+      const GLbitfield clearDepthFlag = clearDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0;
+      m_shadowFramebuffer->RenderToFBO(1, atlas_cell.X, atlas_cell.Y, atlas_cell.Width, atlas_cell.Height, clearDepthFlag);
       glDrawBuffer(GL_NONE);
    }
 
@@ -95,10 +85,18 @@ namespace Graphics
       auto resourceObtainer = m_shadowAtlasCellResource.GetTextureAtlasCellResource();
       if (resourceObtainer)
       {
-         float x_start = (float)resourceObtainer->GetAtlasCell().X / (float)resourceObtainer->GetAtlasCell().TotalShadowMapWidth;
-         float y_start = (float)resourceObtainer->GetAtlasCell().Y / (float)resourceObtainer->GetAtlasCell().TotalShadowMapHeight;
-         float x_offset = (float)resourceObtainer->GetAtlasCell().Width / (float)resourceObtainer->GetAtlasCell().TotalShadowMapWidth;
-         float y_offset = (float)resourceObtainer->GetAtlasCell().Height / (float)resourceObtainer->GetAtlasCell().TotalShadowMapHeight;
+         float x = static_cast<float>(resourceObtainer->GetAtlasCell().X);
+         float y = static_cast<float>(resourceObtainer->GetAtlasCell().Y);
+         float width = static_cast<float>(resourceObtainer->GetAtlasCell().Width);
+         float height = static_cast<float>(resourceObtainer->GetAtlasCell().Height);
+
+         float invShadowMapWidth = 1.0f / static_cast<float>(resourceObtainer->GetAtlasCell().TotalShadowMapWidth);
+         float invShadowMapHeight = 1.0f / static_cast<float>(resourceObtainer->GetAtlasCell().TotalShadowMapHeight);
+
+         float x_start = x * invShadowMapWidth;
+         float y_start = y * invShadowMapHeight;
+         float x_offset = width * invShadowMapWidth;
+         float y_offset = height * invShadowMapHeight;
 
          resultOffset = glm::vec4(x_start, y_start, x_offset, y_offset);
       }

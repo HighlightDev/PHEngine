@@ -354,6 +354,7 @@
     <None Include="res\shaders\waterVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\FramebufferImplementation\ShadowFramebuffer.h" />
     <ClInclude Include="src\Core\DebugCore\TextureRenderer.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\DepthShader.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\SkeletalMeshComponentData.h" />
@@ -723,6 +724,7 @@
     <ClInclude Include="src\Core\GameCore\ThirdPersonCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GameCore\FramebufferImplementation\ShadowFramebuffer.cpp" />
     <ClCompile Include="src\Core\DebugCore\TextureRenderer.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DepthShader.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\SkeletalMeshShader.cpp" />

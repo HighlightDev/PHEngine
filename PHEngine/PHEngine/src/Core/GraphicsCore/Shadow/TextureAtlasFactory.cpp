@@ -188,19 +188,29 @@ namespace Graphics
 
    void TextureAtlasFactory::SplitChunk(std::vector<TextureAtlasCell>& emptyChunks, std::vector<TextureAtlasCell>::const_iterator splittingEmptyChunkIt, TextureAtlasCell& splitCenterCell)
    {
-      TextureAtlasCell leftBottomCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      TextureAtlasCell rightBottomCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
-      TextureAtlasCell rightTopCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
+      TextureAtlasCell leftTopCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X, splittingEmptyChunkIt->Y + splitCenterCell.Height, splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
+      TextureAtlasCell rightBottomCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y, splittingEmptyChunkIt->Width - splitCenterCell.Width, splitCenterCell.Height);
+      TextureAtlasCell rightTopCell = TextureAtlasCell(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, splittingEmptyChunkIt->X + splitCenterCell.Width, splittingEmptyChunkIt->Y + splitCenterCell.Height, splittingEmptyChunkIt->Width - splitCenterCell.Width, splittingEmptyChunkIt->Height - splitCenterCell.Height);
 
       // Remove splitting empty chunk because it was split
       emptyChunks.erase(splittingEmptyChunkIt);
 
       auto sortFunctor = [](const TextureAtlasCell& atlasCell1, const TextureAtlasCell& atlasCell2) -> bool
       {
-         return ((atlasCell1.Height * atlasCell1.Width) > (atlasCell2.Height * atlasCell2.Width));
+         int32_t atlas1Square = atlasCell1.Height * atlasCell1.Width;
+         int32_t atlas2Square = atlasCell2.Height * atlasCell2.Width;
+         if (atlas1Square > atlas2Square)
+         {
+            return true;
+         }
+         else if (atlas1Square == atlas2Square)
+         {
+            return (atlasCell1.Height > atlasCell2.Height);
+         }
+         else return false;
       };
 
-      emptyChunks.emplace_back(leftBottomCell);
+      emptyChunks.emplace_back(leftTopCell);
       emptyChunks.emplace_back(rightTopCell);
       emptyChunks.emplace_back(rightBottomCell);
 

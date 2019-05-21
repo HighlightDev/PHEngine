@@ -53,7 +53,8 @@ namespace Graphics
       void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
          bool bFirstIteration = true;
-         for (auto& lightProxy : lightSourcesProxy)
+         // TODO: need to sort light proxies by projected shadow info with mutual texture atlas (this causes error when different texture atlases are used and depth is not cleared)
+         for (auto& lightProxy : lightSourcesProxy) 
          {
             LightSceneProxy* proxyPtr = lightProxy.get();
 

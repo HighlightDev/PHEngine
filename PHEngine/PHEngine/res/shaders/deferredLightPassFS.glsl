@@ -1,7 +1,7 @@
 #version 400
 
-#define DIR_LIGHT_COUNT 2
-#define POINT_LIGHT_COUNT 1
+#define MAX_DIR_LIGHT_COUNT 5
+#define MAX_POINT_LIGHT_COUNT 1
 #define SHADOWMAP_BIAS 0.005
 #define PCF_SAMPLES 2
 layout (location = 0) out vec4 FragColor;
@@ -9,20 +9,22 @@ layout (location = 0) out vec4 FragColor;
 uniform sampler2D gBuffer_Position;
 uniform sampler2D gBuffer_Normal;
 uniform sampler2D gBuffer_AlbedoNSpecular;
-uniform sampler2D DirLightShadowMaps[DIR_LIGHT_COUNT];
+uniform sampler2D DirLightShadowMaps[MAX_DIR_LIGHT_COUNT];
 
-uniform vec3 DirLightAmbientColor[DIR_LIGHT_COUNT];
-uniform vec3 DirLightDiffuseColor[DIR_LIGHT_COUNT];
-uniform vec3 DirLightSpecularColor[DIR_LIGHT_COUNT];
-uniform vec3 DirLightDirection[DIR_LIGHT_COUNT];
-uniform mat4 DirLightShadowMatrices[DIR_LIGHT_COUNT];
-uniform vec4 DirLightShadowAtlasOffset[DIR_LIGHT_COUNT];
+uniform vec3 DirLightAmbientColor[MAX_DIR_LIGHT_COUNT];
+uniform vec3 DirLightDiffuseColor[MAX_DIR_LIGHT_COUNT];
+uniform vec3 DirLightSpecularColor[MAX_DIR_LIGHT_COUNT];
+uniform vec3 DirLightDirection[MAX_DIR_LIGHT_COUNT];
+uniform mat4 DirLightShadowMatrices[MAX_DIR_LIGHT_COUNT];
+uniform vec4 DirLightShadowAtlasOffset[MAX_DIR_LIGHT_COUNT];
+uniform uint DirLightCount;
 uniform int DirLightShadowMapCount;
 
-uniform vec3 PointLightDiffuseColor[POINT_LIGHT_COUNT];
-uniform vec3 PointLightSpecularColor[POINT_LIGHT_COUNT];
-uniform vec3 PointLightPosition[POINT_LIGHT_COUNT];
-uniform vec3 PointLightAttenuation[POINT_LIGHT_COUNT];
+uniform uint PointLightCount;
+uniform vec3 PointLightDiffuseColor[MAX_POINT_LIGHT_COUNT];
+uniform vec3 PointLightSpecularColor[MAX_POINT_LIGHT_COUNT];
+uniform vec3 PointLightPosition[MAX_POINT_LIGHT_COUNT];
+uniform vec3 PointLightAttenuation[MAX_POINT_LIGHT_COUNT];
 
 in VS_OUT
 {
@@ -48,7 +50,9 @@ float CalcLitFactor(in sampler2D shadowmap, in vec2 shadowmapSize, in vec3 shado
     {
        for (int y = -PCF_SAMPLES; y <= PCF_SAMPLES; y++)
        {
-            float pcfDepth = texture(shadowmap, shadowTexCoord.xy + vec2(x, y) * texelSize).r;
+			vec2 offset = vec2(float(x) * texelSize.x, float(y) * texelSize.y);
+
+            float pcfDepth = texture(shadowmap, shadowTexCoord.xy + offset).r;
             resultShadow += actualDepth > pcfDepth ? 1.0 : 0.0;
             countSamples++;
        }
@@ -65,7 +69,7 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 	vec3 resultDiffuseColor = vec3(0);
 
 	/* POINT LIGHTS */
-	for (uint pointLightIndex = 0; pointLightIndex < POINT_LIGHT_COUNT; ++pointLightIndex)
+	for (uint pointLightIndex = 0; pointLightIndex < PointLightCount; ++pointLightIndex)
 	{
 		vec3 nToLightVec = normalize(PointLightPosition[pointLightIndex] - worldPos);
 		float nDotP = dot(nToLightVec, nWorldNormal);
@@ -74,7 +78,7 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 	}
 
 	/* DIRECTIONAL LIGHTS */
-	for (uint dirLightIndex = 0; dirLightIndex < DIR_LIGHT_COUNT; ++dirLightIndex)
+	for (uint dirLightIndex = 0; dirLightIndex < DirLightCount; ++dirLightIndex)
 	{
 		vec3 direction = -normalize(DirLightDirection[dirLightIndex]);
 		float nDotD = dot(direction, nWorldNormal);
@@ -95,13 +99,13 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 			vec3 shadowCoordinatesAndDepth = vec3(shadowCoordinates, shadowFragCoords.z);
 
 		 	vec2 shadowmapAtlasSize = textureSize(DirLightShadowMaps[dirLightIndex], 0);
-			vec2 shadowmapSize = shadowmapAtlasSize * atlasOffset.zw;
-		    litFactor = CalcLitFactor(DirLightShadowMaps[dirLightIndex], shadowmapSize, shadowCoordinatesAndDepth);
+		    litFactor = CalcLitFactor(DirLightShadowMaps[dirLightIndex], shadowmapAtlasSize, shadowCoordinatesAndDepth);
 		}
 
 		resultDiffuseColor += DirLightDiffuseColor[dirLightIndex] * diffuseFactor * litFactor;
 	}
 	/* SPOT LIGHTS */
+	// TODO: SPOT LIGHTS
 
 	return resultDiffuseColor;
 }

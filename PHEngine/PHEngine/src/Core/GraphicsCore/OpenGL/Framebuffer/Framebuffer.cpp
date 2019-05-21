@@ -90,11 +90,14 @@ namespace Graphics
       SetRenderbuffers();
    }
 
-   void Framebuffer::BindFramebufferImpl(size_t framebufferIndex, size_t viewportWidth, size_t viewportHeight) const
+   void Framebuffer::BindFramebufferImpl(size_t framebufferIndex, size_t viewportX, size_t viewportY, size_t viewportWidth, size_t viewportHeight, GLbitfield clearFlag) const
    {
       BindFramebuffer(framebufferIndex);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-      glViewport(0, 0, viewportWidth, viewportHeight);
+      if (0 != clearFlag)
+      {
+         glClear(clearFlag);
+      }
+      glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
    }
 
    std::string Framebuffer::GetFramebufferLog() const
@@ -118,14 +121,14 @@ namespace Graphics
       }
    }
 
-   void Framebuffer::RenderToFBO(size_t framebufferIndex, size_t viewportWidth, size_t viewportHeight) const
+   void Framebuffer::RenderToFBO(size_t framebufferIndex, size_t viewportX, size_t viewportY, size_t viewportWidth, size_t viewportHeight, GLbitfield clearFlag) const
    {
-      BindFramebufferImpl(framebufferIndex, viewportWidth, viewportHeight);
+      BindFramebufferImpl(framebufferIndex, viewportX, viewportY, viewportWidth, viewportHeight, clearFlag);
    }
 
-   void Framebuffer::RenderToFBO(size_t framebufferIndex, const glm::ivec2& viewportRezolution) const
+   void Framebuffer::RenderToFBO(size_t framebufferIndex, const glm::ivec4& viewport, GLbitfield clearFlag) const
    {
-      BindFramebufferImpl(framebufferIndex, viewportRezolution.x, viewportRezolution.y);
+      BindFramebufferImpl(framebufferIndex, viewport.x, viewport.y, viewport.z, viewport.w, clearFlag);
    }
 
    void Framebuffer::CleanUp()

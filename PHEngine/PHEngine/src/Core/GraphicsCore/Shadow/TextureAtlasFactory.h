@@ -86,10 +86,6 @@ namespace Graphics
 
       std::shared_ptr<ITexture> m_atlasTexture;
 
-      /* Flag is true when memory for shadowmap was already allocated,
-   to reuse space, you should first deallocate possessed memory space */
-      bool bInvalidated = false;
-
       void AllocateReservedMemory();
 
       void DeallocateMemory();
@@ -111,7 +107,7 @@ namespace Graphics
 
    public:
 
-      enum { SHADOW_MAP_SIZE = 1 << 13 };
+      enum { SHADOW_MAP_SIZE = 1 << 10 };
 
       TextureAtlasFactory();
 

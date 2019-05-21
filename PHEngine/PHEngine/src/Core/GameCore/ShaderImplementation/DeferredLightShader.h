@@ -8,8 +8,8 @@
 using namespace Graphics::OpenGL;
 using namespace Graphics::Proxy;
 
-#define DIR_LIGHT_COUNT 2
-#define POINT_LIGHT_COUNT 1
+#define MAX_DIR_LIGHT_COUNT 5
+#define MAX_POINT_LIGHT_COUNT 1
 #define SHADOWMAP_BIAS 0.005f
 #define PCF_SAMPLES 2
 
@@ -33,11 +33,13 @@ namespace Game
          UniformArray u_PointLightSpecularColor;
          UniformArray u_PointLightPosition;
          UniformArray u_PointLightAttenuation;
+         Uniform u_PointLightCount;
 
          UniformArray u_DirectionalLightShadowMaps;
          UniformArray u_DirectionalLightShadowMatrices;
          UniformArray u_DirectionalLightAtlasOffset;
          Uniform u_DirectionalLightShadowMapCount;
+         Uniform u_DirectionalLightCount;
 
          Uniform u_gBuffer_Position;
          Uniform u_gBuffer_Normal;

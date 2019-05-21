@@ -5,8 +5,10 @@
 
 #include "Core/GraphicsCore/Shadow/TextureAtlasFactory.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
+#include "Core/GameCore/FramebufferImplementation/ShadowFramebuffer.h"
 
 using namespace Graphics::Texture;
+using namespace Game::FramebufferImpl;
 
 namespace Graphics
 {
@@ -18,6 +20,8 @@ namespace Graphics
       LazyTextureAtlasObtainer m_shadowAtlasCellResource;
 
       mutable uint32_t m_framebufferDesc;
+
+      mutable std::shared_ptr<ShadowFramebuffer> m_shadowFramebuffer;
 
       void AllocateFramebuffer() const;
 

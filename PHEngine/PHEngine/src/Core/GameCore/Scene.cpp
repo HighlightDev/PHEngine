@@ -196,7 +196,8 @@ namespace Game
 
       // DirectionalLight
       {
-         auto directionalLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1024, 1024));
+         // 0
+         auto directionalLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
          ProjectedShadowInfo* dirLightInfo = new ProjectedShadowInfo(directionalLightTextureAtlasRequest);
 
          DirectionalLightComponentData mData(glm::vec3(0), glm::vec3(0), glm::vec3(1),
@@ -206,6 +207,7 @@ namespace Game
          CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData, dirLightActor);
          AllActors.push_back(dirLightActor);
 
+         // 1
          auto directionalLightTextureAtlasRequest1 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(1024, 1024));
          ProjectedShadowInfo* dirLightInfo1 = new ProjectedShadowInfo(directionalLightTextureAtlasRequest1);
 
@@ -215,6 +217,28 @@ namespace Game
          Actor* dirLightActor1 = new Actor(new SceneComponent());
          CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData1, dirLightActor1);
          AllActors.push_back(dirLightActor1);
+
+         //// 2
+         //auto directionalLightTextureAtlasRequest2 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
+         //ProjectedShadowInfo* dirLightInfo2 = new ProjectedShadowInfo(directionalLightTextureAtlasRequest2);
+
+         //DirectionalLightComponentData mData2(glm::vec3(0), glm::vec3(0), glm::vec3(1),
+         //   glm::vec3(0, 0, 1),
+         //   glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), dirLightInfo2);
+         //Actor* dirLightActor2 = new Actor(new SceneComponent());
+         //CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData2, dirLightActor2);
+         //AllActors.push_back(dirLightActor2);
+
+         //// 3
+         //auto directionalLightTextureAtlasRequest3 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
+         //ProjectedShadowInfo* dirLightInfo3 = new ProjectedShadowInfo(directionalLightTextureAtlasRequest3);
+
+         //DirectionalLightComponentData mData3(glm::vec3(0), glm::vec3(0), glm::vec3(1),
+         //   glm::vec3(0, 0, -1),
+         //   glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), dirLightInfo3);
+         //Actor* dirLightActor3 = new Actor(new SceneComponent());
+         //CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData3, dirLightActor3);
+         //AllActors.push_back(dirLightActor3);
       }
 
       const auto& folderManager = Common::FolderManager::GetInstance();
