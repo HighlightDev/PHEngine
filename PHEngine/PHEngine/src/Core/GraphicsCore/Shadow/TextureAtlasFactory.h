@@ -53,13 +53,13 @@ namespace Graphics
    {
    private:
 
-      TextureAtlasCell m_atlasCell;
+      std::vector<TextureAtlasCell> m_atlasCell;
 
       std::shared_ptr<ITexture> m_atlasResource;
 
    public:
 
-      TextureAtlasCellResource(const TextureAtlasCell& cell, const std::shared_ptr<ITexture>& resource)
+      TextureAtlasCellResource(const std::vector<TextureAtlasCell>& cell, const std::shared_ptr<ITexture>& resource)
          : m_atlasCell(cell)
          , m_atlasResource(resource)
       {
@@ -67,7 +67,7 @@ namespace Graphics
 
       inline TextureAtlasCell GetAtlasCell() const
       {
-         return m_atlasCell;
+         return m_atlasCell[0];
       }
 
       inline std::shared_ptr<ITexture> GetAtlasResource() const
@@ -82,7 +82,7 @@ namespace Graphics
 
       int32_t shadow_map_size;
 
-      std::map<size_t, TextureAtlasCell> Cells;
+      std::map<size_t, std::vector<TextureAtlasCell>> Cells;
 
       std::shared_ptr<ITexture> m_atlasTexture;
 
@@ -103,7 +103,7 @@ namespace Graphics
 
       std::vector<std::shared_ptr<TextureAtlas>> m_textureAtlases;
 
-      std::vector<std::pair<size_t, glm::ivec2>> Reservations;
+      std::vector<std::pair<size_t, std::vector<glm::ivec2>>> Reservations;
 
    public:
 
@@ -124,12 +124,15 @@ namespace Graphics
       void AllocateTextureAtlasSpace();
 
       LazyTextureAtlasObtainer AddTextureAtlasRequest(glm::ivec2 size);
+      LazyTextureAtlasObtainer AddTextureAtlasRequestCubemap(glm::ivec2 size);
 
    private:
 
       std::shared_ptr<TextureAtlasCellResource> GetTextureAtlasCellByRequestId(size_t requestId);
 
       void AddTextureAtlasReservation(size_t requestId, glm::ivec2 size);
+
+      void AddTextureAtlasCubemapReservation(size_t requestId, glm::ivec2 size);
 
       void SplitChunk(std::vector<TextureAtlasCell>& emptyChunks, std::vector<TextureAtlasCell>::const_iterator splittingEmptyChunkIt, TextureAtlasCell& splitCenterCell);
    };

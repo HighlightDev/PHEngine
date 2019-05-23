@@ -97,25 +97,25 @@ private:
       // Depth texture
       {
          TexParams depthParams(m_windowWidth, m_windowHeight, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, 0, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT, GL_REPEAT, true);
-         m_depthBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource(depthParams);
+         m_depthBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource<Texture2d>(depthParams);
       }
   
       // Position texture
       {
          TexParams positionParams(m_windowWidth, m_windowHeight, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, 0, GL_RGB16F, GL_RGB, GL_FLOAT, GL_REPEAT, true);
-         m_positionBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource(positionParams);
+         m_positionBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource<Texture2d>(positionParams);
       }
       
       // Normal texture
       {
          TexParams normalParams(m_windowWidth, m_windowHeight, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, 0, GL_RGB16F, GL_RGB, GL_FLOAT, GL_REPEAT, true);
-         m_normalBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource(normalParams);
+         m_normalBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource<Texture2d>(normalParams);
       }
 
       // Albedo + Specular component texture
       {
          TexParams aldbedoSpecParams(m_windowWidth, m_windowHeight, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, GL_REPEAT, true);
-         m_albedoWithSpecularBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource(aldbedoSpecParams);
+         m_albedoWithSpecularBuffer = RenderTargetPool::GetInstance()->GetOrAllocateResource<Texture2d>(aldbedoSpecParams);
       }
 
       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthBuffer->GetTextureDescriptor(), 0);

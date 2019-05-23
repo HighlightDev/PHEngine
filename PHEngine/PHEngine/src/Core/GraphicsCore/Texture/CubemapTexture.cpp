@@ -13,9 +13,39 @@ namespace Graphics
 			m_texDescriptor = CreateCubemapTexture(pathToTextures);
 		}
 
+      CubemapTexture::CubemapTexture(TexParams cubemapTexParams)
+         : m_texParams({ cubemapTexParams, cubemapTexParams, cubemapTexParams, cubemapTexParams, cubemapTexParams, cubemapTexParams })
+      {
+         m_texDescriptor = CreateEmptyCubemapTexture();
+      }
+
 		CubemapTexture::~CubemapTexture()
 		{
 		}
+
+      uint32_t CubemapTexture::CreateEmptyCubemapTexture()
+      {
+         uint32_t resultTextureDescriptor = -1;
+
+         glGenTextures(1, &resultTextureDescriptor);
+         glBindTexture(GL_TEXTURE_CUBE_MAP, resultTextureDescriptor);
+
+         for (size_t texIndex = 0; texIndex < m_texParams.size(); texIndex++)
+         {
+            TexParams texParam = m_texParams[texIndex];
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + texIndex, 0, texParam.TexPixelInternalFormat, texParam.TexBufferWidth, texParam.TexBufferHeight, 0, texParam.TexPixelFormat, texParam.TexPixelType, NULL);
+
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texParam.TexMagFilter);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texParam.TexMinFilter);
+         }
+
+         glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+         return resultTextureDescriptor;
+      }
 
 		uint32_t CubemapTexture::CreateCubemapTexture(std::vector<std::string>& pathToTextures)
 		{

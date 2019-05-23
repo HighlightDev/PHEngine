@@ -10,15 +10,13 @@ namespace Graphics
          : public LightRenderData
       {
 
-         glm::vec3 Position;
          glm::vec3 Attenuation;
 
          float RadianceSqrRadius;
 
-         PointLightRenderData(glm::vec3 position, glm::vec3 attenuation, float radianceSqrRadius,
+         PointLightRenderData(glm::vec3 attenuation, float radianceSqrRadius,
             glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, ProjectedShadowInfo* shadowInfo)
             : LightRenderData(ambient, diffuse, specular, shadowInfo)
-            , Position(position)
             , Attenuation(attenuation)
             , RadianceSqrRadius(radianceSqrRadius)
          {

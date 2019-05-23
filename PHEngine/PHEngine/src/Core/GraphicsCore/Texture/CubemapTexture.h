@@ -20,6 +20,8 @@ namespace Graphics
 
 			CubemapTexture(std::vector<std::string>& pathToTextures);
 
+         CubemapTexture(TexParams cubemapTexParams);
+
 			virtual ~CubemapTexture();
 
 			virtual void BindTexture(uint32_t textureSlot) override;
@@ -37,6 +39,8 @@ namespace Graphics
 		private:
 
 			uint32_t CreateCubemapTexture(std::vector<std::string>& pathToTextures);
+
+         uint32_t CreateEmptyCubemapTexture();
 		};
 
 	}

@@ -3,6 +3,7 @@
 #include <memory>
 #include "Core/GraphicsCore/Texture/TexParams.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
+#include "Core/GraphicsCore/Texture/Texture2d.h"
 
 using namespace Graphics::Texture;
 
@@ -15,9 +16,16 @@ namespace Resources
       RenderTargetAllocationPolicy();
       ~RenderTargetAllocationPolicy();
 
-      static std::shared_ptr<ITexture> AllocateMemory(TexParams& texParams);
+      template <typename TextureType>
+      static inline std::shared_ptr<ITexture> AllocateMemory(TexParams& texParams)
+      {
+         return std::make_shared<TextureType>(texParams);
+      }
 
-      static void DeallocateMemory(std::shared_ptr<ITexture> arg);
+      static inline void DeallocateMemory(std::shared_ptr<ITexture> arg)
+      {
+         arg->CleanUp();
+      }
    };
 
 }

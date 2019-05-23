@@ -7,7 +7,6 @@ namespace Graphics
 
       PointLightSceneProxy::PointLightSceneProxy(const PointLightComponent* component)
          : LightSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().Ambient, component->GetRenderData().Diffuse, component->GetRenderData().Specular, component->GetRenderData().ShadowInfo)
-         , m_position(component->GetRenderData().Position)
          , m_attenuation(component->GetRenderData().Attenuation)
          , m_radianceSqrRadius(component->GetRenderData().RadianceSqrRadius)
       {

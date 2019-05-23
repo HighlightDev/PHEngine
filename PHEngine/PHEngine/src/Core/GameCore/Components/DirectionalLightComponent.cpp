@@ -9,8 +9,8 @@ using namespace Graphics;
 namespace Game
 {
 
-   DirectionalLightComponent::DirectionalLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const DirectionalLightRenderData& renderData)
-      : LightComponent(translation, rotation, scale)
+   DirectionalLightComponent::DirectionalLightComponent(glm::vec3 rotation, const DirectionalLightRenderData& renderData)
+      : LightComponent(glm::vec3(0), rotation, glm::vec3(1))
       , m_renderData(renderData)
    {
       EventBase::GetInstance()->AddListener(this);

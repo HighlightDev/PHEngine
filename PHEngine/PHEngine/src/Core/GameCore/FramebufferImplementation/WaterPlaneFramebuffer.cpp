@@ -23,9 +23,9 @@ namespace Game
          TexParams reflectionTexParams(500, 500, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, 0, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, GL_REPEAT);
          TexParams refractionTexParams(reflectionTexParams);
          TexParams depthTexParams(500, 500, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, 0, GL_DEPTH24_STENCIL8, GL_DEPTH_COMPONENT, GL_FLOAT, GL_REPEAT);
-         ReflectionTexture = RenderTargetPool::GetInstance()->GetOrAllocateResource(reflectionTexParams);
-         RefractionTexture = RenderTargetPool::GetInstance()->GetOrAllocateResource(refractionTexParams);
-         DepthTexture = RenderTargetPool::GetInstance()->GetOrAllocateResource(depthTexParams);
+         ReflectionTexture = RenderTargetPool::GetInstance()->GetOrAllocateResource<Texture2d>(reflectionTexParams);
+         RefractionTexture = RenderTargetPool::GetInstance()->GetOrAllocateResource<Texture2d>(refractionTexParams);
+         DepthTexture = RenderTargetPool::GetInstance()->GetOrAllocateResource<Texture2d>(depthTexParams);
       }
 
       void WaterPlaneFramebuffer::SetFramebuffers()

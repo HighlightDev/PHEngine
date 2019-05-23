@@ -13,7 +13,6 @@ namespace Graphics
       class PointLightSceneProxy :
          public LightSceneProxy
       {
-         glm::vec3 m_position;
          glm::vec3 m_attenuation;
          float m_radianceSqrRadius;
 
@@ -21,7 +20,7 @@ namespace Graphics
          
          glm::vec3 GetPosition() const
          {
-            glm::vec3 result = m_relativeMatrix * glm::vec4(m_position, 1.0f);
+            glm::vec3 result = m_relativeMatrix * glm::vec4(0, 0, 0, 1.0f);
             return result;
          }
 

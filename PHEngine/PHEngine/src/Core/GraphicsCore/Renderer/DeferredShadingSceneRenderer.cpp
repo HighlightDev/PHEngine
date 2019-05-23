@@ -165,19 +165,31 @@ namespace Graphics
             m_deferredLightShader->ExecuteShader();
 
             // SHADOWS
-            size_t dirShadowMapSlot = 3, dirShadowMapIndex = 0, dirShadowMapCount = 0;
+            size_t dirShadowMapSlot = 3, lightSourceIndex = 0, dirShadowMapCount = 0;
             for (auto& lightProxy : lightSourcesProxy)
             {
                if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
                {
                   ProjectedShadowInfo* shadowInfo = lightProxy->GetShadowInfo();
-                  shadowInfo->GetAtlasResource()->BindTexture(dirShadowMapSlot);
-                  m_deferredLightShader->SetDirectionalLightShadowMapSlot(dirShadowMapIndex, dirShadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
-                  m_deferredLightShader->SetDirectionalLightShadowMatrix(dirShadowMapIndex, shadowInfo->GetShadowMatrix()[0]);
-                  dirShadowMapCount++;
+                  if (shadowInfo)
+                  {
+                     shadowInfo->GetAtlasResource()->BindTexture(dirShadowMapSlot);
+                     m_deferredLightShader->SetDirectionalLightShadowMapSlot(lightSourceIndex, dirShadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
+                     m_deferredLightShader->SetDirectionalLightShadowMatrix(lightSourceIndex, shadowInfo->GetShadowMatrix()[0]);
+                     dirShadowMapCount++;
+                     dirShadowMapSlot++;
+                  }
                }
-               dirShadowMapIndex++;
-               dirShadowMapSlot++;
+               else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
+               {
+                  ProjectedShadowInfo* shadowInfo = lightProxy->GetShadowInfo();
+                  if (shadowInfo)
+                  {
+
+                  }
+               }
+
+               lightSourceIndex++;
             }
             m_deferredLightShader->SetDirectionalLightShadowMapCount(dirShadowMapCount);
             // SHADOWS

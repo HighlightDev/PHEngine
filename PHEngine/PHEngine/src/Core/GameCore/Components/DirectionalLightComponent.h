@@ -25,7 +25,7 @@ namespace Game
 
    public:
 
-      DirectionalLightComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, const DirectionalLightRenderData& renderData);
+      DirectionalLightComponent(glm::vec3 rotation, const DirectionalLightRenderData& renderData);
 
       virtual ~DirectionalLightComponent();
 
