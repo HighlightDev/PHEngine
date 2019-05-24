@@ -360,6 +360,10 @@
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\SkeletalMeshComponentData.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\SkeletalMeshShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\SkeletalMeshSceneProxy.h" />
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\LazyTextureAtlasObtainer.h" />
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlas.h" />
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasCell.h" />
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasHandler.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\AnimationAllocationPolicy.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Pool\AnimationPool.h" />
     <ClInclude Include="src\Core\GameCore\Components\SkeletalMeshComponent.h" />
@@ -385,7 +389,7 @@
     <ClInclude Include="src\Core\GraphicsCore\RenderData\WaterPlaneRenderData.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.h" />
     <ClInclude Include="src\Core\GameCore\PlayerController.h" />
-    <ClInclude Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.h" />
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasFactory.h" />
     <ClInclude Include="src\Core\GameCore\Components\PointLightComponent.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\DirectionalLightComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\LightComponentData.h" />
@@ -729,6 +733,8 @@
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\DepthShader.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\SkeletalMeshShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\SkeletalMeshSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\TextureAtlas\LazyTextureAtlasObtainer.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlas.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\AnimationAllocationPolicy.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Pool\AnimationPool.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\SkeletalMeshComponent.cpp" />
@@ -745,7 +751,7 @@
     <ClCompile Include="src\Core\InterThreadCommunicationMgr.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedShadowInfo.cpp" />
     <ClCompile Include="src\Core\GameCore\PlayerController.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasFactory.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\PointLightComponent.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\DirectionalLightSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\LightSceneProxy.cpp" />

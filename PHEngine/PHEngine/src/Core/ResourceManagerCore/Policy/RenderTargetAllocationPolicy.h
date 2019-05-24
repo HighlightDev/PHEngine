@@ -16,7 +16,7 @@ namespace Resources
       RenderTargetAllocationPolicy();
       ~RenderTargetAllocationPolicy();
 
-      template <typename TextureType>
+      template <typename TextureType = Texture2d>
       static inline std::shared_ptr<ITexture> AllocateMemory(TexParams& texParams)
       {
          return std::make_shared<TextureType>(texParams);

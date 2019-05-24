@@ -1,3 +1,60 @@
-﻿  Scene.cpp
-EngineMath.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
-  PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib
+﻿  ProjectedShadowInfo.cpp
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(47): error C2039: 'GetAtlasCell': is not a member of 'Graphics::TextureAtlasHandler'
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(13): note: see declaration of 'Graphics::TextureAtlasHandler'
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(49): error C3536: 'atlas_cell': cannot be used before it is initialized
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(49): error C2661: 'Graphics::Framebuffer::RenderToFBO': no overloaded function takes 2 arguments
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(88): error C2039: 'GetAtlasCell': is not a member of 'Graphics::TextureAtlasHandler'
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(13): note: see declaration of 'Graphics::TextureAtlasHandler'
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(89): error C2039: 'GetAtlasCell': is not a member of 'Graphics::TextureAtlasHandler'
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(13): note: see declaration of 'Graphics::TextureAtlasHandler'
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(90): error C2039: 'GetAtlasCell': is not a member of 'Graphics::TextureAtlasHandler'
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(13): note: see declaration of 'Graphics::TextureAtlasHandler'
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(91): error C2039: 'GetAtlasCell': is not a member of 'Graphics::TextureAtlasHandler'
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(13): note: see declaration of 'Graphics::TextureAtlasHandler'
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(93): error C2039: 'GetAtlasCell': is not a member of 'Graphics::TextureAtlasHandler'
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(13): note: see declaration of 'Graphics::TextureAtlasHandler'
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\shadow\projectedshadowinfo.cpp(94): error C2039: 'GetAtlasCell': is not a member of 'Graphics::TextureAtlasHandler'
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(13): note: see declaration of 'Graphics::TextureAtlasHandler'
+  TextureAtlasFactory.cpp
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): error C2259: 'Graphics::Texture2dAtlasHandler': cannot instantiate abstract class
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): note: due to following members:
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): note: 'void Graphics::TextureAtlasHandler::abstract(void)': is abstract
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(15): note: see declaration of 'Graphics::TextureAtlasHandler::abstract'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1865): note: see reference to function template instantiation 'std::_Ref_count_obj<_Ty>::_Ref_count_obj<const Graphics::TextureAtlasCell,std::shared_ptr<Graphics::Texture::ITexture>>(const Graphics::TextureAtlasCell &&,std::shared_ptr<Graphics::Texture::ITexture> &&)' being compiled
+          with
+          [
+              _Ty=Graphics::Texture2dAtlasHandler
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1866): note: see reference to function template instantiation 'std::_Ref_count_obj<_Ty>::_Ref_count_obj<const Graphics::TextureAtlasCell,std::shared_ptr<Graphics::Texture::ITexture>>(const Graphics::TextureAtlasCell &&,std::shared_ptr<Graphics::Texture::ITexture> &&)' being compiled
+          with
+          [
+              _Ty=Graphics::Texture2dAtlasHandler
+          ]
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlasfactory.cpp(154): note: see reference to function template instantiation 'std::shared_ptr<Graphics::Texture2dAtlasHandler> std::make_shared<Graphics::Texture2dAtlasHandler,const Graphics::TextureAtlasCell,std::shared_ptr<Graphics::Texture::ITexture>>(const Graphics::TextureAtlasCell &&,std::shared_ptr<Graphics::Texture::ITexture> &&)' being compiled
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1801): error C2664: 'Graphics::Texture2dAtlasHandler::Texture2dAtlasHandler(Graphics::Texture2dAtlasHandler &&)': cannot convert argument 1 from '_Ty' to 'const std::shared_ptr<Graphics::Texture::ITexture> &'
+          with
+          [
+              _Ty=const Graphics::TextureAtlasCell
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): note: Reason: cannot convert from '_Ty' to 'const std::shared_ptr<Graphics::Texture::ITexture>'
+          with
+          [
+              _Ty=const Graphics::TextureAtlasCell
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): note: No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): error C2259: 'Graphics::TextureCubeAtlasHandler': cannot instantiate abstract class
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): note: due to following members:
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1799): note: 'void Graphics::TextureAtlasHandler::abstract(void)': is abstract
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlashandler.h(15): note: see declaration of 'Graphics::TextureAtlasHandler::abstract'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1865): note: see reference to function template instantiation 'std::_Ref_count_obj<_Ty>::_Ref_count_obj<std::shared_ptr<Graphics::Texture::ITexture>>(std::shared_ptr<Graphics::Texture::ITexture> &&)' being compiled
+          with
+          [
+              _Ty=Graphics::TextureCubeAtlasHandler
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\memory(1866): note: see reference to function template instantiation 'std::_Ref_count_obj<_Ty>::_Ref_count_obj<std::shared_ptr<Graphics::Texture::ITexture>>(std::shared_ptr<Graphics::Texture::ITexture> &&)' being compiled
+          with
+          [
+              _Ty=Graphics::TextureCubeAtlasHandler
+          ]
+  d:\mystartup\porthighlightengine\phengine\phengine\phengine\src\core\graphicscore\textureatlas\textureatlasfactory.cpp(163): note: see reference to function template instantiation 'std::shared_ptr<Graphics::TextureCubeAtlasHandler> std::make_shared<Graphics::TextureCubeAtlasHandler,std::shared_ptr<Graphics::Texture::ITexture>>(std::shared_ptr<Graphics::Texture::ITexture> &&)' being compiled
+  Generating Code...

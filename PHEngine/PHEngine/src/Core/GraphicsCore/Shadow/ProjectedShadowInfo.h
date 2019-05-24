@@ -3,7 +3,8 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-#include "Core/GraphicsCore/Shadow/TextureAtlasFactory.h"
+#include "Core/GraphicsCore/TextureAtlas/TextureAtlasFactory.h"
+#include "Core/GraphicsCore/TextureAtlas/LazyTextureAtlasObtainer.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
 #include "Core/GameCore/FramebufferImplementation/ShadowFramebuffer.h"
 

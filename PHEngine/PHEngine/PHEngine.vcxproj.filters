@@ -1592,13 +1592,25 @@
     <ClInclude Include="src\Core\GameCore\Event\TEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\GameCore\ThirdPersonCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\GameCore\FramebufferImplementation\ShadowFramebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\LazyTextureAtlasObtainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasCell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1873,13 +1885,19 @@
     <ClCompile Include="src\Core\GameCore\Event\TEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GraphicsCore\Shadow\TextureAtlasFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\GameCore\ThirdPersonCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GameCore\FramebufferImplementation\ShadowFramebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\TextureAtlas\LazyTextureAtlasObtainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
