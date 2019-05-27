@@ -151,7 +151,7 @@ namespace Graphics
             std::map<size_t, TextureAtlasCell>::const_iterator it = ptr->Cells.find(requestId);
             if (it != ptr->Cells.end())
             {
-               result = std::make_shared<Texture2dAtlasHandler>(std::move(it->second), std::move(atlas->m_atlasTexture));
+               result = std::make_shared<Texture2dAtlasHandler>(atlas->m_atlasTexture, it->second);
                break;
             }
          }

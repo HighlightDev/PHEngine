@@ -29,7 +29,7 @@ namespace Graphics
 	void ScreenQuad::Init()
 	{
       std::string resolveTexShaderPath = Common::FolderManager::GetInstance()->GetShadersPath() + "resolveTextureVS.glsl" + "," + Common::FolderManager::GetInstance()->GetShadersPath() + "resolveTextureFS.glsl";
-      m_resolveTexShader = std::dynamic_pointer_cast<ResolveTextureShader>(ShaderPool::GetInstance()->GetOrAllocateResource<ResolveTextureShader>(resolveTexShaderPath));
+      m_resolveTexShader = std::static_pointer_cast<ResolveTextureShader>(ShaderPool::GetInstance()->GetOrAllocateResource<ResolveTextureShader>(resolveTexShaderPath));
 
 		/*Screen fill quad*/
 		std::vector<float> vertices = { -1.0f, -1.0f, 0.0f ,

@@ -12,7 +12,7 @@ namespace Graphics
          , m_waterDistortionMap(component->GetRenderData().m_waterDistortionMap)
          , m_waterNormalMap(component->GetRenderData().m_waterNormalMap)
          , m_skin(component->GetRenderData().m_skin)
-         , m_shader(std::dynamic_pointer_cast<WaterPlaneShader>(component->GetRenderData().m_shader))
+         , m_shader(std::static_pointer_cast<WaterPlaneShader>(component->GetRenderData().m_shader))
          , m_moveFactor(component->GetMoveFactor())
          , m_waveStrength(component->GetWaveStrength())
          , m_transparencyDepth(component->GetTransparencyDepth())

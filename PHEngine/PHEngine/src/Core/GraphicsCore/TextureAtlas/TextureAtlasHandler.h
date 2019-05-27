@@ -12,8 +12,6 @@ namespace Graphics
 {
    struct TextureAtlasHandler
    {
-      virtual void abstract() = 0;
-
    protected:
 
       std::shared_ptr<ITexture> m_atlasResource;

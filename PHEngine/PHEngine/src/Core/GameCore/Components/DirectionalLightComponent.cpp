@@ -49,10 +49,12 @@ namespace Game
    {
       m_scene->ExecuteOnRenderThread([=]()
       {
-         ProjectedShadowInfo* shadowInfo = m_scene->LightProxies[LightSceneProxyId]->GetShadowInfo();
+         auto proxy = m_scene->LightProxies[LightSceneProxyId];
+         ProjectedShadowInfo* shadowInfo = proxy->GetShadowInfo();
          if (shadowInfo)
          {
             shadowInfo->Offset = data;
+            proxy->SetIsTransformationDirty(true);
          }
       });
    }

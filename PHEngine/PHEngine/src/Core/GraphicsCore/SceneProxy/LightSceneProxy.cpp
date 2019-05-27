@@ -21,6 +21,17 @@ namespace Graphics
       void LightSceneProxy::SetTransformationMatrix(const glm::mat4& relativeMatrix)
       {
          m_relativeMatrix = relativeMatrix;
+         SetIsTransformationDirty(true);
+      }
+
+      bool LightSceneProxy::IsTransformationDirty() const
+      {
+         return bTransformationDirty;
+      }
+
+      void LightSceneProxy::SetIsTransformationDirty(bool value)
+      {
+         bTransformationDirty = value;
       }
 
    }

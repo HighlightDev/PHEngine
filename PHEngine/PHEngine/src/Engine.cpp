@@ -9,8 +9,6 @@ Engine::Engine()
 {
    m_scene.AddTestActors();
 
-   m_sceneRenderer.PushRenderTargetToTextureRenderer();
-
    m_gameThread = std::thread(std::bind(&Engine::GameThreadPulse, this));
    m_gameThread.detach();
 }

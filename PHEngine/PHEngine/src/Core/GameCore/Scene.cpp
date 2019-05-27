@@ -9,6 +9,7 @@
 #include "Core/GameCore/FirstPersonCamera.h"
 #include "Core/GameCore/ThirdPersonCamera.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
+#include "Core/GraphicsCore/Shadow/ProjectedDirShadowInfo.h"
 #include "Core/GameCore/Components/PointLightComponent.h"
 #include "Core/GameCore/Components/InputComponent.h"
 #include "Core/GraphicsCore/TextureAtlas/TextureAtlasFactory.h"
@@ -57,11 +58,11 @@ namespace Game
 
       if ((type & MOVEMENT_COMPONENT) == MOVEMENT_COMPONENT)
       {
-         addComponentToThisActor->AddMovementComponent(std::dynamic_pointer_cast<MovementComponent>(component));
+         addComponentToThisActor->AddMovementComponent(std::static_pointer_cast<MovementComponent>(component));
       }
       else if ((type & INPUT_COMPONENT) == INPUT_COMPONENT)
       {
-         std::shared_ptr<InputComponent> inputComp = std::dynamic_pointer_cast<InputComponent>(component);
+         std::shared_ptr<InputComponent> inputComp = std::static_pointer_cast<InputComponent>(component);
          inputComp->SetOwner(addComponentToThisActor);
          addComponentToThisActor->AddInputComponent(inputComp);
       }
@@ -197,22 +198,22 @@ namespace Game
 
       // PointLight
       {
-         // 0
-         auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
-         ProjectedShadowInfo* pointLightInfo = new ProjectedShadowInfo(pointLightTextureAtlasRequest);
+         //// 0
+         //auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
+         //ProjectedPointShadowInfo* pointLightInfo = new ProjectedShadowInfo(pointLightTextureAtlasRequest);
 
-         PointLightComponentData mData(glm::vec3(0), glm::vec3(), glm::vec3(0.005f, 0, 0), 100, glm::vec3(0.2f, 0.2f, 0.2f), 
-            glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), pointLightInfo);
-         Actor* pointLightActor = new Actor(new SceneComponent(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
-         CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
-         AllActors.push_back(pointLightActor);
+         //PointLightComponentData mData(glm::vec3(0), glm::vec3(), glm::vec3(0.005f, 0, 0), 100, glm::vec3(0.2f, 0.2f, 0.2f), 
+         //   glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), pointLightInfo);
+         //Actor* pointLightActor = new Actor(new SceneComponent(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
+         //CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
+         //AllActors.push_back(pointLightActor);
       }
 
       // DirectionalLight
       {
          // 0
          auto directionalLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
-         ProjectedShadowInfo* dirLightInfo = new ProjectedShadowInfo(directionalLightTextureAtlasRequest);
+         ProjectedDirShadowInfo* dirLightInfo = new ProjectedDirShadowInfo(directionalLightTextureAtlasRequest);
 
          DirectionalLightComponentData mData(glm::vec3(0),
             glm::vec3(1, 0, 0),
@@ -223,7 +224,7 @@ namespace Game
 
          // 1
          auto directionalLightTextureAtlasRequest1 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
-         ProjectedShadowInfo* dirLightInfo1 = new ProjectedShadowInfo(directionalLightTextureAtlasRequest1);
+         ProjectedDirShadowInfo* dirLightInfo1 = new ProjectedDirShadowInfo(directionalLightTextureAtlasRequest1);
 
          DirectionalLightComponentData mData1(glm::vec3(0),
             glm::vec3(-1, 0, 0),
@@ -234,7 +235,7 @@ namespace Game
 
          // 2
          auto directionalLightTextureAtlasRequest2 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
-         ProjectedShadowInfo* dirLightInfo2 = new ProjectedShadowInfo(directionalLightTextureAtlasRequest2);
+         ProjectedDirShadowInfo* dirLightInfo2 = new ProjectedDirShadowInfo(directionalLightTextureAtlasRequest2);
 
          DirectionalLightComponentData mData2(glm::vec3(0),
             glm::vec3(0, 0, 1),
@@ -245,7 +246,7 @@ namespace Game
 
          // 3
          auto directionalLightTextureAtlasRequest3 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
-         ProjectedShadowInfo* dirLightInfo3 = new ProjectedShadowInfo(directionalLightTextureAtlasRequest3);
+         ProjectedDirShadowInfo* dirLightInfo3 = new ProjectedDirShadowInfo(directionalLightTextureAtlasRequest3);
 
          DirectionalLightComponentData mData3(glm::vec3(0), glm::vec3(0, 0, -1),
             glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), dirLightInfo3);

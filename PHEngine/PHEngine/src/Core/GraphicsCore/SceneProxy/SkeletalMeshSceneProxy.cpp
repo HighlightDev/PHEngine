@@ -12,7 +12,7 @@ namespace Graphics
          : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin,
             component->GetRenderData().m_albedo, component->GetRenderData().m_normalMapTex,
             component->GetRenderData().m_specularMapTex)
-         , m_shader(std::dynamic_pointer_cast<SkeletalMeshShader>(component->GetRenderData().m_shader))
+         , m_shader(std::static_pointer_cast<SkeletalMeshShader>(component->GetRenderData().m_shader))
          , m_animations(component->GetRenderData().m_animations)
          , m_animationHolder(m_animations)
          , m_animationDeltaTime(component->GetAnimationDeltaTime())

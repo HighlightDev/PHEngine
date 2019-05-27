@@ -1613,6 +1613,9 @@
     <ClInclude Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlasCell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedDirShadowInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -1898,6 +1901,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\TextureAtlas\TextureAtlas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedDirShadowInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

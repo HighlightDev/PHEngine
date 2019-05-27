@@ -2,6 +2,7 @@
 
 #include "LightSceneProxy.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
+#include "Core/GraphicsCore/Shadow/ProjectedDirShadowInfo.h"
 
 using namespace Game;
 
@@ -15,20 +16,22 @@ namespace Graphics
       {
          glm::vec3 m_direction;
 
+         virtual ProjectedShadowInfo* GetShadowInfo();
+
       public:
          
          glm::vec3 GetDirection() const
          {
             return m_relativeMatrix * glm::vec4(m_direction, 0.0f);
-         }
+         }  
 
          DirectionalLightSceneProxy(const DirectionalLightComponent* component);
 
          virtual ~DirectionalLightSceneProxy();
 
-         virtual LightSceneProxyType GetLightProxyType() const override;
+         ProjectedDirShadowInfo* GetProjectedDirShadowInfo();
 
-         virtual ProjectedShadowInfo* GetShadowInfo() const;
+         virtual LightSceneProxyType GetLightProxyType() const override;
       };
 
    }

@@ -7,7 +7,7 @@ namespace Graphics
 
       SkyboxSceneProxy::SkyboxSceneProxy(const SkyboxComponent* component)
          : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, std::shared_ptr<ITexture>(), std::shared_ptr<ITexture>())
-         , m_skyboxShader(std::dynamic_pointer_cast<SkyboxShader>(component->GetRenderData().m_shader))
+         , m_skyboxShader(std::static_pointer_cast<SkyboxShader>(component->GetRenderData().m_shader))
          , m_dayTexture(component->GetRenderData().m_dayTex)
          , m_nightTexture(component->GetRenderData().m_nightTex)
       {

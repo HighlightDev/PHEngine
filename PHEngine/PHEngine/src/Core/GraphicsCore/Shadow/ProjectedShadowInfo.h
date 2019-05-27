@@ -14,15 +14,25 @@ using namespace Game::FramebufferImpl;
 namespace Graphics
 {
 
+   enum class LightType
+   {
+      UNDEFINED,
+      DIRECTIONAL_LIGHT,
+      POINT_LIGHT,
+      SPOT_LIGHT
+   };
+
    struct ProjectedShadowInfo
    {
-   private:
+   protected:
+
+      LightType m_lightType;
 
       LazyTextureAtlasObtainer m_shadowAtlasCellResource;
 
-      mutable uint32_t m_framebufferDesc;
-
       mutable std::shared_ptr<ShadowFramebuffer> m_shadowFramebuffer;
+
+      glm::mat4 m_shadowBiasMatrix;
 
       void AllocateFramebuffer() const;
 
@@ -30,22 +40,17 @@ namespace Graphics
 
    public:
 
-      std::vector<glm::mat4x4> ShadowViewMatrices;
-      std::vector<glm::mat4x4> ShadowProjectionMatrices;
-      glm::mat4 ShadowBiasMatrix;
       glm::vec3 Offset;
-
-      glm::vec4 GetPosOffsetShadowMapAtlas() const;
-
-      std::shared_ptr<ITexture> GetAtlasResource() const;
-
-      void BindShadowFramebuffer(bool clearDepthBuffer) const;
-
-      std::vector<glm::mat4> GetShadowMatrix() const;
 
       ProjectedShadowInfo(const LazyTextureAtlasObtainer & shadowAtlasCellResource);
 
-      ~ProjectedShadowInfo();
+      virtual ~ProjectedShadowInfo();
+
+      virtual void BindShadowFramebuffer(bool clearDepthBuffer) const = 0;
+
+      std::shared_ptr<ITexture> GetAtlasResource() const;
+
+      LightType GetLightType() const;
    };
 
 }

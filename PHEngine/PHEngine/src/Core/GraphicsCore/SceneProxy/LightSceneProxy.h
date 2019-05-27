@@ -26,6 +26,8 @@ namespace Graphics
          glm::mat4 m_relativeMatrix;
 
          ProjectedShadowInfo* m_shadowInfo = nullptr;
+
+         bool bTransformationDirty = true;
         
       public:
 
@@ -40,7 +42,11 @@ namespace Graphics
 
          void SetTransformationMatrix(const glm::mat4& relativeMatrix);
 
-         virtual ProjectedShadowInfo* GetShadowInfo() const {
+         bool IsTransformationDirty() const;
+
+         void SetIsTransformationDirty(bool value);
+
+         virtual ProjectedShadowInfo* GetShadowInfo() {
 
             return m_shadowInfo;
          }
