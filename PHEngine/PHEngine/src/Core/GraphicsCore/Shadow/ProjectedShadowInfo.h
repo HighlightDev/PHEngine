@@ -46,7 +46,7 @@ namespace Graphics
 
       virtual ~ProjectedShadowInfo();
 
-      virtual void BindShadowFramebuffer(bool clearDepthBuffer) const = 0;
+      virtual void BindShadowFramebuffer(bool clearDepthBuffer) const;
 
       std::shared_ptr<ITexture> GetAtlasResource() const;
 

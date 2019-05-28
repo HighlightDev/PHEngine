@@ -9,13 +9,16 @@ namespace Graphics
    class ProjectedPointShadowInfo :
       public ProjectedShadowInfo
    {
+   public:
+
       using mat4x4tuple_t = std::tuple<glm::mat4x4, glm::mat4x4, glm::mat4x4, glm::mat4x4, glm::mat4x4, glm::mat4x4>;
 
+   private:
       mat4x4tuple_t m_shadowViewMatrix;
 
       mat4x4tuple_t m_shadowProjectionMatrix;
 
-      std::shared_ptr<TextureCubeAtlasHandler>  GetTextureCubeHandler() const;
+      std::shared_ptr<TextureCubeAtlasHandler> GetTextureCubeHandler() const;
 
    public:
 
@@ -33,8 +36,6 @@ namespace Graphics
 
       void SetShadowProjectionMatrix(const mat4x4tuple_t& shadowProjectionMatrices);
 
-      glm::mat4 GetShadowMatrix() const;
-
-      glm::vec4 GetPosOffsetShadowMapAtlas() const;
+      mat4x4tuple_t GetShadowMatrix() const;
    };
 }

@@ -20,6 +20,11 @@ namespace Graphics
       DeallocateFramebuffer();
    }
 
+   void ProjectedShadowInfo::BindShadowFramebuffer(bool clearDepthBuffer) const 
+   {
+      AllocateFramebuffer();
+   }
+
    void ProjectedShadowInfo::AllocateFramebuffer() const
    {
       if (!m_shadowFramebuffer)

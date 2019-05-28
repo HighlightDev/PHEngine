@@ -58,7 +58,7 @@ namespace Graphics
 
    void ProjectedDirShadowInfo::BindShadowFramebuffer(bool clearDepthBuffer) const
    {
-      AllocateFramebuffer();
+      ProjectedShadowInfo::BindShadowFramebuffer(clearDepthBuffer);
 
       auto texAtlas = GetTexture2dHandler();
       auto atlas_cell = texAtlas->GetAtlasCell();
