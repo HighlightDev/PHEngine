@@ -2,6 +2,7 @@
 
 #include "LightSceneProxy.h"
 #include "Core/GameCore/Components/PointLightComponent.h"
+#include "Core/GraphicsCore/Shadow/ProjectedPointShadowInfo.h"
 
 using namespace Game;
 
@@ -15,6 +16,10 @@ namespace Graphics
       {
          glm::vec3 m_attenuation;
          float m_radianceSqrRadius;
+
+         virtual ProjectedShadowInfo* GetShadowInfo() override;
+
+         void InitializeShadowProjectionMatrices();
 
       public:
          
@@ -37,6 +42,8 @@ namespace Graphics
          virtual ~PointLightSceneProxy();
 
          virtual LightSceneProxyType GetLightProxyType() const override;
+
+         ProjectedPointShadowInfo* GetProjectedPointShadowInfo();
       };
 
    }

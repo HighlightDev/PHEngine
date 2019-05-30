@@ -1,19 +1,7 @@
-﻿  ProjectedPointShadowInfo.cpp
-  ProjectedDirShadowInfo.cpp
-  SkeletalMeshComponent.cpp
-  ProjectedShadowInfo.cpp
-  PointLightComponent.cpp
-  DirectionalLightSceneProxy.cpp
-  LightSceneProxy.cpp
-  DirectionalLightComponent.cpp
-  LightComponent.cpp
-  DeferredLightShader.cpp
-  Scene.cpp
-  PointLightSceneProxy.cpp
+﻿  DepthShader.cpp
   DeferredShadingSceneRenderer.cpp
-  PrimitiveComponent.cpp
   Engine.cpp
-  WaterPlaneComponent.cpp
   Generating Code...
 EngineMath.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+RenderTargetAllocationPolicy.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
   PHEngine.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\PHEngine.lib

@@ -47,7 +47,7 @@ namespace Game
 
       public:
 
-         DeferredLightShader(std::string&& vsPath, std::string&& fsPath);
+         DeferredLightShader(const ShaderParams& params);
 
          virtual ~DeferredLightShader();
 

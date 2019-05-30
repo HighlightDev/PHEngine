@@ -4,12 +4,4 @@
 namespace Resources
 {
 
-   RenderTargetAllocationPolicy::RenderTargetAllocationPolicy()
-   {
-   }
-
-
-   RenderTargetAllocationPolicy::~RenderTargetAllocationPolicy()
-   {
-   }
 }

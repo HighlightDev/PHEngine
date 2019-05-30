@@ -21,7 +21,7 @@ namespace Game
 
       public:
 
-         TextureRendererShader(std::string&& vsPath, std::string&& fsPath);
+         TextureRendererShader(const ShaderParams& params);
 
          void SetUiTextureSampler(int32_t uiTextureSampler);
 

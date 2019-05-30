@@ -14,7 +14,7 @@ namespace Graphics
 		{
 		public:
 			
-			ShaderBase(std::string&& shaderName, std::string&& vertexShaderFile, std::string&& fragmentShaderFile, std::string&& geometryShaderFile = "");
+			ShaderBase(const ShaderParams& params);
 
 			~ShaderBase();
 

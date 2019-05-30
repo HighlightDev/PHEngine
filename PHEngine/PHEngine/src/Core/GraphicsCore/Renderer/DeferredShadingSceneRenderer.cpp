@@ -33,17 +33,17 @@ namespace Graphics
       {
          const auto& folderManager = FolderManager::GetInstance();
 
-         std::string deferredNonSkeletalBaseShaderPath = folderManager->GetShadersPath() + "deferredNonSkeletalBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
-         std::string deferredSkeletalBaseShaderPath = folderManager->GetShadersPath() + "deferredSkeletalBasePassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredBasePassFS.glsl";
-         std::string deferredLightShaderPath = folderManager->GetShadersPath() + "deferredLightPassVS.glsl" + "," + folderManager->GetShadersPath() + "deferredLightPassFS.glsl";
-         std::string depthSkeletalShaderPath = folderManager->GetShadersPath() + "basicShadowSkeletalVS.glsl" + "," + folderManager->GetShadersPath() + "basicShadowFS.glsl";
-         std::string depthNonSkeletalShaderPath = folderManager->GetShadersPath() + "basicShadowNonSkeletalVS.glsl" + "," + folderManager->GetShadersPath() + "basicShadowFS.glsl";
+         ShaderParams shaderParams1("DeferredNonSkeletalBase Shader", folderManager->GetShadersPath() + "deferredNonSkeletalBasePassVS.glsl", folderManager->GetShadersPath() + "deferredBasePassFS.glsl", "", "", "", "");
+         ShaderParams shaderParams2("DeferredSkeletalBase Shader", folderManager->GetShadersPath() + "deferredSkeletalBasePassVS.glsl", folderManager->GetShadersPath() + "deferredBasePassFS.glsl", "", "", "", "");
+         ShaderParams shaderParams3("DeferredLight Shader", folderManager->GetShadersPath() + "deferredLightPassVS.glsl", folderManager->GetShadersPath() + "deferredLightPassFS.glsl", "", "", "", "");
+         ShaderParams shaderParams4("DeferredSkeletal Shader", folderManager->GetShadersPath() + "basicShadowSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
+         ShaderParams shaderParams5("DeferredNonSkeletal Shader", folderManager->GetShadersPath() + "basicShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
 
-         m_deferredBaseShaderNonSkeletal = std::static_pointer_cast<DeferredShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<false>>(deferredNonSkeletalBaseShaderPath));
-         m_deferredBaseShaderSkeletal = std::static_pointer_cast<DeferredShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<true>>(deferredSkeletalBaseShaderPath));
-         m_deferredLightShader = std::static_pointer_cast<DeferredLightShader>(ShaderPool::GetInstance()-> template GetOrAllocateResource<DeferredLightShader>(deferredLightShaderPath));
-         m_depthShaderSkeletal = std::static_pointer_cast<DepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<true>>(depthSkeletalShaderPath));
-         m_depthShaderNonSkeletal = std::static_pointer_cast<DepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<false>>(depthNonSkeletalShaderPath));
+         m_deferredBaseShaderNonSkeletal = std::static_pointer_cast<DeferredShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<false>>(shaderParams1));
+         m_deferredBaseShaderSkeletal = std::static_pointer_cast<DeferredShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<true>>(shaderParams2));
+         m_deferredLightShader = std::static_pointer_cast<DeferredLightShader>(ShaderPool::GetInstance()-> template GetOrAllocateResource<DeferredLightShader>(shaderParams3));
+         m_depthShaderSkeletal = std::static_pointer_cast<DepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<true>>(shaderParams4));
+         m_depthShaderNonSkeletal = std::static_pointer_cast<DepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<false>>(shaderParams5));
       }
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()
@@ -164,8 +164,8 @@ namespace Graphics
             // TODO: Make some check if light source (point or spot light) is too far from current view position
             m_deferredLightShader->ExecuteShader();
 
-            // SHADOWS
-            size_t dirShadowMapSlot = 3, lightSourceIndex = 0, dirShadowMapCount = 0;
+            // ************************** SHADOWS ************************** //
+            size_t lightSourceIndex = 0, shadowMapSlot = 3, dirShadowMapCount = 0, pointShadowMapCount = 0;
             for (auto& lightProxy : lightSourcesProxy)
             {
                if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
@@ -174,26 +174,30 @@ namespace Graphics
                   ProjectedDirShadowInfo* shadowInfo = lightPtr->GetProjectedDirShadowInfo();
                   if (shadowInfo)
                   {
-                     shadowInfo->GetAtlasResource()->BindTexture(dirShadowMapSlot);
-                     m_deferredLightShader->SetDirectionalLightShadowMapSlot(lightSourceIndex, dirShadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
+                     shadowInfo->GetAtlasResource()->BindTexture(shadowMapSlot);
+                     m_deferredLightShader->SetDirectionalLightShadowMapSlot(lightSourceIndex, shadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
                      m_deferredLightShader->SetDirectionalLightShadowMatrix(lightSourceIndex, shadowInfo->GetShadowMatrix());
                      dirShadowMapCount++;
-                     dirShadowMapSlot++;
+                     shadowMapSlot++;
                   }
                }
                else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
                {
-                  ProjectedShadowInfo* shadowInfo = lightProxy->GetShadowInfo();
+                  PointLightSceneProxy* lightPtr = static_cast<PointLightSceneProxy*>(lightProxy.get());
+                  ProjectedPointShadowInfo* shadowInfo = lightPtr->GetProjectedPointShadowInfo();
                   if (shadowInfo)
                   {
+                     shadowInfo->GetAtlasResource()->BindTexture(shadowMapSlot);
 
+                     shadowMapSlot++;
+                     pointShadowMapCount++;
                   }
                }
 
                lightSourceIndex++;
             }
             m_deferredLightShader->SetDirectionalLightShadowMapCount(dirShadowMapCount);
-            // SHADOWS
+            // ************************** SHADOWS ************************** //
 
             m_gbuffer->BindPositionTexture(0);
             m_gbuffer->BindAlbedoWithSpecularTexture(1);

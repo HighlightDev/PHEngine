@@ -9,8 +9,10 @@ using namespace EngineUtility;
 
 namespace Resources
 {
+   template class AnimationAllocationPolicy<std::string>;
 
-   std::shared_ptr<std::vector<AnimationSequence>> AnimationAllocationPolicy::AllocateMemory(std::string& arg)
+   template <typename Model>
+   std::shared_ptr<std::vector<AnimationSequence>> AnimationAllocationPolicy<Model>::AllocateMemory(Model& arg)
    {
       const int32_t countOfBonesInfluencingOnVertex = 3;
 
@@ -27,7 +29,8 @@ namespace Resources
       return std::make_shared<std::vector<AnimationSequence>>(std::move(resultAnimationCollection));
    }
 
-   void AnimationAllocationPolicy::DeallocateMemory(std::shared_ptr<std::vector<AnimationSequence>> arg)
+   template <typename Model>
+   void AnimationAllocationPolicy<Model>::DeallocateMemory(std::shared_ptr<std::vector<AnimationSequence>> arg)
    {
    }
 

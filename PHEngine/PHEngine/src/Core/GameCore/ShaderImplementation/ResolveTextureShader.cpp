@@ -5,8 +5,8 @@ namespace Game
 	namespace ShaderImpl
 	{
 
-		ResolveTextureShader::ResolveTextureShader(std::string&& vsPath, std::string&& fsPath)
-			: ShaderBase("Resolve texture shader;", std::move(vsPath), std::move(fsPath))
+		ResolveTextureShader::ResolveTextureShader(const ShaderParams& params)
+			: ShaderBase(params)
 		{
          Init();
 		}

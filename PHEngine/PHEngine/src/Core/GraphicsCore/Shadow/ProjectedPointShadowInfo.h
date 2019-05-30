@@ -37,5 +37,6 @@ namespace Graphics
       void SetShadowProjectionMatrix(const mat4x4tuple_t& shadowProjectionMatrices);
 
       mat4x4tuple_t GetShadowMatrix() const;
+
    };
 }

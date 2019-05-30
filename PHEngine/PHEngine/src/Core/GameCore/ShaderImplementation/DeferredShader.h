@@ -24,8 +24,8 @@ namespace Game
 
       public:
 
-         DeferredShader(std::string&& vsPath, std::string&& fsPath)
-            : ShaderBase("Deferred Shader (Non Skeletal Meshes)", std::move(vsPath), std::move(fsPath))
+         DeferredShader(const ShaderParams& params)
+            : ShaderBase(params)
          {
             Init();
          }
@@ -87,8 +87,8 @@ namespace Game
 
       public:
 
-         DeferredShader(std::string&& vsPath, std::string&& fsPath)
-            : ShaderBase("Deferred Shader (Skeletal Mesh)", std::move(vsPath), std::move(fsPath))
+         DeferredShader(const ShaderParams& params)
+            : ShaderBase(params)
          {
             Init();
          }

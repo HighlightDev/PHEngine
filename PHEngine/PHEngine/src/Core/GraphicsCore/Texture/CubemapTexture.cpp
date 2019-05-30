@@ -87,13 +87,13 @@ namespace Graphics
 			return resultTextureDescriptor;
 		}
 
-		void CubemapTexture::BindTexture(uint32_t textureSlot)
+		void CubemapTexture::BindTexture(uint32_t textureSlot) const
 		{
 			glActiveTexture(GL_TEXTURE0 + textureSlot);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, m_texDescriptor);
 		}
 
-		void CubemapTexture::UnbindTexture(uint32_t textureSlot)
+		void CubemapTexture::UnbindTexture(uint32_t textureSlot) const
 		{
 			glActiveTexture(GL_TEXTURE0 + textureSlot);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
@@ -104,19 +104,24 @@ namespace Graphics
 			glDeleteTextures(1, &m_texDescriptor);
 		}
 
-		uint32_t CubemapTexture::GetTextureDescriptor()
+		uint32_t CubemapTexture::GetTextureDescriptor() const
 		{
 			return m_texDescriptor;
 		}
 
-		glm::ivec2 CubemapTexture::GetTextureRezolution()
+		glm::ivec2 CubemapTexture::GetTextureRezolution() const
 		{
 			return glm::ivec2(m_texParams[0].TexBufferWidth, m_texParams[0].TexBufferHeight);
 		}
 
-		TexParams CubemapTexture::GetTextureParameters()
+		TexParams CubemapTexture::GetTextureParameters() const
 		{
 			return m_texParams[0];
 		}
+
+      float CubemapTexture::GetTextureAspectRatio() const
+      {
+         return (static_cast<float>(m_texParams[0].TexBufferWidth) / static_cast<float>(m_texParams[0].TexBufferHeight));
+      }
 	}
 }

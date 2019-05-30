@@ -63,6 +63,18 @@ namespace Graphics
 				delete m_mipmapState;
 		}
 
+      void Texture2d::BindTexture(uint32_t textureSlot) const
+      {
+         glActiveTexture(GL_TEXTURE0 + textureSlot);
+         glBindTexture(m_textureParams.TexTarget, m_texDescriptor);
+      }
+
+      void Texture2d::UnbindTexture(uint32_t textureSlot) const
+      {
+         glActiveTexture(GL_TEXTURE0 + textureSlot);
+         glBindTexture(m_textureParams.TexTarget, 0);
+      }
+
 		uint32_t Texture2d::LoadTextureFromFile(std::string& pathToTex, int32_t texWrapMode)
 		{
 			uint8_t* data = StbLoader::GetInstance().AllocateTextureMemoryFromFile(pathToTex, m_textureParams);
@@ -104,5 +116,9 @@ namespace Graphics
 			glDeleteTextures(1, &m_texDescriptor);
 		}
 
+      float Texture2d::GetTextureAspectRatio() const
+      {
+         return (static_cast<float>(m_textureParams.TexBufferWidth) / static_cast<float>(m_textureParams.TexBufferHeight));
+      }
 	}
 }

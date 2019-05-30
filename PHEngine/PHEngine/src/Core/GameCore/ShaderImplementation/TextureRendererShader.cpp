@@ -6,8 +6,8 @@ namespace Game
    namespace ShaderImpl
    {
 
-      TextureRendererShader::TextureRendererShader(std::string&& vsPath, std::string&& fsPath)
-         : ShaderBase("Texture Renderer Shader", std::move(vsPath), std::move(fsPath))
+      TextureRendererShader::TextureRendererShader(const ShaderParams& params)
+         : ShaderBase(params)
       {
          Base::Init();
       }

@@ -29,7 +29,7 @@ namespace Game
 
       public:
 
-         WaterPlaneShader(std::string&& shaderName, std::string&& vsPath, std::string&& fsPath);
+         WaterPlaneShader(const ShaderParams& params);
 
          virtual ~WaterPlaneShader();
 

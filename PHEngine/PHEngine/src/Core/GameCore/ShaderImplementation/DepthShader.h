@@ -20,11 +20,11 @@ namespace Game
       {
          using Base = ShaderBase;
 
-         Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix;
+         Uniform u_worldMatrix, u_shadowViewMatrix, u_shadowProjectionMatrix;
 
       public:
 
-         DepthShader(std::string&& vsPath, std::string&& fsPath);
+         DepthShader(const ShaderParams& params);
 
          void SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
@@ -42,14 +42,14 @@ namespace Game
       {
          using Base = ShaderBase;
 
-         Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix;
+         Uniform u_worldMatrix, u_shadowViewMatrix, u_shadowProjectionMatrix;
          UniformArray u_boneMatrices;
 
       public:
 
-         DepthShader(std::string&& vsPath, std::string&& fsPath);
+         DepthShader(const ShaderParams& params);
 
-         void SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+         void SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& shadowViewMatrix, const glm::mat4& shadowProjectionMatrix);
 
          void SetSkinningMatrices(const std::vector<glm::mat4>& skinningMatrices);
 

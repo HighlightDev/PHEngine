@@ -10,6 +10,7 @@ using namespace Graphics::Animation;
 namespace Resources
 {
 
+   template <typename Model>
    class AnimationAllocationPolicy
    {
    public:
@@ -18,7 +19,7 @@ namespace Resources
 
       ~AnimationAllocationPolicy() = default;
 
-      static std::shared_ptr<std::vector<AnimationSequence>> AllocateMemory(std::string& arg);
+      static std::shared_ptr<std::vector<AnimationSequence>> AllocateMemory(Model& arg);
 
       static void DeallocateMemory(std::shared_ptr<std::vector<AnimationSequence>> arg);
    };

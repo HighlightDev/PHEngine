@@ -33,10 +33,6 @@ namespace Resources
 			if (m_instance)
 				m_instance.reset();
 		}
-
-		TexturePool();
-
-		virtual ~TexturePool();
 	};
 
 }

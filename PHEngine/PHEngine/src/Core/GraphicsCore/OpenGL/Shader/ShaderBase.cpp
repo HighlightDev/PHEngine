@@ -4,8 +4,8 @@ namespace Graphics
 {
 	namespace OpenGL
 	{
-		ShaderBase::ShaderBase(std::string&& shaderName, std::string&& vertexShaderFile, std::string&& fragmentShaderFile, std::string&& geometryShaderFile)
-			: Shader(std::move(shaderName), std::move(vertexShaderFile), std::move(fragmentShaderFile), std::move(geometryShaderFile))
+		ShaderBase::ShaderBase(const ShaderParams& params)
+			: Shader(params)
 		{
 		}
 

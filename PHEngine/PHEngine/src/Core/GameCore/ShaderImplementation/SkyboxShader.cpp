@@ -5,8 +5,8 @@ namespace Game
 	namespace ShaderImpl
 	{
 
-		SkyboxShader::SkyboxShader(std::string&& vsPath, std::string&& fsPath)
-			: ShaderBase("Skybox Shader", std::move(vsPath), std::move(fsPath))
+		SkyboxShader::SkyboxShader(const ShaderParams& params)
+			: ShaderBase(params)
 		{
 			Init();
 		}

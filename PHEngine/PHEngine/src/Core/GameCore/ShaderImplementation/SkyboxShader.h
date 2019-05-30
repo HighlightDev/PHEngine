@@ -18,7 +18,7 @@ namespace Game
 			Uniform u_worldMatrix, u_viewMatrix, u_projectionMatrix, u_dayTexture, u_nightTexture;
 
 		public:
-			SkyboxShader(std::string&& vsPath, std::string&& fsPath);
+			SkyboxShader(const ShaderParams& params);
 
 			virtual ~SkyboxShader();
 

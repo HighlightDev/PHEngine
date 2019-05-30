@@ -8,16 +8,12 @@ using namespace Graphics::Mesh;
 
 namespace Resources
 {
-
+   template <typename Model>
 	class MeshAllocationPolicy
 	{
 	public:
 
-		MeshAllocationPolicy();
-
-		~MeshAllocationPolicy();
-
-		static std::shared_ptr<Skin> AllocateMemory(std::string& arg);
+		static std::shared_ptr<Skin> AllocateMemory(Model& arg);
 
 		static void DeallocateMemory(std::shared_ptr<Skin> arg);
 	};

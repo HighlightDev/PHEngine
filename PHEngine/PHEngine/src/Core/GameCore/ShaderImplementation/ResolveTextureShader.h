@@ -20,7 +20,7 @@ namespace Game
 
 		public:
 
-			ResolveTextureShader(std::string&& vsPath, std::string&& fsPath);
+			ResolveTextureShader(const ShaderParams& params);
 
 			virtual ~ResolveTextureShader();
 

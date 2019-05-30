@@ -5,8 +5,8 @@ namespace Game
    namespace ShaderImpl
    {
 
-      WaterPlaneShader::WaterPlaneShader(std::string&& shaderName, std::string&& vsPath, std::string&& fsPath)
-         : ShaderBase("WaterPlane Shader", std::move(vsPath), std::move(fsPath))
+      WaterPlaneShader::WaterPlaneShader(const ShaderParams& params)
+         : ShaderBase(params)
       {
          Init();
       }

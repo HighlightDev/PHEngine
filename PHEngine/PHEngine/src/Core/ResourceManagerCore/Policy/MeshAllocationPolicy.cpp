@@ -19,17 +19,10 @@ using namespace Graphics::Mesh;
 
 namespace Resources
 {
+   template class MeshAllocationPolicy<std::string>;
 
-	MeshAllocationPolicy::MeshAllocationPolicy()
-	{
-	}
-
-
-	MeshAllocationPolicy::~MeshAllocationPolicy()
-	{
-	}
-
-	std::shared_ptr<Skin> MeshAllocationPolicy::AllocateMemory(std::string& arg)
+   template <typename Model>
+	std::shared_ptr<Skin> MeshAllocationPolicy<Model>::AllocateMemory(Model& arg)
 	{
 		const int32_t countOfBonesInfluencingOnVertex = 3;
 
@@ -104,7 +97,8 @@ namespace Resources
 		return resultSkin;
 	}
 
-	void MeshAllocationPolicy::DeallocateMemory(std::shared_ptr<Skin> arg)
+   template <typename Model>
+	void MeshAllocationPolicy<Model>::DeallocateMemory(std::shared_ptr<Skin> arg)
 	{
 		arg->CleanUp();
 	}

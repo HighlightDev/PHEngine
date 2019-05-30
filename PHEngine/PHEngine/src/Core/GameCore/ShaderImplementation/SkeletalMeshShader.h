@@ -29,7 +29,7 @@ namespace Game
 
       public:
 
-         SkeletalMeshShader(std::string&& vsPath, std::string&& fsPath);
+         SkeletalMeshShader(const ShaderParams& params);
 
          virtual ~SkeletalMeshShader();
 

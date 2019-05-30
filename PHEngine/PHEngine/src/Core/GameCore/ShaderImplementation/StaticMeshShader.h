@@ -49,7 +49,7 @@ namespace Game
 
 		public:
 
-			StaticMeshShader(std::string&& vsPath, std::string&& fsPath);
+			StaticMeshShader(const ShaderParams& params);
 
 			virtual ~StaticMeshShader();
 

@@ -31,7 +31,7 @@ namespace Graphics
 
       auto texAtlas = GetTextureCubeHandler();
       auto rezolution = texAtlas->GetAtlasResource()->GetTextureRezolution();
-      const GLbitfield clearDepthFlag = clearDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0;
+      const GLbitfield clearDepthFlag = GL_DEPTH_BUFFER_BIT;
       m_shadowFramebuffer->RenderToFBO(1, 0, 0, rezolution.x, rezolution.y, clearDepthFlag);
       glDrawBuffer(GL_NONE);
    }

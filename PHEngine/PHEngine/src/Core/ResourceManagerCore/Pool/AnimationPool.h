@@ -26,10 +26,6 @@ namespace Resources
          if (m_instance)
             m_instance.reset();
       }
-
-      AnimationPool();
-
-      virtual ~AnimationPool();
    };
 
 }

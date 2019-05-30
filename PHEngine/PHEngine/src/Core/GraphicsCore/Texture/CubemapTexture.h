@@ -24,17 +24,19 @@ namespace Graphics
 
 			virtual ~CubemapTexture();
 
-			virtual void BindTexture(uint32_t textureSlot) override;
+			virtual void BindTexture(uint32_t textureSlot) const override;
 
-			virtual void UnbindTexture(uint32_t textureSlot) override;
+			virtual void UnbindTexture(uint32_t textureSlot) const override;
 
 			virtual void CleanUp() override;
 
-			virtual uint32_t GetTextureDescriptor() override;
+			virtual uint32_t GetTextureDescriptor() const override;
 
-			virtual glm::ivec2 GetTextureRezolution() override;
+			virtual glm::ivec2 GetTextureRezolution() const override;
 
-			virtual TexParams GetTextureParameters() override;
+			virtual TexParams GetTextureParameters() const override;
+
+         virtual float GetTextureAspectRatio() const override;
 
 		private:
 

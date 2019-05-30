@@ -1,6 +1,5 @@
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\phengine.pdb
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\phengine.idb
-d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\playercontroller.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\projectedshadowinfo.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\interthreadcommunicationmgr.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\framebuffer.obj
@@ -20,7 +19,7 @@ d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\skeletalmeshsc
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\skeletalmeshshader.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\depthshader.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\texturerenderer.obj
-d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\globalproperties.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\shadowframebuffer.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\camerabase.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\firstpersoncamera.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\scenecomponent.obj
@@ -40,7 +39,7 @@ d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\lightsceneprox
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\directionallightsceneproxy.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\pointlightcomponent.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\textureatlasfactory.obj
-d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\meshvertexdata.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\playercontroller.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\skeletonboneloader.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\boneframecollectionloader.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\animationloader.obj
@@ -60,7 +59,7 @@ d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\skyboxcomponen
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\skyboxshader.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\meshpool.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\shaderpool.obj
-d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\texture2d.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\globalproperties.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\texturemipmapstate.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\texparams.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\stbloader.obj
@@ -80,6 +79,7 @@ d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\shaderpredefin
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\foldermanager.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\glm.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\assimpmeshloader.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\meshvertexdata.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\thirdpersoncamera.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\tevent.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\texturerenderershader.obj
@@ -92,7 +92,12 @@ d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\staticmeshshad
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\staticmeshcomponent.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\texturepool.obj
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\textureallocationpolicy.obj
-d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\shadowframebuffer.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\texture2d.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\textureatlas.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\lazytextureatlasobtainer.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\projecteddirshadowinfo.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\projectedpointshadowinfo.obj
+d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\shaderparams.obj
 d:\mystartup\porthighlightengine\phengine\phengine\bin\debug\phengine.lib
 d:\mystartup\porthighlightengine\phengine\phengine\bin\debug\phengine.pdb
 d:\mystartup\porthighlightengine\phengine\phengine\phengine\debug\phengine.tlog\cl.command.1.tlog

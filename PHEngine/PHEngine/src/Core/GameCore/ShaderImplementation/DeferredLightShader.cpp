@@ -7,8 +7,8 @@ namespace Game
    namespace ShaderImpl
    {
 
-      DeferredLightShader::DeferredLightShader(std::string&& vsPath, std::string&& fsPath)
-         : ShaderBase("Deferred Light Shader", std::move(vsPath), std::move(fsPath))
+      DeferredLightShader::DeferredLightShader(const ShaderParams& params)
+         : ShaderBase(params)
       {
          Init();
       }

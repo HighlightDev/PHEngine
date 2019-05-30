@@ -68,8 +68,8 @@ namespace Game
             if (mData.m_commaSeparatedPathToSixTexturesNight != "")
                nTex = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_commaSeparatedPathToSixTexturesNight);
 
-            std::string shaderPath = std::move(mData.m_vsShaderPath) + "," + std::move(mData.m_fsShaderPath);
-            ShaderPool::sharedValue_t skyboxShader = ShaderPool::GetInstance()->template GetOrAllocateResource<SkyboxShader>(shaderPath);
+            ShaderParams shaderParams("Skybox Shader", mData.m_vsShaderPath, mData.m_fsShaderPath, "", "", "", "");
+            ShaderPool::sharedValue_t skyboxShader = ShaderPool::GetInstance()->template GetOrAllocateResource<SkyboxShader>(shaderParams);
 
             SkyboxRenderData renderData(skin, skyboxShader, dTex, nTex);
 
@@ -103,8 +103,8 @@ namespace Game
             if (mData.m_pathToSpecularMap != "")
                specularMap = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToSpecularMap);
 
-            std::string shaderPath = std::move(mData.m_vsShaderPath) + "," + std::move(mData.m_fsShaderPath);
-            ShaderPool::sharedValue_t staticMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<StaticMeshShader>(shaderPath);
+            ShaderParams shaderParams("StaticMesh Shader", mData.m_vsShaderPath, mData.m_fsShaderPath, "", "", "", "");
+            ShaderPool::sharedValue_t staticMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<StaticMeshShader>(shaderParams);
 
             StaticMeshRenderData renderData(skin, staticMeshShader, albedo, normalMap, specularMap);
 
@@ -215,8 +215,8 @@ namespace Game
             if (mData.m_pathToSpecularMap != "")
                specularMap = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToSpecularMap);
 
-            std::string shaderPath = std::move(mData.m_vsShaderPath) + "," + std::move(mData.m_fsShaderPath);
-            ShaderPool::sharedValue_t skeletalMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<SkeletalMeshShader>(shaderPath);
+            ShaderParams shaderParams("SkeletalMesh Shader", mData.m_vsShaderPath, mData.m_fsShaderPath, "", "", "", "");
+            ShaderPool::sharedValue_t skeletalMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<SkeletalMeshShader>(shaderParams);
 
             SkeletalMeshRenderData renderData(skin, animations, skeletalMeshShader, albedo, normalMap, specularMap);
              

@@ -21,12 +21,13 @@ namespace Graphics
 
 			virtual ~ITexture();
 
-			virtual void BindTexture(uint32_t textureSlot) = 0;
-			virtual void UnbindTexture(uint32_t textureSlot) = 0;
+			virtual void BindTexture(uint32_t textureSlot) const = 0;
+			virtual void UnbindTexture(uint32_t textureSlot) const = 0;
 			virtual void CleanUp() = 0;
-			virtual uint32_t GetTextureDescriptor() = 0;
-			virtual glm::ivec2 GetTextureRezolution() = 0;
-			virtual TexParams GetTextureParameters() = 0;
+			virtual uint32_t GetTextureDescriptor() const = 0;
+			virtual glm::ivec2 GetTextureRezolution() const = 0;
+			virtual TexParams GetTextureParameters() const = 0;
+         virtual float GetTextureAspectRatio() const = 0;
 		};
 	}
 }

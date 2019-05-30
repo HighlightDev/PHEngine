@@ -13,23 +13,20 @@ using namespace Graphics::Texture;
 namespace Resources
 {
 
+   template <typename Model>
 	class TextureAllocationPolicy
 	{
 	public:
 
-		TextureAllocationPolicy();
-
-		~TextureAllocationPolicy();
-
-		static std::shared_ptr<ITexture> AllocateMemory(std::string& arg);
+		static std::shared_ptr<ITexture> AllocateMemory(Model& arg);
 
 		static void DeallocateMemory(std::shared_ptr<ITexture> arg);
 
 	private:
 
-		static ITexture* LoadTexture2dFromFile(std::string& pathToFile);
+		static ITexture* LoadTexture2dFromFile(Model& pathToFile);
 
-		static ITexture* LoadTextureCubeFromFile(std::vector<std::string>& pathToFiles);
+		static ITexture* LoadTextureCubeFromFile(std::vector<Model>& pathToFiles);
 	};
 
 }

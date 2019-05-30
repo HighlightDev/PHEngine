@@ -5,8 +5,8 @@ namespace Game
    namespace ShaderImpl
    {
 
-      SkeletalMeshShader::SkeletalMeshShader(std::string&& vsPath, std::string&& fsPath)
-         : ShaderBase("Skeletal Mesh Shader", std::move(vsPath), std::move(fsPath))
+      SkeletalMeshShader::SkeletalMeshShader(const ShaderParams& params)
+         : ShaderBase(params)
       {
          Init();
       }

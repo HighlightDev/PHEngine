@@ -20,8 +20,6 @@ namespace Resources
 
       using poolType_t = PoolBase<ITexture, TexParams, RenderTargetAllocationPolicy>;
 
-      RenderTargetPool();
-
       std::shared_ptr<ITexture> GetRenderTargetAt(size_t index) const;
 
       static std::unique_ptr<RenderTargetPool>& GetInstance() {

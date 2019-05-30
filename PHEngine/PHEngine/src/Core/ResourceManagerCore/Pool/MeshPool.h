@@ -32,10 +32,6 @@ namespace Resources
 			if (m_instance)
 				m_instance.reset();
 		}
-
-		MeshPool();
-
-		virtual ~MeshPool();
 	};
 
 }

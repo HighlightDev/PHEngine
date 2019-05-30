@@ -3,6 +3,7 @@
 #include "ShaderPredefine.h"
 #include "Uniform.h"
 #include "ShaderPredefineUtility.h"
+#include "ShaderParams.h"
 
 #include <string>
 #include <stdint.h>
@@ -17,7 +18,7 @@ namespace Graphics
 		{
 		public:
 
-			Shader(std::string&& shaderName, std::string&& vertexShaderFile, std::string&& fragmentShaderFile, std::string&& geometryShaderFile = "");
+			Shader(const ShaderParams& params);
 
 			virtual ~Shader();
 
@@ -27,17 +28,13 @@ namespace Graphics
 
 		private:
 
-			std::string m_vsPath;
-			std::string m_fsPath;
-			std::string m_gsPath;
+         ShaderParams m_shaderParams;
 
 			int32_t m_vertexShaderID;
 			int32_t m_fragmentShaderID;
 			int32_t m_geometryShaderID;
 			uint32_t m_shaderProgramID;
 			
-			std::string m_shaderName;
-
 			std::vector<ShaderPredefine> m_defineParameters;
 
 		protected:

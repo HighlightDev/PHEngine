@@ -5,17 +5,11 @@
 
 namespace Resources
 {
+   
+   template class TextureAllocationPolicy<std::string>;
 
-	TextureAllocationPolicy::TextureAllocationPolicy()
-	{
-	}
-
-
-	TextureAllocationPolicy::~TextureAllocationPolicy()
-	{
-	}
-
-	std::shared_ptr<ITexture> TextureAllocationPolicy::AllocateMemory(std::string& arg)
+   template <typename Model>
+	std::shared_ptr<ITexture> TextureAllocationPolicy<Model>::AllocateMemory(Model& arg)
 	{
 		std::shared_ptr<ITexture> resultTexture;
 		std::vector<std::string> pathToTextures = EngineUtility::Split(arg, ',');
@@ -38,17 +32,20 @@ namespace Resources
 		return resultTexture;
 	}
 
-	void TextureAllocationPolicy::DeallocateMemory(std::shared_ptr<ITexture> arg)
+   template <typename Model>
+	void TextureAllocationPolicy<Model>::DeallocateMemory(std::shared_ptr<ITexture> arg)
 	{
 		arg->CleanUp();
 	}
 
-	ITexture* TextureAllocationPolicy::LoadTexture2dFromFile(std::string& pathToFile)
+   template <typename Model>
+	ITexture* TextureAllocationPolicy<Model>::LoadTexture2dFromFile(Model& pathToFile)
 	{
 		return new Texture2d(pathToFile, new TextureAnisotropy(8.0f));
 	}
 
-	ITexture* TextureAllocationPolicy::LoadTextureCubeFromFile(std::vector<std::string>& pathToFiles)
+   template <typename Model>
+	ITexture* TextureAllocationPolicy<Model>::LoadTextureCubeFromFile(std::vector<Model>& pathToFiles)
 	{
 		std::vector<std::string> absolutePaths;
 

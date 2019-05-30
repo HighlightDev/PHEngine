@@ -25,14 +25,14 @@ namespace Graphics
       bool Shader::bParentAccessUniformLocationsInvoked = false;
 #endif
 
-		Shader::Shader(std::string&& shaderName, std::string&& vertexShaderFile, std::string&& fragmentShaderFile, std::string&& geometryShaderFile)
-			: m_shaderName(std::move(shaderName))
-			, m_vsPath(std::move(vertexShaderFile))
-			, m_fsPath(std::move(fragmentShaderFile))
-			, m_gsPath(std::move(geometryShaderFile))
-			, m_geometryShaderID(-1)
-		{
-		}
+      Shader::Shader(const ShaderParams& params)
+         : m_shaderParams(params)
+         , m_vertexShaderID(-1)
+         , m_fragmentShaderID(-1)
+         , m_geometryShaderID(-1)
+         , m_shaderProgramID(-1)
+      {
+      }
 
 		Shader::~Shader()
 		{
@@ -96,30 +96,45 @@ namespace Graphics
 
 		bool Shader::LoadShadersSource()
 		{
-			bool bAllShadersLoaded = false;
+         bool bVertexShaderLoaded = false, bFragmentShaderLoaded = false, bGeometryShaderLoaded = false;
 
-			/*Vertex shader load*/
-			m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-			std::string vsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_vsPath);
-			const bool bVertexShaderLoaded = LoadSingleShaderSource(m_vertexShaderID, vsSource);
+         if (m_shaderParams.VertexShaderFile != "")
+         {
+            /*Vertex shader load*/
+            m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+            std::string vsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.VertexShaderFile);
+            bVertexShaderLoaded = LoadSingleShaderSource(m_vertexShaderID, vsSource);
+         }
+         else
+         {
+            bVertexShaderLoaded = true;
+         }
 
-			/*Fragment shader load*/
-			m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-			std::string fsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_fsPath);
-			const bool bFragmentShaderLoaded = LoadSingleShaderSource(m_fragmentShaderID, fsSource);
+         if (m_shaderParams.FragmentShaderFile != "")
+         {
+            /*Fragment shader load*/
+            m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+            std::string fsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile);
+            bFragmentShaderLoaded = LoadSingleShaderSource(m_fragmentShaderID, fsSource);
+         }
+         else
+         {
+            bFragmentShaderLoaded = true;
+         }
 
-			/*Geometry shader load*/
-			bool bGeometryShaderLoaded = false;
-			if (m_gsPath != "")
-			{
-				m_geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
-				std::string gsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_gsPath);
-				bGeometryShaderLoaded = LoadSingleShaderSource(m_geometryShaderID, gsSource);
-			}
+         if (m_shaderParams.GeometryShaderFile != "")
+         {
+            /*Geometry shader load*/
+            m_geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
+            std::string gsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile);
+            bGeometryShaderLoaded = LoadSingleShaderSource(m_geometryShaderID, gsSource);
+         }
+         else
+         {
+            bGeometryShaderLoaded = true;
+         }
 
-			bAllShadersLoaded = bVertexShaderLoaded && bFragmentShaderLoaded && (m_geometryShaderID != -1 ? bGeometryShaderLoaded : true);
-
-			return bAllShadersLoaded;
+         return bVertexShaderLoaded && bFragmentShaderLoaded && bGeometryShaderLoaded;
 		}
 
 		bool Shader::CompileShaders()
@@ -279,25 +294,25 @@ namespace Graphics
 
 			if (bEditVertexShader)
 			{
-				if (m_vsPath != "")
+				if (m_shaderParams.VertexShaderFile != "")
 				{
-					std::string vsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_vsPath));
+					std::string vsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.VertexShaderFile));
 					ProcessPredefine(ShaderType::VertexShader, vsSource);
 				}
 			}
 			if (bEditFragmentShader)
 			{
-				if (m_fsPath != "")
+				if (m_shaderParams.FragmentShaderFile != "")
 				{
-					std::string fsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_fsPath));
+					std::string fsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile));
 					ProcessPredefine(ShaderType::FragmentShader, fsSource);
 				}
 			}
 			if (bEditGeometryShader)
 			{
-				if (m_gsPath != "")
+				if (m_shaderParams.GeometryShaderFile != "")
 				{
-					std::string gsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_gsPath));
+					std::string gsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile));
 					ProcessPredefine(ShaderType::GeometryShader, gsSource);
 				}
 			}
@@ -317,7 +332,7 @@ namespace Graphics
 			catch (std::invalid_argument innerEx)
 			{
 				std::string message;
-				EngineUtility::StringStreamWrapper::ToString("Shader with name", m_shaderName, " could not bind uniform(s);", "Inner exception message :", '\n', innerEx.what());
+				EngineUtility::StringStreamWrapper::ToString("Shader with name", m_shaderParams.ShaderName, " could not bind uniform(s);", "Inner exception message :", '\n', innerEx.what());
 
 				throw std::invalid_argument(EngineUtility::StringStreamWrapper::FlushString());
 			}
@@ -332,7 +347,7 @@ namespace Graphics
          catch (std::invalid_argument innerEx)
          {
             std::string message;
-            EngineUtility::StringStreamWrapper::ToString("Shader with name", m_shaderName, " could not bind uniform(s);", "Inner exception message :", '\n', innerEx.what());
+            EngineUtility::StringStreamWrapper::ToString("Shader with name", m_shaderParams.ShaderName, " could not bind uniform(s);", "Inner exception message :", '\n', innerEx.what());
 
             throw std::invalid_argument(EngineUtility::StringStreamWrapper::FlushString());
          }
@@ -348,33 +363,39 @@ namespace Graphics
 			std::string compileLog;
 
 			EngineUtility::StringStreamWrapper::FlushString(); // Just to clear stream
-			GLint vertex_compiled = 0;;
-			glGetShaderiv(m_vertexShaderID, GL_COMPILE_STATUS, &vertex_compiled);
-			if (vertex_compiled != GL_TRUE)
-			{
-				GLint log_length = 0;
-				glGetShaderiv(m_vertexShaderID, GL_INFO_LOG_LENGTH, &log_length);
+			GLint vertex_compiled = 0;
+         if (m_vertexShaderID != -1)
+         {
+            glGetShaderiv(m_vertexShaderID, GL_COMPILE_STATUS, &vertex_compiled);
+            if (vertex_compiled != GL_TRUE)
+            {
+               GLint log_length = 0;
+               glGetShaderiv(m_vertexShaderID, GL_INFO_LOG_LENGTH, &log_length);
 
-				std::vector<char> message(log_length);
-				glGetShaderInfoLog(m_vertexShaderID, log_length, nullptr, message.data());
-				EngineUtility::StringStreamWrapper::ToString("Vertex shader : ", std::string(message.begin(), message.end()), '\n');
-			}
+               std::vector<char> message(log_length);
+               glGetShaderInfoLog(m_vertexShaderID, log_length, nullptr, message.data());
+               EngineUtility::StringStreamWrapper::ToString("Vertex shader : ", std::string(message.begin(), message.end()), '\n');
+            }
+         }
 
 			/*Fragment shader log info*/
-			GLint fragment_compiled = 0;;
-			glGetShaderiv(m_fragmentShaderID, GL_COMPILE_STATUS, &fragment_compiled);
-			if (fragment_compiled != GL_TRUE)
-			{
-				GLint log_length = 0;
-				glGetShaderiv(m_fragmentShaderID, GL_INFO_LOG_LENGTH, &log_length);
+			GLint fragment_compiled = 0;
+         if (m_fragmentShaderID != -1)
+         {
+            glGetShaderiv(m_fragmentShaderID, GL_COMPILE_STATUS, &fragment_compiled);
+            if (fragment_compiled != GL_TRUE)
+            {
+               GLint log_length = 0;
+               glGetShaderiv(m_fragmentShaderID, GL_INFO_LOG_LENGTH, &log_length);
 
-				std::vector<char> message(log_length);
-				glGetShaderInfoLog(m_fragmentShaderID, log_length, nullptr, message.data());
-				EngineUtility::StringStreamWrapper::ToString("Fragment shader : ", std::string(message.begin(), message.end()), '\n');
-			}
+               std::vector<char> message(log_length);
+               glGetShaderInfoLog(m_fragmentShaderID, log_length, nullptr, message.data());
+               EngineUtility::StringStreamWrapper::ToString("Fragment shader : ", std::string(message.begin(), message.end()), '\n');
+            }
+         }
 
 
-			GLint geometry_compiled = 0;;
+			GLint geometry_compiled = 0;
 			/*Geometry shader log info*/
 			if (m_geometryShaderID != -1)
 			{
@@ -390,8 +411,8 @@ namespace Graphics
 				}
 			}
 
-			if (vertex_compiled != GL_TRUE || fragment_compiled != GL_TRUE || (m_geometryShaderID != -1 && geometry_compiled != GL_TRUE))
-				compileLog += std::string("Unresolved mistakes at :" + m_shaderName + '\n') + EngineUtility::StringStreamWrapper::FlushString();
+			if ((m_vertexShaderID != -1 && vertex_compiled != GL_TRUE) || (m_fragmentShaderID != -1 && fragment_compiled != GL_TRUE) || (m_geometryShaderID != -1 && geometry_compiled != GL_TRUE))
+				compileLog += std::string("Unresolved mistakes at :" + m_shaderParams.ShaderName + '\n') + EngineUtility::StringStreamWrapper::FlushString();
 
 			return compileLog;
 		}
@@ -410,7 +431,7 @@ namespace Graphics
 
 				std::vector<char> message(log_length);
 				glGetProgramInfoLog(m_shaderProgramID, log_length, nullptr, message.data());
-				EngineUtility::StringStreamWrapper::ToString("Unsolved mistakes at :", m_shaderName, "\n");
+				EngineUtility::StringStreamWrapper::ToString("Unsolved mistakes at :", m_shaderParams.ShaderName, "\n");
 			}
 
 			linkLog = std::move(EngineUtility::StringStreamWrapper::FlushString());

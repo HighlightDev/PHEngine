@@ -1619,6 +1619,9 @@
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedPointShadowInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -1910,6 +1913,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedPointShadowInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

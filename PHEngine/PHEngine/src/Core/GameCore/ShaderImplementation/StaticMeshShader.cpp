@@ -6,8 +6,8 @@ namespace Game
 	namespace ShaderImpl
 	{
 
-		StaticMeshShader::StaticMeshShader(std::string&& vsPath, std::string&& fsPath)
-			: ShaderBase("Static Mesh Shader", std::move(vsPath), std::move(fsPath))
+		StaticMeshShader::StaticMeshShader(const ShaderParams& params)
+			: ShaderBase(params)
 		{
 			Init();
 		}

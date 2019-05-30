@@ -8,16 +8,16 @@
 namespace Resources
 {
 
-	template <typename ValueType, typename KeyType, typename AllocationPolicyType>
+	template <typename ValueType, typename KeyType, template <typename> typename AllocationPolicyType>
 	class PoolBase
 	{
 	public:
 
 		using value_t = ValueType;
 		using key_t = KeyType;
-		using policy_t = AllocationPolicyType;
+		using policy_t = AllocationPolicyType<typename key_t>;
 		using sharedValue_t = std::shared_ptr<ValueType>;
-      using resourceMap_t = std::unordered_map<KeyType, sharedValue_t>;
+      using resourceMap_t = std::unordered_map<key_t, sharedValue_t>;
 
 	private:
 		
@@ -28,7 +28,7 @@ namespace Resources
 		template <typename T>
 		struct DoIfHasInnerType
 		{
-			static sharedValue_t Allocation(KeyType& key)
+			static sharedValue_t Allocation(key_t& key)
 			{
 				return policy_t::template AllocateMemory<T>(key);
 			}
@@ -37,7 +37,7 @@ namespace Resources
 		template <>
 		struct DoIfHasInnerType<NullInnerType>
 		{
-			static sharedValue_t Allocation(KeyType& key)
+			static sharedValue_t Allocation(key_t& key)
 			{
 				return policy_t::AllocateMemory(key);
 			}
@@ -47,12 +47,12 @@ namespace Resources
 
 	protected:
 
-		std::unordered_map<KeyType, sharedValue_t> resourceMap;
-		std::unordered_map<KeyType, int32_t> referenceMap;
+		std::unordered_map<key_t, sharedValue_t> resourceMap;
+		std::unordered_map<key_t, int32_t> referenceMap;
 
 	private:
 
-		void IncreaseRefCounter(KeyType& key)
+		void IncreaseRefCounter(key_t& key)
 		{
 			auto it = referenceMap.find(key);
 			if (it != referenceMap.end())
@@ -65,7 +65,7 @@ namespace Resources
 			}
 		}
 
-		sharedValue_t GetResource(KeyType& key)
+		sharedValue_t GetResource(key_t& key)
 		{
 			sharedValue_t value;
 			auto it = resourceMap.find(key);
@@ -77,9 +77,9 @@ namespace Resources
 			return value;
 		}
 
-		KeyType GetKey(sharedValue_t value)
+      key_t GetKey(sharedValue_t value)
 		{
-			KeyType key;
+         key_t key;
 			auto predicate = [&value](auto& keyvalue)
 			{
 				return (keyvalue.second == value);
@@ -92,7 +92,7 @@ namespace Resources
 			return key;
 		}
 
-		void FreeResource(KeyType& key)
+		void FreeResource(key_t& key)
 		{
 			auto it = referenceMap.find(key);
 			if (it != referenceMap.end())
@@ -130,13 +130,13 @@ namespace Resources
 		}
 
 		template <typename InnerAllocationType = NullInnerType>
-		sharedValue_t GetOrAllocateResource(KeyType& key)
+		sharedValue_t GetOrAllocateResource(key_t& key)
 		{
 			sharedValue_t resource = GetResource(key);
 			if (!resource)
 			{
 				resource = DoIfHasInnerType<InnerAllocationType>::Allocation(key);
-				std::pair<KeyType, sharedValue_t> pair = std::make_pair(key, resource);
+				std::pair<key_t, sharedValue_t> pair = std::make_pair(key, resource);
 				resourceMap.emplace(std::move(pair));
 			}
 
@@ -148,7 +148,7 @@ namespace Resources
 			return resource;
 		}
 
-		int32_t GetReferenceCount(KeyType& key)
+		int32_t GetReferenceCount(key_t& key)
 		{
 			int32_t referenceCount = 0;
 			auto it = referenceMap.find(key);
@@ -165,7 +165,7 @@ namespace Resources
 			return resourceCount;
 		}
 
-		bool TryToFreeMemory(KeyType& key)
+		bool TryToFreeMemory(key_t& key)
 		{
 			bool bMemoryFreed = false;
 			sharedValue_t resource = GetResource(key);
@@ -182,7 +182,7 @@ namespace Resources
 		bool TryToFreeMemory(sharedValue_t value)
 		{
 			bool bMemoryFreed = false;
-			KeyType key = GetKey(value);
+         key_t key = GetKey(value);
 
 			if (&(key) != nullptr)
 			{

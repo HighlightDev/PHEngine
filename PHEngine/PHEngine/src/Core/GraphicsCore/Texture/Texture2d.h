@@ -32,34 +32,28 @@ namespace Graphics
 
 			virtual ~Texture2d();
 
-			void BindTexture(uint32_t textureSlot)
-			{
-				glActiveTexture(GL_TEXTURE0 + textureSlot);
-				glBindTexture(m_textureParams.TexTarget, m_texDescriptor);
-			}
+         virtual void BindTexture(uint32_t textureSlot) const override;
 
-			void UnbindTexture(uint32_t textureSlot)
-			{
-				glActiveTexture(GL_TEXTURE0 + textureSlot);
-				glBindTexture(m_textureParams.TexTarget, 0);
-			}
+         virtual void UnbindTexture(uint32_t textureSlot) const override;
 
 			void CleanUp();
 
-			inline uint32_t GetTextureDescriptor() {
+			inline uint32_t GetTextureDescriptor() const {
 
-				return m_texDescriptor;
-			}
+            return m_texDescriptor;
+         }
 
-			inline glm::ivec2 GetTextureRezolution() {
+			inline glm::ivec2 GetTextureRezolution() const {
 
 				return glm::ivec2(m_textureParams.TexBufferWidth, m_textureParams.TexBufferHeight);
 			}
 
-			inline TexParams GetTextureParameters() {
+			inline TexParams GetTextureParameters() const {
 
 				return m_textureParams;
 			}
+
+         virtual float GetTextureAspectRatio() const override;
 
 		private:
 

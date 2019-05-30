@@ -11,13 +11,13 @@ namespace Resources
 {
 
 	class ShaderPool :
-		public PoolBase<ShaderBase, std::string, ShaderAllocationPolicy>
+		public PoolBase<ShaderBase, ShaderParams, ShaderAllocationPolicy>
 	{
 		static std::unique_ptr<ShaderPool> m_instance;
 
 	public:
 
-		using poolType_t = PoolBase<ShaderBase, std::string, ShaderAllocationPolicy>;
+		using poolType_t = PoolBase<ShaderBase, ShaderParams, ShaderAllocationPolicy>;
 
 		static std::unique_ptr<ShaderPool>& GetInstance()
 		{
@@ -32,9 +32,5 @@ namespace Resources
 			if (m_instance)
 				m_instance.reset();
 		}
-
-		ShaderPool();
-
-		virtual ~ShaderPool();
 	};
 }
