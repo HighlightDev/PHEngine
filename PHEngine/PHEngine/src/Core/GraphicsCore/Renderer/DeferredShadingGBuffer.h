@@ -1,7 +1,6 @@
 #pragma once
-#include <gl/glew.h>
-#include <stdint.h>
 #include <memory>
+#include <iostream>
 
 #include "Core/GraphicsCore/Texture/ITexture.h"
 #include "Core/GraphicsCore/Texture/TexParams.h"

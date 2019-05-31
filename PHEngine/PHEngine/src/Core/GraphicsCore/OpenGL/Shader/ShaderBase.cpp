@@ -1,5 +1,7 @@
 #include "ShaderBase.h"
 
+#include <iostream>
+
 namespace Graphics
 {
 	namespace OpenGL

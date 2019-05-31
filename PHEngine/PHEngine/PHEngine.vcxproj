@@ -287,6 +287,10 @@
     <None Include="res\shaders\buildingSpecialGShader.glsl" />
     <None Include="res\shaders\buildingSpecialVShader.glsl" />
     <None Include="res\shaders\buildingVShader.glsl" />
+    <None Include="res\shaders\cubemapShadowFS.glsl" />
+    <None Include="res\shaders\cubemapShadowGS.glsl" />
+    <None Include="res\shaders\cubemapShadowNonSkeletalVS.glsl" />
+    <None Include="res\shaders\cubemapShadowSkeletalVS.glsl" />
     <None Include="res\shaders\deferredLightPassFS.glsl" />
     <None Include="res\shaders\deferredLightPassVS.glsl" />
     <None Include="res\shaders\deferredNonSkeletalBasePassVS.glsl" />
@@ -354,6 +358,7 @@
     <None Include="res\shaders\waterVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\CubemapDepthShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedPointShadowInfo.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedDirShadowInfo.h" />
@@ -731,6 +736,7 @@
     <ClInclude Include="src\Core\GameCore\ThirdPersonCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\CubemapDepthShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedPointShadowInfo.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedDirShadowInfo.cpp" />

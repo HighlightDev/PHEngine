@@ -36,14 +36,18 @@ namespace Graphics
          ShaderParams shaderParams1("DeferredNonSkeletalBase Shader", folderManager->GetShadersPath() + "deferredNonSkeletalBasePassVS.glsl", folderManager->GetShadersPath() + "deferredBasePassFS.glsl", "", "", "", "");
          ShaderParams shaderParams2("DeferredSkeletalBase Shader", folderManager->GetShadersPath() + "deferredSkeletalBasePassVS.glsl", folderManager->GetShadersPath() + "deferredBasePassFS.glsl", "", "", "", "");
          ShaderParams shaderParams3("DeferredLight Shader", folderManager->GetShadersPath() + "deferredLightPassVS.glsl", folderManager->GetShadersPath() + "deferredLightPassFS.glsl", "", "", "", "");
-         ShaderParams shaderParams4("DeferredSkeletal Shader", folderManager->GetShadersPath() + "basicShadowSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
-         ShaderParams shaderParams5("DeferredNonSkeletal Shader", folderManager->GetShadersPath() + "basicShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
+         ShaderParams shaderParams4("DepthSkeletal Shader", folderManager->GetShadersPath() + "basicShadowSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
+         ShaderParams shaderParams5("DepthNonSkeletal Shader", folderManager->GetShadersPath() + "basicShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
+         ShaderParams shaderParams6("CubemapDepthSkeletal Shader", folderManager->GetShadersPath() + "cubemapShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "cubemapShadowFS.glsl", folderManager->GetShadersPath() + "cubemapShadowGS.glsl", "", "", "");
+         ShaderParams shaderParams7("CubemapDepthNonSkeletal Shader", folderManager->GetShadersPath() + "cubemapShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "cubemapShadowFS.glsl", folderManager->GetShadersPath() + "cubemapShadowGS.glsl", "", "", "");
 
          m_deferredBaseShaderNonSkeletal = std::static_pointer_cast<DeferredShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<false>>(shaderParams1));
          m_deferredBaseShaderSkeletal = std::static_pointer_cast<DeferredShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<true>>(shaderParams2));
          m_deferredLightShader = std::static_pointer_cast<DeferredLightShader>(ShaderPool::GetInstance()-> template GetOrAllocateResource<DeferredLightShader>(shaderParams3));
          m_depthShaderSkeletal = std::static_pointer_cast<DepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<true>>(shaderParams4));
          m_depthShaderNonSkeletal = std::static_pointer_cast<DepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<false>>(shaderParams5));
+         m_depthCubemapShaderSkeletal = std::static_pointer_cast<CubemapDepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource< CubemapDepthShader<true>>(shaderParams6));
+         m_depthCubemapShaderNonSkeletal = std::static_pointer_cast<CubemapDepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource< CubemapDepthShader<true>>(shaderParams7));
       }
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()
@@ -106,8 +110,24 @@ namespace Graphics
                }
                else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
                {
-                  const PointLightSceneProxy* pointLightSceneProxy = static_cast<PointLightSceneProxy*>(lightPtr);
+                  PointLightSceneProxy* pointLightPtr = static_cast<PointLightSceneProxy*>(lightPtr);
 
+                  // Non - skeletal primitives
+                  if (shadowNonSkeletalMeshPrimitives.size() > 0)
+                  {
+                     m_depthCubemapShaderNonSkeletal->ExecuteShader();
+                     for (auto& primitive : shadowNonSkeletalMeshPrimitives)
+                     {
+                        const auto& worldMatrix = primitive->GetMatrix();
+                        const auto& viewMatrices = pointLightPtr->GetProjectedPointShadowInfo()->GetShadowViewMatrices();
+                        const auto& projectionMatrices = pointLightPtr->GetProjectedPointShadowInfo()->GetShadowProjectionMatrices();
+
+                        m_depthCubemapShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrices, projectionMatrices);
+
+                        primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                     }
+                     m_depthCubemapShaderNonSkeletal->StopShader();
+                  }
                }
                glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }

@@ -495,6 +495,10 @@
     <None Include="res\shaders\uiVS.glsl" />
     <None Include="res\shaders\basicShadowNonSkeletalVS.glsl" />
     <None Include="res\shaders\basicShadowSkeletalVS.glsl" />
+    <None Include="res\shaders\cubemapShadowFS.glsl" />
+    <None Include="res\shaders\cubemapShadowNonSkeletalVS.glsl" />
+    <None Include="res\shaders\cubemapShadowSkeletalVS.glsl" />
+    <None Include="res\shaders\cubemapShadowGS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h">
@@ -1622,6 +1626,9 @@
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\CubemapDepthShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -1916,6 +1923,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\CubemapDepthShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

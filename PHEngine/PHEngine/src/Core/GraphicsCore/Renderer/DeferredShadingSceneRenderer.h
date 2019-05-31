@@ -7,6 +7,7 @@
 #include "Core/GameCore/ShaderImplementation/DeferredShader.h"
 #include "Core/GameCore/ShaderImplementation/DeferredLightShader.h"
 #include "Core/GameCore/ShaderImplementation/DepthShader.h"
+#include "Core/GameCore/ShaderImplementation/CubemapDepthShader.h"
 #include "Core/GraphicsCore/Renderer/DeferredShadingGBuffer.h"
 #include "Core/InterThreadCommunicationMgr.h"
 #include "Core/DebugCore/TextureRenderer.h"
@@ -35,6 +36,8 @@ namespace Graphics
          std::shared_ptr<DeferredLightShader> m_deferredLightShader;
          std::shared_ptr<DepthShader<true>> m_depthShaderSkeletal;
          std::shared_ptr<DepthShader<false>> m_depthShaderNonSkeletal;
+         std::shared_ptr<CubemapDepthShader<true>> m_depthCubemapShaderSkeletal;
+         std::shared_ptr<CubemapDepthShader<false>> m_depthCubemapShaderNonSkeletal;
 
          TextureRenderer m_textureRenderer;
 
