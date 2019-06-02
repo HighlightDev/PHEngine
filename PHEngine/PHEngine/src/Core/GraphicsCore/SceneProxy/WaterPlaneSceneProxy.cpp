@@ -56,7 +56,7 @@ namespace Graphics
          m_farClipPlane = farClipPlane;
       }
 
-      std::shared_ptr<ShaderBase> WaterPlaneSceneProxy::GetShader()
+      std::shared_ptr<ShaderBase> WaterPlaneSceneProxy::GetShader() const
       {
          return m_shader;
       }

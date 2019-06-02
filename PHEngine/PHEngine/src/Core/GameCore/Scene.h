@@ -48,7 +48,7 @@ namespace Game
 
       Scene(InterThreadCommunicationMgr& interThreadMgr);
 
-      inline class CameraBase* GetCamera()
+      inline class CameraBase* GetCamera() const
       {
          return m_camera;
       }

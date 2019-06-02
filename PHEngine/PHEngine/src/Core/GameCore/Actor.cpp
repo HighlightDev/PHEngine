@@ -185,4 +185,18 @@ namespace Game
 		}
 	}
 
+   std::shared_ptr<SceneComponent> Actor::GetBaseRootComponent() const
+   {
+      std::shared_ptr<SceneComponent> rootComponent;
+
+      const Actor* ptrActor = this;
+      while (m_parent)
+      {
+         ptrActor = m_parent.get();
+      }
+
+      rootComponent = ptrActor->GetRootComponent();
+      return rootComponent;
+   }
+
 }

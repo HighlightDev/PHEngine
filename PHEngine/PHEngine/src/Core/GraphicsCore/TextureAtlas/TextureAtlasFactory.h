@@ -56,7 +56,7 @@ namespace Graphics
 
       void AllocateTextureCubeSpace();
 
-      std::shared_ptr<TextureAtlasHandler> GetTextureAtlasCellByRequestId(size_t requestId);
+      std::shared_ptr<TextureAtlasHandler> GetTextureAtlasCellByRequestId(size_t requestId) const;
 
       void AddTextureAtlasReservation(size_t requestId, glm::ivec2 size);
 

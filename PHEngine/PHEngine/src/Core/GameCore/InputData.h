@@ -7,12 +7,12 @@ namespace Game
 
 	struct InputData
 	{
-		inline int32_t GetMouseDeltaX()
+		inline int32_t GetMouseDeltaX() const
 		{
 			return m_mouseX - m_prevMouseX;
 		}
 
-		inline int32_t GetMouseDeltaY()
+		inline int32_t GetMouseDeltaY() const
 		{
 			return m_mouseY - m_prevMouseY;
 		}
@@ -29,32 +29,32 @@ namespace Game
 			m_mouseY = mouseY;
 		}
 
-		inline int32_t GetMouseX()
+		inline int32_t GetMouseX() const
 		{
 			return m_mouseX;
 		}
 
-		inline int32_t GetMouseY()
+		inline int32_t GetMouseY() const
 		{
 			return m_mouseY;
 		}
 
-		inline int32_t GetWindowWidth()
+		inline int32_t GetWindowWidth() const
 		{
 			return m_windowWidth;
 		}
 
-		inline int32_t GetWindowHeight()
+		inline int32_t GetWindowHeight() const
 		{
 			return m_windowHeight;
 		}
 
-		inline int32_t GetScreenWidth()
+		inline int32_t GetScreenWidth() const
 		{
 			return m_screenWidth;
 		}
 
-		inline int32_t GetScreenHeight()
+		inline int32_t GetScreenHeight() const
 		{
 			return m_screenHeight;
 		}
@@ -85,12 +85,12 @@ namespace Game
 			m_windowPosY = posY;
 		}
 
-		inline int32_t GetWindowPosX() {
+		inline int32_t GetWindowPosX() const {
 
 			return m_windowPosX;
 		}
 
-		inline int32_t GetWindowPosY() {
+		inline int32_t GetWindowPosY() const {
 
 			return m_windowPosY;
 		}

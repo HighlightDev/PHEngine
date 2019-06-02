@@ -318,12 +318,12 @@ namespace Graphics
 			}
 		}
 
-		int32_t Shader::GetSubroutineIndex(ShaderType shaderType, std::string&& subroutineName)
+		int32_t Shader::GetSubroutineIndex(ShaderType shaderType, std::string&& subroutineName) const
 		{
 			return glGetSubroutineIndex(m_shaderProgramID, (GLenum)shaderType, subroutineName.c_str());
 		}
 
-		Uniform Shader::GetUniform(std::string&& uniformName)
+		Uniform Shader::GetUniform(std::string&& uniformName) const
 		{
 			try
 			{
@@ -338,7 +338,7 @@ namespace Graphics
 			}
 		}
 
-      UniformArray Shader::GetUniformArray(std::string&& uniformName, size_t countOfUniforms)
+      UniformArray Shader::GetUniformArray(std::string&& uniformName, size_t countOfUniforms) const
       {
          try
          {
@@ -358,7 +358,7 @@ namespace Graphics
 			glUniformSubroutinesuiv((int32_t)shaderType, countIndices, (uint32_t*)subroutineIndex);
 		}
 
-		std::string Shader::GetCompileLogInfo()
+		std::string Shader::GetCompileLogInfo() const
 		{
 			std::string compileLog;
 
@@ -417,7 +417,7 @@ namespace Graphics
 			return compileLog;
 		}
 
-		std::string Shader::GetLinkLogInfo()
+		std::string Shader::GetLinkLogInfo() const
 		{
 			std::string  linkLog;
 			EngineUtility::StringStreamWrapper::FlushString(); // Just to clear stream

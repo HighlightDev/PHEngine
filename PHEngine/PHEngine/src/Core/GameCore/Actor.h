@@ -57,17 +57,19 @@ namespace Game
 
 		void DetachActor(std::shared_ptr<Actor> actor);
 
-		inline std::shared_ptr<Game::SceneComponent> GetRootComponent() {
+		inline std::shared_ptr<Game::SceneComponent> GetRootComponent() const {
 
 			return m_rootComponent;
 		}
 
-      inline std::shared_ptr<InputComponent> GetInputComponent()
+      std::shared_ptr<Game::SceneComponent> GetBaseRootComponent() const;
+
+      inline std::shared_ptr<InputComponent> GetInputComponent() const
       {
          return m_inputComponent;
       }
 
-      inline std::shared_ptr<MovementComponent> GetMovementComponent()
+      inline std::shared_ptr<MovementComponent> GetMovementComponent() const
       {
          return m_movementComponent;
       }

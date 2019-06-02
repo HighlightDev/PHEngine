@@ -43,7 +43,7 @@ namespace Graphics
             return m_IsDeferred;
          }
 
-         virtual std::shared_ptr<ShaderBase> GetShader() = 0;
+         virtual std::shared_ptr<ShaderBase> GetShader() const = 0;
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) = 0;
 

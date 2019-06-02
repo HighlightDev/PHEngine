@@ -139,7 +139,7 @@ namespace Graphics
       AllocateTextureCubeSpace();
    }
 
-   std::shared_ptr<TextureAtlasHandler> TextureAtlasFactory::GetTextureAtlasCellByRequestId(size_t requestId)
+   std::shared_ptr<TextureAtlasHandler> TextureAtlasFactory::GetTextureAtlasCellByRequestId(size_t requestId) const
    {
       std::shared_ptr<TextureAtlasHandler> result;
 

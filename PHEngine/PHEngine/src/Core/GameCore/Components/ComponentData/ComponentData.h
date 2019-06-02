@@ -10,7 +10,7 @@ namespace Game
 
 		ComponentData() { }
 
-      virtual uint64_t GetType()
+      virtual uint64_t GetType() const
       {
          return COMPONENT;
       }

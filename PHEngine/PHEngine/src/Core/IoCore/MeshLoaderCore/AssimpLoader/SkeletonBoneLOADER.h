@@ -24,9 +24,9 @@ namespace Io
 
 				inline std::vector<SkeletonBoneLOADER*>& GetChildren();
 
-				int32_t GetIdByBoneInHierarchy(aiBone* seekBone);
+				int32_t GetIdByBoneInHierarchy(aiBone* seekBone) const;
 
-				int32_t GetIdByBone(aiBone* seekBone, SkeletonBoneLOADER* currentSkeletonBone);
+				int32_t GetIdByBone(aiBone* seekBone, SkeletonBoneLOADER* currentSkeletonBone) const;
 
             void CleanUp();
 			};
@@ -51,7 +51,7 @@ namespace Io
 
 				inline int32_t GetBoneId() const;
 
-				inline SkeletonBoneBaseLOADER* GetParent();
+				inline SkeletonBoneBaseLOADER* GetParent() const;
 
 				void CleanUp();
 			};

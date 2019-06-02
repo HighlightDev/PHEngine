@@ -40,12 +40,12 @@ namespace Graphics
          }
       }
 
-      AnimationSequence* AnimationHolder::GetCurrentSequence()
+      AnimationSequence* AnimationHolder::GetCurrentSequence() const
       {
          return m_currentSequence;
       }
 
-      std::vector<BoneTransform>& AnimationHolder::GetAnimatedPoseTransformsList()
+      std::vector<BoneTransform>& AnimationHolder::GetAndUpdateAnimatedPoseTransformsList()
       {
          // BLEND BONE TRANSFORMS WITHIN CURRENT ANIMATION FRAME AND RETURN THEM
 
@@ -81,7 +81,7 @@ namespace Graphics
       std::vector<glm::mat4> AnimationHolder::GetAnimatedNotOffsetedPoseMatricesList()
       {
          std::vector<glm::mat4> resultAnimatedPoseMatrices;
-         auto& poseTransforms = GetAnimatedPoseTransformsList();
+         auto& poseTransforms = GetAndUpdateAnimatedPoseTransformsList();
          for (std::vector<BoneTransform>::iterator it = poseTransforms.begin(); it != poseTransforms.end(); ++it)
          {
             resultAnimatedPoseMatrices.push_back(it->GetToBoneSpaceMatrix());
@@ -111,7 +111,7 @@ namespace Graphics
          return skinningMatrices;
       }
 
-      void AnimationHolder::TransformFromLocalSpaceToBoneSpace(Bone* parentBone, glm::mat4& parentMatrix, std::vector<glm::mat4> srcTransformation, std::vector<glm::mat4>& dstMatrices)
+      void AnimationHolder::TransformFromLocalSpaceToBoneSpace(Bone* parentBone, glm::mat4& parentMatrix, std::vector<glm::mat4> srcTransformation, std::vector<glm::mat4>& dstMatrices) const
       {
          for (auto& child : parentBone->GetChildren())
          {

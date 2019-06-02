@@ -38,24 +38,24 @@ namespace Common
 			return m_instance;
 		}
 
-		std::string GetRootPath();
-		std::string GetResPath();
-		std::string GetModelPath();
-		std::string GetShadersPath();
-		std::string GetCollisionPath();
-		std::string GetTexturesPath();
-		std::string GetIniPath();
+		std::string GetRootPath() const;
+		std::string GetResPath() const;
+		std::string GetModelPath() const;
+		std::string GetShadersPath() const;
+		std::string GetCollisionPath() const;
+		std::string GetTexturesPath() const;
+		std::string GetIniPath() const;
 
-		std::string GetGrassTexturePath();
-		std::string GetHeightMapsTexturePath();
-		std::string GetLandscapeTexturePath();
-		std::string GetCubemapTexturePath();
-		std::string GetNormalMapPath();
-		std::string GetSpecularMapPath();
-		std::string GetAlbedoTexturePath();
-		std::string GetDistortionTexturePath();
-		std::string GetPostprocessTexturePath();
-		std::string GetEditorTexturePath();
+		std::string GetGrassTexturePath() const;
+		std::string GetHeightMapsTexturePath() const;
+		std::string GetLandscapeTexturePath() const;
+		std::string GetCubemapTexturePath() const;
+		std::string GetNormalMapPath() const;
+		std::string GetSpecularMapPath() const;
+		std::string GetAlbedoTexturePath() const;
+		std::string GetDistortionTexturePath() const;
+		std::string GetPostprocessTexturePath() const;
+		std::string GetEditorTexturePath() const;
 	};
 }
 

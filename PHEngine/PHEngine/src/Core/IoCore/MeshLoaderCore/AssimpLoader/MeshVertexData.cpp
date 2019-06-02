@@ -222,7 +222,7 @@ namespace Io
 			}
 
 			template <int32_t count_bones_influence_vertex>
-			aiBone* MeshVertexData<count_bones_influence_vertex>::GetBoneByName(const std::string& name) {
+			aiBone* MeshVertexData<count_bones_influence_vertex>::GetBoneByName(const std::string& name) const {
 
 				aiBone* result = nullptr;
 

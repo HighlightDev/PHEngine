@@ -65,7 +65,7 @@ namespace Resources
 			}
 		}
 
-		sharedValue_t GetResource(key_t& key)
+		sharedValue_t GetResource(key_t& key) const
 		{
 			sharedValue_t value;
 			auto it = resourceMap.find(key);
@@ -77,7 +77,7 @@ namespace Resources
 			return value;
 		}
 
-      key_t GetKey(sharedValue_t value)
+      key_t GetKey(sharedValue_t value) const
 		{
          key_t key;
 			auto predicate = [&value](auto& keyvalue)
@@ -148,7 +148,7 @@ namespace Resources
 			return resource;
 		}
 
-		int32_t GetReferenceCount(key_t& key)
+		int32_t GetReferenceCount(key_t& key) const
 		{
 			int32_t referenceCount = 0;
 			auto it = referenceMap.find(key);
@@ -158,7 +158,7 @@ namespace Resources
 			return referenceCount;
 		}
 
-		size_t GetResourcesCount()
+		size_t GetResourcesCount() const
 		{
 			size_t resourceCount = resourceMap.size();
 

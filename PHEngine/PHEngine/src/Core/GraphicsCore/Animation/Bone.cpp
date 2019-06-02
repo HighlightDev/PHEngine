@@ -15,7 +15,6 @@ namespace Graphics
 
 		Bone::~Bone()
 		{
-
 		}
 	
 		void Bone::CleanUp() {
@@ -23,7 +22,7 @@ namespace Graphics
 			ClearChildren();
 		}
 
-		std::vector<glm::mat4> Bone::GetChildrenOffsetMatrices() {
+		std::vector<glm::mat4> Bone::GetChildrenOffsetMatrices() const {
 
 			std::vector<glm::mat4> resultOffsetMatrices;
 
@@ -36,7 +35,7 @@ namespace Graphics
 			return resultOffsetMatrices;
 		}
 
-		void Bone::IterateOffsetHierarchy(Bone* parentBone, std::vector<glm::mat4>& out_offsetMatrices) {
+		void Bone::IterateOffsetHierarchy(Bone* parentBone, std::vector<glm::mat4>& out_offsetMatrices) const {
 
 			for (auto& child : parentBone->m_children)
 			{

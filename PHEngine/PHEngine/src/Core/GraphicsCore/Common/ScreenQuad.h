@@ -16,7 +16,7 @@ namespace Graphics
 
       std::shared_ptr<ResolveTextureShader> m_resolveTexShader;
 
-		VertexArrayObject m_vao;
+		VertexArrayObject* m_vao;
 
 		ScreenQuad();
 
@@ -34,12 +34,12 @@ namespace Graphics
 			return m_instance;
 		}
 
-		inline VertexArrayObject* GetBuffer()
+		inline VertexArrayObject* GetBuffer() const
 		{
-			return &m_vao;
+			return m_vao;
 		}
 
-      inline std::shared_ptr<ResolveTextureShader> GetResolveTexShader()
+      inline std::shared_ptr<ResolveTextureShader> GetResolveTexShader() const
       {
          return m_resolveTexShader;
       }

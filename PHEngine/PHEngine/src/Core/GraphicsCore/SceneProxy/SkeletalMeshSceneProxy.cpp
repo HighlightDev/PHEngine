@@ -41,7 +41,7 @@ namespace Graphics
          m_shader->StopShader();
       }
 
-      std::shared_ptr<ShaderBase> SkeletalMeshSceneProxy::GetShader()
+      std::shared_ptr<ShaderBase> SkeletalMeshSceneProxy::GetShader() const
       {
          return m_shader;
       }

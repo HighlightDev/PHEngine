@@ -25,7 +25,7 @@ namespace Game
 
       void KeyRelease(Keys key);
 
-      bool GetKeyState(Keys key);
+      bool GetKeyState(Keys key) const;
    };
 
 };

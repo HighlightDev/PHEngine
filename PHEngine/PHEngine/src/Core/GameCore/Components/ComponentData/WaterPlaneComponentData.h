@@ -25,7 +25,7 @@ namespace Game
 		{
 		}
 
-		virtual uint64_t GetType() override {
+		virtual uint64_t GetType() const override {
 
 			return WATER_PLANE_COMPONENT;
 		}

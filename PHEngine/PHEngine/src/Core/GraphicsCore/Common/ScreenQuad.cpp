@@ -17,6 +17,7 @@ namespace Graphics
 	ScreenQuad* ScreenQuad::m_instance = nullptr;
 
 	ScreenQuad::ScreenQuad()
+      : m_vao(new VertexArrayObject())
 	{
 		Init();
 	}
@@ -24,6 +25,7 @@ namespace Graphics
 	ScreenQuad::~ScreenQuad()
 	{
       ShaderPool::GetInstance()->TryToFreeMemory(m_resolveTexShader);
+      delete m_vao;
 	}
 
 	void ScreenQuad::Init()
@@ -50,9 +52,9 @@ namespace Graphics
 		VertexBufferObjectBase* verticesVBO = new VertexBufferObject< float, 3, GL_FLOAT>(std::make_shared<std::vector<float>>(vertices), GL_ARRAY_BUFFER, 0, DataCarryFlag::Invalidate);
 		VertexBufferObjectBase* texCoordsVBO = new VertexBufferObject< float, 2, GL_FLOAT>(std::make_shared<std::vector<float>>(texCoords), GL_ARRAY_BUFFER, 2, DataCarryFlag::Invalidate);
 
-		m_vao.AddVBO(std::unique_ptr<VertexBufferObjectBase>(std::move(verticesVBO)),
+		m_vao->AddVBO(std::unique_ptr<VertexBufferObjectBase>(std::move(verticesVBO)),
 			std::unique_ptr<VertexBufferObjectBase>(std::move(texCoordsVBO)));
 
-		m_vao.BindBuffersToVao();
+		m_vao->BindBuffersToVao();
 	}
 }

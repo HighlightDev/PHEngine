@@ -18,7 +18,7 @@ namespace Game
       return INPUT_COMPONENT;
    }
 
-   KeyboardBindings& InputComponent::GetKeyboardBindings()
+   const KeyboardBindings& InputComponent::GetKeyboardBindings() const
    {
       return m_keyboardBindings;
    }

@@ -36,15 +36,15 @@ namespace Graphics
 
          void UpdateAnimationLoopTime(float deltaTime);
 
-         AnimationSequence* GetCurrentSequence();
+         AnimationSequence* GetCurrentSequence() const;
 
-         std::vector<BoneTransform>& GetAnimatedPoseTransformsList();
+         std::vector<BoneTransform>& GetAndUpdateAnimatedPoseTransformsList();
 
          std::vector<glm::mat4> GetAnimatedOffsetedMatrices(Bone* rootBone);
 
          std::vector<glm::mat4> GetAnimatedNotOffsetedPoseMatricesList();
 
-         void TransformFromLocalSpaceToBoneSpace(Bone* parentBone, glm::mat4& parentMatrix, std::vector<glm::mat4> srcTransformation, std::vector<glm::mat4>& dstMatrices);
+         void TransformFromLocalSpaceToBoneSpace(Bone* parentBone, glm::mat4& parentMatrix, std::vector<glm::mat4> srcTransformation, std::vector<glm::mat4>& dstMatrices) const;
       };
 
    }

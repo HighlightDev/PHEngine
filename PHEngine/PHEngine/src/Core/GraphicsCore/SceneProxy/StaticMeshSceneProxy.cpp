@@ -16,7 +16,7 @@ namespace Graphics
       {
       }
 
-      std::shared_ptr<ShaderBase> StaticMeshSceneProxy::GetShader()
+      std::shared_ptr<ShaderBase> StaticMeshSceneProxy::GetShader() const
       {
          return m_shader;
       }

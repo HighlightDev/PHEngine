@@ -50,16 +50,16 @@ namespace Graphics
 
 			void CleanUp();
 
-			std::vector<glm::mat4> GetChildrenOffsetMatrices();
+			std::vector<glm::mat4> GetChildrenOffsetMatrices() const;
 
-			void IterateOffsetHierarchy(Bone* parentBone, std::vector<glm::mat4>& out_offsetMatrices);
+			void IterateOffsetHierarchy(Bone* parentBone, std::vector<glm::mat4>& out_offsetMatrices) const;
 
 			inline std::vector<Bone*>& GetChildren() {
 
 				return m_children;
 			}
 
-			inline Bone* GetParent()
+			inline Bone* GetParent() const
 			{
 				return m_parent;
 			}

@@ -57,7 +57,7 @@ namespace Graphics
 
 		protected:
 
-			int32_t GetSubroutineIndex(ShaderType shaderType, std::string&& subroutineName);
+			int32_t GetSubroutineIndex(ShaderType shaderType, std::string&& subroutineName) const;
 
 			virtual void AccessAllUniformLocations() = 0;
 
@@ -66,9 +66,9 @@ namespace Graphics
 			// Init should be called in child constructor!
 			void Init();
 
-			Uniform GetUniform(std::string&& uniformName);
+			Uniform GetUniform(std::string&& uniformName) const;
 
-         UniformArray GetUniformArray(std::string&& uniformName, size_t countOfUniforms);
+         UniformArray GetUniformArray(std::string&& uniformName, size_t countOfUniforms) const;
 
 			void LoadSubroutineIndex(ShaderType shaderType, int32_t countIndices, int32_t subroutineIndex);
 
@@ -77,9 +77,9 @@ namespace Graphics
 
 		public:
 
-			std::string GetCompileLogInfo();
+			std::string GetCompileLogInfo() const;
 
-			std::string GetLinkLogInfo();
+			std::string GetLinkLogInfo() const;
 
 			void ExecuteShader();
 

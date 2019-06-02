@@ -19,7 +19,7 @@ namespace Game
       {
       }
 
-      virtual uint64_t GetType() override {
+      virtual uint64_t GetType() const override {
 
          return POINT_LIGHT_COMPONENT;
       }

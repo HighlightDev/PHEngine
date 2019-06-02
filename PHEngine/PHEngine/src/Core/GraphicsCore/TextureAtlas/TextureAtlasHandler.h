@@ -31,7 +31,7 @@ namespace Graphics
          return m_atlasResource;
       }
 
-      inline TextureType GetTextureType()
+      inline TextureType GetTextureType() const
       {
          return m_texType;
       }

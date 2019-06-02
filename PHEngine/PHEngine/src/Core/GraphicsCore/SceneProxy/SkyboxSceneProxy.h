@@ -33,7 +33,7 @@ namespace Graphics
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
 
-         virtual std::shared_ptr<ShaderBase> GetShader() override;
+         virtual std::shared_ptr<ShaderBase> GetShader() const override;
 
          void PostConstructor();
 

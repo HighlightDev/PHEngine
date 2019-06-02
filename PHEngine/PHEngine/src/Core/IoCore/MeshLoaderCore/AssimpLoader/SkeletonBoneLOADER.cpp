@@ -27,7 +27,7 @@ namespace Io
 				return m_children;
 			}
 
-			int32_t SkeletonBoneBaseLOADER::GetIdByBoneInHierarchy(aiBone* seekBone)
+			int32_t SkeletonBoneBaseLOADER::GetIdByBoneInHierarchy(aiBone* seekBone) const
 			{
 				int32_t id = -1;
 
@@ -41,7 +41,7 @@ namespace Io
 				return id;
 			}
 
-			int32_t SkeletonBoneBaseLOADER::GetIdByBone(aiBone* seekBone, SkeletonBoneLOADER* currentSkeletonBone)
+			int32_t SkeletonBoneBaseLOADER::GetIdByBone(aiBone* seekBone, SkeletonBoneLOADER* currentSkeletonBone) const
 			{
 				int32_t id = -1;
 
@@ -106,7 +106,7 @@ namespace Io
 				return m_boneId;
 			}
 
-			SkeletonBoneBaseLOADER* SkeletonBoneLOADER::GetParent()
+			SkeletonBoneBaseLOADER* SkeletonBoneLOADER::GetParent() const
 			{
 				return m_parent;
 			}

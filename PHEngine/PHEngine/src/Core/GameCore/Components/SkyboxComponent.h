@@ -49,7 +49,7 @@ namespace Game
 			m_rotateSpeed = rotateSpeed;
 		}
 
-		inline float GetRotateSpeed()
+		inline float GetRotateSpeed() const
 		{
 			return m_rotateSpeed;
 		}

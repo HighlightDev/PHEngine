@@ -36,7 +36,7 @@ namespace Graphics
             return m_frames;
          }
 
-         std::vector<double> GetFrameTimeIntervals()
+         std::vector<double> GetFrameTimeIntervals() const
          {
             std::vector<double> intervals;
 
@@ -47,7 +47,7 @@ namespace Graphics
             return intervals;
          }
 
-         std::pair<double, double> GetIntervalsOnTimeBoundaries(double time)
+         std::pair<double, double> GetIntervalsOnTimeBoundaries(double time) const
          {
             std::vector<double> allTimeIntervals = GetFrameTimeIntervals();
             std::pair<double, double> resultInterval;

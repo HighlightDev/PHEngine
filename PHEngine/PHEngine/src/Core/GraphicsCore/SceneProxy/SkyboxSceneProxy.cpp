@@ -27,7 +27,7 @@ namespace Graphics
          }
       }
 
-      std::shared_ptr<ShaderBase> SkyboxSceneProxy::GetShader()
+      std::shared_ptr<ShaderBase> SkyboxSceneProxy::GetShader() const
       {
          return m_skyboxShader;
       }

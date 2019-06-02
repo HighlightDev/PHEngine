@@ -27,7 +27,7 @@ namespace Game
       if (m_playerActor->GetInputComponent())
       {
          auto& bindings = m_playerActor->GetInputComponent()->GetKeyboardBindings();
-         std::shared_ptr<SceneComponent> rootComponent = m_playerActor->GetRootComponent();
+         std::shared_ptr<SceneComponent> rootComponent = m_playerActor->GetBaseRootComponent();
          std::shared_ptr<MovementComponent> movementComponent = m_playerActor->GetMovementComponent();
 
          glm::vec3& velocity = movementComponent->Velocity;

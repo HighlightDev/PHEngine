@@ -70,7 +70,7 @@ namespace Graphics
             ExtractRotationTranslationScale();
          }
 
-         mat4 GetToBoneSpaceMatrix()
+         mat4 GetToBoneSpaceMatrix() const
          {
             return m_toBoneSpace;
          }

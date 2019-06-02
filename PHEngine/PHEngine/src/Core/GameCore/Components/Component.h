@@ -32,10 +32,10 @@ namespace Game
 
       void RemoveOwner();
 
-      inline Actor* GetOwner();
+      inline Actor* GetOwner() const;
 	};
 
-   inline Actor* Component::GetOwner()
+   inline Actor* Component::GetOwner() const
    {
       return m_owner;
    }
