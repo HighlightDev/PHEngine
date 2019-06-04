@@ -1,7 +1,7 @@
 #include "PlayerController.h"
 #include "Core/GameCore/CameraBase.h"
 #include "COre/GameCore/ThirdPersonCamera.h"
-#include "Core/GameCore/Event/TEvent.h"
+#include "Core/GameCore/Event/CameraMovedEvent.h"
 
 namespace Game
 {
