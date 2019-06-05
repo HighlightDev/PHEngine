@@ -3,7 +3,7 @@
 #include "LightComponent.h"
 #include "Core/GraphicsCore/SceneProxy/LightSceneProxy.h"
 #include "Core/GraphicsCore/RenderData/DirectionalLightRenderData.h"
-#include "Core/GameCore/Event/TEvent.h"
+#include "Core/GameCore/Event/CameraMovedEvent.h"
 
 using namespace Graphics::Proxy;
 using namespace Graphics::Data;

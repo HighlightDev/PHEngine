@@ -44,7 +44,5 @@ namespace Event
       }
 
    };
-
-   typedef TEvent<glm::vec3> CameraMovedEvent;
 }
 
