@@ -71,8 +71,6 @@ namespace Graphics
                const BoneTransform& lerpedTransform = BoneTransform::SLerp(prevTransform, nextTransform, blendFactor);
                m_cachedBoneTransforms.emplace_back(std::move(lerpedTransform));
             }
-
-            bSequenceDirty = false;
          }
 
          return m_cachedBoneTransforms;
@@ -91,24 +89,29 @@ namespace Graphics
 
       std::vector<glm::mat4> AnimationHolder::GetAnimatedOffsetedMatrices(Bone* rootBone)
       {
-         std::vector<glm::mat4> animatePoseMatrices = GetAnimatedNotOffsetedPoseMatricesList();
-         std::vector<glm::mat4> offsetMatrices(rootBone->GetChildrenOffsetMatrices());
-         std::vector<glm::mat4> animateToBoneSpaceMatrices;
-
-         glm::mat4 matrixOfRootBone(1);
-         TransformFromLocalSpaceToBoneSpace(rootBone, matrixOfRootBone, animatePoseMatrices, animateToBoneSpaceMatrices);
-
-         size_t countOfAnimatedBones = animatePoseMatrices.size();
-         std::vector<glm::mat4> skinningMatrices;
-
-         for (size_t i = 0; i < countOfAnimatedBones; i++)
+         if (bSequenceDirty)
          {
-            const glm::mat4& animateMatrix = animateToBoneSpaceMatrices[i];
-            const glm::mat4& offsetMatrix = offsetMatrices[i];
-            skinningMatrices.emplace_back(animateMatrix * offsetMatrix);
+            std::vector<glm::mat4> animatePoseMatrices = GetAnimatedNotOffsetedPoseMatricesList();
+            std::vector<glm::mat4> offsetMatrices(rootBone->GetChildrenOffsetMatrices());
+            std::vector<glm::mat4> animateToBoneSpaceMatrices;
+
+            glm::mat4 matrixOfRootBone(1);
+            TransformFromLocalSpaceToBoneSpace(rootBone, matrixOfRootBone, animatePoseMatrices, animateToBoneSpaceMatrices);
+
+            size_t countOfAnimatedBones = animatePoseMatrices.size();
+            m_cachedSkinningMatrices.clear();
+
+            for (size_t i = 0; i < countOfAnimatedBones; i++)
+            {
+               const glm::mat4& animateMatrix = animateToBoneSpaceMatrices[i];
+               const glm::mat4& offsetMatrix = offsetMatrices[i];
+               m_cachedSkinningMatrices.emplace_back(animateMatrix * offsetMatrix);
+            }
+
+            bSequenceDirty = false;
          }
 
-         return skinningMatrices;
+         return m_cachedSkinningMatrices;
       }
 
       void AnimationHolder::TransformFromLocalSpaceToBoneSpace(Bone* parentBone, glm::mat4& parentMatrix, std::vector<glm::mat4> srcTransformation, std::vector<glm::mat4>& dstMatrices) const

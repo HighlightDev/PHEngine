@@ -74,7 +74,7 @@ namespace Game
       {
          Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", MaxWeights);
          Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", MaxBones);
-         Predefine<int32_t>(ShaderType::GeometryShader, "CubemapSides", 6);
+         Predefine<int32_t>(ShaderType::GeometryShader, "CubemapFaces", 6);
       }
 
 #undef MaxWeights

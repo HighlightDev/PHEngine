@@ -49,6 +49,7 @@ namespace Graphics
       void SkeletalMeshSceneProxy::SetAnimationDeltaTime(float animationDeltaTime)
       {
          m_animationDeltaTime = animationDeltaTime;
+         bAnimationTransformationDirty = true;
       }
 
       uint64_t SkeletalMeshSceneProxy::GetComponentType() const
@@ -59,7 +60,13 @@ namespace Graphics
       std::vector<glm::mat4> SkeletalMeshSceneProxy::GetSkinningMatrices()
       {
          AnimatedSkin* animatedSkin = static_cast<AnimatedSkin*>(m_skin.get());
-         m_animationHolder.UpdateAnimationLoopTime(m_animationDeltaTime);
+
+         if (bAnimationTransformationDirty)
+         {
+            m_animationHolder.UpdateAnimationLoopTime(m_animationDeltaTime);
+            bAnimationTransformationDirty = false;
+         }
+
          return m_animationHolder.GetAnimatedOffsetedMatrices(animatedSkin->GetRootBone().get());
       }
    }

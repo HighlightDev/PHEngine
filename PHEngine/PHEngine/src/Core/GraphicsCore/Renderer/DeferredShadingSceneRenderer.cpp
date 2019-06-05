@@ -306,7 +306,14 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::PushRenderTargetToTextureRenderer()
       {
-         m_textureRenderer.PushDebugRenderTarget();
+         const auto lightProxies = m_scene->LightProxies;
+
+         std::shared_ptr<Graphics::Proxy::LightSceneProxy> pointLightIt = std::find_if(lightProxies.begin(), lightProxies.end(), [&](const std::shared_ptr<Graphics::Proxy::LightSceneProxy>& proxy) { return proxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT;  })[0];
+         
+         std::shared_ptr<LightSceneProxy> proxyPtr = pointLightIt;
+         std::shared_ptr <PointLightSceneProxy> pointLightProxyPtr = std::static_pointer_cast<PointLightSceneProxy>(proxyPtr);
+         m_textureRenderer.RenderPointLightShadowmap(pointLightProxyPtr, m_gbuffer);
+         //m_textureRenderer.PushDebugRenderTarget();
       }
 	}
 }

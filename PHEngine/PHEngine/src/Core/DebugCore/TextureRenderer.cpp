@@ -15,6 +15,9 @@ namespace Debug
       const auto& folderManager = Common::FolderManager::GetInstance();
       ShaderParams shaderParams("Texture Renderer Shader", folderManager->GetShadersPath() + "uiVS.glsl", folderManager->GetShadersPath() + "uiFS.glsl", "", "", "", "");
       m_shader = std::static_pointer_cast<TextureRendererShader>(ShaderPool::GetInstance()->template GetOrAllocateResource<TextureRendererShader>(shaderParams));
+
+      shaderParams = ShaderParams("Cubemap Renderer Shader", folderManager->GetShadersPath() + "cubemapUiVS.glsl", folderManager->GetShadersPath() + "cubemapUiFS.glsl", "", "", "", "");
+      m_cubemapRendererShader = std::static_pointer_cast<CubemapRendererShader>(ShaderPool::GetInstance()->template GetOrAllocateResource<CubemapRendererShader>(shaderParams));
    }
 
    TextureRenderer::~TextureRenderer()
@@ -114,6 +117,31 @@ namespace Debug
       m_shader->SetScreenSpaceMatrix(glm::mat4(1));
       ScreenQuad::GetInstance()->GetBuffer()->RenderVAO(GL_TRIANGLES);
       m_shader->StopShader();
+   }
+
+   void TextureRenderer::RenderPointLightShadowmap(const std::shared_ptr<Graphics::Proxy::PointLightSceneProxy> pointLightSceneProxy, const std::unique_ptr<DeferredShadingGBuffer>& gbuffer)
+   {
+      const auto pointShadowInfo = pointLightSceneProxy->GetProjectedPointShadowInfo();
+
+      if (pointShadowInfo)
+      {
+         const std::shared_ptr<ITexture> resource = pointShadowInfo->GetAtlasResource();
+         const glm::vec3 lightPosition = pointLightSceneProxy->GetPosition();
+         const float farPlane = std::sqrtf(pointLightSceneProxy->GetRadianceSqrRadius());
+
+         int32_t texturePixelFormat = resource->GetTextureParameters().TexPixelFormat;
+         const bool bDepthTexture = texturePixelFormat == GL_DEPTH_COMPONENT;
+
+         m_cubemapRendererShader->ExecuteShader();
+         gbuffer->BindPositionTexture(0);
+         resource->BindTexture(1);
+         m_cubemapRendererShader->SetPointLightPosition(lightPosition);
+         m_cubemapRendererShader->SetWorldPositionGBuffeer(0);
+         m_cubemapRendererShader->SetCubemapSampler(1);
+         m_cubemapRendererShader->SetIsDepthTexture(bDepthTexture);
+         m_cubemapRendererShader->SetProjectionFarPlane(farPlane);
+         m_cubemapRendererShader->StopShader();
+      }
    }
 
    void TextureRenderer::CleanUp()

@@ -31,6 +31,8 @@ namespace Graphics
 
          float m_animationDeltaTime;
 
+         bool bAnimationTransformationDirty = true;
+
       public:
          SkeletalMeshSceneProxy(const SkeletalMeshComponent* component);
 

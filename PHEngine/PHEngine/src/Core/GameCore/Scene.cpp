@@ -10,6 +10,7 @@
 #include "Core/GameCore/ThirdPersonCamera.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
 #include "Core/GraphicsCore/Shadow/ProjectedDirShadowInfo.h"
+#include "Core/GraphicsCore/Shadow/ProjectedPointShadowInfo.h"
 #include "Core/GameCore/Components/PointLightComponent.h"
 #include "Core/GameCore/Components/InputComponent.h"
 #include "Core/GraphicsCore/TextureAtlas/TextureAtlasFactory.h"
@@ -198,15 +199,15 @@ namespace Game
 
       // PointLight
       {
-         //// 0
-         //auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
-         //ProjectedPointShadowInfo* pointLightInfo = new ProjectedShadowInfo(pointLightTextureAtlasRequest);
+         // 0
+         auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
+         ProjectedPointShadowInfo* pointLightInfo = new ProjectedPointShadowInfo(pointLightTextureAtlasRequest);
 
-         //PointLightComponentData mData(glm::vec3(0), glm::vec3(), glm::vec3(0.005f, 0, 0), 100, glm::vec3(0.2f, 0.2f, 0.2f), 
-         //   glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), pointLightInfo);
-         //Actor* pointLightActor = new Actor(new SceneComponent(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
-         //CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
-         //AllActors.push_back(pointLightActor);
+         PointLightComponentData mData(glm::vec3(0), glm::vec3(), glm::vec3(0.005f, 0, 0), 100, glm::vec3(0.2f, 0.2f, 0.2f), 
+            glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), pointLightInfo);
+         Actor* pointLightActor = new Actor(new SceneComponent(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
+         CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
+         AllActors.push_back(pointLightActor);
       }
 
       // DirectionalLight

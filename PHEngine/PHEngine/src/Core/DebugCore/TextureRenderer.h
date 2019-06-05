@@ -9,10 +9,15 @@
 
 #include "Core/GraphicsCore/Texture/ITexture.h"
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
+#include "Core/GraphicsCore/Renderer/DeferredShadingGBuffer.h"
 #include "Core/GameCore/ShaderImplementation/TextureRendererShader.h"
+#include "Core/GameCore/ShaderImplementation/CubemapRendererShader.h"
+#include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 
 using namespace Graphics::Texture;
+using namespace Graphics::Proxy;
 using namespace Graphics;
+
 using namespace Game::ShaderImpl;
 
 namespace Debug
@@ -21,6 +26,7 @@ namespace Debug
    class TextureRenderer
    {
       std::shared_ptr<TextureRendererShader> m_shader;
+      std::shared_ptr<CubemapRendererShader> m_cubemapRendererShader;
       std::vector<std::shared_ptr<ITexture>> frameTextures;
 
    public:
@@ -50,8 +56,10 @@ namespace Debug
 
       void RenderSeparatedScreen(std::shared_ptr<ITexture> separatedTexture, glm::ivec2 screenRezolution);
 
+      void RenderPointLightShadowmap(const std::shared_ptr<Graphics::Proxy::PointLightSceneProxy> pointLightComponent, const std::unique_ptr<DeferredShadingGBuffer>& gbuffer);
+
       void CleanUp();
-      
+
    private:
 
       glm::mat4 GetScreenSpaceMatrix(size_t layoutIndex) const;

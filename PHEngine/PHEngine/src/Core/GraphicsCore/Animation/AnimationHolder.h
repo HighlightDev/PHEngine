@@ -20,6 +20,8 @@ namespace Graphics
          AnimationSequence* m_currentSequence;
 
          std::vector<BoneTransform> m_cachedBoneTransforms;
+         
+         std::vector<glm::mat4> m_cachedSkinningMatrices;
 
          double m_sequenceLoopTime;
          double m_previousFrameTime;
