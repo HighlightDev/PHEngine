@@ -18,6 +18,10 @@ namespace Graphics
       {
       }
 
+      void LightSceneProxy::PostConstructorInitialize()
+      {
+      }
+
       void LightSceneProxy::SetTransformationMatrix(const glm::mat4& relativeMatrix)
       {
          m_relativeMatrix = relativeMatrix;
@@ -32,6 +36,11 @@ namespace Graphics
       void LightSceneProxy::SetIsTransformationDirty(bool value)
       {
          bTransformationDirty = value;
+      }
+
+      ProjectedShadowInfo* LightSceneProxy::GetShadowInfo() {
+
+         return m_shadowInfo;
       }
 
    }

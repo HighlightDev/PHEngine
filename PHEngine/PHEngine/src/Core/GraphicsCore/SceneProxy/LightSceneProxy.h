@@ -36,9 +36,12 @@ namespace Graphics
          glm::vec3 SpecularColor;
 
          LightSceneProxy(glm::mat4 relativeMatrix, glm::vec3 ambientColor, glm::vec3 diffuseColor, glm::vec3 specularColor, ProjectedShadowInfo* shadowInfo = nullptr);
+
          virtual ~LightSceneProxy();
 
          virtual LightSceneProxyType GetLightProxyType() const = 0;
+
+         virtual void PostConstructorInitialize();
 
          void SetTransformationMatrix(const glm::mat4& relativeMatrix);
 
@@ -46,10 +49,7 @@ namespace Graphics
 
          void SetIsTransformationDirty(bool value);
 
-         virtual ProjectedShadowInfo* GetShadowInfo() {
-
-            return m_shadowInfo;
-         }
+         virtual ProjectedShadowInfo* GetShadowInfo();
 
       };
 

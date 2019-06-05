@@ -18,13 +18,9 @@ namespace Graphics
       {
       }
 
-      void SkyboxSceneProxy::PostConstructor() 
+      void SkyboxSceneProxy::PostConstructorInitialize()
       {
-         if (bPostConstructor)
-         {
 
-            bPostConstructor = false;
-         }
       }
 
       std::shared_ptr<ShaderBase> SkyboxSceneProxy::GetShader() const
@@ -39,8 +35,6 @@ namespace Graphics
 
       void SkyboxSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
       {
-         PostConstructor();
-
          glDisable(GL_CLIP_DISTANCE0);
          glEnable(GL_CULL_FACE);
          glCullFace(GL_BACK);

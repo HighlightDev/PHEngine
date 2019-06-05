@@ -20,14 +20,13 @@ namespace Graphics
          , m_attenuation(component->GetRenderData().Attenuation)
          , m_radianceSqrRadius(component->GetRenderData().RadianceSqrRadius)
       {
-         InitializeShadowProjectionMatrices();
       }
 
       PointLightSceneProxy::~PointLightSceneProxy()
       {
       }
 
-      void PointLightSceneProxy::InitializeShadowProjectionMatrices()
+      void PointLightSceneProxy::PostConstructorInitialize()
       {
          auto shadowInfo = static_cast<ProjectedPointShadowInfo*>(m_shadowInfo);
          if (shadowInfo)
@@ -56,6 +55,22 @@ namespace Graphics
       {
          auto result = static_cast<ProjectedPointShadowInfo*>(GetShadowInfo());
          return result;
+      }
+
+      glm::vec3 PointLightSceneProxy::GetPosition() const
+      {
+         glm::vec3 result = m_relativeMatrix * glm::vec4(0, 0, 0, 1.0f);
+         return result;
+      }
+
+      glm::vec3 PointLightSceneProxy::GetAttenuation() const 
+      {
+         return m_attenuation;
+      }
+
+      float PointLightSceneProxy::GetRadianceSqrRadius() const 
+      {
+         return m_radianceSqrRadius;
       }
 
       ProjectedShadowInfo* PointLightSceneProxy::GetShadowInfo()

@@ -15,35 +15,30 @@ namespace Graphics
          public LightSceneProxy
       {
          glm::vec3 m_attenuation;
+
          float m_radianceSqrRadius;
-
-         virtual ProjectedShadowInfo* GetShadowInfo() override;
-
-         void InitializeShadowProjectionMatrices();
 
       public:
          
-         glm::vec3 GetPosition() const
-         {
-            glm::vec3 result = m_relativeMatrix * glm::vec4(0, 0, 0, 1.0f);
-            return result;
-         }
-
-         glm::vec3 GetAttenuation() const {
-            return m_attenuation;
-         }
-
-         float GetRadianceSqrRadius() const {
-            return m_radianceSqrRadius;
-         }
-
          PointLightSceneProxy(const PointLightComponent* component);
 
          virtual ~PointLightSceneProxy();
 
+         virtual void PostConstructorInitialize() override;
+
+         glm::vec3 GetPosition() const;
+
+         glm::vec3 GetAttenuation() const;
+
+         float GetRadianceSqrRadius() const;
+
          virtual LightSceneProxyType GetLightProxyType() const override;
 
          ProjectedPointShadowInfo* GetProjectedPointShadowInfo();
+
+      private:
+
+         virtual ProjectedShadowInfo* GetShadowInfo() override;
       };
 
    }

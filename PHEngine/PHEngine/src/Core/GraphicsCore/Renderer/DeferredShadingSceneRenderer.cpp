@@ -54,80 +54,136 @@ namespace Graphics
       {
       }
 
+      void DeferredShadingSceneRenderer::PostConstructorInitialize()
+      {
+         
+      }
+
+      std::vector<std::shared_ptr<DirectionalLightSceneProxy>> DeferredShadingSceneRenderer::RetrieveDirectionalLightProxies(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy) const
+      {
+         std::vector<std::shared_ptr<DirectionalLightSceneProxy>> directionalLights;
+         for (const auto& lightProxy : lightSourcesProxy)
+         {
+            if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
+               directionalLights.push_back(std::static_pointer_cast<DirectionalLightSceneProxy>(lightProxy));
+         }
+         return directionalLights;
+      }
+
+      std::vector<std::shared_ptr<PointLightSceneProxy>> DeferredShadingSceneRenderer::RetrievePointLightProxies(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy) const
+      {
+         std::vector<std::shared_ptr<PointLightSceneProxy>> pointLights;
+         for (const auto& lightProxy : lightSourcesProxy)
+         {
+            if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
+               pointLights.push_back(std::static_pointer_cast<PointLightSceneProxy>(lightProxy));
+         }
+         return pointLights;
+      }
+
       void DeferredShadingSceneRenderer::DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
-         bool bFirstIteration = true;
-         // TODO: need to sort light proxies by projected shadow info with mutual texture atlas (this causes error when different texture atlases are used and depth is not cleared)
-         for (auto& lightProxy : lightSourcesProxy) 
-         {
-            LightSceneProxy* lightPtr = lightProxy.get();
+         auto dirLightProxies = RetrieveDirectionalLightProxies(lightSourcesProxy);
+         auto pointLightProxies = RetrievePointLightProxies(lightSourcesProxy);
 
-            const ProjectedShadowInfo* const shadowInfo = lightProxy->GetShadowInfo();
+         std::sort(dirLightProxies.begin(), dirLightProxies.end(),
+            [](const std::shared_ptr<DirectionalLightSceneProxy>& firstProxy, const std::shared_ptr<DirectionalLightSceneProxy>& secondProxy)
+         {
+            bool result = false;
+            const auto& shadowInfo1 = firstProxy->GetProjectedDirShadowInfo();
+            const auto& shadowInfo2 = secondProxy->GetProjectedDirShadowInfo();
+            if (shadowInfo1 && shadowInfo2)
+            {
+               const uint32_t desc1 = shadowInfo1->GetAtlasResource()->GetTextureDescriptor();
+               const uint32_t desc2 = shadowInfo2->GetAtlasResource()->GetTextureDescriptor();
+               result = desc1 > desc2;
+            }
+            else if (shadowInfo1 && !shadowInfo2)
+            {
+               result = true;
+            }
+
+            return result;
+         });
+
+         const auto firstDirLightProxyWithShadowInfo = std::find_if(dirLightProxies.begin(), dirLightProxies.end(), [](const std::shared_ptr<DirectionalLightSceneProxy>& proxy) {return proxy->GetProjectedDirShadowInfo() != nullptr; });
+         uint32_t lastDirLightFramebufferDesc = std::numeric_limits<uint32_t>::max();
+
+         for (auto& dirLightProxy : dirLightProxies)
+         {
+            DirectionalLightSceneProxy* lightPtr = dirLightProxy.get();
+
+            const ProjectedShadowInfo* const shadowInfo = lightPtr->GetProjectedDirShadowInfo();
             if (shadowInfo)
             {
-               shadowInfo->BindShadowFramebuffer(bFirstIteration);
-               bFirstIteration = false;
+               shadowInfo->BindShadowFramebuffer(shadowInfo->GetAtlasResource()->GetTextureDescriptor() != lastDirLightFramebufferDesc);
+               lastDirLightFramebufferDesc = shadowInfo->GetAtlasResource()->GetTextureDescriptor();
 
-               if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
+               DirectionalLightSceneProxy* dirLightPtr = static_cast<DirectionalLightSceneProxy*>(lightPtr);
+
+               // Non - skeletal primitives
+               if (shadowNonSkeletalMeshPrimitives.size() > 0)
                {
-                  DirectionalLightSceneProxy* dirLightPtr = static_cast<DirectionalLightSceneProxy*>(lightPtr);
-
-                  // Non - skeletal primitives
-                  if (shadowNonSkeletalMeshPrimitives.size() > 0)
+                  m_depthShaderNonSkeletal->ExecuteShader();
+                  for (auto& primitive : shadowNonSkeletalMeshPrimitives)
                   {
-                     m_depthShaderNonSkeletal->ExecuteShader();
-                     for (auto& primitive : shadowNonSkeletalMeshPrimitives)
-                     {
-                        const auto& worldMatrix = primitive->GetMatrix();
-                        const auto& viewMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowViewMatrix();
-                        const auto& projectionMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowProjectionMatrix();
+                     const auto& worldMatrix = primitive->GetMatrix();
+                     const auto& viewMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowViewMatrix();
+                     const auto& projectionMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowProjectionMatrix();
 
-                        m_depthShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
+                     m_depthShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
 
-                        primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
-                     }
-                     m_depthShaderNonSkeletal->StopShader();
+                     primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
                   }
-
-                  // Skeletal primitives
-                  if (shadowSkeletalMeshPrimitives.size() > 0)
-                  {
-                     m_depthShaderSkeletal->ExecuteShader();
-                     for (auto& primitive : shadowSkeletalMeshPrimitives)
-                     {
-                        SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(primitive);
-
-                        const auto& worldMatrix = primitive->GetMatrix();
-                        const auto& viewMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowViewMatrix();
-                        const auto& projectionMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowProjectionMatrix();
-                        m_depthShaderSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
-                        m_depthShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
-                         
-                        primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
-                     }
-                     m_depthShaderSkeletal->StopShader();
-                  }
+                  m_depthShaderNonSkeletal->StopShader();
                }
-               else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
+
+               // Skeletal primitives
+               if (shadowSkeletalMeshPrimitives.size() > 0)
                {
-                  PointLightSceneProxy* pointLightPtr = static_cast<PointLightSceneProxy*>(lightPtr);
-
-                  // Non - skeletal primitives
-                  if (shadowNonSkeletalMeshPrimitives.size() > 0)
+                  m_depthShaderSkeletal->ExecuteShader();
+                  for (auto& primitive : shadowSkeletalMeshPrimitives)
                   {
-                     m_depthCubemapShaderNonSkeletal->ExecuteShader();
-                     for (auto& primitive : shadowNonSkeletalMeshPrimitives)
-                     {
-                        const auto& worldMatrix = primitive->GetMatrix();
-                        const auto& viewMatrices = pointLightPtr->GetProjectedPointShadowInfo()->GetShadowViewMatrices();
-                        const auto& projectionMatrices = pointLightPtr->GetProjectedPointShadowInfo()->GetShadowProjectionMatrices();
+                     SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(primitive);
 
-                        m_depthCubemapShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrices, projectionMatrices);
+                     const auto& worldMatrix = primitive->GetMatrix();
+                     const auto& viewMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowViewMatrix();
+                     const auto& projectionMatrix = dirLightPtr->GetProjectedDirShadowInfo()->GetShadowProjectionMatrix();
+                     m_depthShaderSkeletal->SetTransformationMatrices(worldMatrix, viewMatrix, projectionMatrix);
+                     m_depthShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
 
-                        primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
-                     }
-                     m_depthCubemapShaderNonSkeletal->StopShader();
+                     primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
                   }
+                  m_depthShaderSkeletal->StopShader();
+               }
+
+               glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            }
+         }
+
+         for (auto& pointLightProxy : pointLightProxies)
+         {
+            PointLightSceneProxy* pointLightPtr = static_cast<PointLightSceneProxy*>(pointLightProxy.get());
+
+            const auto& shadowInfo = pointLightPtr->GetProjectedPointShadowInfo();
+            if (shadowInfo)
+            {
+               shadowInfo->BindShadowFramebuffer(true); // every point light has it's own texture atlas 
+               // Non - skeletal primitives
+               if (shadowNonSkeletalMeshPrimitives.size() > 0)
+               {
+                  m_depthCubemapShaderNonSkeletal->ExecuteShader();
+                  for (auto& primitive : shadowNonSkeletalMeshPrimitives)
+                  {
+                     const auto& worldMatrix = primitive->GetMatrix();
+                     const auto& viewMatrices = shadowInfo->GetShadowViewMatrices();
+                     const auto& projectionMatrices = shadowInfo->GetShadowProjectionMatrices();
+
+                     m_depthCubemapShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrices, projectionMatrices);
+
+                     primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                  }
+                  m_depthCubemapShaderNonSkeletal->StopShader();
                }
                glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
@@ -301,18 +357,18 @@ namespace Graphics
       void DeferredShadingSceneRenderer::DebugFramePanelsPass()
       {
          glDisable(GL_DEPTH_TEST);
-         m_textureRenderer.RenderFrames();
+         m_textureRenderer.RenderFrames(m_gbuffer);
       }
 
       void DeferredShadingSceneRenderer::PushRenderTargetToTextureRenderer()
       {
          const auto lightProxies = m_scene->LightProxies;
 
-         std::shared_ptr<Graphics::Proxy::LightSceneProxy> pointLightIt = std::find_if(lightProxies.begin(), lightProxies.end(), [&](const std::shared_ptr<Graphics::Proxy::LightSceneProxy>& proxy) { return proxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT;  })[0];
+         std::shared_ptr<Graphics::Proxy::LightSceneProxy> pointLight = *(std::find_if(lightProxies.begin(), lightProxies.end(), [&](const std::shared_ptr<Graphics::Proxy::LightSceneProxy>& proxy) { return proxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT;  }));
          
-         std::shared_ptr<LightSceneProxy> proxyPtr = pointLightIt;
+         std::shared_ptr<LightSceneProxy> proxyPtr = pointLight;
          std::shared_ptr <PointLightSceneProxy> pointLightProxyPtr = std::static_pointer_cast<PointLightSceneProxy>(proxyPtr);
-         m_textureRenderer.RenderPointLightShadowmap(pointLightProxyPtr, m_gbuffer);
+         m_textureRenderer.PushPointLightCubemap(pointLightProxyPtr);
          //m_textureRenderer.PushDebugRenderTarget();
       }
 	}

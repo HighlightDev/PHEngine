@@ -45,6 +45,11 @@ namespace Debug
       frameTextures.push_back(texture);
    }
 
+   void TextureRenderer::PushPointLightCubemap(const std::shared_ptr<Graphics::Proxy::PointLightSceneProxy>& pointLightSceneProxy)
+   {
+      m_pointLightSceneProxies.push_back(pointLightSceneProxy);
+   }
+
    void TextureRenderer::PopFrame()
    {
       if (frameTextures.size() > 0)
@@ -53,12 +58,17 @@ namespace Debug
       }
    }
 
-   void TextureRenderer::RenderFrames()
+   void TextureRenderer::RenderFrames(const std::unique_ptr<DeferredShadingGBuffer>& gbuffer)
    {
       for (size_t i = 0; i < frameTextures.size(); i++)
       {
          std::shared_ptr<ITexture> frameTexture = frameTextures[i];
          Render(frameTexture, i);
+      }
+
+      for (const auto& light : m_pointLightSceneProxies)
+      {
+         RenderPointLightShadowmap(light, gbuffer);
       }
    }
 
@@ -121,6 +131,8 @@ namespace Debug
 
    void TextureRenderer::RenderPointLightShadowmap(const std::shared_ptr<Graphics::Proxy::PointLightSceneProxy> pointLightSceneProxy, const std::unique_ptr<DeferredShadingGBuffer>& gbuffer)
    {
+      glDisable(GL_DEPTH_TEST);
+
       const auto pointShadowInfo = pointLightSceneProxy->GetProjectedPointShadowInfo();
 
       if (pointShadowInfo)
@@ -128,6 +140,7 @@ namespace Debug
          const std::shared_ptr<ITexture> resource = pointShadowInfo->GetAtlasResource();
          const glm::vec3 lightPosition = pointLightSceneProxy->GetPosition();
          const float farPlane = std::sqrtf(pointLightSceneProxy->GetRadianceSqrRadius());
+         const glm::mat4& screenSpaceMatrix = GetScreenSpaceMatrix(0);
 
          int32_t texturePixelFormat = resource->GetTextureParameters().TexPixelFormat;
          const bool bDepthTexture = texturePixelFormat == GL_DEPTH_COMPONENT;
@@ -135,11 +148,14 @@ namespace Debug
          m_cubemapRendererShader->ExecuteShader();
          gbuffer->BindPositionTexture(0);
          resource->BindTexture(1);
+         m_cubemapRendererShader->SetScreenSpaceMatrix(screenSpaceMatrix);
          m_cubemapRendererShader->SetPointLightPosition(lightPosition);
          m_cubemapRendererShader->SetWorldPositionGBuffeer(0);
          m_cubemapRendererShader->SetCubemapSampler(1);
          m_cubemapRendererShader->SetIsDepthTexture(bDepthTexture);
          m_cubemapRendererShader->SetProjectionFarPlane(farPlane);
+
+         ScreenQuad::GetInstance()->GetBuffer()->RenderVAO(GL_TRIANGLES);
          m_cubemapRendererShader->StopShader();
       }
    }

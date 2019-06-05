@@ -38,16 +38,11 @@ namespace Graphics
 
          virtual ~PrimitiveSceneProxy();
 
-         inline bool IsDeferred() const
-         {
-            return m_IsDeferred;
-         }
+         virtual void PostConstructorInitialize();
 
          virtual std::shared_ptr<ShaderBase> GetShader() const = 0;
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) = 0;
-
-         virtual void StencilRender(glm::mat4& viewMatrix, glm::mat4& projectionMatrix);
 
          virtual glm::mat4 GetMatrix() const;
 
@@ -62,6 +57,11 @@ namespace Graphics
          virtual std::shared_ptr<ITexture> GetSpecularMap() const;
 
          virtual uint64_t GetComponentType() const;
+
+         inline bool IsDeferred() const
+         {
+            return m_IsDeferred;
+         }
          
       };
 

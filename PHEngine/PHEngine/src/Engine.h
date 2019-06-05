@@ -25,6 +25,8 @@ public:
 
 	~Engine();
 
+   void PostConstructorInitialize();
+
    void GameThreadPulse();
 
    void RenderThreadPulse();

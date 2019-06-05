@@ -28,6 +28,7 @@ namespace Debug
       std::shared_ptr<TextureRendererShader> m_shader;
       std::shared_ptr<CubemapRendererShader> m_cubemapRendererShader;
       std::vector<std::shared_ptr<ITexture>> frameTextures;
+      std::vector<std::shared_ptr<Graphics::Proxy::PointLightSceneProxy>> m_pointLightSceneProxies;
 
    public:
 
@@ -48,9 +49,11 @@ namespace Debug
 
       void PushFrame(std::shared_ptr<ITexture> texture);
 
+      void PushPointLightCubemap(const std::shared_ptr<Graphics::Proxy::PointLightSceneProxy>& pointLightSceneProxy);
+
       void PopFrame();
 
-      void RenderFrames();
+      void RenderFrames(const std::unique_ptr<DeferredShadingGBuffer>& gbuffer);
 
       void RenderFullScreenInputTexture(std::shared_ptr<ITexture> renderTexture, glm::ivec2 screenRezolution);
 

@@ -16,8 +16,6 @@ namespace Graphics
       {
          glm::vec3 m_direction;
 
-         virtual ProjectedShadowInfo* GetShadowInfo();
-
       public:
          
          glm::vec3 GetDirection() const
@@ -29,9 +27,15 @@ namespace Graphics
 
          virtual ~DirectionalLightSceneProxy();
 
+         virtual void PostConstructorInitialize() override;
+
          ProjectedDirShadowInfo* GetProjectedDirShadowInfo();
 
          virtual LightSceneProxyType GetLightProxyType() const override;
+
+      private:
+
+         virtual ProjectedShadowInfo* GetShadowInfo();
       };
 
    }

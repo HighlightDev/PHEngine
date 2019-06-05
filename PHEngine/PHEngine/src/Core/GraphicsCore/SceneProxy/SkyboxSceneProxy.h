@@ -15,8 +15,6 @@ namespace Graphics
       class SkyboxSceneProxy :
          public PrimitiveSceneProxy
       {
-         bool bPostConstructor = true;
-
          std::shared_ptr<SkyboxShader> m_skyboxShader;
          std::shared_ptr<ITexture> m_dayTexture;
          std::shared_ptr<ITexture> m_nightTexture;
@@ -31,11 +29,11 @@ namespace Graphics
 
          ~SkyboxSceneProxy();
 
+         virtual void PostConstructorInitialize() override;
+
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
 
          virtual std::shared_ptr<ShaderBase> GetShader() const override;
-
-         void PostConstructor();
 
          virtual uint64_t GetComponentType() const override;
       };

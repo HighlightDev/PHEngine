@@ -7,14 +7,22 @@ Engine::Engine()
    , m_scene(m_interThreadMgr)
    , m_sceneRenderer(m_interThreadMgr, &m_scene)
 {
-   m_scene.AddTestActors();
-
-   m_gameThread = std::thread(std::bind(&Engine::GameThreadPulse, this));
-   m_gameThread.detach();
+   PostConstructorInitialize();
 }
 
 Engine::~Engine()
 {
+}
+
+void Engine::PostConstructorInitialize()
+{
+   m_scene.AddTestActors();
+
+   m_scene.PostConstructorInitialize();
+   m_sceneRenderer.PostConstructorInitialize();
+
+   m_gameThread = std::thread(std::bind(&Engine::GameThreadPulse, this));
+   m_gameThread.detach();
 }
 
 void Engine::GameThreadPulse()

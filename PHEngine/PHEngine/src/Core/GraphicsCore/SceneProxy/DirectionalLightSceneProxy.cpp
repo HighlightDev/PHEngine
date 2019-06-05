@@ -16,16 +16,20 @@ namespace Graphics
             component->GetRenderData().ShadowInfo)
          , m_direction(component->GetRenderData().Direction)
       {
-         auto shadowInfo = static_cast<ProjectedDirShadowInfo*>(m_shadowInfo);
-         if (shadowInfo)
-         {
-            shadowInfo->SetShadowProjectionMatrix(glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, 0.1f, 100.0f));
-         }
       }
 
       DirectionalLightSceneProxy::~DirectionalLightSceneProxy()
       {
 
+      }
+
+      void DirectionalLightSceneProxy::PostConstructorInitialize()
+      {
+         auto shadowInfo = static_cast<ProjectedDirShadowInfo*>(m_shadowInfo);
+         if (shadowInfo)
+         {
+            shadowInfo->SetShadowProjectionMatrix(glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, 0.1f, 100.0f));
+         }
       }
 
       ProjectedDirShadowInfo* DirectionalLightSceneProxy::GetProjectedDirShadowInfo()

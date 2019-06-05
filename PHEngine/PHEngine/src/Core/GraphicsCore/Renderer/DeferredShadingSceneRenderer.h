@@ -11,6 +11,8 @@
 #include "Core/GraphicsCore/Renderer/DeferredShadingGBuffer.h"
 #include "Core/InterThreadCommunicationMgr.h"
 #include "Core/DebugCore/TextureRenderer.h"
+#include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 
 using namespace Game::ShaderImpl;
 using namespace Game;
@@ -51,11 +53,16 @@ namespace Graphics
 
          void DepthPass(std::vector<PrimitiveSceneProxy*>& shadowNonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& shadowSkeletalMeshPrimitives, const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy);
 
+         std::vector<std::shared_ptr<DirectionalLightSceneProxy>> RetrieveDirectionalLightProxies(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy) const;
+         std::vector<std::shared_ptr<PointLightSceneProxy>> RetrievePointLightProxies(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy) const;
+
       public:
 
          DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene);
 
 			~DeferredShadingSceneRenderer();
+
+         void PostConstructorInitialize();
 
          void RenderScene_RenderThread();
 

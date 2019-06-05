@@ -48,6 +48,8 @@ namespace Game
 
       Scene(InterThreadCommunicationMgr& interThreadMgr);
 
+      void PostConstructorInitialize();
+
       inline class CameraBase* GetCamera() const
       {
          return m_camera;

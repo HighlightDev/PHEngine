@@ -19,12 +19,8 @@ namespace Graphics
       {
       }
 
-      void PrimitiveSceneProxy::StencilRender(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
+      void PrimitiveSceneProxy::PostConstructorInitialize()
       {
-        //m_stencilPassShader.startProgram();
-        //m_stencilPassShader.SetUniformVariables(ref projectionMatrix, camera.GetViewMatrix(), ref m_modelMatrix);
-         m_skin->GetBuffer()->RenderVAO(GL_TRIANGLES);
-         //m_stencilPassShader.stopProgram();
       }
 
       glm::mat4 PrimitiveSceneProxy::GetMatrix() const
