@@ -9,6 +9,12 @@ namespace Graphics
 {
 	namespace Texture
 	{
+      enum class TextureType
+      {
+         UNDEFINED,
+         TEXTURE_2D,
+         TEXTURE_CUBE
+      };
 
 		class ITexture
 		{
@@ -28,6 +34,7 @@ namespace Graphics
 			virtual glm::ivec2 GetTextureRezolution() const = 0;
 			virtual TexParams GetTextureParameters() const = 0;
          virtual float GetTextureAspectRatio() const = 0;
+         virtual TextureType GetTextureType() const = 0;
 		};
 	}
 }

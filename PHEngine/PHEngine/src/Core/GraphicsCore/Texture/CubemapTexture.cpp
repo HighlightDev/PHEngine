@@ -123,5 +123,10 @@ namespace Graphics
       {
          return (static_cast<float>(m_texParams[0].TexBufferWidth) / static_cast<float>(m_texParams[0].TexBufferHeight));
       }
+
+      TextureType CubemapTexture::GetTextureType() const
+      {
+         return TextureType::TEXTURE_CUBE;
+      }
 	}
 }

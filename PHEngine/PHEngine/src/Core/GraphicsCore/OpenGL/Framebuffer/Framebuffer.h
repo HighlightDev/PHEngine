@@ -28,6 +28,9 @@ namespace Graphics
       void SetRenderbufferStorage(int32_t renderbufferType, const glm::ivec2& screenRezolution) const;
       void Attach2DTextureToFramebuffer(int32_t framebufferAttachment, uint32_t attachedTexture) const;
       void Attach2DTextureToFramebuffer(int32_t framebufferAttachment, const std::shared_ptr<ITexture> texture) const;
+
+      void AttachCubeTextureToFramebuffer(int32_t framebufferAttachment, const std::shared_ptr<ITexture> texture) const;
+
       void AttachRenderbufferToFramebuffer(int32_t framebufferAttachment, size_t renderbufferIndex) const;
       void AttachRenderbufferToFramebuffer(int32_t framebufferAttachment) const;
       void Init();

@@ -24,7 +24,17 @@ namespace Game
       {
          Base::GenFramebuffers(1);
          Base::BindFramebuffer(1);
-         Base::Attach2DTextureToFramebuffer(GL_DEPTH_ATTACHMENT, m_shadowmapTextureResource);
+
+         const auto textureType = m_shadowmapTextureResource->GetTextureType();
+
+         if (TextureType::TEXTURE_CUBE == textureType)
+         {
+            Base::AttachCubeTextureToFramebuffer(GL_DEPTH_ATTACHMENT, m_shadowmapTextureResource);
+         }
+         else if (TextureType::TEXTURE_2D == textureType)
+         {
+            Base::Attach2DTextureToFramebuffer(GL_DEPTH_ATTACHMENT, m_shadowmapTextureResource);
+         }
       }
 
       void ShadowFramebuffer::SetRenderbuffers()

@@ -38,6 +38,8 @@ namespace Graphics
 
          virtual float GetTextureAspectRatio() const override;
 
+         virtual TextureType GetTextureType() const override;
+
 		private:
 
 			uint32_t CreateCubemapTexture(std::vector<std::string>& pathToTextures);

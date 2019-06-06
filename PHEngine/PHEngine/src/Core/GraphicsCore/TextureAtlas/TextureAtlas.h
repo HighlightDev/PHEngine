@@ -13,13 +13,6 @@ using namespace Graphics::Texture;
 namespace Graphics
 {
 
-   enum class TextureType
-   {
-      UNDEFINED,
-      TEXTURE_2D, 
-      TEXTURE_CUBE
-   };
-
    class TextureAtlas
    {
       friend class TextureAtlasFactory;

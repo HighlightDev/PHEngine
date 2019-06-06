@@ -55,6 +55,8 @@ namespace Graphics
 
          virtual float GetTextureAspectRatio() const override;
 
+         virtual TextureType GetTextureType() const override;
+
 		private:
 
          void InitEmptyTexture();

@@ -68,6 +68,11 @@ namespace Graphics
       glFramebufferTexture2D(GL_FRAMEBUFFER, framebufferAttachment, GL_TEXTURE_2D, texture->GetTextureDescriptor(), 0);
    }
 
+   void Framebuffer::AttachCubeTextureToFramebuffer(int32_t framebufferAttachment, const std::shared_ptr<ITexture> texture) const
+   {
+      glFramebufferTexture(GL_FRAMEBUFFER, framebufferAttachment, texture->GetTextureDescriptor(), 0);
+   }
+
    void Framebuffer::AttachRenderbufferToFramebuffer(int32_t framebufferAttachment, size_t renderbufferIndex) const
    {
       glFramebufferRenderbuffer(GL_FRAMEBUFFER, framebufferAttachment, GL_RENDERBUFFER,

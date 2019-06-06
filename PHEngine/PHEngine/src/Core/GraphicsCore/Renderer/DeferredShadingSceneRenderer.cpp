@@ -121,8 +121,7 @@ namespace Graphics
 
                DirectionalLightSceneProxy* dirLightPtr = static_cast<DirectionalLightSceneProxy*>(lightPtr);
 
-               // Non - skeletal primitives
-               if (shadowNonSkeletalMeshPrimitives.size() > 0)
+               if (shadowNonSkeletalMeshPrimitives.size() > 0) // Non - skeletal primitives
                {
                   m_depthShaderNonSkeletal->ExecuteShader();
                   for (auto& primitive : shadowNonSkeletalMeshPrimitives)
@@ -138,8 +137,7 @@ namespace Graphics
                   m_depthShaderNonSkeletal->StopShader();
                }
 
-               // Skeletal primitives
-               if (shadowSkeletalMeshPrimitives.size() > 0)
+               if (shadowSkeletalMeshPrimitives.size() > 0) // Skeletal primitives
                {
                   m_depthShaderSkeletal->ExecuteShader();
                   for (auto& primitive : shadowSkeletalMeshPrimitives)
@@ -169,8 +167,8 @@ namespace Graphics
             if (shadowInfo)
             {
                shadowInfo->BindShadowFramebuffer(true); // every point light has it's own texture atlas 
-               // Non - skeletal primitives
-               if (shadowNonSkeletalMeshPrimitives.size() > 0)
+               
+               if (shadowNonSkeletalMeshPrimitives.size() > 0) // Non - skeletal primitives
                {
                   m_depthCubemapShaderNonSkeletal->ExecuteShader();
                   for (auto& primitive : shadowNonSkeletalMeshPrimitives)
