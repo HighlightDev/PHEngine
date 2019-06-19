@@ -1,7 +1,7 @@
 #pragma once
 #include "ProjectedShadowInfo.h"
 
-#include <tuple>
+#include <array>
 
 namespace Graphics
 {
@@ -11,12 +11,12 @@ namespace Graphics
    {
    public:
 
-      using mat4x4tuple_t = std::tuple<glm::mat4x4, glm::mat4x4, glm::mat4x4, glm::mat4x4, glm::mat4x4, glm::mat4x4>;
+      using six_mat4x4 = std::array<glm::mat4x4, 6>;
 
    private:
-      mat4x4tuple_t m_shadowViewMatrix;
+      six_mat4x4 m_shadowViewMatrix;
 
-      mat4x4tuple_t m_shadowProjectionMatrix;
+      six_mat4x4 m_shadowProjectionMatrix;
 
       std::shared_ptr<TextureCubeAtlasHandler> GetTextureCubeHandler() const;
 
@@ -28,15 +28,15 @@ namespace Graphics
 
       virtual void BindShadowFramebuffer(bool clearDepthBuffer) const override;
 
-      mat4x4tuple_t GetShadowViewMatrices() const;
+      six_mat4x4 GetShadowViewMatrices() const;
 
-      mat4x4tuple_t GetShadowProjectionMatrices() const;
+      six_mat4x4 GetShadowProjectionMatrices() const;
 
-      void SetShadowViewMatrices(const mat4x4tuple_t& shadowViewMatrices);
+      void SetShadowViewMatrices(const six_mat4x4& shadowViewMatrices);
 
-      void SetShadowProjectionMatrix(const mat4x4tuple_t& shadowProjectionMatrices);
+      void SetShadowProjectionMatrix(const six_mat4x4& shadowProjectionMatrices);
 
-      mat4x4tuple_t GetShadowMatrix() const;
+      six_mat4x4 GetShadowMatrix() const;
 
    };
 }

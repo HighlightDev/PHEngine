@@ -18,22 +18,22 @@ namespace Game
          u_shadowProjectionMatrices = GetUniformArray("shadowProjectionMatrices", 6);
       }
 
-      void CubemapDepthShaderBase::SetTransformationMatrices(const glm::mat4& worldMatrix, const mat4x4tuple_t& viewMatrix, const mat4x4tuple_t& projectionMatrix)
+      void CubemapDepthShaderBase::SetTransformationMatrices(const glm::mat4& worldMatrix, const six_mat4x4& viewMatrix, const six_mat4x4& projectionMatrix)
       {
          u_worldMatrix.LoadUniform(worldMatrix);
-         u_shadowViewMatrices.LoadUniform(0, std::get<0>(viewMatrix));
-         u_shadowViewMatrices.LoadUniform(1, std::get<1>(viewMatrix));
-         u_shadowViewMatrices.LoadUniform(2, std::get<2>(viewMatrix));
-         u_shadowViewMatrices.LoadUniform(3, std::get<3>(viewMatrix));
-         u_shadowViewMatrices.LoadUniform(4, std::get<4>(viewMatrix));
-         u_shadowViewMatrices.LoadUniform(5, std::get<5>(viewMatrix));
+         u_shadowViewMatrices.LoadUniform(0, viewMatrix[0]);
+         u_shadowViewMatrices.LoadUniform(1, viewMatrix[1]);
+         u_shadowViewMatrices.LoadUniform(2, viewMatrix[2]);
+         u_shadowViewMatrices.LoadUniform(3, viewMatrix[3]);
+         u_shadowViewMatrices.LoadUniform(4, viewMatrix[4]);
+         u_shadowViewMatrices.LoadUniform(5, viewMatrix[5]);
 
-         u_shadowProjectionMatrices.LoadUniform(0, std::get<0>(projectionMatrix));
-         u_shadowProjectionMatrices.LoadUniform(1, std::get<1>(projectionMatrix));
-         u_shadowProjectionMatrices.LoadUniform(2, std::get<2>(projectionMatrix));
-         u_shadowProjectionMatrices.LoadUniform(3, std::get<3>(projectionMatrix));
-         u_shadowProjectionMatrices.LoadUniform(4, std::get<4>(projectionMatrix));
-         u_shadowProjectionMatrices.LoadUniform(5, std::get<5>(projectionMatrix));
+         u_shadowProjectionMatrices.LoadUniform(0, projectionMatrix[0]);
+         u_shadowProjectionMatrices.LoadUniform(1, projectionMatrix[1]);
+         u_shadowProjectionMatrices.LoadUniform(2, projectionMatrix[2]);
+         u_shadowProjectionMatrices.LoadUniform(3, projectionMatrix[3]);
+         u_shadowProjectionMatrices.LoadUniform(4, projectionMatrix[4]);
+         u_shadowProjectionMatrices.LoadUniform(5, projectionMatrix[5]);
       }
 
       // *************************  CubemapDepthShader (Non Skeletal)  *************************  //

@@ -34,13 +34,13 @@ namespace Graphics
             const float aspectRatio = shadowInfo->GetAtlasResource()->GetTextureAspectRatio();
             const auto shadowProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(90), aspectRatio, 1.0f, std::sqrtf(m_radianceSqrRadius));
 
-            ProjectedPointShadowInfo::mat4x4tuple_t matrices;
-            std::get<0>(matrices) = shadowProjectionMatrix;
-            std::get<1>(matrices) = shadowProjectionMatrix;
-            std::get<2>(matrices) = shadowProjectionMatrix;
-            std::get<3>(matrices) = shadowProjectionMatrix;
-            std::get<4>(matrices) = shadowProjectionMatrix;
-            std::get<5>(matrices) = shadowProjectionMatrix;
+            ProjectedPointShadowInfo::six_mat4x4 matrices;
+            matrices[0] = shadowProjectionMatrix;
+            matrices[1] = shadowProjectionMatrix;
+            matrices[2] = shadowProjectionMatrix;
+            matrices[3] = shadowProjectionMatrix;
+            matrices[4] = shadowProjectionMatrix;
+            matrices[5] = shadowProjectionMatrix;
 
             shadowInfo->SetShadowProjectionMatrix(matrices);
          }
@@ -81,13 +81,13 @@ namespace Graphics
             if (IsTransformationDirty())
             {
                glm::vec3 lightPosition = GetPosition();
-               ProjectedPointShadowInfo::mat4x4tuple_t matrices;
-               std::get<0>(matrices) = glm::lookAt(lightPosition, lightPosition + glm::vec3(1.0, 0.0, 0.0), -AXIS_UP);
-               std::get<1>(matrices) = glm::lookAt(lightPosition, lightPosition + glm::vec3(-1.0, 0.0, 0.0), -AXIS_UP);
-               std::get<2>(matrices) = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, 1.0, 0.0), AXIS_FORWARD);
-               std::get<3>(matrices) = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, -1.0, 0.0), -AXIS_FORWARD);
-               std::get<4>(matrices) = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, 0.0, 1.0), -AXIS_UP);
-               std::get<5>(matrices) = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, 0.0, -1.0), -AXIS_UP);
+               ProjectedPointShadowInfo::six_mat4x4 matrices;
+               matrices[0] = glm::lookAt(lightPosition, lightPosition + glm::vec3(1.0, 0.0, 0.0), -AXIS_UP);
+               matrices[1] = glm::lookAt(lightPosition, lightPosition + glm::vec3(-1.0, 0.0, 0.0), -AXIS_UP);
+               matrices[2] = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, 1.0, 0.0), AXIS_FORWARD);
+               matrices[3] = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, -1.0, 0.0), -AXIS_FORWARD);
+               matrices[4] = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, 0.0, 1.0), -AXIS_UP);
+               matrices[5] = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0, 0.0, -1.0), -AXIS_UP);
 
                shadowInfo->SetShadowViewMatrices(matrices);
                SetIsTransformationDirty(false);

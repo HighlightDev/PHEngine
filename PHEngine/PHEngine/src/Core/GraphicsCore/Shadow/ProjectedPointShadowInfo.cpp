@@ -36,65 +36,65 @@ namespace Graphics
       glDrawBuffer(GL_NONE);
    }
 
-   ProjectedPointShadowInfo::mat4x4tuple_t ProjectedPointShadowInfo::GetShadowViewMatrices() const
+   ProjectedPointShadowInfo::six_mat4x4 ProjectedPointShadowInfo::GetShadowViewMatrices() const
    {
       return m_shadowViewMatrix;
    }
 
-   ProjectedPointShadowInfo::mat4x4tuple_t ProjectedPointShadowInfo::GetShadowProjectionMatrices() const
+   ProjectedPointShadowInfo::six_mat4x4 ProjectedPointShadowInfo::GetShadowProjectionMatrices() const
    {
       return m_shadowProjectionMatrix;
    }
 
-   void ProjectedPointShadowInfo::SetShadowViewMatrices(const mat4x4tuple_t& shadowViewMatrices)
+   void ProjectedPointShadowInfo::SetShadowViewMatrices(const six_mat4x4& shadowViewMatrices)
    {
       m_shadowViewMatrix = shadowViewMatrices;
    }
 
-   void ProjectedPointShadowInfo::SetShadowProjectionMatrix(const mat4x4tuple_t& shadowProjectionMatrices)
+   void ProjectedPointShadowInfo::SetShadowProjectionMatrix(const six_mat4x4& shadowProjectionMatrices)
    {
       m_shadowProjectionMatrix = shadowProjectionMatrices;
    }
 
-   ProjectedPointShadowInfo::mat4x4tuple_t ProjectedPointShadowInfo::GetShadowMatrix() const
+   ProjectedPointShadowInfo::six_mat4x4 ProjectedPointShadowInfo::GetShadowMatrix() const
    {
-      ProjectedPointShadowInfo::mat4x4tuple_t result;
+      ProjectedPointShadowInfo::six_mat4x4 result;
 
       // 0
       glm::mat4 shadowMatrix(1);
       shadowMatrix *= m_shadowBiasMatrix;
-      shadowMatrix *= std::get<0>(m_shadowProjectionMatrix);
-      shadowMatrix *= std::get<0>(m_shadowViewMatrix);
-      std::get<0>(result) = shadowMatrix;
+      shadowMatrix *= m_shadowProjectionMatrix[0];
+      shadowMatrix *= m_shadowViewMatrix[0];
+      result[0] = shadowMatrix;
       // 1
       shadowMatrix = glm::mat4(1);
       shadowMatrix *= m_shadowBiasMatrix;
-      shadowMatrix *= std::get<1>(m_shadowProjectionMatrix);
-      shadowMatrix *= std::get<1>(m_shadowViewMatrix);
-      std::get<1>(result) = shadowMatrix;
+      shadowMatrix *= m_shadowProjectionMatrix[1];
+      shadowMatrix *= m_shadowViewMatrix[1];
+      result[1] = shadowMatrix;
       // 2
       shadowMatrix = glm::mat4(1);
       shadowMatrix *= m_shadowBiasMatrix;
-      shadowMatrix *= std::get<2>(m_shadowProjectionMatrix);
-      shadowMatrix *= std::get<2>(m_shadowViewMatrix);
-      std::get<2>(result) = shadowMatrix;
+      shadowMatrix *= m_shadowProjectionMatrix[2];
+      shadowMatrix *= m_shadowViewMatrix[2];
+      result[2] = shadowMatrix;
       // 3
       shadowMatrix = glm::mat4(1);
       shadowMatrix *= m_shadowBiasMatrix;
-      shadowMatrix *= std::get<3>(m_shadowProjectionMatrix);
-      shadowMatrix *= std::get<3>(m_shadowViewMatrix);
+      shadowMatrix *= m_shadowProjectionMatrix[3];
+      shadowMatrix *= m_shadowViewMatrix[3];
       std::get<3>(result) = shadowMatrix;
       // 4
       shadowMatrix = glm::mat4(1);
       shadowMatrix *= m_shadowBiasMatrix;
-      shadowMatrix *= std::get<4>(m_shadowProjectionMatrix);
-      shadowMatrix *= std::get<4>(m_shadowViewMatrix);
+      shadowMatrix *= m_shadowProjectionMatrix[4];
+      shadowMatrix *= m_shadowViewMatrix[4];
       std::get<4>(result) = shadowMatrix;
       // 5
       shadowMatrix = glm::mat4(1);
       shadowMatrix *= m_shadowBiasMatrix;
-      shadowMatrix *= std::get<5>(m_shadowProjectionMatrix);
-      shadowMatrix *= std::get<5>(m_shadowViewMatrix);
+      shadowMatrix *= m_shadowProjectionMatrix[5];
+      shadowMatrix *= m_shadowViewMatrix[5];
       std::get<5>(result) = shadowMatrix;
 
       return result;

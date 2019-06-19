@@ -2,7 +2,7 @@
 #include "Core/GraphicsCore/OpenGL/Shader/ShaderBase.h"
 #include "Core/GraphicsCore/OpenGL/Shader/Uniform.h"
 
-#include <tuple>
+#include <array>
 
 using namespace Graphics::OpenGL;
 
@@ -16,7 +16,7 @@ namespace Game
       {
       public:
 
-         using mat4x4tuple_t = std::tuple<glm::mat4, glm::mat4, glm::mat4, glm::mat4, glm::mat4, glm::mat4>;
+         using six_mat4x4 = std::array<glm::mat4x4, 6>;
 
       protected:
 
@@ -31,7 +31,7 @@ namespace Game
 
          CubemapDepthShaderBase(const ShaderParams& params);
 
-         void SetTransformationMatrices(const glm::mat4& worldMatrix, const mat4x4tuple_t& viewMatrix, const mat4x4tuple_t& projectionMatrix);
+         void SetTransformationMatrices(const glm::mat4& worldMatrix, const six_mat4x4& viewMatrix, const six_mat4x4& projectionMatrix);
 
       };
 
