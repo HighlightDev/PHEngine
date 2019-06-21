@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace Game::ShaderImpl;
@@ -20,8 +21,6 @@ namespace Game
 	{
 	private:
 
-		const float SkyboxSize = 500.0f;
-
 		float m_rotateSpeed;
 
       SkyboxRenderData m_renderData;
@@ -34,7 +33,7 @@ namespace Game
 
 	public:
 
-		SkyboxComponent(float rotateSpeed, const SkyboxRenderData& renderData);
+		SkyboxComponent(glm::vec3 scale, float rotateSpeed, const SkyboxRenderData& renderData);
 
 		virtual ~SkyboxComponent();
 

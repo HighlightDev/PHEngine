@@ -9,12 +9,12 @@ namespace Game
 {
 	struct SkyboxComponentData : public ComponentData
 	{
-		SkyboxComponentData(float skyboxSideSize, float rotateSpeed, std::string&& vsPath,
+		SkyboxComponentData(glm::vec3 scale, float rotateSpeed, std::string&& vsPath,
 			std::string&& fsPath, std::string&& commaSeparatedPathToSixTexturesDay, std::string&& commaSeparatedPathToSixTexturesNight = "")
 
 			: ComponentData()
 			, m_rotateSpeed(rotateSpeed)
-			, m_skyboxSideSize(skyboxSideSize)
+			, m_scale(scale)
 			, m_vsShaderPath(std::move(vsPath))
 			, m_fsShaderPath(std::move(fsPath))
 			, m_commaSeparatedPathToSixTexturesDay(std::move(commaSeparatedPathToSixTexturesDay))
@@ -29,7 +29,7 @@ namespace Game
 		}
 
 		float m_rotateSpeed;
-		float m_skyboxSideSize;
+      glm::vec3 m_scale;
 		std::string m_commaSeparatedPathToSixTexturesDay;
 		std::string m_commaSeparatedPathToSixTexturesNight;
 		std::string m_vsShaderPath;

@@ -18,11 +18,11 @@ namespace Game
          , m_translation(std::move(translation))
          , m_rotation(std::move(rotation))
          , m_scale(std::move(scale))
-         , m_vsShaderPath(std::move(vsPath))
-         , m_fsShaderPath(std::move(fsPath))
          , m_pathToAlbedo(std::move(pathToAlbedo))
          , m_pathToNormalMap(std::move(pathToNormalMap))
          , m_pathToSpecularMap(std::move(pathToSpecularMap))
+         , m_vsShaderPath(std::move(vsPath))
+         , m_fsShaderPath(std::move(fsPath))
       {
       }
 

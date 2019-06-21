@@ -45,7 +45,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform1i(uniformLocation, arg);
       }
@@ -62,7 +62,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform1f(uniformLocation, arg);
       }
@@ -78,7 +78,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform1i(uniformLocation, arg);
       }
@@ -94,7 +94,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform2f(uniformLocation, arg.x, arg.y);
       }
@@ -110,7 +110,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform2f(uniformLocation, arg.x, arg.y);
       }
@@ -126,7 +126,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform3f(uniformLocation, arg.x, arg.y, arg.z);
       }
@@ -142,7 +142,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform3f(uniformLocation, arg.x, arg.y, arg.z);
       }
@@ -158,7 +158,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform4f(uniformLocation, arg.x, arg.y, arg.z, arg.w);
       }
@@ -174,7 +174,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniform4f(uniformLocation, arg.x, arg.y, arg.z, arg.w);
       }
@@ -190,7 +190,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniformMatrix2fv(uniformLocation, 1, false, glm::value_ptr(arg));
       }
@@ -206,7 +206,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniformMatrix3fv(uniformLocation, 1, false, glm::value_ptr(arg));
       }
@@ -223,7 +223,7 @@ namespace Graphics
 
          int32_t uniformLocation = m_uniformLocations[uniformIndex];
 
-         if (uniformLocation == -1 || uniformIndex >= m_uniformLocations.size())
+         if (uniformLocation == -1)
             return;
          glUniformMatrix4fv(uniformLocation, 1, false, glm::value_ptr(arg));
       }

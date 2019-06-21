@@ -16,24 +16,35 @@ namespace Game
          u_worldMatrix = GetUniform("worldMatrix");
          u_shadowViewMatrices = GetUniformArray("shadowViewMatrices", 6);
          u_shadowProjectionMatrices = GetUniformArray("shadowProjectionMatrices", 6);
+         u_pointLightPos = GetUniform("pointLightPos");
+         u_farPlane = GetUniform("farPlane");
       }
 
-      void CubemapDepthShaderBase::SetTransformationMatrices(const glm::mat4& worldMatrix, const six_mat4x4& viewMatrix, const six_mat4x4& projectionMatrix)
+      void CubemapDepthShaderBase::SetTransformationMatrices(const glm::mat4& worldMatrix, const six_mat4x4& viewMatrices, const six_mat4x4& projectionMatrices)
       {
          u_worldMatrix.LoadUniform(worldMatrix);
-         u_shadowViewMatrices.LoadUniform(0, viewMatrix[0]);
-         u_shadowViewMatrices.LoadUniform(1, viewMatrix[1]);
-         u_shadowViewMatrices.LoadUniform(2, viewMatrix[2]);
-         u_shadowViewMatrices.LoadUniform(3, viewMatrix[3]);
-         u_shadowViewMatrices.LoadUniform(4, viewMatrix[4]);
-         u_shadowViewMatrices.LoadUniform(5, viewMatrix[5]);
 
-         u_shadowProjectionMatrices.LoadUniform(0, projectionMatrix[0]);
-         u_shadowProjectionMatrices.LoadUniform(1, projectionMatrix[1]);
-         u_shadowProjectionMatrices.LoadUniform(2, projectionMatrix[2]);
-         u_shadowProjectionMatrices.LoadUniform(3, projectionMatrix[3]);
-         u_shadowProjectionMatrices.LoadUniform(4, projectionMatrix[4]);
-         u_shadowProjectionMatrices.LoadUniform(5, projectionMatrix[5]);
+         for (size_t matIndex  = 0; matIndex < viewMatrices.size(); ++matIndex)
+         {
+            const auto& viewMatrix = viewMatrices[matIndex];
+            u_shadowViewMatrices.LoadUniform(matIndex, viewMatrix);
+         }
+
+         for (size_t matIndex = 0; matIndex < projectionMatrices.size(); ++matIndex)
+         {
+            const auto& projectionMatrix = projectionMatrices[matIndex];
+            u_shadowProjectionMatrices.LoadUniform(matIndex, projectionMatrix);
+         }
+      }
+
+      void CubemapDepthShaderBase::SetPointLightPosition(const glm::vec3& position)
+      {
+         u_pointLightPos.LoadUniform(position);
+      }
+
+      void CubemapDepthShaderBase::SetFarPlane(const float distance)
+      {
+         u_farPlane.LoadUniform(distance);
       }
 
       // *************************  CubemapDepthShader (Non Skeletal)  *************************  //

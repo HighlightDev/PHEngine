@@ -30,9 +30,6 @@ namespace Graphics
       if (!m_shadowFramebuffer)
       {
          m_shadowFramebuffer = std::make_shared<ShadowFramebuffer>(m_shadowAtlasCellResource.GetTextureAtlasCellResource()->GetAtlasResource());
-         m_shadowFramebuffer->BindFramebuffer(1);
-         glDrawBuffer(GL_NONE);
-         glReadBuffer(GL_NONE);
          m_shadowFramebuffer->UnbindFramebuffer();
       }
    }

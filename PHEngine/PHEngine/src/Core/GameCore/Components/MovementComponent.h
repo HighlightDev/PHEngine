@@ -24,7 +24,11 @@ namespace Game
 
       virtual uint64_t GetComponentType() const override;
 
+      virtual void Tick(float deltaTime) override;
+
       class  CameraBase* const GetCamera() const;
+
+      glm::vec3 GetMoveOffset() const;
    };
 
 }

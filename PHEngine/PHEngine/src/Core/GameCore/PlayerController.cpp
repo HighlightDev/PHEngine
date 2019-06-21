@@ -30,19 +30,13 @@ namespace Game
          std::shared_ptr<SceneComponent> rootComponent = m_playerActor->GetBaseRootComponent();
          std::shared_ptr<MovementComponent> movementComponent = m_playerActor->GetMovementComponent();
 
-         glm::vec3& velocity = movementComponent->Velocity;
-         float& speed = movementComponent->Speed;
-         CameraBase* const camera = movementComponent->GetCamera();
-
          if (bindings.GetKeyState(Keys::W))
          {
-            velocity = camera->GetEyeSpaceForwardVector() * glm::vec3(1, 1, 1); // truncate y-velocity
-
-            auto newPosition = (velocity * speed) + rootComponent->GetTranslation();
-
+            auto newPosition = movementComponent->GetMoveOffset() + rootComponent->GetTranslation();
             rootComponent->SetTranslation(newPosition);
 
-            if (camera->GetCameraType() == CameraBase::CameraType::THIRD_PERSON)
+            auto camera = movementComponent->GetCamera();
+            if (CameraBase::CameraType::THIRD_PERSON == camera->GetCameraType())
             {
                // TEST FAST VERSION
                auto myCamera = static_cast<ThirdPersonCamera*>(camera);

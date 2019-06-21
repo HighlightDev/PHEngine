@@ -22,6 +22,7 @@ namespace Game
 
          Uniform u_worldMatrix;
          UniformArray u_shadowViewMatrices, u_shadowProjectionMatrices;
+         Uniform u_pointLightPos, u_farPlane;
 
       protected:
 
@@ -31,7 +32,11 @@ namespace Game
 
          CubemapDepthShaderBase(const ShaderParams& params);
 
-         void SetTransformationMatrices(const glm::mat4& worldMatrix, const six_mat4x4& viewMatrix, const six_mat4x4& projectionMatrix);
+         void SetTransformationMatrices(const glm::mat4& worldMatrix, const six_mat4x4& viewMatrices, const six_mat4x4& projectionMatrices);
+
+         void SetPointLightPosition(const glm::vec3& position);
+
+         void SetFarPlane(const float distance);
 
       };
 

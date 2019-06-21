@@ -26,4 +26,14 @@ namespace Game
    {
       return MOVEMENT_COMPONENT;
    }
+
+   void MovementComponent::Tick(float deltaTime)
+   {
+      Velocity = m_mainCamera->GetEyeSpaceForwardVector();
+   }
+
+   glm::vec3 MovementComponent::GetMoveOffset() const
+   {
+      return Velocity * Speed;
+   }
 }

@@ -13,12 +13,12 @@ namespace EngineUtility
    /*                       Convert from degrees to radians                */
    /************************************************************************/
 
-#define DEG_TO_RAD(X) (X * (PI / 180.0f))
+#define DEG_TO_RAD(X) (glm::radians<float>(X ))
 
    /************************************************************************/
    /*                       Convert from radians to degrees                */
    /************************************************************************/
-#define RAD_TO_DEG(X) (X * (180.0f / PI))
+#define RAD_TO_DEG(X) (glm::degrees<float>(X))
 
    constexpr float CMP(float X, float Y)
    {

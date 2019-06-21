@@ -35,6 +35,9 @@ namespace Game
          {
             Base::Attach2DTextureToFramebuffer(GL_DEPTH_ATTACHMENT, m_shadowmapTextureResource);
          }
+
+         glDrawBuffer(GL_NONE);
+         glReadBuffer(GL_NONE);
       }
 
       void ShadowFramebuffer::SetRenderbuffers()

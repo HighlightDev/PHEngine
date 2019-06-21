@@ -11,7 +11,6 @@
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
 #include "Core/GraphicsCore/Renderer/DeferredShadingGBuffer.h"
 #include "Core/GameCore/ShaderImplementation/TextureRendererShader.h"
-#include "Core/GameCore/ShaderImplementation/CubemapRendererShader.h"
 #include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 
 using namespace Graphics::Texture;
@@ -26,9 +25,7 @@ namespace Debug
    class TextureRenderer
    {
       std::shared_ptr<TextureRendererShader> m_shader;
-      std::shared_ptr<CubemapRendererShader> m_cubemapRendererShader;
       std::vector<std::shared_ptr<ITexture>> frameTextures;
-      std::vector<std::shared_ptr<Graphics::Proxy::PointLightSceneProxy>> m_pointLightSceneProxies;
 
    public:
 
@@ -49,8 +46,6 @@ namespace Debug
 
       void PushFrame(std::shared_ptr<ITexture> texture);
 
-      void PushPointLightCubemap(const std::shared_ptr<Graphics::Proxy::PointLightSceneProxy>& pointLightSceneProxy);
-
       void PopFrame();
 
       void RenderFrames(const std::unique_ptr<DeferredShadingGBuffer>& gbuffer);
@@ -58,8 +53,6 @@ namespace Debug
       void RenderFullScreenInputTexture(std::shared_ptr<ITexture> renderTexture, glm::ivec2 screenRezolution);
 
       void RenderSeparatedScreen(std::shared_ptr<ITexture> separatedTexture, glm::ivec2 screenRezolution);
-
-      void RenderPointLightShadowmap(const std::shared_ptr<Graphics::Proxy::PointLightSceneProxy> pointLightComponent, const std::unique_ptr<DeferredShadingGBuffer>& gbuffer);
 
       void CleanUp();
 

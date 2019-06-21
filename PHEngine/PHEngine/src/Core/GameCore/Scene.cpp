@@ -12,6 +12,8 @@
 #include "Core/GraphicsCore/Shadow/ProjectedDirShadowInfo.h"
 #include "Core/GraphicsCore/Shadow/ProjectedPointShadowInfo.h"
 #include "Core/GameCore/Components/PointLightComponent.h"
+#include "Core/GameCore/Components/BillboardComponent.h"
+#include "Core/GameCore/Components/ComponentData/BillboardComponentData.h"
 #include "Core/GameCore/Components/InputComponent.h"
 #include "Core/GraphicsCore/TextureAtlas/TextureAtlasFactory.h"
 #include "Core/GameCore/Components/ComponentData/InputComponentData.h"
@@ -202,19 +204,28 @@ namespace Game
 
    void Scene::AddTestActors()
    {
+      const auto& folderManager = Common::FolderManager::GetInstance();
+
       const float aspectRatio = 16.0f / 9.0f;
       ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 1000);
 
       // PointLight
       {
          // 0
+         Actor* pointLightActor = new Actor(new SceneComponent(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
+
          auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
          ProjectedPointShadowInfo* pointLightInfo = new ProjectedPointShadowInfo(pointLightTextureAtlasRequest);
 
          PointLightComponentData mData(glm::vec3(0), glm::vec3(), glm::vec3(0.005f, 0, 0), 3000, glm::vec3(0.2f, 0.2f, 0.2f), 
             glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), pointLightInfo);
-         Actor* pointLightActor = new Actor(new SceneComponent(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
          CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
+
+         BillboardComponentData mBillboardData(glm::vec3(), glm::vec3(), glm::vec3(1),
+            folderManager->GetShadersPath() + "lampVS.glsl", folderManager->GetShadersPath() + "lampFS.glsl", folderManager->GetShadersPath() + "lampGS.glsl",
+            folderManager->GetEditorTexturePath() + "lamp.png");
+         CreateAndAddComponent_GameThread<BillboardComponent>(mBillboardData, pointLightActor);
+
          AllActors.push_back(pointLightActor);
       }
 
@@ -264,7 +275,6 @@ namespace Game
          //AllActors.push_back(dirLightActor3);
       }
 
-      const auto& folderManager = Common::FolderManager::GetInstance();
       // HOUSE
       {
          StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(0), glm::vec3(), glm::vec3(5), folderManager->GetShadersPath() + "testVS.glsl",
@@ -278,7 +288,7 @@ namespace Game
       // SKELETAL MESH
       {
          SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
-            folderManager->GetShadersPath() + "skeletalMeshFS.glsl", folderManager->GetAlbedoTexturePath() + "diffuse.png", folderManager->GetNormalMapPath() + "city_house_2_Nor.png",
+            folderManager->GetShadersPath() + "skeletalMeshFS.glsl", folderManager->GetAlbedoTexturePath() + "diffuse.png", folderManager->GetNormalMapPath() + "dummy_nm.png",
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
          Actor* skeletActor = new Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkeletalMeshComponent>(mData, skeletActor);
@@ -300,8 +310,6 @@ namespace Game
 
       // SKYBOX
       {
-         float SKYBOX_SIZE = 550.0f;
-
          StringStreamWrapper::ToString(
             folderManager->GetCubemapTexturePath(), "Day/", "right.png", ",",
             folderManager->GetCubemapTexturePath(), "Day/", "left.png", ",",
@@ -311,7 +319,7 @@ namespace Game
             folderManager->GetCubemapTexturePath(), "Day/", "front.png");
          auto dTexPath = StringStreamWrapper::FlushString();
 
-         SkyboxComponentData mData(SKYBOX_SIZE, 5.0f, std::move(folderManager->GetShadersPath() + "tSkyboxVS.glsl"),
+         SkyboxComponentData mData(glm::vec3(140.0f), 5.0f, std::move(folderManager->GetShadersPath() + "tSkyboxVS.glsl"),
             std::move(folderManager->GetShadersPath() + "tSkyboxFS.glsl"), std::move(dTexPath));
          Actor* skyboxActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkyboxComponent>(mData, skyboxActor);

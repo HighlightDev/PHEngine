@@ -14,6 +14,7 @@ void main(void)
 {
 	for (int face = 0; face < CubemapFaces; ++face)
 	{
+		gl_Layer = face;
 		for (int i = 0; i < 3; ++i)
 		{
 			FragPos = gl_in[i].gl_Position.xyz;

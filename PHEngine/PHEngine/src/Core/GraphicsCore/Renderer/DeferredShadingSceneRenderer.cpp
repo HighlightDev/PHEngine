@@ -8,6 +8,7 @@
 #include "Core/GameCore/ShaderImplementation/DeferredShader.h"
 #include "Core/GameCore/GlobalProperties.h"
 #include "Core/GraphicsCore/SceneProxy/SkeletalMeshSceneProxy.h"
+#include "Core/GraphicsCore/SceneProxy/SkyboxSceneProxy.h"
 #include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
 #include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 #include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
@@ -38,7 +39,7 @@ namespace Graphics
          ShaderParams shaderParams3("DeferredLight Shader", folderManager->GetShadersPath() + "deferredLightPassVS.glsl", folderManager->GetShadersPath() + "deferredLightPassFS.glsl", "", "", "", "");
          ShaderParams shaderParams4("DepthSkeletal Shader", folderManager->GetShadersPath() + "basicShadowSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
          ShaderParams shaderParams5("DepthNonSkeletal Shader", folderManager->GetShadersPath() + "basicShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "basicShadowFS.glsl", "", "", "", "");
-         ShaderParams shaderParams6("CubemapDepthSkeletal Shader", folderManager->GetShadersPath() + "cubemapShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "cubemapShadowFS.glsl", folderManager->GetShadersPath() + "cubemapShadowGS.glsl", "", "", "");
+         ShaderParams shaderParams6("CubemapDepthSkeletal Shader", folderManager->GetShadersPath() + "cubemapShadowSkeletalVS.glsl", folderManager->GetShadersPath() + "cubemapShadowFS.glsl", folderManager->GetShadersPath() + "cubemapShadowGS.glsl", "", "", "");
          ShaderParams shaderParams7("CubemapDepthNonSkeletal Shader", folderManager->GetShadersPath() + "cubemapShadowNonSkeletalVS.glsl", folderManager->GetShadersPath() + "cubemapShadowFS.glsl", folderManager->GetShadersPath() + "cubemapShadowGS.glsl", "", "", "");
 
          m_deferredBaseShaderNonSkeletal = std::static_pointer_cast<DeferredShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DeferredShader<false>>(shaderParams1));
@@ -106,7 +107,7 @@ namespace Graphics
             return result;
          });
 
-         const auto firstDirLightProxyWithShadowInfo = std::find_if(dirLightProxies.begin(), dirLightProxies.end(), [](const std::shared_ptr<DirectionalLightSceneProxy>& proxy) {return proxy->GetProjectedDirShadowInfo() != nullptr; });
+         const auto firstDirLightProxyWithShadowInfo = std::find_if(dirLightProxies.begin(), dirLightProxies.end(), [](const std::shared_ptr<DirectionalLightSceneProxy>& proxy) { return proxy->GetProjectedDirShadowInfo() != nullptr; });
          uint32_t lastDirLightFramebufferDesc = std::numeric_limits<uint32_t>::max();
 
          for (auto& dirLightProxy : dirLightProxies)
@@ -178,10 +179,32 @@ namespace Graphics
                      const auto& projectionMatrices = shadowInfo->GetShadowProjectionMatrices();
 
                      m_depthCubemapShaderNonSkeletal->SetTransformationMatrices(worldMatrix, viewMatrices, projectionMatrices);
+                     m_depthCubemapShaderNonSkeletal->SetFarPlane(std::sqrtf(pointLightPtr->GetRadianceSqrRadius()));
+                     m_depthCubemapShaderNonSkeletal->SetPointLightPosition(pointLightPtr->GetPosition());
 
                      primitive->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
                   }
                   m_depthCubemapShaderNonSkeletal->StopShader();
+               }
+               if (shadowSkeletalMeshPrimitives.size() > 0) // Skeletal primitives
+               {
+                  m_depthCubemapShaderSkeletal->ExecuteShader();
+                  for (auto& primitive : shadowSkeletalMeshPrimitives)
+                  {
+                     SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(primitive);
+
+                     const auto& worldMatrix = skeletalProxy->GetMatrix();
+                     const auto& viewMatrices = shadowInfo->GetShadowViewMatrices();
+                     const auto& projectionMatrices = shadowInfo->GetShadowProjectionMatrices();
+
+                     m_depthCubemapShaderSkeletal->SetTransformationMatrices(worldMatrix, viewMatrices, projectionMatrices);
+                     m_depthCubemapShaderSkeletal->SetFarPlane(std::sqrtf(pointLightPtr->GetRadianceSqrRadius()));
+                     m_depthCubemapShaderSkeletal->SetPointLightPosition(pointLightPtr->GetPosition());
+                     m_depthCubemapShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
+
+                     skeletalProxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                  }
+                  m_depthCubemapShaderSkeletal->StopShader();
                }
                glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
@@ -301,7 +324,17 @@ namespace Graphics
 
          for (auto& proxy : forwardedPrimitives)
          {
-            proxy->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
+            auto result = dynamic_cast<SkyboxSceneProxy*>(proxy);
+            if (!result)
+            {
+               proxy->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
+            }
+            else
+            {
+               PointLightSceneProxy* pointLightPtr = static_cast<PointLightSceneProxy*>(m_scene->LightProxies[0].get());
+               result->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
+                  //,pointLightPtr->GetProjectedPointShadowInfo()->GetAtlasResource());
+            }
          }
       }
 
@@ -360,14 +393,7 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::PushRenderTargetToTextureRenderer()
       {
-         const auto lightProxies = m_scene->LightProxies;
-
-         std::shared_ptr<Graphics::Proxy::LightSceneProxy> pointLight = *(std::find_if(lightProxies.begin(), lightProxies.end(), [&](const std::shared_ptr<Graphics::Proxy::LightSceneProxy>& proxy) { return proxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT;  }));
-         
-         std::shared_ptr<LightSceneProxy> proxyPtr = pointLight;
-         std::shared_ptr <PointLightSceneProxy> pointLightProxyPtr = std::static_pointer_cast<PointLightSceneProxy>(proxyPtr);
-         m_textureRenderer.PushPointLightCubemap(pointLightProxyPtr);
-         //m_textureRenderer.PushDebugRenderTarget();
+         m_textureRenderer.PushDebugRenderTarget();
       }
 	}
 }

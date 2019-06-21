@@ -32,7 +32,7 @@ namespace Graphics
          if (shadowInfo)
          {
             const float aspectRatio = shadowInfo->GetAtlasResource()->GetTextureAspectRatio();
-            const auto shadowProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(90), aspectRatio, 1.0f, std::sqrtf(m_radianceSqrRadius));
+            const auto shadowProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(90.0f), aspectRatio, 1.0f, std::sqrtf(m_radianceSqrRadius));
 
             ProjectedPointShadowInfo::six_mat4x4 matrices;
             matrices[0] = shadowProjectionMatrix;

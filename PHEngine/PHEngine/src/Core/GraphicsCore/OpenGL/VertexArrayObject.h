@@ -51,7 +51,7 @@ namespace Graphics
 
 			void GenVAO();
 
-			void RenderVAO(int32_t privitiveMode = GL_TRIANGLES);
+			void RenderVAO(int32_t primitiveMode = GL_TRIANGLES);
 
 			void AddIndexBuffer(std::unique_ptr<IndexBufferObject>&& ibo);
 

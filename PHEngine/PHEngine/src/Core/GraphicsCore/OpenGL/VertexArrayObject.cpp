@@ -30,16 +30,16 @@ namespace Graphics
 			glGenVertexArrays(1, &m_descriptor);
 		}
 
-		void VertexArrayObject::RenderVAO(int32_t privitiveMode)
+		void VertexArrayObject::RenderVAO(int32_t primitiveMode)
 		{
 			glBindVertexArray(m_descriptor);
 			if (HasIBO())
 			{
-				glDrawElements(privitiveMode, m_ibo->GetCountOfIndices(), GL_UNSIGNED_INT, 0);
+				glDrawElements(primitiveMode, m_ibo->GetCountOfIndices(), GL_UNSIGNED_INT, 0);
 			}
 			else
 			{
-				glDrawArrays(privitiveMode, 0, m_vbos.front()->GetCountOfIndices());
+				glDrawArrays(primitiveMode, 0, m_vbos.front()->GetCountOfIndices());
 			}
 			glBindVertexArray(0);
 		}
