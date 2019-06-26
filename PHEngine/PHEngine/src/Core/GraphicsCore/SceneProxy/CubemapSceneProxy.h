@@ -1,7 +1,7 @@
 #pragma once
 #include "PrimitiveSceneProxy.h"
-#include "Core/GameCore/Components/BillboardComponent.h"
-#include "Core/GameCore/ShaderImplementation/BillboardShader.h"
+#include "Core/GameCore/Components/CubemapComponent.h"
+#include "Core/GameCore/ShaderImplementation/CubemapShader.h"
 
 using namespace Game;
 using namespace Game::ShaderImpl;
@@ -11,11 +11,12 @@ namespace Graphics
    namespace Proxy
    {
 
-      class BillboardSceneProxy :
+      class CubemapSceneProxy :
          public PrimitiveSceneProxy
       {
 
-         std::shared_ptr<BillboardShader> m_shader;
+         std::shared_ptr<CubemapShader> m_shader;
+         LazyTextureAtlasObtainer m_textureObtainer;
 
       protected:
 
@@ -23,9 +24,9 @@ namespace Graphics
 
       public:
 
-         BillboardSceneProxy(const BillboardComponent* component);
+         CubemapSceneProxy(const CubemapComponent* component);
 
-         ~BillboardSceneProxy();
+         ~CubemapSceneProxy();
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
 

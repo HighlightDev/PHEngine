@@ -1,7 +1,5 @@
 #include "Engine.h"
 
-#include "Core/GameCore/Event/TEvent.h"
-
 Engine::Engine()
    : m_interThreadMgr()
    , m_scene(m_interThreadMgr)

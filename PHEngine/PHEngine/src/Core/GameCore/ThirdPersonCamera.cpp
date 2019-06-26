@@ -100,12 +100,12 @@ namespace Game
       return m_distanceFromTargetToCamera;
    }
 
-   Actor* ThirdPersonCamera::GetThirdPersonTarget() const
+   std::shared_ptr<Actor> ThirdPersonCamera::GetThirdPersonTarget() const
    {
       return m_thirdPersonTarget;
    }
 
-   void ThirdPersonCamera::SetThirdPersonTarget(Actor* thirdPersonTarget)
+   void ThirdPersonCamera::SetThirdPersonTarget(std::shared_ptr<Actor> thirdPersonTarget)
    {
       m_thirdPersonTarget = thirdPersonTarget;
       m_actualTargetVector = thirdPersonTarget->GetRootComponent()->GetTranslation();

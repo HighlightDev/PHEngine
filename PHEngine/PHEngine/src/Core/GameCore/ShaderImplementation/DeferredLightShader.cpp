@@ -30,6 +30,10 @@ namespace Game
          u_PointLightSpecularColor = GetUniformArray("PointLightSpecularColor", MAX_POINT_LIGHT_COUNT);
          u_PointLightPosition = GetUniformArray("PointLightPosition", MAX_POINT_LIGHT_COUNT);
          u_PointLightAttenuation = GetUniformArray("PointLightAttenuation", MAX_POINT_LIGHT_COUNT);
+
+         u_PointLightShadowMaps = GetUniformArray("PointLightShadowMaps", MAX_POINT_LIGHT_COUNT);
+         u_PointLightPositionWorld = GetUniformArray("PointLightPositionWorld", MAX_POINT_LIGHT_COUNT);
+         u_PointLightShadowMapCount = GetUniform("PointLightShadowMapCount");
          u_PointLightCount = GetUniform("PointLightCount");
 
          u_DirLightAmbientColor = GetUniformArray("DirLightAmbientColor", MAX_DIR_LIGHT_COUNT);
@@ -46,10 +50,10 @@ namespace Game
 
       void DeferredLightShader::SetShaderPredefine()
       {
-         Predefine(FragmentShader, "MAX_DIR_LIGHT_COUNT", MAX_DIR_LIGHT_COUNT);
-         Predefine(FragmentShader, "MAX_POINT_LIGHT_COUNT", MAX_POINT_LIGHT_COUNT);
-         Predefine(FragmentShader, "SHADOWMAP_BIAS", SHADOWMAP_BIAS);
-         Predefine(FragmentShader, "PCF_SAMPLES", PCF_SAMPLES);
+         Predefine<int32_t>(FragmentShader, "MAX_DIR_LIGHT_COUNT", MAX_DIR_LIGHT_COUNT);
+         Predefine<int32_t>(FragmentShader, "MAX_POINT_LIGHT_COUNT", MAX_POINT_LIGHT_COUNT);
+         Predefine<float>(FragmentShader, "SHADOWMAP_BIAS", SHADOWMAP_BIAS);
+         Predefine<int32_t>(FragmentShader, "PCF_SAMPLES", PCF_SAMPLES);
       }
 
       void DeferredLightShader::SetGBufferAlbedoNSpecular(int32_t slot)
@@ -88,7 +92,22 @@ namespace Game
          u_DirectionalLightShadowMatrices.LoadUniform(index, shadowMatrix);
       }
 
-      void DeferredLightShader::SetLightsInfo(std::vector<std::shared_ptr<LightSceneProxy>> lightsProxies)
+      void DeferredLightShader::SetPointLightShadowMapSlot(size_t index, int32_t slot)
+      {
+         u_PointLightShadowMaps.LoadUniform(index, slot);
+      }
+
+      void DeferredLightShader::SetPointLightPosition(size_t index, const glm::vec3& position)
+      {
+         u_PointLightPosition.LoadUniform(index, position);
+      }
+
+      void DeferredLightShader::SetPointLightShadowMapCount(int32_t count)
+      {
+         u_PointLightShadowMapCount.LoadUniform(count);
+      }
+
+      void DeferredLightShader::SetLightsInfo(const std::vector<std::shared_ptr<LightSceneProxy>>& lightsProxies)
       {
          // Directional lights
          size_t dirLightProxyIndex = 0;
@@ -96,7 +115,7 @@ namespace Game
          {
             if (lightsProxies[lightProxyIndex]->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT && dirLightProxyIndex < MAX_DIR_LIGHT_COUNT)
             {
-               auto sharedLightProxy = lightsProxies[lightProxyIndex];
+               const auto& sharedLightProxy = lightsProxies[lightProxyIndex];
                DirectionalLightSceneProxy* dirLProxyPtr = static_cast<DirectionalLightSceneProxy*>(sharedLightProxy.get());
                u_DirLightAmbientColor.LoadUniform(dirLightProxyIndex, dirLProxyPtr->AmbientColor);
                u_DirLightDiffuseColor.LoadUniform(dirLightProxyIndex, dirLProxyPtr->DiffuseColor);
@@ -115,7 +134,7 @@ namespace Game
          {
             if (lightsProxies[lightProxyIndex]->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT && dirLightProxyIndex < MAX_POINT_LIGHT_COUNT)
             {
-               auto sharedLightProxy = lightsProxies[lightProxyIndex];
+               const auto& sharedLightProxy = lightsProxies[lightProxyIndex];
                PointLightSceneProxy* pointLProxyPtr = static_cast<PointLightSceneProxy*>(sharedLightProxy.get());
                u_PointLightDiffuseColor.LoadUniform(pointLightProxyIndex, pointLProxyPtr->DiffuseColor);
                u_PointLightSpecularColor.LoadUniform(pointLightProxyIndex, pointLProxyPtr->SpecularColor);

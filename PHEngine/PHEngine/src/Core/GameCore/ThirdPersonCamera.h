@@ -10,7 +10,7 @@ namespace Game
 
       float m_distanceFromTargetToCamera;
 
-      Actor* m_thirdPersonTarget;
+      std::shared_ptr<Actor> m_thirdPersonTarget;
 
       glm::vec3 m_actualTargetVector;
 
@@ -50,9 +50,9 @@ namespace Game
 
       float GetDistanceFromTargetToCamera() const;
 
-      Actor* GetThirdPersonTarget() const;
+      std::shared_ptr<Actor> GetThirdPersonTarget() const;
 
-      void SetThirdPersonTarget(Actor* thirdPersonTarget);
+      void SetThirdPersonTarget(std::shared_ptr<Actor> thirdPersonTarget);
 
       void SetThirdPersonTargetTransformationDirty();
    };

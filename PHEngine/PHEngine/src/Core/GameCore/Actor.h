@@ -22,7 +22,7 @@ namespace Game
 
       std::vector<std::shared_ptr<Actor>> m_children;
 
-		std::shared_ptr<Actor> m_parent;
+		Actor* m_parent;
 
       std::shared_ptr<InputComponent> m_inputComponent;
 
@@ -32,16 +32,16 @@ namespace Game
 
       std::vector<std::shared_ptr<Game::Component>> m_allComponents;
 
-		Actor(Game::SceneComponent* rootComponent = nullptr);
+		Actor(std::shared_ptr<Game::SceneComponent> rootComponent = nullptr);
 
 		virtual ~Actor();
 
 		// Tick is executed on game thread
 		virtual void Tick(float deltaTime);
 
-      void AddInputComponent(std::shared_ptr<InputComponent> inputComponent);
+      void AddInputComponent(std::shared_ptr<Game::Component> inputComponent);
 
-      void AddMovementComponent(std::shared_ptr<MovementComponent> movementComponent);
+      void AddMovementComponent(std::shared_ptr<Game::Component> movementComponent);
 
 		void AddComponent(std::shared_ptr<Game::Component> component);
 
@@ -51,7 +51,7 @@ namespace Game
 
       void RemoveInputComponent();
 
-		void SetParent(std::shared_ptr<Actor> actor);
+		void SetParent(Actor* actor);
 
 		void AttachActor(std::shared_ptr<Actor> actor);
 

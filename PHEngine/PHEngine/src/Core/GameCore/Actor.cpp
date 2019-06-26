@@ -5,11 +5,12 @@
 namespace Game
 {
 
-	Actor::Actor(Game::SceneComponent* rootComponent)
-      : m_inputComponent(nullptr)
+	Actor::Actor(std::shared_ptr<Game::SceneComponent> rootComponent)
+      : m_rootComponent(rootComponent)
+      , m_inputComponent(nullptr)
       , m_movementComponent(nullptr)
 	{
-		m_rootComponent = std::shared_ptr<Game::SceneComponent>(rootComponent);
+      m_parent = nullptr;
 	}
 
 	Actor::~Actor()
@@ -128,19 +129,20 @@ namespace Game
          m_movementComponent->Tick(deltaTime);
 	}
 
-   void Actor::AddInputComponent(std::shared_ptr<InputComponent> inputComponent)
+   void Actor::AddInputComponent(std::shared_ptr<Game::Component> inputComponent)
    {
-      m_inputComponent = inputComponent;
+      inputComponent->SetOwner(this);
+      m_inputComponent = std::static_pointer_cast<InputComponent>(inputComponent);
    }
 
-   void Actor::AddMovementComponent(std::shared_ptr<MovementComponent> movementComponent)
+   void Actor::AddMovementComponent(std::shared_ptr<Game::Component> movementComponent)
    {
-      m_movementComponent = movementComponent;
+      m_movementComponent = std::static_pointer_cast<MovementComponent>(movementComponent);
    }
 
 	void Actor::AddComponent(std::shared_ptr<Game::Component> component)
 	{
-		component->SetOwner(this);
+		
 		m_allComponents.push_back(component);
 	}
 
@@ -164,14 +166,14 @@ namespace Game
       m_inputComponent = std::shared_ptr<InputComponent>(nullptr);
    }
 
-	void Actor::SetParent(std::shared_ptr<Actor> actor)
+	void Actor::SetParent(Actor* actor)
 	{
 		m_parent = actor;
 	}
 
 	void Actor::AttachActor(std::shared_ptr<Actor> actor)
 	{
-		actor->SetParent(actor);
+		actor->SetParent(this);
 		m_children.push_back(actor);
 	}
 
@@ -192,7 +194,7 @@ namespace Game
       const Actor* ptrActor = this;
       while (m_parent)
       {
-         ptrActor = m_parent.get();
+         ptrActor = m_parent;
       }
 
       rootComponent = ptrActor->GetRootComponent();

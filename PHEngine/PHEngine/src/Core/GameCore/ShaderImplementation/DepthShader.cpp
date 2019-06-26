@@ -31,7 +31,9 @@ namespace Game
          Init();
       }
 
-      void DepthShader<false>::SetShaderPredefine() { }
+      void DepthShader<false>::SetShaderPredefine() 
+      {
+      }
 
       /*     SKELETAL MESH DEPTH SHADER   */
 

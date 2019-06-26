@@ -14,7 +14,7 @@ namespace Game
    {
    }
 
-   void PlayerController::SetPlayerActor(Actor* playerActor)
+   void PlayerController::SetPlayerActor(std::shared_ptr<Actor> playerActor)
    {
       m_playerActor = playerActor;
    }

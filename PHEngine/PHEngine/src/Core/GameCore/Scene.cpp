@@ -43,7 +43,7 @@ namespace Game
    }
 
    template <typename PrimitiveType>
-   void Scene::CreateAndAddComponent_GameThread(ComponentData& componentData, Actor* addComponentToThisActor)
+   void Scene::CreateAndAddComponent_GameThread(ComponentData& componentData, std::shared_ptr<Actor> owner)
    {
       auto component = ComponentCreatorFactory<PrimitiveType>::CreateComponent(componentData);
       uint64_t type = component->GetComponentType();
@@ -69,17 +69,15 @@ namespace Game
 
       if ((type & MOVEMENT_COMPONENT) == MOVEMENT_COMPONENT)
       {
-         addComponentToThisActor->AddMovementComponent(std::static_pointer_cast<MovementComponent>(component));
+         owner->AddMovementComponent(component);
       }
       else if ((type & INPUT_COMPONENT) == INPUT_COMPONENT)
       {
-         std::shared_ptr<InputComponent> inputComp = std::static_pointer_cast<InputComponent>(component);
-         inputComp->SetOwner(addComponentToThisActor);
-         addComponentToThisActor->AddInputComponent(inputComp);
+         owner->AddInputComponent(component);
       }
       else
       {
-         addComponentToThisActor->AddComponent(component);
+         owner->AddComponent(component);
       }
    }
 
@@ -212,7 +210,7 @@ namespace Game
       // PointLight
       {
          // 0
-         Actor* pointLightActor = new Actor(new SceneComponent(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
+         std::shared_ptr<Actor> pointLightActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
 
          auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
          ProjectedPointShadowInfo* pointLightInfo = new ProjectedPointShadowInfo(pointLightTextureAtlasRequest);
@@ -221,10 +219,19 @@ namespace Game
             glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), pointLightInfo);
          CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
 
-         BillboardComponentData mBillboardData(glm::vec3(), glm::vec3(), glm::vec3(1),
+#if DEBUG
+
+         std::shared_ptr<Actor> debugVisualLigthActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(glm::vec3(0, 0, 0), glm::vec3(), glm::vec3(1)));
+
+         BillboardComponentData mBillboardData(glm::vec3(0, 5, 0), glm::vec3(), glm::vec3(1),
             folderManager->GetShadersPath() + "lampVS.glsl", folderManager->GetShadersPath() + "lampFS.glsl", folderManager->GetShadersPath() + "lampGS.glsl",
             folderManager->GetEditorTexturePath() + "lamp.png");
-         CreateAndAddComponent_GameThread<BillboardComponent>(mBillboardData, pointLightActor);
+         CreateAndAddComponent_GameThread<BillboardComponent>(mBillboardData, debugVisualLigthActor);
+
+         CubemapComponentData mCubemapData(glm::vec3(), glm::vec3(), glm::vec3(1), folderManager->GetShadersPath() + "tSkyboxVS.glsl", folderManager->GetShadersPath() + "cubemapRendererFS.glsl", pointLightTextureAtlasRequest);
+         CreateAndAddComponent_GameThread<CubemapComponent>(mCubemapData, debugVisualLigthActor);
+         pointLightActor->AttachActor(debugVisualLigthActor);
+#endif
 
          AllActors.push_back(pointLightActor);
       }
@@ -280,7 +287,7 @@ namespace Game
          StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(0), glm::vec3(), glm::vec3(5), folderManager->GetShadersPath() + "testVS.glsl",
             folderManager->GetShadersPath() + "testFS.glsl", folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png", folderManager->GetNormalMapPath() + "city_house_2_Nor.png",
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
-         Actor* houseActor = new Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+         std::shared_ptr<Actor> houseActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
          AllActors.push_back(houseActor);
       }
@@ -290,7 +297,7 @@ namespace Game
          SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
             folderManager->GetShadersPath() + "skeletalMeshFS.glsl", folderManager->GetAlbedoTexturePath() + "diffuse.png", folderManager->GetNormalMapPath() + "dummy_nm.png",
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
-         Actor* skeletActor = new Actor(new SceneComponent(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+         std::shared_ptr<Actor> skeletActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkeletalMeshComponent>(mData, skeletActor);
 
          InputComponentData inputComponentData;
@@ -321,7 +328,7 @@ namespace Game
 
          SkyboxComponentData mData(glm::vec3(140.0f), 5.0f, std::move(folderManager->GetShadersPath() + "tSkyboxVS.glsl"),
             std::move(folderManager->GetShadersPath() + "tSkyboxFS.glsl"), std::move(dTexPath));
-         Actor* skyboxActor = new Actor(new SceneComponent(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+         std::shared_ptr<Actor> skyboxActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(0)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkyboxComponent>(mData, skyboxActor);
          AllActors.push_back(skyboxActor);
       }
@@ -331,10 +338,6 @@ namespace Game
 
    Scene::~Scene()
    {
-      for (Actor* actor : AllActors)
-      {
-         delete actor;
-      }
       AllActors.clear();
    }
 

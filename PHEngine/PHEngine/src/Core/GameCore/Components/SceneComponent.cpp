@@ -15,6 +15,7 @@ namespace Game
       , m_rotation(0)
       , m_scale(1)
       , m_relativeMatrix(1)
+      , m_scene(nullptr)
    {
 
    }
@@ -26,6 +27,7 @@ namespace Game
 		, m_rotation(rotation)
 		, m_scale(scale)
 		, m_relativeMatrix(std::move(glm::mat4(1)))
+      , m_scene(nullptr)
 	{
 	}
 

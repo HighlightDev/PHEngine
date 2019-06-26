@@ -26,7 +26,7 @@ namespace Game
 
       //btDiscreteDynamicsWorld* m_dynamicsWorld;
 
-      std::vector<Actor*> AllActors;
+      std::vector<std::shared_ptr<Actor>> AllActors;
 
       std::vector<std::shared_ptr<PrimitiveSceneProxy>> SceneProxies;
 
@@ -62,7 +62,7 @@ namespace Game
       void OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const glm::mat4& newRelativeMatrix);
 
       template <typename PrimitiveType>
-      void CreateAndAddComponent_GameThread(ComponentData& componentData, Actor* addComponentToThisActor);
+      void CreateAndAddComponent_GameThread(ComponentData& componentData, std::shared_ptr<Actor> owner);
 
       void RemoveComponent_GameThread(std::shared_ptr<Component> component);
 

@@ -10,7 +10,7 @@ namespace Game
 
       using Base = Actor;
 
-      Actor* m_playerActor;
+      std::shared_ptr<Actor> m_playerActor;
 
    public:
 
@@ -18,7 +18,7 @@ namespace Game
 
       virtual ~PlayerController();
       
-      void SetPlayerActor(Actor* playerActor);
+      void SetPlayerActor(std::shared_ptr<Actor> playerActor);
 
       void Tick(float deltaTime);
    };

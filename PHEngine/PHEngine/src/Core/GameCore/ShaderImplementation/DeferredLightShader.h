@@ -29,17 +29,21 @@ namespace Game
          UniformArray u_DirLightSpecularColor;
          UniformArray u_DirLightDirection;
 
-         UniformArray u_PointLightDiffuseColor;
-         UniformArray u_PointLightSpecularColor;
-         UniformArray u_PointLightPosition;
-         UniformArray u_PointLightAttenuation;
-         Uniform u_PointLightCount;
-
          UniformArray u_DirectionalLightShadowMaps;
          UniformArray u_DirectionalLightShadowMatrices;
          UniformArray u_DirectionalLightAtlasOffset;
          Uniform u_DirectionalLightShadowMapCount;
          Uniform u_DirectionalLightCount;
+
+         UniformArray u_PointLightDiffuseColor;
+         UniformArray u_PointLightSpecularColor;
+         UniformArray u_PointLightAttenuation;
+         UniformArray u_PointLightPosition;
+
+         UniformArray u_PointLightShadowMaps;
+         UniformArray u_PointLightPositionWorld;
+         Uniform u_PointLightShadowMapCount;
+         Uniform u_PointLightCount;
 
          Uniform u_gBuffer_Position;
          Uniform u_gBuffer_Normal;
@@ -57,14 +61,16 @@ namespace Game
 
          void SetGBufferPosition(int32_t slot);
 
-         void SetLightsInfo(std::vector<std::shared_ptr<LightSceneProxy>> lightsProxies);
+         void SetLightsInfo(const std::vector<std::shared_ptr<LightSceneProxy>>& lightsProxies);
 
          void SetDirectionalLightShadowMapSlot(size_t index, int32_t slot);
          void SetDirectionalLightShadowMapSlot(size_t index, int32_t slot, const glm::vec4& atlasOffset);
-
          void SetDirectionalLightShadowMapCount(int32_t count);
-
          void SetDirectionalLightShadowMatrix(size_t index, const glm::mat4& shadowMatrix);
+
+         void SetPointLightShadowMapSlot(size_t index, int32_t slot);
+         void SetPointLightPosition(size_t index, const glm::vec3& position);
+         void SetPointLightShadowMapCount(int32_t count);
 
       protected:
 

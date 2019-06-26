@@ -286,6 +286,7 @@ namespace Graphics
                   {
                      shadowInfo->GetAtlasResource()->BindTexture(shadowMapSlot);
 
+
                      shadowMapSlot++;
                      pointShadowMapCount++;
                   }
@@ -311,7 +312,7 @@ namespace Graphics
       }
 
       void DeferredShadingSceneRenderer::ForwardBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& forwardedPrimitives, const glm::mat4& viewMatrix)
-      {
+      { 
          // Resolve depth buffer from gBuffer to default frame buffer
 
          int32_t windowWidth = GlobalProperties::GetInstance()->GetInputData().GetWindowWidth();
@@ -324,17 +325,7 @@ namespace Graphics
 
          for (auto& proxy : forwardedPrimitives)
          {
-            auto result = dynamic_cast<SkyboxSceneProxy*>(proxy);
-            if (!result)
-            {
-               proxy->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
-            }
-            else
-            {
-               PointLightSceneProxy* pointLightPtr = static_cast<PointLightSceneProxy*>(m_scene->LightProxies[0].get());
-               result->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
-                  //,pointLightPtr->GetProjectedPointShadowInfo()->GetAtlasResource());
-            }
+            proxy->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
          }
       }
 
