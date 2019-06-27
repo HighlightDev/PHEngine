@@ -262,7 +262,7 @@ namespace Graphics
             m_deferredLightShader->ExecuteShader();
 
             // ************************** SHADOWS ************************** //
-            size_t lightSourceIndex = 0, shadowMapSlot = 3, dirShadowMapCount = 0, pointShadowMapCount = 0;
+            size_t pointLightIndex = 0, dirLightIndex = 0, shadowMapSlot = 3, dirShadowMapCount = 0, pointShadowMapCount = 0;
             for (auto& lightProxy : lightSourcesProxy)
             {
                if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
@@ -272,9 +272,11 @@ namespace Graphics
                   if (shadowInfo)
                   {
                      shadowInfo->GetAtlasResource()->BindTexture(shadowMapSlot);
-                     m_deferredLightShader->SetDirectionalLightShadowMapSlot(lightSourceIndex, shadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
-                     m_deferredLightShader->SetDirectionalLightShadowMatrix(lightSourceIndex, shadowInfo->GetShadowMatrix());
+                     m_deferredLightShader->SetDirectionalLightShadowMapSlot(dirLightIndex, shadowMapSlot, shadowInfo->GetPosOffsetShadowMapAtlas());
+                     m_deferredLightShader->SetDirectionalLightShadowMatrix(dirLightIndex, shadowInfo->GetShadowMatrix());
+
                      dirShadowMapCount++;
+                     dirLightIndex++;
                      shadowMapSlot++;
                   }
                }
@@ -285,14 +287,13 @@ namespace Graphics
                   if (shadowInfo)
                   {
                      shadowInfo->GetAtlasResource()->BindTexture(shadowMapSlot);
-
-
+                     m_deferredLightShader->SetPointLightShadowMapSlot(pointLightIndex, shadowMapSlot);
+   
                      shadowMapSlot++;
                      pointShadowMapCount++;
+                     pointLightIndex++;
                   }
                }
-
-               lightSourceIndex++;
             }
             m_deferredLightShader->SetDirectionalLightShadowMapCount(dirShadowMapCount);
             // ************************** SHADOWS ************************** //
