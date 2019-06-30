@@ -44,6 +44,7 @@ namespace Game
          UniformArray u_PointLightPositionWorld;
          Uniform u_PointLightShadowMapCount;
          Uniform u_PointLightCount;
+         UniformArray u_PointLightShadowProjectionFarPlane;
 
          Uniform u_gBuffer_Position;
          Uniform u_gBuffer_Normal;
@@ -71,6 +72,7 @@ namespace Game
          void SetPointLightShadowMapSlot(size_t index, int32_t slot);
          void SetPointLightPosition(size_t index, const glm::vec3& position);
          void SetPointLightShadowMapCount(int32_t count);
+         void SetPointLightShadowProjectionFarPlane(size_t index, float FarPlane);
 
       protected:
 

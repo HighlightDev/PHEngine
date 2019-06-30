@@ -10,6 +10,7 @@ uniform sampler2D gBuffer_Position;
 uniform sampler2D gBuffer_Normal;
 uniform sampler2D gBuffer_AlbedoNSpecular;
 uniform sampler2D DirLightShadowMaps[MAX_DIR_LIGHT_COUNT];
+uniform samplerCube PointLightShadowMaps[MAX_POINT_LIGHT_COUNT];
 
 uniform vec3 DirLightAmbientColor[MAX_DIR_LIGHT_COUNT];
 uniform vec3 DirLightDiffuseColor[MAX_DIR_LIGHT_COUNT];
@@ -21,10 +22,13 @@ uniform uint DirLightCount;
 uniform int DirLightShadowMapCount;
 
 uniform uint PointLightCount;
+uniform int PointLightShadowMapCount;
 uniform vec3 PointLightDiffuseColor[MAX_POINT_LIGHT_COUNT];
 uniform vec3 PointLightSpecularColor[MAX_POINT_LIGHT_COUNT];
 uniform vec3 PointLightPosition[MAX_POINT_LIGHT_COUNT];
 uniform vec3 PointLightAttenuation[MAX_POINT_LIGHT_COUNT];
+uniform float PointLightShadowProjectionFarPlane[MAX_POINT_LIGHT_COUNT];
+uniform vec3 PointLightPositionWorld[MAX_POINT_LIGHT_COUNT];
 
 in VS_OUT
 {
@@ -38,7 +42,24 @@ vec2 GetShadowTexCoords(in vec2 texCoords, in vec4 atlasOffset)
 	return texCoordsInAtlas;
 }
 
-float CalcLitFactor(in sampler2D shadowmap, in vec2 shadowmapSize, in vec3 shadowTexCoord)
+float CalcLitFactorCubemap(in samplerCube shadowmap, in vec3 worldPos, in vec3 pointLightWorldPos, in float shadowmapProjectionfarPlane)
+{
+	float resultShadow = 0.0f;
+
+	vec3 LightToFragVec = worldPos - pointLightWorldPos;
+
+	float actualDepth = length(LightToFragVec) - SHADOWMAP_BIAS;
+
+	vec3 cubeTexCoords = normalize(LightToFragVec);
+	float shadowmapDepth = texture(shadowmap, cubeTexCoords).r; // depth is in range [0 ; 1]
+	shadowmapDepth = shadowmapDepth * shadowmapProjectionfarPlane; // now depth is liner in world space in range [0 ; Far Plane]
+
+	resultShadow = actualDepth > shadowmapDepth ? 1.0f : 0.0f;
+
+	return resultShadow;
+}
+
+float CalcLitFactorTexture2D(in sampler2D shadowmap, in vec2 shadowmapSize, in vec3 shadowTexCoord)
 {
 	float resultShadow = 0.0;
     float actualDepth = shadowTexCoord.z - SHADOWMAP_BIAS;
@@ -74,7 +95,14 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 		vec3 nToLightVec = normalize(PointLightPosition[pointLightIndex] - worldPos);
 		float nDotP = dot(nToLightVec, nWorldNormal);
 		float diffuseFactor = max(nDotP, 0.0);
-		resultDiffuseColor += PointLightDiffuseColor[pointLightIndex] * diffuseFactor;
+		float litFactor = 1.0f;
+		if (PointLightShadowMapCount > pointLightIndex)
+		{
+			litFactor = CalcLitFactorCubemap(PointLightShadowMaps[pointLightIndex], worldPos, PointLightPositionWorld[pointLightIndex],
+				PointLightShadowProjectionFarPlane[pointLightIndex]);
+		}
+
+		resultDiffuseColor += PointLightDiffuseColor[pointLightIndex] * diffuseFactor * litFactor;
 	}
 
 	/* DIRECTIONAL LIGHTS */
@@ -99,7 +127,7 @@ vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 			vec3 shadowCoordinatesAndDepth = vec3(shadowCoordinates, shadowFragCoords.z);
 
 		 	vec2 shadowmapAtlasSize = textureSize(DirLightShadowMaps[dirLightIndex], 0);
-		    litFactor = CalcLitFactor(DirLightShadowMaps[dirLightIndex], shadowmapAtlasSize, shadowCoordinatesAndDepth);
+		    litFactor = CalcLitFactorTexture2D(DirLightShadowMaps[dirLightIndex], shadowmapAtlasSize, shadowCoordinatesAndDepth);
 		}
 
 		resultDiffuseColor += DirLightDiffuseColor[dirLightIndex] * diffuseFactor * litFactor;

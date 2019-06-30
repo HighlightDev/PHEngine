@@ -35,6 +35,7 @@ namespace Game
          u_PointLightPositionWorld = GetUniformArray("PointLightPositionWorld", MAX_POINT_LIGHT_COUNT);
          u_PointLightShadowMapCount = GetUniform("PointLightShadowMapCount");
          u_PointLightCount = GetUniform("PointLightCount");
+         u_PointLightShadowProjectionFarPlane = GetUniformArray("PointLightShadowProjectionFarPlane", MAX_POINT_LIGHT_COUNT);
 
          u_DirLightAmbientColor = GetUniformArray("DirLightAmbientColor", MAX_DIR_LIGHT_COUNT);
          u_DirLightDiffuseColor = GetUniformArray("DirLightDiffuseColor", MAX_DIR_LIGHT_COUNT);
@@ -105,6 +106,11 @@ namespace Game
       void DeferredLightShader::SetPointLightShadowMapCount(int32_t count)
       {
          u_PointLightShadowMapCount.LoadUniform(count);
+      }
+
+      void DeferredLightShader::SetPointLightShadowProjectionFarPlane(size_t index, float FarPlane)
+      {
+         u_PointLightShadowProjectionFarPlane.LoadUniform(index, FarPlane);
       }
 
       void DeferredLightShader::SetLightsInfo(const std::vector<std::shared_ptr<LightSceneProxy>>& lightsProxies)
