@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Core/ResourceManagerCore/Pool/ShaderPool.h"
 
 Engine::Engine()
    : m_interThreadMgr()
@@ -63,7 +64,16 @@ void Engine::KeyDown()
    m_scene.CameraMove();
 }
 
+#if DEBUG
+
 void Engine::PushFrame()
 {
    m_sceneRenderer.PushRenderTargetToTextureRenderer();
 }
+
+void Engine::RecompileAllShaders()
+{
+   Resources::ShaderPool::GetInstance()->RecompileShaders();
+}
+
+#endif

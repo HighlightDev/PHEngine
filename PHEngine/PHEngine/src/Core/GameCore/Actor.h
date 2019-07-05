@@ -53,6 +53,8 @@ namespace Game
 
 		void SetParent(Actor* actor);
 
+      Actor* GetParent() const;
+
 		void AttachActor(std::shared_ptr<Actor> actor);
 
 		void DetachActor(std::shared_ptr<Actor> actor);

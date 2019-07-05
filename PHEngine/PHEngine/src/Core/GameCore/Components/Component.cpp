@@ -35,4 +35,16 @@ namespace Game
       return COMPONENT;
    }
 
+   Actor* Component::GetBaseOwner() const 
+   {
+      Actor* base = this->m_owner;
+
+      while (base && base->GetParent())
+      {
+         base = base->GetParent();
+      }
+
+      return base;
+   }
+
 }

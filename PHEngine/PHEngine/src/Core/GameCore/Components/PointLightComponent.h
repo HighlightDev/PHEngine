@@ -26,6 +26,8 @@ namespace Game
 
       virtual uint64_t GetComponentType() const override;
 
+      virtual void Tick(float deltaTime) override;
+
       virtual std::shared_ptr<LightSceneProxy> CreateSceneProxy() const override;
 
       inline const PointLightRenderData& GetRenderData() const {

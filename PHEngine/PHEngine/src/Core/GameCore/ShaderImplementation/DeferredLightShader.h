@@ -10,8 +10,10 @@ using namespace Graphics::Proxy;
 
 #define MAX_DIR_LIGHT_COUNT 5
 #define MAX_POINT_LIGHT_COUNT 1
-#define SHADOWMAP_BIAS 0.005f
-#define PCF_SAMPLES 2
+#define SHADOWMAP_BIAS_DIR_LIGHT 0.005f
+#define SHADOWMAP_BIAS_POINT_LIGHT 0.05f
+#define PCF_SAMPLES_DIR_LIGHT 2
+#define PCF_SAMPLES_POINT_LIGHT 4
 
 namespace Game
 {
@@ -38,13 +40,12 @@ namespace Game
          UniformArray u_PointLightDiffuseColor;
          UniformArray u_PointLightSpecularColor;
          UniformArray u_PointLightAttenuation;
-         UniformArray u_PointLightPosition;
+         UniformArray u_PointLightPositionWorld;
 
          UniformArray u_PointLightShadowMaps;
-         UniformArray u_PointLightPositionWorld;
+         UniformArray u_PointLightShadowProjectionFarPlane;
          Uniform u_PointLightShadowMapCount;
          Uniform u_PointLightCount;
-         UniformArray u_PointLightShadowProjectionFarPlane;
 
          Uniform u_gBuffer_Position;
          Uniform u_gBuffer_Normal;
@@ -70,7 +71,6 @@ namespace Game
          void SetDirectionalLightShadowMatrix(size_t index, const glm::mat4& shadowMatrix);
 
          void SetPointLightShadowMapSlot(size_t index, int32_t slot);
-         void SetPointLightPosition(size_t index, const glm::vec3& position);
          void SetPointLightShadowMapCount(int32_t count);
          void SetPointLightShadowProjectionFarPlane(size_t index, float FarPlane);
 

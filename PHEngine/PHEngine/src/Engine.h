@@ -37,6 +37,12 @@ public:
 
    void KeyDown();
 
+#if DEBUG
+
    void PushFrame();
+
+   void RecompileAllShaders();
+
+#endif
 };
 

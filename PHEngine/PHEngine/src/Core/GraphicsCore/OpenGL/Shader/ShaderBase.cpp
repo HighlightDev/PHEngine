@@ -25,15 +25,16 @@ namespace Graphics
 		{
 #if DEBUG
          Shader::bParentAccessUniformLocationsInvoked = true;
-#endif
+
 			if (m_shaderCompiledSuccessfully)
 			{
-				std::cout << GetCompileLogInfo() << std::endl;
-				std::cout << GetLinkLogInfo() << std::endl;
+            std::cout << GetCompileLogInfo();
+            std::cout << GetLinkLogInfo();
 				//Log.AddToFileStreamLog(getCompileLogInfo(m_shaderName));
 				//Log.AddToFileStreamLog(getLinkLogInfo(m_shaderName));
 			}
-			//else Log.AddToFileStreamLog(DateTime.Now.ToString() + "  " + m_shaderName + " : shader file(s) not found!");
+         //else Log.AddToFileStreamLog(DateTime.Now.ToString() + "  " + m_shaderName + " : shader file(s) not found!");
+#endif
 		}
 	}
 }

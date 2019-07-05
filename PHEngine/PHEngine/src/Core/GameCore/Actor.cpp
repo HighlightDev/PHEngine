@@ -137,12 +137,13 @@ namespace Game
 
    void Actor::AddMovementComponent(std::shared_ptr<Game::Component> movementComponent)
    {
+      movementComponent->SetOwner(this);
       m_movementComponent = std::static_pointer_cast<MovementComponent>(movementComponent);
    }
 
 	void Actor::AddComponent(std::shared_ptr<Game::Component> component)
 	{
-		
+      component->SetOwner(this);
 		m_allComponents.push_back(component);
 	}
 
@@ -170,6 +171,11 @@ namespace Game
 	{
 		m_parent = actor;
 	}
+
+   Actor* Actor::GetParent() const
+   {
+      return m_parent;
+   }
 
 	void Actor::AttachActor(std::shared_ptr<Actor> actor)
 	{

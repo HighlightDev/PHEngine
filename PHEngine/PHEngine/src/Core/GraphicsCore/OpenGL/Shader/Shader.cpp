@@ -7,6 +7,10 @@
 #include <gl/glew.h>
 #include <fstream>
 
+#if DEBUG
+#include <iostream>
+#endif
+
 namespace Graphics
 {
 	namespace OpenGL
@@ -412,7 +416,7 @@ namespace Graphics
 			}
 
 			if ((m_vertexShaderID != -1 && vertex_compiled != GL_TRUE) || (m_fragmentShaderID != -1 && fragment_compiled != GL_TRUE) || (m_geometryShaderID != -1 && geometry_compiled != GL_TRUE))
-				compileLog += std::string("Unresolved mistakes at :" + m_shaderParams.ShaderName + '\n') + EngineUtility::StringStreamWrapper::FlushString();
+				compileLog += std::string("Unresolved mistakes at :" + m_shaderParams.ShaderName + '\n') + EngineUtility::StringStreamWrapper::FlushString() + "\n";
 
 			return compileLog;
 		}
@@ -435,6 +439,8 @@ namespace Graphics
 			}
 
 			linkLog = std::move(EngineUtility::StringStreamWrapper::FlushString());
+         linkLog = linkLog != "" ? linkLog + "\n" : linkLog;
+
 			return linkLog;
 		}
 
@@ -474,6 +480,8 @@ namespace Graphics
 			m_defineParameters.clear();
 		}
 
+#if DEBUG
+
 		bool Shader::RecompileShader()
 		{
 			CleanUp(false);
@@ -484,8 +492,13 @@ namespace Graphics
 				LinkShaders();
 				AccessAllUniformLocations();
 			}
+
+         std::cout << "Shader " + m_shaderParams.ShaderName + (m_shaderCompiledSuccessfully ? " has recompiled successfully " : "has not recompiled") << std::endl;
+
 			return m_shaderCompiledSuccessfully;
 		}
+
+#endif
 
 		template <typename ValueType>
 		void Shader::Predefine(ShaderType shaderType, const std::string& name, ValueType&& value)

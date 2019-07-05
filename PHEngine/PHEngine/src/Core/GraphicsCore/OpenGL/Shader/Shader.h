@@ -89,7 +89,9 @@ namespace Graphics
 
 			void PreprocessorEdit();
 
+#if DEBUG
 			bool RecompileShader();
+#endif
 
 		};
 	}

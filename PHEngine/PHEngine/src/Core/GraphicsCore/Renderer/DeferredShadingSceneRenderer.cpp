@@ -288,7 +288,6 @@ namespace Graphics
                   {
                      shadowInfo->GetAtlasResource()->BindTexture(shadowMapSlot);
                      m_deferredLightShader->SetPointLightShadowMapSlot(pointLightIndex, shadowMapSlot);
-                     m_deferredLightShader->SetPointLightPosition(pointLightIndex, lightPtr->GetPosition());
                      m_deferredLightShader->SetPointLightShadowProjectionFarPlane(pointLightIndex, std::sqrtf(lightPtr->GetRadianceSqrRadius()));
                      shadowMapSlot++;
                      pointShadowMapCount++;

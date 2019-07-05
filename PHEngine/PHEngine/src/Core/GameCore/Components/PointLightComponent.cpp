@@ -1,5 +1,10 @@
 #include "PointLightComponent.h"
 #include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
+#include "Core/UtilityCore/EngineMath.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "Core/GameCore/Actor.h"
 
 namespace Game
 {
@@ -24,6 +29,13 @@ namespace Game
    uint64_t PointLightComponent::GetComponentType() const
    {
       return POINT_LIGHT_COMPONENT;
+   }
+
+   float time = 0.0f;
+
+   void PointLightComponent::Tick(float deltaTime)
+   {
+      Base::Tick(deltaTime);
    }
 
 }
