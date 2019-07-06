@@ -1,5 +1,6 @@
 #include "SceneComponent.h"
 #include "Core/UtilityCore/EngineMath.h"
+#include "Core/GameCore/Event/ComponentPositionChangedEvent.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -10,7 +11,7 @@ namespace Game
 
    SceneComponent::SceneComponent()
       : Component()
-      , bTransformationDirty(true)
+      , bTransformationDirty(true, std::function<void(void)>([=](){ Event::ComponentPositionChangedEvent::GetInstance()->SendEvent(GetComponentType()); }))
       , m_translation(0)
       , m_rotation(0)
       , m_scale(1)
@@ -22,7 +23,7 @@ namespace Game
 
 	SceneComponent::SceneComponent(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
 		: Component()
-		, bTransformationDirty(true)
+      , bTransformationDirty(true, std::function<void(void)>([=]() { Event::ComponentPositionChangedEvent::GetInstance()->SendEvent(GetComponentType()); }))
 		, m_translation(translation)
 		, m_rotation(rotation)
 		, m_scale(scale)

@@ -30,7 +30,7 @@ namespace Game
       m_moveFactor += m_waveSpeed * deltaTime;
       m_moveFactor = std::truncf(m_moveFactor);
 
-      m_scene->ExecuteOnRenderThread([=]() {
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetMoveFactor(m_moveFactor);
@@ -56,7 +56,7 @@ namespace Game
    {
       m_waveStrength = waveStr;
 
-      m_scene->ExecuteOnRenderThread([=]() {
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetWaveStrength(m_waveStrength);
@@ -67,7 +67,7 @@ namespace Game
    {
       m_transparencyDepth = transparencyDepth;
 
-      m_scene->ExecuteOnRenderThread([=]() {
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetTransparencyDepth(m_transparencyDepth);
@@ -92,7 +92,7 @@ namespace Game
    void WaterPlaneComponent::SetNearClipPlane(float nearClipPlane)
    {
       m_nearClipPlane = nearClipPlane;
-      m_scene->ExecuteOnRenderThread([=]() {
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetNearClipPlane(m_nearClipPlane);
@@ -102,7 +102,7 @@ namespace Game
    void WaterPlaneComponent::SetFarClipPlane(float farClipPlane)
    {
       m_farClipPlane = farClipPlane;
-      m_scene->ExecuteOnRenderThread([=]() {
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetFarClipPlane(m_farClipPlane);

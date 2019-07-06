@@ -2,22 +2,23 @@
 
 #include <vector>
 #include <glm/vec3.hpp>
+#include <tuple>
 
 namespace Event
 {
-   template <typename DataType>
+   template <typename... DataTypes>
    class TEvent
    {
    public:
 
-      using Event_t = TEvent<DataType>;
-      using EventData_t = DataType;
+      using Event_t = TEvent<DataTypes...>;
+      using EventData_t = std::tuple<DataTypes...>;
 
    private:
 
       static Event_t* m_instance;
 
-      std::vector<TEvent<DataType>*> m_listeners;
+      std::vector<TEvent<DataTypes...>*> m_listeners;
 
    protected:
 
@@ -27,13 +28,13 @@ namespace Event
 
       virtual ~TEvent();
 
-      void SendEvent(const DataType& data) const;
+      void SendEvent(DataTypes... data) const;
 
-      void AddListener(TEvent<DataType>* eventListener);
+      void AddListener(Event_t* eventListener);
 
-      void RemoveListener(TEvent<DataType>* eventListener);
+      void RemoveListener(Event_t* eventListener);
 
-      virtual void ProcessEvent(const DataType& data);
+      virtual void ProcessEvent(const EventData_t& data);
 
       static Event_t* GetInstance() {
 

@@ -13,12 +13,14 @@ namespace Game
       : LightComponent(glm::vec3(0), rotation, glm::vec3(1))
       , m_renderData(renderData)
    {
-      EventBase::GetInstance()->AddListener(this);
+      PlayerMovedEvent::GetInstance()->AddListener(this);
+      ComponentPositionChangedEvent::GetInstance()->AddListener(this);
    }
 
    DirectionalLightComponent::~DirectionalLightComponent()
    {
-      EventBase::GetInstance()->RemoveListener(this);
+      PlayerMovedEvent::GetInstance()->RemoveListener(this);
+      ComponentPositionChangedEvent::GetInstance()->RemoveListener(this);
    }
 
    std::shared_ptr<LightSceneProxy> DirectionalLightComponent::CreateSceneProxy() const
@@ -35,9 +37,9 @@ namespace Game
    {
       Base::Tick(deltaTime);
 
-      SetRotationAxisX(m_rotation.x + 0.001f);
+     /* SetRotationAxisX(m_rotation.x + 0.001f);
       SetRotationAxisY(m_rotation.y + 0.001f);
-      SetRotationAxisZ(m_rotation.z + 0.001f);
+      SetRotationAxisZ(m_rotation.z + 0.001f);*/
    }
 
    uint64_t DirectionalLightComponent::GetComponentType() const
@@ -45,16 +47,29 @@ namespace Game
       return DIR_LIGHT_COMPONENT;
    }
 
-   void DirectionalLightComponent::ProcessEvent(const EventBase::EventData_t& data)
+   void DirectionalLightComponent::ProcessEvent(const PlayerMovedEvent::EventData_t& data)
    {
-      m_scene->ExecuteOnRenderThread([=]()
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]()
       {
          auto proxy = m_scene->LightProxies[LightSceneProxyId];
          ProjectedShadowInfo* shadowInfo = proxy->GetShadowInfo();
          if (shadowInfo)
          {
-            shadowInfo->Offset = data;
+            shadowInfo->Offset = std::get<0>(data);
             proxy->SetIsTransformationDirty(true);
+         }
+      });
+   }
+
+   void DirectionalLightComponent::ProcessEvent(const ComponentPositionChangedEvent::EventData_t& data)
+   {
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH, [=]()
+      {
+         auto proxy = m_scene->LightProxies[LightSceneProxyId];
+         ProjectedShadowInfo* shadowInfo = proxy->GetShadowInfo();
+         if (shadowInfo)
+         {
+            shadowInfo->bMustUpdateShadowmap = true;
          }
       });
    }

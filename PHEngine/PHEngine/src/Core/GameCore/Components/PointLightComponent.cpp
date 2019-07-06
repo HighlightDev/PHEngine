@@ -31,8 +31,6 @@ namespace Game
       return POINT_LIGHT_COMPONENT;
    }
 
-   float time = 0.0f;
-
    void PointLightComponent::Tick(float deltaTime)
    {
       Base::Tick(deltaTime);

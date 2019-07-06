@@ -1,18 +1,24 @@
 #pragma once
 #include "Component.h"
+#include "Core/CommonApi/VariableWrapper.h"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
 namespace Game
 {
-	class SceneComponent : public Component
+	class SceneComponent 
+      : public Component
 	{
-		protected:
+   public:
+
+      using wrapped_bool = VariableWrapper<bool>;
+
+   protected:
 
 		using Base = Component;
 
-		bool bTransformationDirty;
+      wrapped_bool bTransformationDirty;
 
 		glm::vec3 m_translation;
 		glm::vec3 m_rotation;
@@ -95,7 +101,7 @@ namespace Game
 		}
 
 		inline bool GetIsTransformationDirty() const {
-			return bTransformationDirty;
+			return bTransformationDirty.GetValue();
 		}
 
 		inline glm::vec3 GetTranslation() const

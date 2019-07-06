@@ -1,7 +1,7 @@
 #include "PlayerController.h"
 #include "Core/GameCore/CameraBase.h"
 #include "COre/GameCore/ThirdPersonCamera.h"
-#include "Core/GameCore/Event/CameraMovedEvent.h"
+#include "Core/GameCore/Event/PlayerMovedEvent.h"
 
 namespace Game
 {
@@ -46,7 +46,7 @@ namespace Game
                }
             }
 
-            Event::CameraMovedEvent::GetInstance()->SendEvent(newPosition);
+            Event::PlayerMovedEvent::GetInstance()->SendEvent(newPosition);
          }
          else if (bindings.GetKeyState(Keys::A))
          {

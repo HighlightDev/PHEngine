@@ -34,13 +34,13 @@ namespace Graphics
 
       glm::mat4 m_shadowBiasMatrix;
 
-      void AllocateFramebuffer() const;
-
-      void DeallocateFramebuffer() const;
-
    public:
 
+      bool bMustUpdateShadowmap;
+
       glm::vec3 Offset;
+
+   public:
 
       ProjectedShadowInfo(const LazyTextureAtlasObtainer & shadowAtlasCellResource);
 
@@ -51,6 +51,12 @@ namespace Graphics
       std::shared_ptr<ITexture> GetAtlasResource() const;
 
       LightType GetLightType() const;
+
+   protected:
+
+      void AllocateFramebuffer() const;
+
+      void DeallocateFramebuffer() const;
    };
 
 }

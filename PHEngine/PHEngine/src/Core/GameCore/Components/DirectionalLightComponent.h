@@ -3,7 +3,8 @@
 #include "LightComponent.h"
 #include "Core/GraphicsCore/SceneProxy/LightSceneProxy.h"
 #include "Core/GraphicsCore/RenderData/DirectionalLightRenderData.h"
-#include "Core/GameCore/Event/CameraMovedEvent.h"
+#include "Core/GameCore/Event/PlayerMovedEvent.h"
+#include "Core/GameCore/Event/ComponentPositionChangedEvent.h"
 
 using namespace Graphics::Proxy;
 using namespace Graphics::Data;
@@ -12,12 +13,13 @@ using namespace Event;
 namespace Game
 {
 
-   class DirectionalLightComponent :
-      public LightComponent, public CameraMovedEvent
+   class DirectionalLightComponent 
+      : public LightComponent
+      , public PlayerMovedEvent
+      , public ComponentPositionChangedEvent
    {
 
       using Base = LightComponent;
-      using EventBase = CameraMovedEvent;
 
    protected:
 
@@ -44,7 +46,8 @@ namespace Game
 
    protected:
 
-      virtual void ProcessEvent(const EventBase::EventData_t& data) override;
+      virtual void ProcessEvent(const PlayerMovedEvent::EventData_t& data) override;
+      virtual void ProcessEvent(const ComponentPositionChangedEvent::EventData_t& data) override;
    };
 
 }

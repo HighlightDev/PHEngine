@@ -56,15 +56,14 @@ float CalcLitFactorCubemap(in samplerCube shadowmap, in vec3 worldPos, in vec3 p
 	float actualDepth = length(LightToFragVec);
 
 	float shadow  = 0.0;
-	float bias    = 0.05;
-	float samples = 4.0;
-	float offset  = 0.1;
+	const float offset  = 0.1;
+	const float offsetStep = offset / (PCF_SAMPLES_POINT_LIGHT * 0.5);
 
-	for (float x = -offset; x < offset; x += offset / (samples * 0.5))
+	for (float x = -offset; x < offset; x += offsetStep)
 	{
-		for (float y = -offset; y < offset; y += offset / (samples * 0.5))
+		for (float y = -offset; y < offset; y += offsetStep)
 		{
-			for (float z = -offset; z < offset; z += offset / (samples * 0.5))
+			for (float z = -offset; z < offset; z += offsetStep)
 			{
 				float shadowmapDepth = texture(shadowmap, LightToFragVec + vec3(x, y, z)).r; // depth is in range [0 ; 1]
 				shadowmapDepth *= shadowmapProjectionfarPlane; // now depth is linear in world space in range [0 ; Far Plane]

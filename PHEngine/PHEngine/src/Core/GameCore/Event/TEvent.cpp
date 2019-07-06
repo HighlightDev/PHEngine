@@ -1,46 +1,49 @@
 #include "TEvent.h"
 
+#include <utility>
+
 namespace Event
 {
 
    template class TEvent<glm::vec3>;
+   template class TEvent<uint64_t>;
 
-   template <typename DataType>
-   TEvent<DataType>* TEvent<DataType>::m_instance = nullptr;
+   template <typename... DataTypes>
+   TEvent<DataTypes...>* TEvent<DataTypes...>::m_instance = nullptr;
 
-   template <typename DataType>
-   TEvent<DataType>::TEvent()
+   template <typename... DataTypes>
+   TEvent<DataTypes...>::TEvent()
    {
    }
 
-   template <typename DataType>
-   TEvent<DataType>::~TEvent()
+   template <typename... DataTypes>
+   TEvent<DataTypes...>::~TEvent()
    {
    }
 
-   template <typename DataType>
-   void TEvent<DataType>::SendEvent(const DataType& data) const
+   template <typename... DataTypes>
+   void TEvent<DataTypes...>::SendEvent(DataTypes... data) const
    {
+      EventData_t packedData = std::make_tuple<DataTypes...>(std::forward<DataTypes>(data)...);
       for (auto& listener : m_listeners)
       {
-         listener->ProcessEvent(data);
+         listener->ProcessEvent(packedData);
       }
    }
 
-   template <typename DataType>
-   void TEvent<DataType>::ProcessEvent(const DataType& data)
+   template <typename... DataTypes>
+   void TEvent<DataTypes...>::ProcessEvent(const EventData_t& data)
    {
-
    }
 
-   template <typename DataType>
-   void TEvent<DataType>::AddListener(TEvent<DataType>* eventListener)
+   template <typename... DataTypes>
+   void TEvent<DataTypes...>::AddListener(Event_t* eventListener)
    {
       m_listeners.push_back(eventListener);
    }
 
-   template <typename DataType>
-   void TEvent<DataType>::RemoveListener(TEvent<DataType>* eventListener)
+   template <typename... DataTypes>
+   void TEvent<DataTypes...>::RemoveListener(Event_t* eventListener)
    {
       auto it = std::find(m_listeners.begin(), m_listeners.end(), eventListener);
       if (it != m_listeners.end())

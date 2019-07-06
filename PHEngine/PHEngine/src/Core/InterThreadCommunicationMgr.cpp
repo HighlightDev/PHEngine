@@ -16,16 +16,61 @@ namespace Thread
    {
    }
 
-   void InterThreadCommunicationMgr::PushGameThreadJob(std::function<void(void)> job)
+   void InterThreadCommunicationMgr::PushGameThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
    {
       std::lock_guard<std::mutex> lock(m_gameThreadMutex);
-      m_gameThreadJobs.push(job);
+      ProcessPushGameThreadJob(policy, job);
    }
 
-   void InterThreadCommunicationMgr::PushRenderThreadJob(std::function<void(void)> job)
+   void InterThreadCommunicationMgr::PushRenderThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
    {
       std::lock_guard<std::mutex> lock(m_renderThreadMutex);
-      m_renderThreadJobs.push(job);
+      ProcessPushRenderThreadJob(policy, job);
+   }
+
+   void InterThreadCommunicationMgr::ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
+   {
+      switch (policy)
+      {
+         case EnqueueJobPolicy::PUSH_ANYWAY:
+         {
+            m_renderThreadJobs.push(job);
+            break;
+         }
+         case EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH:
+         {
+            m_renderThreadJobs.push(job);
+            break;
+         }
+         case EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH:
+         {
+            m_renderThreadJobs.push(job);
+            break;
+         }
+      }
+   }
+
+   void InterThreadCommunicationMgr::ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
+   {
+      switch (policy)
+      {
+         case EnqueueJobPolicy::PUSH_ANYWAY:
+         {
+            m_gameThreadJobs.push(job);
+            break;
+         }
+         case EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH:
+         {
+            m_gameThreadJobs.push(job);
+            break;
+         }
+         case EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH:
+         {
+            m_gameThreadJobs.push(job);
+            break;
+         }
+      }
+
    }
 
    void InterThreadCommunicationMgr::SpinGameThreadJobs()

@@ -114,8 +114,8 @@ namespace Graphics
          {
             DirectionalLightSceneProxy* lightPtr = dirLightProxy.get();
 
-            const ProjectedShadowInfo* const shadowInfo = lightPtr->GetProjectedDirShadowInfo();
-            if (shadowInfo)
+            ProjectedShadowInfo* const shadowInfo = lightPtr->GetProjectedDirShadowInfo();
+            if (shadowInfo && shadowInfo->bMustUpdateShadowmap)
             {
                shadowInfo->BindShadowFramebuffer(shadowInfo->GetAtlasResource()->GetTextureDescriptor() != lastDirLightFramebufferDesc);
                lastDirLightFramebufferDesc = shadowInfo->GetAtlasResource()->GetTextureDescriptor();
@@ -157,6 +157,9 @@ namespace Graphics
                }
 
                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+               // Next frame shadow map will not be updated unless position of objects in the level are changed
+               shadowInfo->bMustUpdateShadowmap = false;
             }
          }
 
