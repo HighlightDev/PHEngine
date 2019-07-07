@@ -7,11 +7,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "GlobalProperties.h"
+#include "Core/GameCore/GameObject.h"
 
 namespace Game
 {
 
 	class CameraBase
+      : public GameObject
 	{
    public:
 

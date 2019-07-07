@@ -14,13 +14,13 @@ namespace Game
       , m_renderData(renderData)
    {
       PlayerMovedEvent::GetInstance()->AddListener(this);
-      ComponentPositionChangedEvent::GetInstance()->AddListener(this);
+      ComponentTransformChangedEvent::GetInstance()->AddListener(this);
    }
 
    DirectionalLightComponent::~DirectionalLightComponent()
    {
       PlayerMovedEvent::GetInstance()->RemoveListener(this);
-      ComponentPositionChangedEvent::GetInstance()->RemoveListener(this);
+      ComponentTransformChangedEvent::GetInstance()->RemoveListener(this);
    }
 
    std::shared_ptr<LightSceneProxy> DirectionalLightComponent::CreateSceneProxy() const
@@ -49,7 +49,7 @@ namespace Game
 
    void DirectionalLightComponent::ProcessEvent(const PlayerMovedEvent::EventData_t& data)
    {
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]()
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]()
       {
          auto proxy = m_scene->LightProxies[LightSceneProxyId];
          ProjectedShadowInfo* shadowInfo = proxy->GetShadowInfo();
@@ -61,9 +61,9 @@ namespace Game
       });
    }
 
-   void DirectionalLightComponent::ProcessEvent(const ComponentPositionChangedEvent::EventData_t& data)
+   void DirectionalLightComponent::ProcessEvent(const ComponentTransformChangedEvent::EventData_t& data)
    {
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH, [=]()
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH, GetObjectId(), [=]()
       {
          auto proxy = m_scene->LightProxies[LightSceneProxyId];
          ProjectedShadowInfo* shadowInfo = proxy->GetShadowInfo();

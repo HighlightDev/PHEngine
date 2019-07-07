@@ -4,6 +4,7 @@
 #include <memory>
 #include <glm/mat4x4.hpp>
 
+#include "GameObject.h"
 #include "Core/GameCore/Components/Component.h"
 #include "Core/GameCore/Components/SceneComponent.h"
 #include "Core/GameCore/Components/InputComponent.h"
@@ -12,7 +13,8 @@
 namespace Game
 {
 
-	class Actor
+	class Actor 
+      : public GameObject
 	{
 	private:
 

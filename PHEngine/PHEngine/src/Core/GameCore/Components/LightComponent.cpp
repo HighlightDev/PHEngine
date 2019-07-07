@@ -24,7 +24,7 @@ namespace Game
    {
       Base::UpdateRelativeMatrix(parentRelativeMatrix);
       // Update light proxy transform
-      m_scene->OnUpdateLightComponentTransform_GameThread(LightSceneProxyId, m_relativeMatrix);
+      m_scene->OnUpdateLightComponentTransform_GameThread(LightSceneProxyId, GetObjectId(), m_relativeMatrix);
    }
 
 }

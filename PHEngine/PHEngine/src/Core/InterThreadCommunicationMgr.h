@@ -1,8 +1,9 @@
 #pragma once
 
-#include <functional>
 #include <queue>
 #include <mutex>
+
+#include "Job.h"
 
 namespace Thread
 {
@@ -33,9 +34,9 @@ InterThreadMgrInstance.SpinGameThreadJobs();
 
       std::mutex m_renderThreadMutex;
 
-      std::queue<std::function<void(void)>> m_gameThreadJobs;
+      std::queue<Job> m_gameThreadJobs;
 
-      std::queue<std::function<void(void)>> m_renderThreadJobs;
+      std::queue<Job> m_renderThreadJobs;
 
    public:
 
@@ -43,9 +44,9 @@ InterThreadMgrInstance.SpinGameThreadJobs();
 
       ~InterThreadCommunicationMgr();
 
-      void PushGameThreadJob(const EnqueueJobPolicy, const std::function<void(void)>& job);
+      void PushGameThreadJob(const EnqueueJobPolicy, const Job& job);
 
-      void PushRenderThreadJob(const EnqueueJobPolicy, const std::function<void(void)>& job);
+      void PushRenderThreadJob(const EnqueueJobPolicy, const Job& job);
 
       /* @ Should be executed only on game thread! */
       void SpinGameThreadJobs();
@@ -55,8 +56,8 @@ InterThreadMgrInstance.SpinGameThreadJobs();
 
    private:
 
-      void ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job);
-      void ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job);
+      void ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const Job& job);
+      void ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const Job& job);
 
       inline bool AreGameJobsAwaiting() const {
 

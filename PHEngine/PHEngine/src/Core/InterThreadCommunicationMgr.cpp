@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <algorithm>
 
 namespace Thread
 {
@@ -16,19 +17,19 @@ namespace Thread
    {
    }
 
-   void InterThreadCommunicationMgr::PushGameThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
+   void InterThreadCommunicationMgr::PushGameThreadJob(const EnqueueJobPolicy policy, const Job& job)
    {
       std::lock_guard<std::mutex> lock(m_gameThreadMutex);
       ProcessPushGameThreadJob(policy, job);
    }
 
-   void InterThreadCommunicationMgr::PushRenderThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
+   void InterThreadCommunicationMgr::PushRenderThreadJob(const EnqueueJobPolicy policy, const Job& job)
    {
       std::lock_guard<std::mutex> lock(m_renderThreadMutex);
       ProcessPushRenderThreadJob(policy, job);
    }
 
-   void InterThreadCommunicationMgr::ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
+   void InterThreadCommunicationMgr::ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const Job& job)
    {
       switch (policy)
       {
@@ -50,7 +51,7 @@ namespace Thread
       }
    }
 
-   void InterThreadCommunicationMgr::ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const std::function<void(void)>& job)
+   void InterThreadCommunicationMgr::ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const Job& job)
    {
       switch (policy)
       {

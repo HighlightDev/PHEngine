@@ -143,37 +143,37 @@ namespace Game
       }
    }
 
-   void Scene::ExecuteOnRenderThread(EnqueueJobPolicy policy, std::function<void(void)> gameThreadJob) const
+   void Scene::ExecuteOnRenderThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const std::function<void(void)>& gameThreadJobCallback) const
    {
-      ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, policy, gameThreadJob);
+      ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, policy, Job(creatorObjectId, gameThreadJobCallback));
    }
 
-   void Scene::ExecuteOnGameThread(EnqueueJobPolicy policy, std::function<void(void)> renderThreadJob) const
+   void Scene::ExecuteOnGameThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const std::function<void(void)>& renderThreadJobCallback) const
    {
-      ENQUEUE_GAME_THREAD_JOB(m_interThreadMgr, policy, renderThreadJob);
+      ENQUEUE_GAME_THREAD_JOB(m_interThreadMgr, policy, Job(creatorObjectId, renderThreadJobCallback));
    }
 
-   void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const glm::mat4& newRelativeMatrix)
+   void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const uint64_t creatorObjectId, const glm::mat4& newRelativeMatrix)
    {
       if (primitiveSceneProxyIndex < SceneProxies.size())
       {
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH,
-            [=]()
+           Job(creatorObjectId,[=]()
          {
             SceneProxies[primitiveSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
-         });
+         }));
       }
    }
 
-   void Scene::OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const glm::mat4& newRelativeMatrix)
+   void Scene::OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const uint64_t creatorObjectId, const glm::mat4& newRelativeMatrix)
    {
       if (lightSceneProxyIndex < LightProxies.size())
       {
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH,
-            [=]()
+            Job( creatorObjectId, [=]()
          {
             LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
-         });
+         }));
       }
    }
 

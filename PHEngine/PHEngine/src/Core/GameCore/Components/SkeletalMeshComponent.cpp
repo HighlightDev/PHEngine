@@ -28,7 +28,7 @@ namespace Game
    {
       m_animationDeltaTime = deltaTime;
 
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, [=]() {
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]() {
 
          SkeletalMeshSceneProxy* proxyPtr = static_cast<SkeletalMeshSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetAnimationDeltaTime(m_animationDeltaTime);

@@ -26,6 +26,6 @@ namespace Game
       Base::UpdateRelativeMatrix(parentRelativeMatrix);
 
       // Update primitives proxy transform
-      m_scene->OnUpdatePrimitiveComponentTransform_GameThread(PrimitiveProxyComponentId, m_relativeMatrix);
+      m_scene->OnUpdatePrimitiveComponentTransform_GameThread(PrimitiveProxyComponentId, GetObjectId(), m_relativeMatrix);
    }
 }

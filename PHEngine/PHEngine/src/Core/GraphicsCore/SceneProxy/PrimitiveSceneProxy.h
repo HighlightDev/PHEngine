@@ -6,10 +6,12 @@
 #include "Core/GraphicsCore/Mesh/Skin.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
 #include "Core/GameCore/Components/ComponentType.h"
+#include "Core/GameCore/GameObject.h"
 
 using namespace Graphics::OpenGL;
 using namespace Graphics::Mesh;
 using namespace Graphics::Texture;
+using namespace Game;
 
 namespace Graphics
 {
@@ -17,6 +19,7 @@ namespace Graphics
    {
 
       class PrimitiveSceneProxy
+         : public GameObject
       {
       protected:
 

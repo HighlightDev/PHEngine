@@ -57,18 +57,18 @@ namespace Game
 
       void Tick_GameThread(float delta);
 
-      void OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const glm::mat4& newRelativeMatrix);
+      void OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const uint64_t creatorObjectId, const glm::mat4& newRelativeMatrix);
 
-      void OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const glm::mat4& newRelativeMatrix);
+      void OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const uint64_t creatorObjectId, const glm::mat4& newRelativeMatrix);
 
       template <typename PrimitiveType>
       void CreateAndAddComponent_GameThread(ComponentData& componentData, std::shared_ptr<Actor> owner);
 
       void RemoveComponent_GameThread(std::shared_ptr<Component> component);
 
-      void ExecuteOnRenderThread(EnqueueJobPolicy policy, std::function<void(void)> gameThreadJob) const;
+      void ExecuteOnRenderThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const std::function<void(void)>& gameThreadJobCallback) const;
 
-      void ExecuteOnGameThread(EnqueueJobPolicy policy, std::function<void(void)> renderThreadJob) const;
+      void ExecuteOnGameThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const std::function<void(void)>& renderThreadJobCallback) const;
 
       // TEMP
       void CameraRotate();

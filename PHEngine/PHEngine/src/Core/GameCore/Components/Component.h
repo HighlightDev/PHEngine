@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComponentType.h"
+#include "Core/GameCore/GameObject.h"
 
 #include <memory>
 #include <vector>
@@ -14,6 +15,7 @@ namespace Game
 	// of all components which could be 
 	// picked by actor
 	class Component
+      : public GameObject
 	{
 		Actor* m_owner;
 
