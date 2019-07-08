@@ -1,5 +1,6 @@
 #include "LightComponent.h"
 #include "Core/GameCore/Scene.h"
+#include "Core/CommonApi/StringHash.h"
 
 namespace Game
 {
@@ -24,7 +25,9 @@ namespace Game
    {
       Base::UpdateRelativeMatrix(parentRelativeMatrix);
       // Update light proxy transform
-      m_scene->OnUpdateLightComponentTransform_GameThread(LightSceneProxyId, GetObjectId(), m_relativeMatrix);
+      constexpr uint64_t functionId = Hash("LightComponent: OnUpdateLightComponentTransform_GameThread");
+
+      m_scene->OnUpdateLightComponentTransform_GameThread(LightSceneProxyId, GetObjectId(), functionId, m_relativeMatrix);
    }
 
 }

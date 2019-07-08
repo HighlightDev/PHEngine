@@ -1,6 +1,6 @@
 #pragma once
 
-#include <queue>
+#include <vector>
 #include <mutex>
 
 #include "Job.h"
@@ -34,9 +34,9 @@ InterThreadMgrInstance.SpinGameThreadJobs();
 
       std::mutex m_renderThreadMutex;
 
-      std::queue<Job> m_gameThreadJobs;
+      std::vector<Job> m_gameThreadJobs;
 
-      std::queue<Job> m_renderThreadJobs;
+      std::vector<Job> m_renderThreadJobs;
 
    public:
 
@@ -58,6 +58,7 @@ InterThreadMgrInstance.SpinGameThreadJobs();
 
       void ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const Job& job);
       void ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const Job& job);
+      void ProcessPushJob(const EnqueueJobPolicy policy, const Job& job, std::vector<Job>& jobs);
 
       inline bool AreGameJobsAwaiting() const {
 

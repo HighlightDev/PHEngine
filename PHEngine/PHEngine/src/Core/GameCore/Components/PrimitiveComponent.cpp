@@ -1,6 +1,6 @@
 #include "PrimitiveComponent.h"
-
 #include "Core/GameCore/Scene.h"
+#include "Core/CommonApi/StringHash.h"
 
 namespace Game
 {
@@ -26,6 +26,8 @@ namespace Game
       Base::UpdateRelativeMatrix(parentRelativeMatrix);
 
       // Update primitives proxy transform
-      m_scene->OnUpdatePrimitiveComponentTransform_GameThread(PrimitiveProxyComponentId, GetObjectId(), m_relativeMatrix);
+      constexpr uint64_t functionId = Hash("PrimitiveComponent: OnUpdatePrimitiveComponentTransform_GameThread");
+
+      m_scene->OnUpdatePrimitiveComponentTransform_GameThread(PrimitiveProxyComponentId, GetObjectId(), functionId, m_relativeMatrix);
    }
 }

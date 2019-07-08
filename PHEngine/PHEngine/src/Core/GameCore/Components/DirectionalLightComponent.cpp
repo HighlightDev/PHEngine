@@ -3,6 +3,7 @@
 #include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
 #include "Core/GameCore/Scene.h"
 #include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
+#include "core/CommonApi/StringHash.h"
 
 using namespace Graphics;
 
@@ -49,7 +50,9 @@ namespace Game
 
    void DirectionalLightComponent::ProcessEvent(const PlayerMovedEvent::EventData_t& data)
    {
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]()
+      constexpr uint64_t functionId = Hash("DirectionalLightComponent: Set shadowInfo->Offset");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), functionId, [=]()
       {
          auto proxy = m_scene->LightProxies[LightSceneProxyId];
          ProjectedShadowInfo* shadowInfo = proxy->GetShadowInfo();
@@ -63,7 +66,9 @@ namespace Game
 
    void DirectionalLightComponent::ProcessEvent(const ComponentTransformChangedEvent::EventData_t& data)
    {
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH, GetObjectId(), [=]()
+      constexpr uint64_t functionId = Hash("DirectionalLightComponent: Set shadowInfo->bMustUpdateShadowmap");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH, GetObjectId(), functionId, [=]()
       {
          auto proxy = m_scene->LightProxies[LightSceneProxyId];
          ProjectedShadowInfo* shadowInfo = proxy->GetShadowInfo();

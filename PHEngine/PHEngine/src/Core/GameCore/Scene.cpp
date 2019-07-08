@@ -143,34 +143,34 @@ namespace Game
       }
    }
 
-   void Scene::ExecuteOnRenderThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const std::function<void(void)>& gameThreadJobCallback) const
+   void Scene::ExecuteOnRenderThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const uint64_t functionId, const std::function<void(void)>& gameThreadJobCallback) const
    {
-      ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, policy, Job(creatorObjectId, gameThreadJobCallback));
+      ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, policy, Job(creatorObjectId, functionId, gameThreadJobCallback));
    }
 
-   void Scene::ExecuteOnGameThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const std::function<void(void)>& renderThreadJobCallback) const
+   void Scene::ExecuteOnGameThread(EnqueueJobPolicy policy, const uint64_t creatorObjectId, const uint64_t functionId, const std::function<void(void)>& renderThreadJobCallback) const
    {
-      ENQUEUE_GAME_THREAD_JOB(m_interThreadMgr, policy, Job(creatorObjectId, renderThreadJobCallback));
+      ENQUEUE_GAME_THREAD_JOB(m_interThreadMgr, policy, Job(creatorObjectId, functionId, renderThreadJobCallback));
    }
 
-   void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const uint64_t creatorObjectId, const glm::mat4& newRelativeMatrix)
+   void Scene::OnUpdatePrimitiveComponentTransform_GameThread(size_t primitiveSceneProxyIndex, const uint64_t creatorObjectId, const uint64_t functionId, const glm::mat4& newRelativeMatrix)
    {
       if (primitiveSceneProxyIndex < SceneProxies.size())
       {
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH,
-           Job(creatorObjectId,[=]()
+           Job(creatorObjectId, functionId, [=]()
          {
             SceneProxies[primitiveSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
          }));
       }
    }
 
-   void Scene::OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const uint64_t creatorObjectId, const glm::mat4& newRelativeMatrix)
+   void Scene::OnUpdateLightComponentTransform_GameThread(size_t lightSceneProxyIndex, const uint64_t creatorObjectId, const uint64_t functionId, const glm::mat4& newRelativeMatrix)
    {
       if (lightSceneProxyIndex < LightProxies.size())
       {
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH,
-            Job( creatorObjectId, [=]()
+            Job( creatorObjectId, functionId, [=]()
          {
             LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
          }));

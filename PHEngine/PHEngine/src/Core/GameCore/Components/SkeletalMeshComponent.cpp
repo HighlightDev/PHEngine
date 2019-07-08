@@ -1,6 +1,7 @@
 #include "SkeletalMeshComponent.h"
 #include "Core/GraphicsCore/SceneProxy/SkeletalMeshSceneProxy.h"
 #include "Core/GameCore/Scene.h"
+#include "Core/CommonApi/StringHash.h"
 
 using namespace Graphics::Proxy;
 
@@ -26,9 +27,11 @@ namespace Game
 
    void SkeletalMeshComponent::Tick(float deltaTime)
    {
-      m_animationDeltaTime = deltaTime;
+      m_animationDeltaTime = std::max(deltaTime, 0.03f);
 
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]() {
+      constexpr uint64_t functionId = Hash("SkeletalMeshComponent: SetAnimationDeltaTime");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), functionId, [=]() {
 
          SkeletalMeshSceneProxy* proxyPtr = static_cast<SkeletalMeshSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetAnimationDeltaTime(m_animationDeltaTime);

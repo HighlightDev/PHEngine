@@ -1,6 +1,7 @@
 #include "WaterPlaneComponent.h"
 #include "Core/GameCore/Scene.h"
 #include "Core/GraphicsCore/SceneProxy/WaterPlaneSceneProxy.h"
+#include "Core/CommonApi/StringHash.h"
 
 #include <glm/vec3.hpp>
 
@@ -30,7 +31,9 @@ namespace Game
       m_moveFactor += m_waveSpeed * deltaTime;
       m_moveFactor = std::truncf(m_moveFactor);
 
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]() {
+      constexpr uint64_t functionId = Hash("WaterPlaneComponent: SetMoveFactor");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), functionId, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetMoveFactor(m_moveFactor);
@@ -56,7 +59,9 @@ namespace Game
    {
       m_waveStrength = waveStr;
 
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]() {
+      constexpr uint64_t functionId = Hash("WaterPlaneComponent: SetWaveStrength");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), functionId, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetWaveStrength(m_waveStrength);
@@ -67,7 +72,9 @@ namespace Game
    {
       m_transparencyDepth = transparencyDepth;
 
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]() {
+      constexpr uint64_t functionId = Hash("WaterPlaneComponent: SetTransparencyDepth");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(),functionId, [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetTransparencyDepth(m_transparencyDepth);
@@ -92,7 +99,10 @@ namespace Game
    void WaterPlaneComponent::SetNearClipPlane(float nearClipPlane)
    {
       m_nearClipPlane = nearClipPlane;
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]() {
+
+      constexpr uint64_t functionId = Hash("WaterPlaneComponent: SetNearClipPlane");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, functionId, GetObjectId(), [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetNearClipPlane(m_nearClipPlane);
@@ -102,7 +112,10 @@ namespace Game
    void WaterPlaneComponent::SetFarClipPlane(float farClipPlane)
    {
       m_farClipPlane = farClipPlane;
-      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, GetObjectId(), [=]() {
+
+      constexpr uint64_t functionId = Hash("WaterPlaneComponent: SetFarClipPlane");
+
+      m_scene->ExecuteOnRenderThread(EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH, functionId, GetObjectId(), [=]() {
 
          WaterPlaneSceneProxy* proxyPtr = static_cast<WaterPlaneSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetFarClipPlane(m_farClipPlane);

@@ -5,6 +5,11 @@ Engine::Engine()
    : m_interThreadMgr()
    , m_scene(m_interThreadMgr)
    , m_sceneRenderer(m_interThreadMgr, &m_scene)
+   , mLastRenderThreadPulseTime(Clock_t::now())
+   , mRenderThreadDeltaTimeSeconds()
+   , mLastGameThreadPulseTime(Clock_t::now())
+   , mGameThreadDeltaTimeSeconds()
+   , mGameThreadSumDeltaTimeSec()
 {
    PostConstructorInitialize();
 }
@@ -30,10 +35,17 @@ void Engine::GameThreadPulse()
    {
       /* GAME THREAD*/
       {
-         // This should be executed on game thread
+         mGameThreadDeltaTimeSeconds = GetGameThreadDeltaSeconds();
+         mGameThreadSumDeltaTimeSec += mGameThreadDeltaTimeSeconds;
 
          SPIN_GAME_THREAD_JOBS(m_interThreadMgr);
-         m_scene.Tick_GameThread(0.005f);
+         if (mGameThreadSumDeltaTimeSec >= InvLimitFPS) // 1 / 60 of a second
+         {
+            // This should be executed on game thread
+            m_scene.Tick_GameThread(static_cast<float>(mGameThreadDeltaTimeSeconds));
+            mLastGameThreadPulseTime = Clock_t::now();
+            mGameThreadSumDeltaTimeSec = 0.0;
+         }
       }
    }
 }
@@ -42,11 +54,14 @@ void Engine::RenderThreadPulse()
 {
    /* RENDER THREAD */
    {
+      mRenderThreadDeltaTimeSeconds = GetRenderThreadDeltaSeconds();
+      
       // This should be executed on render thread
-
       SPIN_RENDER_THREAD_JOBS(m_interThreadMgr);
       m_sceneRenderer.RenderScene_RenderThread();
+      mLastRenderThreadPulseTime = Clock_t::now();
    }
+
 }
 
 void Engine::TickWindow()
@@ -62,6 +77,30 @@ void Engine::MouseMove()
 void Engine::KeyDown()
 {
    m_scene.CameraMove();
+}
+
+double Engine::GetRenderThreadDeltaSeconds() const
+{
+   Clock_t::duration deltaTime = Clock_t::now() - mLastRenderThreadPulseTime;
+   const double invFromNanoToSec = 0.000000001;
+   return static_cast<double>(deltaTime.count()) * invFromNanoToSec;
+}
+
+double Engine::GetGameThreadDeltaSeconds() const
+{
+   Clock_t::duration deltaTime = Clock_t::now() - mLastGameThreadPulseTime;
+   const double invFromNanoToSec = 0.000000001;
+   return static_cast<double>(deltaTime.count()) * invFromNanoToSec;
+}
+
+double Engine::GetRenderThreadDeltaTime() const
+{
+   return mRenderThreadDeltaTimeSeconds;
+}
+
+double Engine::GetGameThreadDeltaTime() const
+{
+   return mGameThreadDeltaTimeSeconds;
 }
 
 #if DEBUG

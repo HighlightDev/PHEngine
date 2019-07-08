@@ -1,6 +1,5 @@
 #include "InterThreadCommunicationMgr.h"
 
-#include <chrono>
 #include <iostream>
 #include <algorithm>
 
@@ -31,47 +30,58 @@ namespace Thread
 
    void InterThreadCommunicationMgr::ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const Job& job)
    {
-      switch (policy)
-      {
-         case EnqueueJobPolicy::PUSH_ANYWAY:
-         {
-            m_renderThreadJobs.push(job);
-            break;
-         }
-         case EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH:
-         {
-            m_renderThreadJobs.push(job);
-            break;
-         }
-         case EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH:
-         {
-            m_renderThreadJobs.push(job);
-            break;
-         }
-      }
+      ProcessPushJob(policy, job, m_renderThreadJobs);
    }
 
    void InterThreadCommunicationMgr::ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const Job& job)
+   {
+      ProcessPushJob(policy, job, m_gameThreadJobs);
+   }
+
+   void InterThreadCommunicationMgr::ProcessPushJob(const EnqueueJobPolicy policy, const Job& job, std::vector<Job>& jobs)
    {
       switch (policy)
       {
          case EnqueueJobPolicy::PUSH_ANYWAY:
          {
-            m_gameThreadJobs.push(job);
+            jobs.emplace_back(job);
             break;
          }
          case EnqueueJobPolicy::IF_DUPLICATE_NO_PUSH:
          {
-            m_gameThreadJobs.push(job);
+            const auto duplicateIt = std::find_if(jobs.begin(), jobs.end(),
+               [&](const Job& collectionJob)
+            {
+               return (collectionJob.GetCreatorObjectId() == job.GetCreatorObjectId() && collectionJob.GetFunctionId() == job.GetFunctionId());
+            });
+
+            if (jobs.end() == duplicateIt)
+            {
+               jobs.emplace_back(job);
+            }
+
             break;
          }
          case EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH:
          {
-            m_gameThreadJobs.push(job);
+            const auto duplicateIt = std::find_if(jobs.begin(), jobs.end(),
+               [&](const Job& collectionJob)
+            {
+               return (collectionJob.GetCreatorObjectId() == job.GetCreatorObjectId() && collectionJob.GetFunctionId() == job.GetFunctionId());
+            });
+
+            if (jobs.end() == duplicateIt)
+            {
+               jobs.emplace_back(job);
+            }
+            else
+            {
+               *(duplicateIt) = job;
+            }
+
             break;
          }
       }
-
    }
 
    void InterThreadCommunicationMgr::SpinGameThreadJobs()
@@ -83,17 +93,9 @@ namespace Thread
       std::lock_guard<std::mutex> lock(m_gameThreadMutex);
       while (AreGameJobsAwaiting())
       {
-         auto job = m_gameThreadJobs.front();
-         job();
-         m_gameThreadJobs.pop();
-         
-         /* Measure how much time was spent on jobs execution
-            If spent time is more than border - stop execution, 
-            leave execution until next invocation        */
-         typename Clock_t::time_point current_time = Clock_t::now();
-         Clock_t::duration deltaTime = current_time - start_time;
-         if (deltaTime.count() > 1e+7) // 0.01 seconds
-            return;
+         auto jobIt = m_gameThreadJobs.begin();
+         (*jobIt)();
+         m_gameThreadJobs.erase(jobIt);
       }
    }
 
@@ -106,18 +108,9 @@ namespace Thread
       std::lock_guard<std::mutex> lock(m_renderThreadMutex);
       while (AreRenderJobsAwaiting())
       {
-         auto job = m_renderThreadJobs.front();
-         job();
-         m_renderThreadJobs.pop();
-
-         /* Measure how much time was spent on jobs execution
-            If spent time is more than border - stop execution,
-            leave execution until next invocation        */
-         typename Clock_t::time_point current_time = Clock_t::now();
-         Clock_t::duration deltaTime = current_time - start_time;
-
-         if (deltaTime.count() > 1e+7) // 0.01 seconds
-            return;
+         auto jobIt = m_renderThreadJobs.begin();
+         (*jobIt)();
+         m_renderThreadJobs.erase(jobIt);
       }
    }
 }

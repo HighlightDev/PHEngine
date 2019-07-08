@@ -27,6 +27,8 @@ namespace Game
 
    void ThirdPersonCamera::Tick(float DeltaTime)
    {
+      DeltaTime = std::max(DeltaTime, 0.03f);
+
       if (bTransformationDirty)
       {
          bTransformationDirty = false;
