@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)\PHEngine\src;$(SolutionDir)\PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\GLFW\include\GLFW</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;GLEW_STATIC;%(PreprocessorDefinitions);DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\lib\Release</AdditionalLibraryDirectories>
@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)\PHEngine\src;$(SolutionDir)\PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\GLFW\include\GLFW</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;GLEW_STATIC;%(PreprocessorDefinitions);DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)PHEngine\Dependencies\GLFW\lib-vc2015\;$(SolutionDir)PHEngine\Dependencies\GL;$(SolutionDir)PHEngine\Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)PHEngine\Dependencies\GLM\lib\Release;$(SolutionDir)PHEngine\Dependencies\Assimp\lib\Release;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\lib\Release</AdditionalLibraryDirectories>

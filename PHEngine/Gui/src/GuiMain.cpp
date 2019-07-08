@@ -15,6 +15,7 @@ using namespace Game;
 bool bMouseMove = false;
 bool bKeyDown = false;
 bool bPushFrame = false;
+bool bShaderRecompile = false;
 
 void get_window_pos(GLFWwindow* window)
 {
@@ -66,6 +67,10 @@ void key_pressed_callback(GLFWwindow* window, int32_t key, int32_t scancode, int
       else if (key == 'P' || key == 'p')
       {
          bPushFrame = true;
+      }
+      else if (key == 'R' || key == 'p')
+      {
+         bShaderRecompile = true;
       }
 
       KeyboardInputManager::GetInstance()->PushKeyEvent((Keys)key, KEY_PRESSED);
@@ -161,8 +166,17 @@ int32_t main(int32_t argc, char** argv)
       }
       if (bPushFrame)
       {
+#if DEBUG
          engine.PushFrame();
+#endif
          bPushFrame = false;
+      }
+      if (bShaderRecompile)
+      {
+#ifdef DEBUG
+         engine.RecompileAllShaders();
+#endif
+         bShaderRecompile = false;
       }
 	}
 

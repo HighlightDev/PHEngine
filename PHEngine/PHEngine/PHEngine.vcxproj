@@ -89,6 +89,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -99,6 +100,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -287,6 +289,7 @@
     <None Include="res\shaders\buildingSpecialGShader.glsl" />
     <None Include="res\shaders\buildingSpecialVShader.glsl" />
     <None Include="res\shaders\buildingVShader.glsl" />
+    <None Include="res\shaders\cubemapRendererFS.glsl" />
     <None Include="res\shaders\cubemapShadowFS.glsl" />
     <None Include="res\shaders\cubemapShadowGS.glsl" />
     <None Include="res\shaders\cubemapShadowNonSkeletalVS.glsl" />
@@ -358,8 +361,22 @@
     <None Include="res\shaders\waterVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\CommonApi\VariableWrapper.h" />
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\CubemapComponentData.h" />
+    <ClInclude Include="src\Core\GameCore\Components\CubemapComponent.h" />
+    <ClInclude Include="src\Core\GameCore\Event\ComponentPositionChangedEvent.h" />
+    <ClInclude Include="src\Core\GameCore\Event\PlayerMovedEvent.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\CubemapShader.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\BillboardSceneProxy.h" />
+    <ClInclude Include="src\Core\GraphicsCore\SceneProxy\CubemapSceneProxy.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Policy\SimplePrimitiveAllocationPolicy.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Pool\SimplePrimitivePool.h" />
+    <ClInclude Include="src\Core\GameCore\Components\ComponentData\BillboardComponentData.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\BillboardShader.h" />
+    <ClInclude Include="src\Core\GameCore\Components\BillboardComponent.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\CubemapDepthShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.h" />
+    <ClInclude Include="src\Core\GraphicsCore\RenderData\BillboardRenderData.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedPointShadowInfo.h" />
     <ClInclude Include="src\Core\GraphicsCore\Shadow\ProjectedDirShadowInfo.h" />
     <ClInclude Include="src\Core\GameCore\FramebufferImplementation\ShadowFramebuffer.h" />
@@ -736,6 +753,14 @@
     <ClInclude Include="src\Core\GameCore\ThirdPersonCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GameCore\Components\CubemapComponent.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\CubemapShader.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\BillboardSceneProxy.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\SceneProxy\CubemapSceneProxy.cpp" />
+    <ClCompile Include="src\Core\ResourceManagerCore\Policy\SimplePrimitiveAllocationPolicy.cpp" />
+    <ClCompile Include="src\Core\ResourceManagerCore\Pool\SimplePrimitivePool.cpp" />
+    <ClCompile Include="src\Core\GameCore\ShaderImplementation\BillboardShader.cpp" />
+    <ClCompile Include="src\Core\GameCore\Components\BillboardComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\CubemapDepthShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\ShaderParams.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Shadow\ProjectedPointShadowInfo.cpp" />
