@@ -35,7 +35,8 @@ namespace Graphics
 			int32_t m_geometryShaderID;
 			uint32_t m_shaderProgramID;
 			
-			std::vector<ShaderPredefine> m_defineParameters;
+			std::vector<ShaderDefineConstant> m_defineConstantParameters;
+         std::vector<ShaderDefine> m_defines;
 
 		protected:
 
@@ -73,7 +74,11 @@ namespace Graphics
 			void LoadSubroutineIndex(ShaderType shaderType, int32_t countIndices, int32_t subroutineIndex);
 
 			template <typename ValueType>
-			void Predefine(ShaderType shaderType, const std::string& name, ValueType&& value);
+			void DefineConstant(ShaderType shaderType, const std::string& name, ValueType&& value);
+
+         void Define(ShaderType shaderType, const std::string& name);
+
+         void Undefine(ShaderType shaderType, const std::string& name);
 
 		public:
 

@@ -41,7 +41,7 @@ namespace Game
 
       void BillboardShader::SetShaderPredefine()
       {
-         Predefine<float>(ShaderType::GeometryShader, "billboardSize", 1.0f);
+         DefineConstant<float>(ShaderType::GeometryShader, "billboardSize", 1.0f);
       }
 
    }

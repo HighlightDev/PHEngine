@@ -57,8 +57,8 @@ namespace Game
 
       void SkeletalMeshShader::SetShaderPredefine()
       {
-         Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", MAX_WEIGHTS);
-         Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", MAX_BONES);
+         DefineConstant<int32_t>(ShaderType::VertexShader, "MaxWeights", MAX_WEIGHTS);
+         DefineConstant<int32_t>(ShaderType::VertexShader, "MaxBones", MAX_BONES);
       }
 
    }

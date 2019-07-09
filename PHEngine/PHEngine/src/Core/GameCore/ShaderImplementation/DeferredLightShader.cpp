@@ -22,6 +22,8 @@ namespace Game
       {
          Base::AccessAllUniformLocations();
 
+         u_CameraWorldPosition = GetUniform("CameraWorldPosition");
+
          u_gBuffer_Position = GetUniform("gBuffer_Position");
          u_gBuffer_Normal = GetUniform("gBuffer_Normal");
          u_gBuffer_AlbedoNSpecular = GetUniform("gBuffer_AlbedoNSpecular");
@@ -46,16 +48,32 @@ namespace Game
          u_DirectionalLightAtlasOffset = GetUniformArray("DirLightShadowAtlasOffset", MAX_DIR_LIGHT_COUNT);
          u_DirectionalLightShadowMapCount = GetUniform("DirLightShadowMapCount");
          u_DirectionalLightCount = GetUniform("DirLightCount");
+
+#ifdef SHADING_MODEL_PBR
+         u_MaterialMetallic = GetUniform("Metallic");
+         u_MaterialRoughness = GetUniform("Roughness");
+#endif
       }
 
       void DeferredLightShader::SetShaderPredefine()
       {
-         Predefine<int32_t>(FragmentShader, "MAX_DIR_LIGHT_COUNT", MAX_DIR_LIGHT_COUNT);
-         Predefine<int32_t>(FragmentShader, "MAX_POINT_LIGHT_COUNT", MAX_POINT_LIGHT_COUNT);
-         Predefine<float>(FragmentShader, "SHADOWMAP_BIAS_DIR_LIGHT", SHADOWMAP_BIAS_DIR_LIGHT);
-         Predefine<float>(FragmentShader, "SHADOWMAP_BIAS_POINT_LIGHT", SHADOWMAP_BIAS_POINT_LIGHT);
-         Predefine<int32_t>(FragmentShader, "PCF_SAMPLES_DIR_LIGHT", PCF_SAMPLES_DIR_LIGHT);
-         Predefine<int32_t>(FragmentShader, "PCF_SAMPLES_POINT_LIGHT", PCF_SAMPLES_POINT_LIGHT);
+         DefineConstant<int32_t>(FragmentShader, "MAX_DIR_LIGHT_COUNT", MAX_DIR_LIGHT_COUNT);
+         DefineConstant<int32_t>(FragmentShader, "MAX_POINT_LIGHT_COUNT", MAX_POINT_LIGHT_COUNT);
+         DefineConstant<float>(FragmentShader, "SHADOWMAP_BIAS_DIR_LIGHT", SHADOWMAP_BIAS_DIR_LIGHT);
+         DefineConstant<float>(FragmentShader, "SHADOWMAP_BIAS_POINT_LIGHT", SHADOWMAP_BIAS_POINT_LIGHT);
+         DefineConstant<int32_t>(FragmentShader, "PCF_SAMPLES_DIR_LIGHT", PCF_SAMPLES_DIR_LIGHT);
+         DefineConstant<int32_t>(FragmentShader, "PCF_SAMPLES_POINT_LIGHT", PCF_SAMPLES_POINT_LIGHT);
+#ifdef SHADING_MODEL_PBR
+         Define(FragmentShader, "SHADING_MODEL_PBR");
+#else
+         Undefine(FragmentShader, "SHADING_MODEL_PBR");
+#endif
+
+      }
+
+      void DeferredLightShader::SetCameraWorldPosition(const glm::vec3& cameraWorldPosition)
+      {
+         u_CameraWorldPosition.LoadUniform(cameraWorldPosition);
       }
 
       void DeferredLightShader::SetGBufferAlbedoNSpecular(int32_t slot)
@@ -149,6 +167,20 @@ namespace Game
 
          u_PointLightCount.LoadUniform(pointLightProxyIndex);
       }
+
+#ifdef SHADING_MODEL_PBR
+
+      void DeferredLightShader::SetMaterialMetallic(const float metallic)
+      {
+         u_MaterialMetallic.LoadUniform(metallic);
+      }
+
+      void DeferredLightShader::SetMaterialRoughness(const float roughness)
+      {
+         u_MaterialRoughness.LoadUniform(roughness);
+      }
+
+#endif
 
    }
 }

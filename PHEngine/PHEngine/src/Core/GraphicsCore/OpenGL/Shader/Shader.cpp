@@ -15,15 +15,15 @@ namespace Graphics
 {
 	namespace OpenGL
 	{
-		template void Shader::Predefine<glm::vec2>(ShaderType, const std::string&, glm::vec2&&);
-		template void Shader::Predefine<glm::vec3>(ShaderType, const std::string&, glm::vec3&&);
-		template void Shader::Predefine<glm::vec4>(ShaderType, const std::string&, glm::vec4&&);
-		template void Shader::Predefine<glm::mat2>(ShaderType, const std::string&, glm::mat2&&);
-		template void Shader::Predefine<glm::mat3>(ShaderType, const std::string&, glm::mat3&&);
-		template void Shader::Predefine<glm::mat4>(ShaderType, const std::string&, glm::mat4&&);
-		template void Shader::Predefine<int32_t>(ShaderType, const std::string&, int32_t&&);
-		template void Shader::Predefine<float>(ShaderType, const std::string&, float&&);
-		template void Shader::Predefine<double>(ShaderType, const std::string&, double&&);
+		template void Shader::DefineConstant<glm::vec2>(ShaderType, const std::string&, glm::vec2&&);
+		template void Shader::DefineConstant<glm::vec3>(ShaderType, const std::string&, glm::vec3&&);
+		template void Shader::DefineConstant<glm::vec4>(ShaderType, const std::string&, glm::vec4&&);
+		template void Shader::DefineConstant<glm::mat2>(ShaderType, const std::string&, glm::mat2&&);
+		template void Shader::DefineConstant<glm::mat3>(ShaderType, const std::string&, glm::mat3&&);
+		template void Shader::DefineConstant<glm::mat4>(ShaderType, const std::string&, glm::mat4&&);
+		template void Shader::DefineConstant<int32_t>(ShaderType, const std::string&, int32_t&&);
+		template void Shader::DefineConstant<float>(ShaderType, const std::string&, float&&);
+		template void Shader::DefineConstant<double>(ShaderType, const std::string&, double&&);
 
 #if DEBUG
       bool Shader::bParentAccessUniformLocationsInvoked = false;
@@ -35,6 +35,8 @@ namespace Graphics
          , m_fragmentShaderID(-1)
          , m_geometryShaderID(-1)
          , m_shaderProgramID(-1)
+         , m_defineConstantParameters()
+         , m_defines()
       {
       }
 
@@ -189,7 +191,8 @@ namespace Graphics
 			stream.close();
 
 			// code only with macros
-			std::vector<ShaderPredefine> macros;
+         std::vector<ShaderDefineConstant> macros;
+         std::vector<ShaderDefine> macrosDefines;
 
 			for (auto it = code.begin(); it != code.end(); ++it)
 			{
@@ -200,7 +203,14 @@ namespace Graphics
 
 					std::string name = it->substr(indexName + 1, indexValue - indexName - 1);
 					std::string value = it->substr(indexValue + 1);
-					macros.emplace_back(std::move<ShaderPredefine>(std::move(ShaderPredefine(std::move(name), std::move(value)))));
+               if (std::string::npos == indexValue)
+               {
+                  macrosDefines.emplace_back(ShaderDefine(name, true, shaderType));
+               }
+               else
+               {
+                  macros.emplace_back(std::move(ShaderDefineConstant(std::move(name), std::move(value))));
+               }
 				}
 			}
 
@@ -214,17 +224,30 @@ namespace Graphics
 			}
 
 			// get macros only for current shader
-			std::vector<ShaderPredefine> input;
-			for (auto it = m_defineParameters.begin(); it != m_defineParameters.end(); ++it)
-			{
-				if ((it->m_ShaderType & ShaderType::VertexShader) == shaderType ||
-					(it->m_ShaderType & (int32_t)ShaderType::FragmentShader) == shaderType ||
-					(it->m_ShaderType & (int32_t)ShaderType::GeometryShader) == shaderType)
-					input.emplace_back(std::move(*it));
-			}
+			std::vector<ShaderDefineConstant> inputConstants;
+         for (auto it = m_defineConstantParameters.begin(); it != m_defineConstantParameters.end(); ++it)
+         {
+            if ((it->m_ShaderType & ShaderType::VertexShader) == shaderType ||
+               (it->m_ShaderType & ShaderType::FragmentShader) == shaderType ||
+               (it->m_ShaderType & ShaderType::GeometryShader) == shaderType)
+            {
+               inputConstants.emplace_back(std::move(*it));
+            }
+         }
+
+         std::vector<ShaderDefine> inputDefines;
+         for (auto it = m_defines.begin(); it != m_defines.end(); ++it)
+         {
+            if ((it->m_ShaderType & ShaderType::VertexShader) == shaderType ||
+               (it->m_ShaderType & ShaderType::FragmentShader) == shaderType ||
+               (it->m_ShaderType & ShaderType::GeometryShader) == shaderType)
+            {
+               inputDefines.emplace_back(std::move(*it));
+            }
+         }
 
 			// update values for existing macros
-			for (auto input_it = input.begin(); input_it != input.end(); ++input_it)
+         for (auto input_it = inputConstants.begin(); input_it != inputConstants.end(); ++input_it)
 			{
 				for (auto macro_it = macros.begin(); macro_it != macros.end();)
 				{
@@ -241,14 +264,39 @@ namespace Graphics
 				macros.emplace_back(std::move(*input_it));
 			}
 
+         // update defines
+         for (auto input_it = inputDefines.begin(); input_it != inputDefines.end(); ++input_it)
+         {
+            for (auto macro_it = macrosDefines.begin(); macro_it != macrosDefines.end();)
+            {
+               if (macro_it->m_Name == input_it->m_Name && !input_it->bDefined)
+               {
+                  macro_it = macrosDefines.erase(macro_it);
+               }
+               else
+               {
+                  ++macro_it;
+               }
+            }
+
+            if (input_it->bDefined)
+            {
+               macrosDefines.emplace_back(std::move(*input_it));
+            }
+         }
 
 			for (auto it = macros.begin(); it != macros.end(); ++it)
 			{
 				EngineUtility::StringStreamWrapper::ToString("#define ", it->m_Name, " ", it->m_Value, '\n');
 			}
+         std::string macroResult = std::move(EngineUtility::StringStreamWrapper::FlushString());
 
-			std::string macroResult = std::move(EngineUtility::StringStreamWrapper::FlushString());
-
+         for (auto it = macrosDefines.begin(); it != macrosDefines.end(); ++it)
+         {
+            EngineUtility::StringStreamWrapper::ToString("#define ", it->m_Name, '\n');
+         }
+         std::string macroDefinesResult = std::move(EngineUtility::StringStreamWrapper::FlushString());
+         
 			std::vector<std::string>::iterator version_it = code.begin();
 
 			for (auto it = code.begin(); it != code.end(); ++it, ++version_it)
@@ -260,7 +308,25 @@ namespace Graphics
 				}
 			}
 
-			code.insert(version_it, macroResult);
+         if ("" != macroResult)
+         {
+            code.insert(version_it, macroResult);
+         }
+
+         version_it = code.begin();
+         for (auto it = code.begin(); it != code.end(); ++it, ++version_it)
+         {
+            if (EngineUtility::StartsWith(*it, "#version"))
+            {
+               version_it += 2;
+               break;
+            }
+         }
+
+         if ("" != macroDefinesResult)
+         {
+            code.insert(version_it, macroDefinesResult);
+         }
 
 			std::string codeResult = std::move("");
 
@@ -283,9 +349,9 @@ namespace Graphics
 		{
 			bool bEditVertexShader = false, bEditFragmentShader = false, bEditGeometryShader = false;
 
-			if (m_defineParameters.size() > 0)
+			if (m_defineConstantParameters.size() > 0 || m_defines.size() > 0)
 			{
-				for (auto define_it = m_defineParameters.begin(); define_it != m_defineParameters.end(); ++define_it)
+				for (auto define_it = m_defineConstantParameters.begin(); define_it != m_defineConstantParameters.end(); ++define_it)
 				{
 					if ((define_it->m_ShaderType & ShaderType::VertexShader))
 						bEditVertexShader = true;
@@ -294,6 +360,16 @@ namespace Graphics
 					if (define_it->m_ShaderType & ShaderType::GeometryShader)
 						bEditGeometryShader = true;
 				}
+
+            for (auto define_it = m_defines.begin(); define_it != m_defines.end(); ++define_it)
+            {
+               if ((define_it->m_ShaderType & ShaderType::VertexShader))
+                  bEditVertexShader = true;
+               if (define_it->m_ShaderType & ShaderType::FragmentShader)
+                  bEditFragmentShader = true;
+               if (define_it->m_ShaderType & ShaderType::GeometryShader)
+                  bEditGeometryShader = true;
+            }
 			}
 
 			if (bEditVertexShader)
@@ -477,7 +553,8 @@ namespace Graphics
 		void Shader::PreprocessorEdit()
 		{
 			ProcessAllPredefines();
-			m_defineParameters.clear();
+         m_defineConstantParameters.clear();
+         m_defines.clear();
 		}
 
 #if DEBUG
@@ -501,11 +578,21 @@ namespace Graphics
 #endif
 
 		template <typename ValueType>
-		void Shader::Predefine(ShaderType shaderType, const std::string& name, ValueType&& value)
+		void Shader::DefineConstant(ShaderType shaderType, const std::string& name, ValueType&& value)
 		{
 			std::string formatedValue = MacroConverter<ValueType>::GetValue(std::forward<ValueType>(value));
-			m_defineParameters.emplace_back(ShaderPredefine(name, formatedValue, shaderType));
+			m_defineConstantParameters.emplace_back(ShaderDefineConstant(name, formatedValue, shaderType));
 		}
+
+      void Shader::Define(ShaderType shaderType, const std::string& name)
+      {
+         m_defines.emplace_back(ShaderDefine(name, true, shaderType));
+      }
+
+      void Shader::Undefine(ShaderType shaderType, const std::string& name)
+      {
+         m_defines.emplace_back(ShaderDefine(name, false, shaderType));
+      }
 
 	}
 

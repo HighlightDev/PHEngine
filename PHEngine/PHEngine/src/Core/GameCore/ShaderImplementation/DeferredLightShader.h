@@ -26,6 +26,8 @@ namespace Game
 
          using Base = ShaderBase;
 
+         Uniform u_CameraWorldPosition;
+
          UniformArray u_DirLightAmbientColor;
          UniformArray u_DirLightDiffuseColor;
          UniformArray u_DirLightSpecularColor;
@@ -51,6 +53,11 @@ namespace Game
          Uniform u_gBuffer_Normal;
          Uniform u_gBuffer_AlbedoNSpecular;
 
+#ifdef SHADING_MODEL_PBR
+         Uniform u_MaterialMetallic;
+         Uniform u_MaterialRoughness;
+#endif
+
       public:
 
          DeferredLightShader(const ShaderParams& params);
@@ -73,6 +80,12 @@ namespace Game
          void SetPointLightShadowMapSlot(size_t index, int32_t slot);
          void SetPointLightShadowMapCount(int32_t count);
          void SetPointLightShadowProjectionFarPlane(size_t index, float FarPlane);
+
+#ifdef SHADING_MODEL_PBR
+         void SetMaterialMetallic(const float metallic);
+         void SetMaterialRoughness(const float roughness);
+#endif
+         void SetCameraWorldPosition(const glm::vec3& cameraWorldPosition);
 
       protected:
 

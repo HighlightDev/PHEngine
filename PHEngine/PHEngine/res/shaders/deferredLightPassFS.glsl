@@ -1,5 +1,6 @@
 #version 400
 
+#define SHADING_MODEL_PBR
 #define PCF_SAMPLES 2
 #define MAX_DIR_LIGHT_COUNT 5
 #define MAX_POINT_LIGHT_COUNT 1
@@ -12,6 +13,8 @@ const float INV_COUNT_PCF_DIR_LIGHT_SAMPLES = 1.0 / (((PCF_SAMPLES_DIR_LIGHT * 2
 const float INV_COUNT_PCF_POINT_LIGHT_SAMPLES = 1.0 / (PCF_SAMPLES_POINT_LIGHT * PCF_SAMPLES_POINT_LIGHT * PCF_SAMPLES_POINT_LIGHT);
 
 layout (location = 0) out vec4 FragColor;
+
+uniform vec3 CameraWorldPosition;
 
 uniform sampler2D gBuffer_Position;
 uniform sampler2D gBuffer_Normal;
@@ -40,6 +43,50 @@ in VS_OUT
 {
 	vec2 tex_coords;
 } fs_in;
+
+#ifdef SHADING_MODEL_PBR
+
+	uniform float Metallic;
+	uniform float Roughness;
+
+	const float PI = 3.14159265359;
+
+	float DistributionGGX(vec3 N, vec3 H, float roughness)
+	{
+	    float a      = roughness * roughness;
+	    float a2     = a * a;
+	    float NdotH  = max(dot(N, H), 0.0);
+	    float NdotH2 = NdotH * NdotH;
+
+	    float num   = a2;
+	    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+	    denom = PI * denom * denom;
+
+	    return num / denom;
+	}
+
+	float GeometrySchlickGGX(float NdotV, float roughness)
+	{
+	    float r = (roughness + 1.0);
+	    float k = (r * r) * 0.125; // 1 / 8
+
+	    float num   = NdotV;
+	    float denom = NdotV * (1.0 - k) + k;
+
+	    return num / denom;
+	}
+
+	float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+	{
+	    float NdotV = max(dot(N, V), 0.0);
+	    float NdotL = max(dot(N, L), 0.0);
+	    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+	    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+
+	    return ggx1 * ggx2;
+	}
+
+#endif
 
 vec2 GetShadowTexCoords(in vec2 texCoords, in vec4 atlasOffset)
 {

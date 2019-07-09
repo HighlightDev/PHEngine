@@ -6,23 +6,32 @@ namespace Graphics
 {
 	namespace OpenGL
 	{
-		ShaderPredefine::ShaderPredefine(const std::string& name, std::string value, ShaderType shaderType) :
+      /* ************** ShaderDefineConstant ************** */
+		ShaderDefineConstant::ShaderDefineConstant(const std::string& name, std::string value, ShaderType shaderType) :
 			m_Name(name)
 			, m_Value(std::move(value))
 			, m_ShaderType(shaderType)
 		{
 		}
 
-		ShaderPredefine::ShaderPredefine(const std::string& name, std::string value) :
+		ShaderDefineConstant::ShaderDefineConstant(const std::string& name, std::string value) :
 			m_Name(name)
 			, m_Value(value)
 			, m_ShaderType(ShaderType::VertexShader)
 		{
 		}
 
-		ShaderPredefine::~ShaderPredefine()
+		ShaderDefineConstant::~ShaderDefineConstant()
 		{
 
 		}
+      /* ************** ShaderDefine ************** */
+
+      ShaderDefine::ShaderDefine(const std::string& name, const bool isDefined, ShaderType shaderType)
+         : m_Name(name)
+         , bDefined(isDefined)
+         , m_ShaderType(shaderType)
+      {
+      }
 	}
 }

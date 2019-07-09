@@ -56,7 +56,7 @@ namespace Game
 
       void CubemapDepthShader<false>::SetShaderPredefine() 
       {
-         Predefine<int32_t>(ShaderType::GeometryShader, "CubemapFaces", 6);
+         DefineConstant<int32_t>(ShaderType::GeometryShader, "CubemapFaces", 6);
       }
 
       // *************************  CubemapDepthShader (Skeletal)  *************************  //
@@ -83,9 +83,9 @@ namespace Game
 
       void CubemapDepthShader<true>::SetShaderPredefine()
       {
-         Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", MaxWeights);
-         Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", MaxBones);
-         Predefine<int32_t>(ShaderType::GeometryShader, "CubemapFaces", 6);
+         DefineConstant<int32_t>(ShaderType::VertexShader, "MaxWeights", MaxWeights);
+         DefineConstant<int32_t>(ShaderType::VertexShader, "MaxBones", MaxBones);
+         DefineConstant<int32_t>(ShaderType::GeometryShader, "CubemapFaces", 6);
       }
 
 #undef MaxWeights

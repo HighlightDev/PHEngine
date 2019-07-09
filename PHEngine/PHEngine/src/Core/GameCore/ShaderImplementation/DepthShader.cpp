@@ -54,8 +54,8 @@ namespace Game
 
       void DepthShader<true>::SetShaderPredefine() 
       {
-         Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", MaxWeights);
-         Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", MaxBones);
+         DefineConstant<int32_t>(ShaderType::VertexShader, "MaxWeights", MaxWeights);
+         DefineConstant<int32_t>(ShaderType::VertexShader, "MaxBones", MaxBones);
       }
 
 #undef MaxWeights

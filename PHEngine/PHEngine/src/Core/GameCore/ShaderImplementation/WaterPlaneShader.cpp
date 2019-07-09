@@ -43,10 +43,10 @@ namespace Game
 
       void WaterPlaneShader::SetShaderPredefine()
       {
-         Predefine<int32_t>(ShaderType(VertexShader | FragmentShader), "MAX_LIGHT_COUNT", 1);
-         Predefine<float>(ShaderType(VertexShader), "tiling", 15.0f);
-         Predefine<float>(ShaderType(FragmentShader), "materialReflectivity", 0.7f);
-         Predefine<float>(ShaderType(FragmentShader), "materialShineDamper", 100.0f);
+         DefineConstant<int32_t>(ShaderType(VertexShader | FragmentShader), "MAX_LIGHT_COUNT", 1);
+         DefineConstant<float>(ShaderType(VertexShader), "tiling", 15.0f);
+         DefineConstant<float>(ShaderType(FragmentShader), "materialReflectivity", 0.7f);
+         DefineConstant<float>(ShaderType(FragmentShader), "materialShineDamper", 100.0f);
       }
 
       void WaterPlaneShader::SetTransformationMatrices(glm::mat4& modelMatrix, glm::mat4& viewMatrix, glm::mat4& projectionMatrix)

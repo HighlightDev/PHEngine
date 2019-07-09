@@ -139,8 +139,8 @@ namespace Game
          {
             int32_t maxWeights = MaxWeights;
             int32_t maxBones = MaxBones;
-            Predefine<int32_t>(ShaderType::VertexShader, "MaxWeights", std::move(maxWeights));
-            Predefine<int32_t>(ShaderType::VertexShader, "MaxBones", std::move(maxBones));
+            DefineConstant<int32_t>(ShaderType::VertexShader, "MaxWeights", std::move(maxWeights));
+            DefineConstant<int32_t>(ShaderType::VertexShader, "MaxBones", std::move(maxBones));
          }
 
       };
