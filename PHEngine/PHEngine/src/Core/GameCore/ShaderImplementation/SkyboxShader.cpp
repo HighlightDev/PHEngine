@@ -8,7 +8,7 @@ namespace Game
 		SkyboxShader::SkyboxShader(const ShaderParams& params)
 			: ShaderBase(params)
 		{
-			Init();
+         ShaderInit();
 		}
 
 

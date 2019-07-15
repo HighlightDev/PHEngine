@@ -12,7 +12,7 @@
 namespace Game
 {
 
-	class CameraBase
+	class ICamera
       : public GameObject
 	{
    public:
@@ -46,9 +46,9 @@ namespace Game
 
 		float CameraCollisionSphereRadius = 8.0f;
 
-		CameraBase();
+		ICamera();
 
-		virtual ~CameraBase();
+		virtual ~ICamera();
 
 		virtual void Tick(float DeltaTime) = 0;
 

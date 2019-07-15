@@ -8,7 +8,7 @@ namespace Game
 		ResolveTextureShader::ResolveTextureShader(const ShaderParams& params)
 			: ShaderBase(params)
 		{
-         Init();
+         ShaderInit();
 		}
 
 		ResolveTextureShader::~ResolveTextureShader()

@@ -9,7 +9,7 @@ namespace Game
       BillboardShader::BillboardShader(const ShaderParams& params)
          : ShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
 

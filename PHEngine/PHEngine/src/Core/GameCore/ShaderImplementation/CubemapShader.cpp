@@ -9,7 +9,7 @@ namespace Game
       CubemapShader::CubemapShader(const ShaderParams& params)
          : ShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
 

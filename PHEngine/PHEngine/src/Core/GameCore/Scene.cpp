@@ -5,7 +5,7 @@
 #include "Core/GameCore/Components/ComponentCreatorFactory.h"
 #include "Core/CommonCore/FolderManager.h"
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
-#include "Core/GameCore/CameraBase.h"
+#include "Core/GameCore/ICamera.h"
 #include "Core/GameCore/FirstPersonCamera.h"
 #include "Core/GameCore/ThirdPersonCamera.h"
 #include "Core/GameCore/Components/DirectionalLightComponent.h"
@@ -194,7 +194,7 @@ namespace Game
 
    void Scene::CameraMove()
    {
-      if (m_camera->GetCameraType() == CameraBase::CameraType::FIRST_PERSON)
+      if (m_camera->GetCameraType() == ICamera::CameraType::FIRST_PERSON)
       {
          static_cast<FirstPersonCamera*>(m_camera)->MoveCamera(0);
       }
@@ -310,7 +310,7 @@ namespace Game
 
          AllActors.push_back(skeletActor);
 
-         if (m_camera->GetCameraType() == CameraBase::CameraType::THIRD_PERSON)
+         if (m_camera->GetCameraType() == ICamera::CameraType::THIRD_PERSON)
          {
             static_cast<ThirdPersonCamera*>(m_camera)->SetThirdPersonTarget(skeletActor);
          }

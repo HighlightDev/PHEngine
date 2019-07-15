@@ -44,9 +44,9 @@ namespace Graphics
 
 		private:
 
-			bool LoadSingleShaderSource(int32_t shaderId, std::string& shaderPath);
+			bool LoadSingleShaderSourceFromFile(int32_t shaderId, std::string& shaderPath);
 
-			bool LoadShadersSource();
+			bool LoadShadersSourceFromFile();
 
 			bool CompileShaders();
 
@@ -58,20 +58,20 @@ namespace Graphics
 
 		protected:
 
-			int32_t GetSubroutineIndex(ShaderType shaderType, std::string&& subroutineName) const;
-
 			virtual void AccessAllUniformLocations() = 0;
 
 			virtual void SetShaderPredefine() = 0;
 
 			// Init should be called in child constructor!
-			void Init();
+         virtual void ShaderInit();
 
 			Uniform GetUniform(std::string&& uniformName) const;
 
          UniformArray GetUniformArray(std::string&& uniformName, size_t countOfUniforms) const;
 
 			void LoadSubroutineIndex(ShaderType shaderType, int32_t countIndices, int32_t subroutineIndex);
+
+         int32_t GetSubroutineIndex(ShaderType shaderType, std::string&& subroutineName) const;
 
 			template <typename ValueType>
 			void DefineConstant(ShaderType shaderType, const std::string& name, ValueType&& value);

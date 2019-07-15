@@ -27,7 +27,7 @@ namespace Game
          DeferredShader(const ShaderParams& params)
             : ShaderBase(params)
          {
-            Init();
+            ShaderInit();
          }
 
          void SetTransformMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
@@ -90,7 +90,7 @@ namespace Game
          DeferredShader(const ShaderParams& params)
             : ShaderBase(params)
          {
-            Init();
+            ShaderInit();
          }
 
          void SetSkinningMatrices(const std::vector<glm::mat4>& skinningMatrices)

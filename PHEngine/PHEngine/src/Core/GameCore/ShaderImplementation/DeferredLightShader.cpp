@@ -10,7 +10,7 @@ namespace Game
       DeferredLightShader::DeferredLightShader(const ShaderParams& params)
          : ShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
       DeferredLightShader::~DeferredLightShader()

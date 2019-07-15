@@ -1,11 +1,11 @@
 #include "MovementComponent.h"
 
-#include "Core/GameCore/CameraBase.h"
+#include "Core/GameCore/ICamera.h"
 
 namespace Game
 {
 
-   MovementComponent::MovementComponent(CameraBase* const mainCamera, glm::vec3 launchVelocity)
+   MovementComponent::MovementComponent(ICamera* const mainCamera, glm::vec3 launchVelocity)
       : Component()
       , m_mainCamera(mainCamera)
       , Velocity(launchVelocity)
@@ -17,7 +17,7 @@ namespace Game
    {
    }
 
-   CameraBase* const MovementComponent::GetCamera() const
+   ICamera* const MovementComponent::GetCamera() const
    {
       return m_mainCamera;
    }

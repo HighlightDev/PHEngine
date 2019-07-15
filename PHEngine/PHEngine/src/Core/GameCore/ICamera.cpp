@@ -1,4 +1,4 @@
-#include "CameraBase.h"
+#include "ICamera.h"
 #include "Core/UtilityCore/EngineMath.h"
 
 using namespace EngineUtility;
@@ -6,7 +6,7 @@ using namespace EngineUtility;
 namespace Game
 {
 
-	CameraBase::CameraBase()
+	ICamera::ICamera()
 		: m_rotateSensetivity(0.08f)
 		, m_localSpaceRightVector(std::move(glm::vec3(1, 0, 0)))
 		, m_localSpaceUpVector(std::move(glm::vec3(0, 1, 0)))
@@ -19,11 +19,11 @@ namespace Game
 		
 	}
 
-	CameraBase::~CameraBase()
+	ICamera::~ICamera()
 	{
 	}
 
-	void CameraBase::Rotate()
+	void ICamera::Rotate()
 	{
 		int32_t x = GlobalProperties::GetInstance()->GetInputData().GetMouseDeltaX();
 		int32_t y = GlobalProperties::GetInstance()->GetInputData().GetMouseDeltaY();
@@ -31,7 +31,7 @@ namespace Game
 		UpdateRotationMatrix(-x, -y);
 	}
 
-	void CameraBase::UpdateRotationMatrix(int32_t deltaX, int32_t deltaY)
+	void ICamera::UpdateRotationMatrix(int32_t deltaX, int32_t deltaY)
 	{
 		m_eyeSpaceForwardVector = m_rotationMatrix * m_localSpaceForwardVector;
 
@@ -56,7 +56,7 @@ namespace Game
 		bTransformationDirty = true;
 	}
 
-	glm::vec3 CameraBase::LerpPosition(float t, float t1, float t2, const glm::vec3& position1, const glm::vec3& position2) const
+	glm::vec3 ICamera::LerpPosition(float t, float t1, float t2, const glm::vec3& position1, const glm::vec3& position2) const
 	{
 		glm::vec3 resultPosition = glm::vec3(0);
 

@@ -7,18 +7,18 @@ namespace Game
 {
 
    ThirdPersonCamera::ThirdPersonCamera()
-      : CameraBase()
+      : ICamera()
    {
-      m_cameraType = CameraBase::CameraType::THIRD_PERSON;
+      m_cameraType = ICamera::CameraType::THIRD_PERSON;
    }
 
    ThirdPersonCamera::ThirdPersonCamera(glm::vec3 localSpaceForwardVector, float camDistanceToThirdPersonTarget)
-      : CameraBase()
+      : ICamera()
    {
       m_localSpaceForwardVector = m_eyeSpaceForwardVector = glm::normalize(localSpaceForwardVector);
       SetMaxDistanceFromTargetToCamera(camDistanceToThirdPersonTarget);
       m_distanceFromTargetToCamera = camDistanceToThirdPersonTarget;
-      m_cameraType = CameraBase::CameraType::THIRD_PERSON;
+      m_cameraType = ICamera::CameraType::THIRD_PERSON;
    }
 
    ThirdPersonCamera::~ThirdPersonCamera()

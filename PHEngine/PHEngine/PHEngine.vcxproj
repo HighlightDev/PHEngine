@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions);SHADING_MODEL_PBR;</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions);SHADING_MODEL_PBR;</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -361,14 +361,22 @@
     <None Include="res\shaders\waterVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\MaterialShader.h" />
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShader.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Pool\MaterialShaderPool.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Material\PBRMaterial.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Material\IMaterial.h" />
+    <ClInclude Include="src\Core\CommonApi\StringHash.h" />
     <ClInclude Include="src\Core\CommonApi\VariableWrapper.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\CubemapComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\CubemapComponent.h" />
-    <ClInclude Include="src\Core\GameCore\Event\ComponentPositionChangedEvent.h" />
+    <ClInclude Include="src\Core\GameCore\Event\ComponentTransformChangedEvent.h" />
     <ClInclude Include="src\Core\GameCore\Event\PlayerMovedEvent.h" />
+    <ClInclude Include="src\Core\GameCore\GameObject.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\CubemapShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\BillboardSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\CubemapSceneProxy.h" />
+    <ClInclude Include="src\Core\Job.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\SimplePrimitiveAllocationPolicy.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Pool\SimplePrimitivePool.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\BillboardComponentData.h" />
@@ -432,8 +440,6 @@
     <ClInclude Include="src\Core\GraphicsCore\RenderData\SkyboxRenderData.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\PointLightSceneProxy.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.h" />
-    <ClInclude Include="src\Core\GraphicsCore\Light\SpotLight.h" />
-    <ClInclude Include="src\Core\GraphicsCore\Light\LightBase.h" />
     <ClInclude Include="src\Core\GraphicsCore\SceneProxy\PrimitiveSceneProxy.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredShader.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.h" />
@@ -442,7 +448,7 @@
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\StaticMeshComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\SceneComponent.h" />
     <ClInclude Include="src\Core\GameCore\FirstPersonCamera.h" />
-    <ClInclude Include="src\Core\GameCore\CameraBase.h" />
+    <ClInclude Include="src\Core\GameCore\ICamera.h" />
     <ClInclude Include="src\Core\GameCore\GlobalProperties.h" />
     <ClInclude Include="src\Core\GameCore\InputData.h" />
     <ClInclude Include="src\Core\ResourceManagerCore\Policy\ShaderAllocationPolicy.h" />
@@ -753,10 +759,17 @@
     <ClInclude Include="src\Core\GameCore\ThirdPersonCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\MaterialShader.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShader.cpp" />
+    <ClCompile Include="src\Core\ResourceManagerCore\Pool\MaterialShaderPool.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Material\PBRMaterial.cpp" />
+    <ClCompile Include="src\Core\GraphicsCore\Material\IMaterial.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\CubemapComponent.cpp" />
+    <ClCompile Include="src\Core\GameCore\GameObject.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\CubemapShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\BillboardSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\CubemapSceneProxy.cpp" />
+    <ClCompile Include="src\Core\Job.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Policy\SimplePrimitiveAllocationPolicy.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Pool\SimplePrimitivePool.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\BillboardShader.cpp" />
@@ -798,15 +811,13 @@
     <ClCompile Include="src\Core\GameCore\Scene.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\PointLightSceneProxy.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\SkyboxSceneProxy.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\Light\SpotLight.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\Light\LightBase.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\SceneProxy\PrimitiveSceneProxy.cpp" />
     <ClCompile Include="src\Core\GameCore\ShaderImplementation\ResolveTextureShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Common\ScreenQuad.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Renderer\DeferredShadingSceneRenderer.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\SceneComponent.cpp" />
     <ClCompile Include="src\Core\GameCore\FirstPersonCamera.cpp" />
-    <ClCompile Include="src\Core\GameCore\CameraBase.cpp" />
+    <ClCompile Include="src\Core\GameCore\ICamera.cpp" />
     <ClCompile Include="src\Core\GameCore\GlobalProperties.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Pool\ShaderPool.cpp" />
     <ClCompile Include="src\Core\ResourceManagerCore\Pool\MeshPool.cpp" />

@@ -7,12 +7,12 @@
 namespace EngineUtility
 {
 
-	bool StartsWith(std::string& sourceStr, const std::string& lookfor)
+	bool StartsWith(const std::string& sourceStr, const std::string& lookfor)
 	{
 		return sourceStr.find(lookfor) == 0;
 	}
 
-	size_t IndexOf(std::string& sourceStr, const std::string& lookfor, size_t offset)
+	size_t IndexOf(const std::string& sourceStr, const std::string& lookfor, size_t offset)
 	{
 		size_t result = std::string::npos;
 		typename std::string::size_type location = sourceStr.find(lookfor, offset);
@@ -22,7 +22,7 @@ namespace EngineUtility
 		return result;
 	}
 
-	size_t LastIndexOf(std::string& sourceStr, const std::string& lookfor, size_t offset)
+	size_t LastIndexOf(const std::string& sourceStr, const std::string& lookfor, size_t offset)
 	{
 		size_t index = std::string::npos;
 		size_t new_offset = 0;
@@ -39,7 +39,7 @@ namespace EngineUtility
 		return index;
 	}
 
-	std::string TrimStart(std::string& sourceStr)
+	std::string TrimStart(const std::string& sourceStr)
 	{
 		std::string str = sourceStr;
 		auto trim = [](std::string& s) -> void
@@ -54,7 +54,7 @@ namespace EngineUtility
 		return str;
 	}
 
-	std::string TrimEnd(std::string& sourceStr)
+	std::string TrimEnd(const std::string& sourceStr)
 	{
 		std::string str = sourceStr;
 		auto trim = [](std::string& s) -> void
@@ -68,7 +68,7 @@ namespace EngineUtility
 		return str;
 	}
 
-	std::vector<std::string> Split(std::string& source, char splitChar)
+	std::vector<std::string> Split(const std::string& source, char splitChar)
 	{
 		std::stringstream test(source);
 		std::string segment;

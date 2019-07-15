@@ -4,11 +4,11 @@ namespace Game
 {
 
    FirstPersonCamera::FirstPersonCamera(glm::vec3 forwardVec, glm::vec3 camPos)
-      : CameraBase()
+      : ICamera()
       , m_firstPersonCameraPosition(camPos)
       , m_cameraMoveSpeed(0.1f)
    {
-      m_cameraType = CameraBase::CameraType::FIRST_PERSON;
+      m_cameraType = ICamera::CameraType::FIRST_PERSON;
    }
 
    FirstPersonCamera::~FirstPersonCamera()

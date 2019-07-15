@@ -28,7 +28,7 @@ namespace Game
       DepthShader<false>::DepthShader(const ShaderParams& params)
          : DepthShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
       void DepthShader<false>::SetShaderPredefine() 
@@ -43,7 +43,7 @@ namespace Game
       DepthShader<true>::DepthShader(const ShaderParams& params)
          : DepthShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
       void DepthShader<true>::AccessAllUniformLocations()

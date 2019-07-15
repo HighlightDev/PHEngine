@@ -8,7 +8,7 @@ namespace Game
       SkeletalMeshShader::SkeletalMeshShader(const ShaderParams& params)
          : ShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
       SkeletalMeshShader::~SkeletalMeshShader()

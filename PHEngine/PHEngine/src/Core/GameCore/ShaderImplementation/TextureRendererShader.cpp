@@ -9,7 +9,7 @@ namespace Game
       TextureRendererShader::TextureRendererShader(const ShaderParams& params)
          : ShaderBase(params)
       {
-         Base::Init();
+         Base::ShaderInit();
       }
 
       void TextureRendererShader::AccessAllUniformLocations() {

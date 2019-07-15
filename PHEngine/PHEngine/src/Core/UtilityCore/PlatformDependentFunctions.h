@@ -16,6 +16,6 @@ namespace EngineUtility
 
    std::string GetExecutablePath();
 
-	std::string ConvertFromRelativeToAbsolutePath(std::string& relativePath);
+	std::string ConvertFromRelativeToAbsolutePath(const std::string& relativePath);
 
 }

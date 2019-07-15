@@ -33,8 +33,6 @@ namespace Graphics
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
 
-         void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix, std::shared_ptr<ITexture> cubemap);
-
          virtual std::shared_ptr<ShaderBase> GetShader() const override;
 
          virtual uint64_t GetComponentType() const override;

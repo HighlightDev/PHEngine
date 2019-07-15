@@ -1,11 +1,11 @@
 #pragma once
-#include "CameraBase.h"
+#include "ICamera.h"
 #include "Actor.h"
 
 namespace Game
 {
    class ThirdPersonCamera :
-      public CameraBase
+      public ICamera
    {
 
       float m_distanceFromTargetToCamera;

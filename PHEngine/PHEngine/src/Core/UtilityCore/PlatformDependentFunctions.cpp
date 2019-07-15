@@ -35,11 +35,10 @@ namespace EngineUtility
 		return std::move(currentDirPath);
 	}
 
-	std::string ConvertFromRelativeToAbsolutePath(std::string& relativePath)
+	std::string ConvertFromRelativeToAbsolutePath(const std::string& relativePath)
 	{
 		std::string pathToExe = std::move(EngineUtility::GetExecutablePath());
 		std::string absolutePath = pathToExe;
-		std::string& relative = relativePath;
 
 		int32_t countOfGoBack = 0;
 		std::string relativeTrimmedGoBack;
@@ -59,7 +58,7 @@ namespace EngineUtility
 		} while (new_offset != std::string::npos);
 
 
-		relativeTrimmedGoBack = relative.substr(relativeOffset);
+		relativeTrimmedGoBack = relativePath.substr(relativeOffset);
 
 		while (countOfGoBack != 0)
 		{

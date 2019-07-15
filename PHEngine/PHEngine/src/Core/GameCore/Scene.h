@@ -42,7 +42,7 @@ namespace Game
 
       InterThreadCommunicationMgr& m_interThreadMgr;
 
-      class CameraBase* m_camera;
+      class ICamera* m_camera;
 
    public:
 
@@ -50,7 +50,7 @@ namespace Game
 
       void PostConstructorInitialize();
 
-      inline class CameraBase* GetCamera() const
+      inline class ICamera* GetCamera() const
       {
          return m_camera;
       }

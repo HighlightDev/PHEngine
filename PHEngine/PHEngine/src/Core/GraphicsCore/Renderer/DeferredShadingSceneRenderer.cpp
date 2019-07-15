@@ -3,7 +3,7 @@
 #include "Core/CommonCore/FolderManager.h"
 #include "Core/GraphicsCore/SceneProxy/PrimitiveSceneProxy.h"
 #include "Core/GameCore/GlobalProperties.h"
-#include "Core/GameCore/CameraBase.h"
+#include "Core/GameCore/ICamera.h"
 #include "Core/GraphicsCore/Common/ScreenQuad.h"
 #include "Core/GameCore/ShaderImplementation/DeferredShader.h"
 #include "Core/GameCore/GlobalProperties.h"
@@ -13,6 +13,11 @@
 #include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 #include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
 
+#include "Core/GraphicsCore/OpenGL/Shader/CompositeShader.h"
+#include "Core/GraphicsCore/Material/PBRMaterial.h"
+#include "Core/GraphicsCore/OpenGL/Shader/MaterialShader.h"
+#include "Core/ResourceManagerCore/Pool/TexturePool.h"
+
 #include <gl/glew.h>
 #include <iostream>
 
@@ -21,6 +26,7 @@ using namespace Common;
 using namespace Graphics;
 using namespace Graphics::Renderer;
 using namespace Graphics::Proxy;
+using namespace Graphics::OpenGL;
 
 namespace Graphics
 {
@@ -49,6 +55,17 @@ namespace Graphics
          m_depthShaderNonSkeletal = std::static_pointer_cast<DepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource<DepthShader<false>>(shaderParams5));
          m_depthCubemapShaderSkeletal = std::static_pointer_cast<CubemapDepthShader<true>>(ShaderPool::GetInstance()->template GetOrAllocateResource< CubemapDepthShader<true>>(shaderParams6));
          m_depthCubemapShaderNonSkeletal = std::static_pointer_cast<CubemapDepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource< CubemapDepthShader<true>>(shaderParams7));
+
+
+         using texShared = PBRMaterial::ITextureShared;
+         std::string diffuseTexPath = folderManager->GetAlbedoTexturePath() + "diffuse.png";
+         texShared image = TexturePool::GetInstance()->GetOrAllocateResource(diffuseTexPath);
+
+         MaterialShaderImp<PBRMaterial> mMaterialShader = MaterialShaderImp<PBRMaterial>(PBRMaterial(image, image, image, image, image));
+
+         CompositeShader<float, MaterialShaderImp<PBRMaterial>, int> compositeShader(0.5f, mMaterialShader, 5);
+         compositeShader.AccessAllUniformLocations();
+         compositeShader.SetUniformValues();
       }
 
       DeferredShadingSceneRenderer::~DeferredShadingSceneRenderer()

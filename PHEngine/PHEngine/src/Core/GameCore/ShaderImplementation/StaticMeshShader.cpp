@@ -9,7 +9,7 @@ namespace Game
 		StaticMeshShader::StaticMeshShader(const ShaderParams& params)
 			: ShaderBase(params)
 		{
-			Init();
+         ShaderInit();
 		}
 
 		StaticMeshShader::~StaticMeshShader()

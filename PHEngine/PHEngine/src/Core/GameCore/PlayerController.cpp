@@ -1,5 +1,5 @@
 #include "PlayerController.h"
-#include "Core/GameCore/CameraBase.h"
+#include "Core/GameCore/ICamera.h"
 #include "COre/GameCore/ThirdPersonCamera.h"
 #include "Core/GameCore/Event/PlayerMovedEvent.h"
 
@@ -36,7 +36,7 @@ namespace Game
             rootComponent->SetTranslation(newPosition);
 
             auto camera = movementComponent->GetCamera();
-            if (CameraBase::CameraType::THIRD_PERSON == camera->GetCameraType())
+            if (ICamera::CameraType::THIRD_PERSON == camera->GetCameraType())
             {
                // TEST FAST VERSION
                auto myCamera = static_cast<ThirdPersonCamera*>(camera);

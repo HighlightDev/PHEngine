@@ -51,7 +51,7 @@ namespace Game
       CubemapDepthShader<false>::CubemapDepthShader(const ShaderParams& params)
          : CubemapDepthShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
       void CubemapDepthShader<false>::SetShaderPredefine() 
@@ -63,7 +63,7 @@ namespace Game
       CubemapDepthShader<true>::CubemapDepthShader(const ShaderParams& params)
          : CubemapDepthShaderBase(params)
       {
-         Init();
+         ShaderInit();
       }
 
       void CubemapDepthShader<true>::SetSkinningMatrices(const std::vector<glm::mat4>& skinningMatrices)
