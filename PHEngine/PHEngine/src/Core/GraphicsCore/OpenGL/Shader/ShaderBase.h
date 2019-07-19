@@ -14,12 +14,6 @@ namespace Graphics
 			ShaderBase(const ShaderParams& params);
 
 			~ShaderBase();
-
-		protected:
-
-			virtual void AccessAllUniformLocations() override;
-
-			virtual void SetShaderPredefine() override;
 		};
 
 	}

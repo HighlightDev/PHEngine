@@ -7,25 +7,42 @@ namespace Graphics
 {
 	namespace OpenGL
 	{
-		struct ShaderDefineConstant
-		{
-			std::string m_Name;
-			std::string m_Value;
-			ShaderType m_ShaderType;
+      struct ShaderGenericDefineConstant
+      {
+         std::string m_Name;
+         std::string m_Value;
 
-			ShaderDefineConstant(const std::string& name, std::string value);
+         ShaderGenericDefineConstant(const std::string& name, const std::string& value)
+            : m_Name(name)
+            , m_Value(value)
+         {
+         }
+      };
 
-			ShaderDefineConstant(const std::string& name, std::string value, ShaderType shaderType);
-
-			~ShaderDefineConstant();
-		};
-
-      struct ShaderDefine
+      struct ShaderGenericDefine
       {
          std::string m_Name;
          bool bDefined;
-         ShaderType m_ShaderType;
 
+         ShaderGenericDefine(const std::string& name, const bool isDefined)
+            : m_Name(name)
+            , bDefined(isDefined)
+         {
+         }
+      };
+
+		struct ShaderDefineConstant
+         : public ShaderGenericDefineConstant
+		{
+			ShaderType m_ShaderType;
+			ShaderDefineConstant(const std::string& name, const std::string& value, ShaderType shaderType);
+		};
+
+      struct ShaderDefine
+         : public ShaderGenericDefine
+      {
+     
+         ShaderType m_ShaderType;
          ShaderDefine(const std::string& name, const bool isDefined, ShaderType shaderType);
       };
 	}

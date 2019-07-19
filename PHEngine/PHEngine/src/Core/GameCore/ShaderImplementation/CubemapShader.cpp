@@ -29,14 +29,14 @@ namespace Game
          u_texture.LoadUniform(texSlot);
       }
 
-      void CubemapShader::AccessAllUniformLocations()
+      void CubemapShader::AccessAllUniformLocations(uint32_t shaderProgramId)
       {
-         ShaderBase::AccessAllUniformLocations();
+         ShaderBase::AccessAllUniformLocations(shaderProgramId);
 
-         u_worldMatrix = GetUniform("worldMatrix");
-         u_viewMatrix = GetUniform("viewMatrix");
-         u_projectionMatrix = GetUniform("projectionMatrix");
-         u_texture = GetUniform("cubeTexture");
+         u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+         u_viewMatrix = GetUniform("viewMatrix", shaderProgramId);
+         u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramId);
+         u_texture = GetUniform("cubeTexture", shaderProgramId);
       }
 
       void CubemapShader::SetShaderPredefine()

@@ -10,14 +10,14 @@ namespace Game
       {
       }
 
-      void CubemapDepthShaderBase::AccessAllUniformLocations()
+      void CubemapDepthShaderBase::AccessAllUniformLocations(uint32_t shaderProgramId)
       {
-         ShaderBase::AccessAllUniformLocations();
-         u_worldMatrix = GetUniform("worldMatrix");
-         u_shadowViewMatrices = GetUniformArray("shadowViewMatrices", 6);
-         u_shadowProjectionMatrices = GetUniformArray("shadowProjectionMatrices", 6);
-         u_pointLightPos = GetUniform("pointLightPos");
-         u_farPlane = GetUniform("farPlane");
+         ShaderBase::AccessAllUniformLocations(shaderProgramId);
+         u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+         u_shadowViewMatrices = GetUniformArray("shadowViewMatrices", 6, shaderProgramId);
+         u_shadowProjectionMatrices = GetUniformArray("shadowProjectionMatrices", 6, shaderProgramId);
+         u_pointLightPos = GetUniform("pointLightPos", shaderProgramId);
+         u_farPlane = GetUniform("farPlane", shaderProgramId);
       }
 
       void CubemapDepthShaderBase::SetTransformationMatrices(const glm::mat4& worldMatrix, const six_mat4x4& viewMatrices, const six_mat4x4& projectionMatrices)
@@ -75,10 +75,10 @@ namespace Game
 #define MaxWeights 3
 #define MaxBones 55
 
-      void CubemapDepthShader<true>::AccessAllUniformLocations()
+      void CubemapDepthShader<true>::AccessAllUniformLocations(uint32_t shaderProgramId)
       {
-         CubemapDepthShaderBase::AccessAllUniformLocations();
-         u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones);
+         CubemapDepthShaderBase::AccessAllUniformLocations(shaderProgramId);
+         u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones, shaderProgramId);
       }
 
       void CubemapDepthShader<true>::SetShaderPredefine()

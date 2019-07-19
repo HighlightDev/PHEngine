@@ -30,7 +30,7 @@ namespace Graphics
 
          UniformArray() = default;
 
-         explicit UniformArray(int32_t programDescriptor, size_t uniformsCount, std::string&& uniformName);
+         explicit UniformArray(int32_t programDescriptor, size_t uniformsCount, const std::string& uniformName);
 
          ~UniformArray();
 
@@ -70,7 +70,7 @@ namespace Graphics
 
 			Uniform();
 
-			explicit Uniform(int32_t programDescriptor, std::string&& uniformName);
+			explicit Uniform(int32_t programDescriptor, const std::string& uniformName);
 
 			~Uniform();
 

@@ -15,11 +15,11 @@ namespace Game
 		{
 		}
 
-		void ResolveTextureShader::AccessAllUniformLocations()
+		void ResolveTextureShader::AccessAllUniformLocations(uint32_t shaderProgramId)
 		{
-			Base::AccessAllUniformLocations();
+			Base::AccessAllUniformLocations(shaderProgramId);
 
-			u_textureSampler = GetUniform("SrcColor");
+			u_textureSampler = GetUniform("SrcColor", shaderProgramId);
 		}
 
 		void ResolveTextureShader::SetShaderPredefine() 

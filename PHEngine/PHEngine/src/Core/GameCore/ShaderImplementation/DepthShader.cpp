@@ -10,12 +10,12 @@ namespace Game
       {
       }
 
-      void DepthShaderBase::AccessAllUniformLocations() {
+      void DepthShaderBase::AccessAllUniformLocations(uint32_t shaderProgramId) {
 
-         ShaderBase::AccessAllUniformLocations();
-         u_worldMatrix = GetUniform("worldMatrix");
-         u_shadowViewMatrix = GetUniform("shadowViewMatrix");
-         u_shadowProjectionMatrix = GetUniform("shadowProjectionMatrix");
+         ShaderBase::AccessAllUniformLocations(shaderProgramId);
+         u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+         u_shadowViewMatrix = GetUniform("shadowViewMatrix", shaderProgramId);
+         u_shadowProjectionMatrix = GetUniform("shadowProjectionMatrix", shaderProgramId);
       }
 
       void DepthShaderBase::SetTransformationMatrices(const glm::mat4& worldMatrix, const glm::mat4& shadowViewMatrix, const glm::mat4& shadowProjectionMatrix)
@@ -46,10 +46,10 @@ namespace Game
          ShaderInit();
       }
 
-      void DepthShader<true>::AccessAllUniformLocations()
+      void DepthShader<true>::AccessAllUniformLocations(uint32_t shaderProgramId)
       {
-         DepthShaderBase::AccessAllUniformLocations();
-         u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones);
+         DepthShaderBase::AccessAllUniformLocations(shaderProgramId);
+         u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones, shaderProgramId);
       }
 
       void DepthShader<true>::SetShaderPredefine() 

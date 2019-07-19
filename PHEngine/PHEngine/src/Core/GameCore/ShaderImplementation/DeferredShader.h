@@ -54,16 +54,16 @@ namespace Game
 
       protected:
 
-         void AccessAllUniformLocations()
+         void AccessAllUniformLocations(uint32_t shaderProgramId)
          {
-            Base::AccessAllUniformLocations();
+            Base::AccessAllUniformLocations(shaderProgramId);
 
-            u_worldMatrix = GetUniform("worldMatrix");
-            u_viewMatrix = GetUniform("viewMatrix");
-            u_projectionMatrix = GetUniform("projectionMatrix");
-            u_albedoTex = GetUniform("albedo");
-            u_normalTex = GetUniform("normalMap");
-            u_specularTex = GetUniform("specularMap");
+            u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+            u_viewMatrix = GetUniform("viewMatrix", shaderProgramId);
+            u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramId);
+            u_albedoTex = GetUniform("albedo", shaderProgramId);
+            u_normalTex = GetUniform("normalMap", shaderProgramId);
+            u_specularTex = GetUniform("specularMap", shaderProgramId);
          }
 
          void SetShaderPredefine()
@@ -121,18 +121,18 @@ namespace Game
             u_specularTex.LoadUniform(slot);
          }
 
-         void AccessAllUniformLocations()
+         void AccessAllUniformLocations(uint32_t shaderProgramId)
          {
-            Base::AccessAllUniformLocations();
+            Base::AccessAllUniformLocations(shaderProgramId);
 
-            u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones);
+            u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones, shaderProgramId);
 
-            u_worldMatrix = GetUniform("worldMatrix");
-            u_viewMatrix = GetUniform("viewMatrix");
-            u_projectionMatrix = GetUniform("projectionMatrix");
-            u_albedoTex = GetUniform("albedo");
-            u_normalTex = GetUniform("normalMap");
-            u_specularTex = GetUniform("specularMap");
+            u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+            u_viewMatrix = GetUniform("viewMatrix", shaderProgramId);
+            u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramId);
+            u_albedoTex = GetUniform("albedo", shaderProgramId);
+            u_normalTex = GetUniform("normalMap", shaderProgramId);
+            u_specularTex = GetUniform("specularMap", shaderProgramId);
          }
 
          void SetShaderPredefine()

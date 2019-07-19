@@ -21,13 +21,12 @@ namespace Resources
 		template <typename ShaderT>
       static std::shared_ptr<ShaderBase> AllocateMemory(Model& arg)
       {
-         ShaderBase* allocatedShader = new ShaderT(arg);
-         return std::shared_ptr<ShaderBase>(allocatedShader);
+         return std::shared_ptr<ShaderBase>(std::make_shared<ShaderT>(arg));
       }
 
 		static void DeallocateMemory(std::shared_ptr<ShaderBase> arg)
 		{
-			arg->CleanUp();
+			arg->CleanUp(true);
 		}
 	};
 

@@ -12,14 +12,14 @@ namespace Game
          Base::ShaderInit();
       }
 
-      void TextureRendererShader::AccessAllUniformLocations() {
+      void TextureRendererShader::AccessAllUniformLocations(uint32_t shaderProgramId) {
 
-         Base::AccessAllUniformLocations();
+         Base::AccessAllUniformLocations(shaderProgramId);
 
-         u_uiTexture = GetUniform("uiTexture");
-         u_screenSpaceMatrix = GetUniform("screenSpaceMatrix");
-         u_bPerspectiveDepthTexture = GetUniform("bPerspectiveDepthTexture");
-         u_bSeparated = GetUniform("bSeparated");
+         u_uiTexture = GetUniform("uiTexture", shaderProgramId);
+         u_screenSpaceMatrix = GetUniform("screenSpaceMatrix", shaderProgramId);
+         u_bPerspectiveDepthTexture = GetUniform("bPerspectiveDepthTexture", shaderProgramId);
+         u_bSeparated = GetUniform("bSeparated", shaderProgramId);
       }
 
       void TextureRendererShader::SetUiTextureSampler(int32_t uiTextureSampler)

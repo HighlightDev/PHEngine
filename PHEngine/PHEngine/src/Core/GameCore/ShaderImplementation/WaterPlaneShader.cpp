@@ -15,30 +15,32 @@ namespace Game
       {
       }
 
-      void WaterPlaneShader::AccessAllUniformLocations()
+      void WaterPlaneShader::AccessAllUniformLocations(uint32_t shaderProgramId)
       {
-         u_bEnableSun = GetUniform("bEnableSun");
-         u_modelMatrix = GetUniform("modelMatrix");
-         u_viewMatrix = GetUniform("viewMatrix");
-         u_projectionMatrix = GetUniform("projectionMatrix");
-         u_reflectionTexture = GetUniform("reflectionTexture");
-         u_refractionTexture = GetUniform("refractionTexture");
-         u_cameraPosition = GetUniform("cameraPosition");
-         u_dudvTexture = GetUniform("dudvTexture");
-         u_normalMap = GetUniform("normalMap");
-         u_depthTexture = GetUniform("depthTexture");
-         u_moveFactor = GetUniform("moveFactor");
-         u_sunPos = GetUniform("sunPos");
-         u_sunSpecularColour = GetUniform("sunSpecularColour");
-         u_waveStrength = GetUniform("waveStrength");
-         u_farClipPlane = GetUniform("farClipPlane");
-         u_nearClipPlane = GetUniform("nearClipPlane");
-         u_transparencyDepth = GetUniform("transparencyDepth");
+         Base::AccessAllUniformLocations(shaderProgramId);
 
-         u_mistEnable = GetUniform("mistEnable");
-         u_mistDensity = GetUniform("mistDensity");
-         u_mistGradient = GetUniform("mistGradient");
-         u_mistColour = GetUniform("mistColour");
+         u_bEnableSun = GetUniform("bEnableSun", shaderProgramId);
+         u_modelMatrix = GetUniform("modelMatrix", shaderProgramId);
+         u_viewMatrix = GetUniform("viewMatrix", shaderProgramId);
+         u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramId);
+         u_reflectionTexture = GetUniform("reflectionTexture", shaderProgramId);
+         u_refractionTexture = GetUniform("refractionTexture", shaderProgramId);
+         u_cameraPosition = GetUniform("cameraPosition", shaderProgramId);
+         u_dudvTexture = GetUniform("dudvTexture", shaderProgramId);
+         u_normalMap = GetUniform("normalMap", shaderProgramId);
+         u_depthTexture = GetUniform("depthTexture", shaderProgramId);
+         u_moveFactor = GetUniform("moveFactor", shaderProgramId);
+         u_sunPos = GetUniform("sunPos", shaderProgramId);
+         u_sunSpecularColour = GetUniform("sunSpecularColour", shaderProgramId);
+         u_waveStrength = GetUniform("waveStrength", shaderProgramId);
+         u_farClipPlane = GetUniform("farClipPlane", shaderProgramId);
+         u_nearClipPlane = GetUniform("nearClipPlane", shaderProgramId);
+         u_transparencyDepth = GetUniform("transparencyDepth", shaderProgramId);
+
+         u_mistEnable = GetUniform("mistEnable", shaderProgramId);
+         u_mistDensity = GetUniform("mistDensity", shaderProgramId);
+         u_mistGradient = GetUniform("mistGradient", shaderProgramId);
+         u_mistColour = GetUniform("mistColour", shaderProgramId);
       }
 
       void WaterPlaneShader::SetShaderPredefine()

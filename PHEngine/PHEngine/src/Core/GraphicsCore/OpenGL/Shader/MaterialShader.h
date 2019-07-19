@@ -1,19 +1,20 @@
 #pragma once
 
 #include "Core/GraphicsCore/Material/IMaterial.h"
-#include "Core/GraphicsCore/OpenGL/Shader/Uniform.h"
+#include "Core/GraphicsCore/OpenGL/Shader/IShader.h"
 
 namespace Graphics
 {
    namespace OpenGL
    {
-      class IMaterialShader
+      class IMaterialShader 
+         : public IShader
       {
          std::string mShaderSource;
 
       public:
 
-         IMaterialShader();
+         IMaterialShader(const std::string& materialName);
 
          virtual ~IMaterialShader();
 
@@ -23,22 +24,24 @@ namespace Graphics
 
          void LoadMaterialShaderSource(const IMaterial* material);
 
-         virtual void ProcessAllPredefines();
+         virtual void ProcessAllPredefines() override;
+         virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override;
+         virtual void SetShaderPredefine() override;
       };
 
       template <typename ValuesTuple, typename UniformArray, size_t indexCount>
-      struct SetUniform
+      struct SetUniformValuesIterate
       {
 
          static void ProcessSet(ValuesTuple& values, UniformArray& uniforms)
          {
             uniforms[indexCount].LoadUniform(std::get<indexCount>(values).GetValue(indexCount));
-            SetUniform<ValuesTuple, UniformArray, indexCount - 1>::ProcessSet(values, uniforms);
+            SetUniformValuesIterate<ValuesTuple, UniformArray, indexCount - 1>::ProcessSet(values, uniforms);
          }
       };
 
       template <typename ValuesTuple, typename UniformArray>
-      struct SetUniform<ValuesTuple, UniformArray, 0>
+      struct SetUniformValuesIterate<ValuesTuple, UniformArray, 0>
       {
          static void ProcessSet(ValuesTuple& values, UniformArray& uniforms)
          {
@@ -61,13 +64,21 @@ namespace Graphics
          material_t mMaterial;
          uniforms_t Uniforms;
 
+         virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override
+         {
+            for (size_t index = 0; index < properties_count; ++index)
+            {
+               Uniforms[index] = GetUniform(mMaterial.mPropertiesName[index], shaderProgramID);
+            }
+         }
+
          void SetUniformValues()
          {
-            SetUniform<typename material_t::materialProperties_t, uniforms_t, properties_count - 1>::ProcessSet(mMaterial.mProperties, Uniforms);
+            SetUniformValuesIterate<typename material_t::materialProperties_t, uniforms_t, properties_count - 1>::ProcessSet(mMaterial.mProperties, Uniforms);
          }
 
          MaterialShaderImp(const Material& material)
-            : IMaterialShader()
+            : IMaterialShader(material.mMaterialName)
             , mMaterial(material)
          {
          }

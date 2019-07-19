@@ -1,7 +1,6 @@
 #version 400
 
 #define SHADING_MODEL_PBR
-#define PCF_SAMPLES 2
 #define MAX_DIR_LIGHT_COUNT 5
 #define MAX_POINT_LIGHT_COUNT 1
 #define SHADOWMAP_BIAS_DIR_LIGHT 0.005
@@ -132,9 +131,9 @@ float CalcLitFactorTexture2D(in sampler2D shadowmap, in vec2 shadowmapSize, in v
     float SumDepth = 0.0;
     vec2 texelSize = 1.0 / shadowmapSize;
 
-    for (int x = -PCF_SAMPLES; x <= PCF_SAMPLES; x++)
+    for (int x = -PCF_SAMPLES_DIR_LIGHT; x <= PCF_SAMPLES_DIR_LIGHT; x++)
     {
-       for (int y = -PCF_SAMPLES; y <= PCF_SAMPLES; y++)
+       for (int y = -PCF_SAMPLES_DIR_LIGHT; y <= PCF_SAMPLES_DIR_LIGHT; y++)
        {
 			vec2 offset = vec2(float(x) * texelSize.x, float(y) * texelSize.y);
 

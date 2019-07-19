@@ -9,7 +9,8 @@ namespace Graphics
    namespace OpenGL
    {
 
-      IMaterialShader::IMaterialShader()
+      IMaterialShader::IMaterialShader(const std::string& materialName)
+         : IShader(materialName)
       {
       }
 
@@ -28,14 +29,11 @@ namespace Graphics
       {
          std::string absoluteShaderPath = EngineUtility::ConvertFromRelativeToAbsolutePath(material->GetShaderPath());
 
-         std::ifstream stream(absoluteShaderPath);
-         std::string line = std::string("");
-
-         while (stream.is_open() && getline(stream, line))
+         auto src = LoadShaderSrc(absoluteShaderPath);
+         for (auto item : src)
          {
-            EngineUtility::StringStreamWrapper::ToString(line, '\n');
+            EngineUtility::StringStreamWrapper::ToString(item, '\n');
          }
-
          std::string shaderSource = std::move(EngineUtility::StringStreamWrapper::FlushString());
 
          mShaderSource = shaderSource;
@@ -43,7 +41,14 @@ namespace Graphics
 
       void IMaterialShader::ProcessAllPredefines()
       {
+      }
 
+      void IMaterialShader::SetShaderPredefine()
+      {
+      }
+
+      void IMaterialShader::AccessAllUniformLocations(uint32_t shaderProgramID)
+      {
       }
    }
 }

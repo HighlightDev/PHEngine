@@ -29,15 +29,15 @@ namespace Game
 			u_nightTexture.LoadUniform(nightTexSlot);
 		}
 
-		void SkyboxShader::AccessAllUniformLocations()
+		void SkyboxShader::AccessAllUniformLocations(uint32_t shaderProgramId)
 		{
-			ShaderBase::AccessAllUniformLocations();
+			ShaderBase::AccessAllUniformLocations(shaderProgramId);
 
-			u_worldMatrix = GetUniform("worldMatrix");
-			u_viewMatrix = GetUniform("viewMatrix");
-			u_projectionMatrix = GetUniform("projectionMatrix");
-			u_dayTexture = GetUniform("dayTexture");
-			u_nightTexture = GetUniform("nightTexture");
+			u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+			u_viewMatrix = GetUniform("viewMatrix", shaderProgramId);
+			u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramId);
+			u_dayTexture = GetUniform("dayTexture", shaderProgramId);
+			u_nightTexture = GetUniform("nightTexture", shaderProgramId);
 		}
 
 		void SkyboxShader::SetShaderPredefine()

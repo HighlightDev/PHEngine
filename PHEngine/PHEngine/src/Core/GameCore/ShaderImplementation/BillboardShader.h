@@ -26,7 +26,7 @@ namespace Game
 
       protected:
 
-         virtual void AccessAllUniformLocations() override;
+         virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override;
 
          virtual void SetShaderPredefine() override;
       };

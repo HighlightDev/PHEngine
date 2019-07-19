@@ -29,14 +29,14 @@ namespace Game
          u_texture.LoadUniform(texSlot);
       }
 
-      void BillboardShader::AccessAllUniformLocations()
+      void BillboardShader::AccessAllUniformLocations(uint32_t shaderProgramID)
       {
-         ShaderBase::AccessAllUniformLocations();
+         ShaderBase::AccessAllUniformLocations(shaderProgramID);
 
-         u_worldMatrix = GetUniform("worldMatrix");
-         u_viewMatrix = GetUniform("viewMatrix");
-         u_projectionMatrix = GetUniform("projectionMatrix");
-         u_texture = GetUniform("billboardTexture");
+         u_worldMatrix = GetUniform("worldMatrix", shaderProgramID);
+         u_viewMatrix = GetUniform("viewMatrix", shaderProgramID);
+         u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramID);
+         u_texture = GetUniform("billboardTexture", shaderProgramID);
       }
 
       void BillboardShader::SetShaderPredefine()

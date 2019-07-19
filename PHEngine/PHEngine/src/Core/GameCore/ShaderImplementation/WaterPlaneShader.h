@@ -14,6 +14,7 @@ namespace Game
       class WaterPlaneShader :
          public ShaderBase
       {
+         using Base = ShaderBase;
 
          Uniform u_modelMatrix, u_viewMatrix, u_projectionMatrix,
             u_reflectionTexture, u_refractionTexture, u_dudvTexture,
@@ -23,7 +24,7 @@ namespace Game
             u_transparencyDepth, u_mistEnable, u_mistDensity,
             u_mistGradient, u_mistColour, u_bEnableSun;
 
-         virtual void AccessAllUniformLocations() override;
+         virtual void AccessAllUniformLocations(uint32_t shaderProgramId) override;
 
          virtual void SetShaderPredefine() override;
 

@@ -20,8 +20,14 @@ namespace EngineUtility
    /************************************************************************/
 #define RAD_TO_DEG(X) (glm::degrees<float>(X))
 
-   constexpr float CMP(float X, float Y)
+   struct CMP
    {
-      return (std::abs(X) - std::abs(Y)) <= FLT_EPSILON ? std::max(1.0f, std::max(std::abs(X), std::abs(Y))) : 0.0f;
-   }
+      static bool Process(const float X, const float Y)
+      {
+         const float absX = std::abs(X);
+         const float absY = std::abs(Y);
+         const bool bResult = std::abs(absX - absY) <= FLT_EPSILON;
+         return bResult;
+      }
+   };
 }

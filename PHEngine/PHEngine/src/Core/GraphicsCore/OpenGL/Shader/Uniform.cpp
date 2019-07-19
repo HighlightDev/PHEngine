@@ -13,7 +13,7 @@ namespace Graphics
 	{
       /* UNIFORM ARRAY */
 
-      UniformArray::UniformArray(int32_t programDescriptor, size_t uniformsCount, std::string&& uniformName)
+      UniformArray::UniformArray(int32_t programDescriptor, size_t uniformsCount, const std::string& uniformName)
       {
          std::string uniformNamePart = uniformName;
 
@@ -232,7 +232,7 @@ namespace Graphics
 
 		Uniform::Uniform() {}
 
-		Uniform::Uniform(int32_t programDescriptor, std::string&& uniformName)
+		Uniform::Uniform(int32_t programDescriptor, const std::string& uniformName)
 		{
 			uniformLocation = glGetUniformLocation(programDescriptor, uniformName.c_str());
 		/*	if (uniformLocation < 0)

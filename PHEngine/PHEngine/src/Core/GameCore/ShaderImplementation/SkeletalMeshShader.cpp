@@ -38,13 +38,15 @@ namespace Game
 
       }
 
-      void SkeletalMeshShader::AccessAllUniformLocations()
+      void SkeletalMeshShader::AccessAllUniformLocations(uint32_t shaderProgramId)
       {
-         u_worldMatrix = GetUniform("worldMatrix");
-         u_viewMatrix = GetUniform("viewMatrix");
-         u_projectionMatrix = GetUniform("projectionMatrix");
-         u_albedo = GetUniform("albedoTexture");
-         u_boneMatrices = GetUniformArray("bonesMatrices", MAX_BONES);
+         Base::AccessAllUniformLocations(shaderProgramId);
+
+         u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+         u_viewMatrix = GetUniform("viewMatrix", shaderProgramId);
+         u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramId);
+         u_albedo = GetUniform("albedoTexture", shaderProgramId);
+         u_boneMatrices = GetUniformArray("bonesMatrices", MAX_BONES, shaderProgramId);
       }
 
       void SkeletalMeshShader::SetSkinningMatrices(const std::vector<glm::mat4>& matrices)

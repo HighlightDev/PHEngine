@@ -25,8 +25,9 @@ namespace Graphics
          MaterialProperty<TexturePropertyProcessPolicy>>;
 
       materialProperties_t mProperties;
+      const std::string mMaterialName = "PBR Material";
 
-      std::array<std::string, std::tuple_size<materialProperties_t>::value> mPropertiesName = { "albedo", "normalMap", "metallicMap", "roughnessMap", "ambientOcclusionMap" };
+      const std::array<std::string, std::tuple_size<materialProperties_t>::value> mPropertiesName = { "albedo", "normalMap", "metallicMap", "roughnessMap", "ambientOcclusionMap" };
 
       PBRMaterial(ITextureShared albedo,
                   ITextureShared normalMap,

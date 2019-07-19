@@ -39,44 +39,37 @@ namespace Game
 			u_specularMap.LoadUniform(slot);
 		}
 
-		void StaticMeshShader::AccessAllUniformLocations()
+		void StaticMeshShader::AccessAllUniformLocations(uint32_t shaderProgramId)
 		{
-         Base::AccessAllUniformLocations();
+         Base::AccessAllUniformLocations(shaderProgramId);
 
-			u_worldMatrix = GetUniform("worldMatrix");
-			u_viewMatrix = GetUniform("viewMatrix");
-			u_projectionMatrix = GetUniform("projectionMatrix");
-			u_albedo = GetUniform("albedo");
-			u_normalMap = GetUniform("normalMap");
-			u_specularMap = GetUniform("specularMap");
+			u_worldMatrix = GetUniform("worldMatrix", shaderProgramId);
+			u_viewMatrix = GetUniform("viewMatrix", shaderProgramId);
+			u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramId);
+			u_albedo = GetUniform("albedo", shaderProgramId);
+			u_normalMap = GetUniform("normalMap", shaderProgramId);
+			u_specularMap = GetUniform("specularMap", shaderProgramId);
 
-			u_materialAmbient = GetUniform("materialAmbient");
-			u_materialDiffuse = GetUniform("materialDiffuse");
-			u_materialSpecular = GetUniform("materialSpecular");
-			u_materialReflectivity = GetUniform("materialReflectivity");
-			u_materialShineDamper = GetUniform("materialShineDamper");
-			u_sunDirection = GetUniform("sunDirection");
-			u_sunAmbientColour = GetUniform("sunAmbientColour");
-			u_sunDiffuseColour = GetUniform("sunDiffuseColour");
-			u_sunSpecularColour = GetUniform("sunSpecularColour");
-			u_sunEnable = GetUniform("sunEnable");
-			u_mistEnable = GetUniform("mistEnable");
-			u_mistDensity = GetUniform("mistDensity");
-			u_mistGradient = GetUniform("mistGradient");
-			u_mistColour = GetUniform("mistColour");
-			for (size_t i = 0; i < MAX_LIGHT_COUNT; i++)
-			{
-				/*u_lightPosition[i] = GetUniform("lightPosition[" + i + "]");
-				u_attenuation[i] = GetUniform("attenuation[" + i + "]");
-				u_diffuseColour[i] = GetUniform("diffuseColour[" + i + "]");
-				u_specularColour[i] = GetUniform("specularColour[" + i + "]");
-				u_enableLight[i] = GetUniform("enableLight[" + i + "]");*/
-			}
-			u_clipPlane = GetUniform("clipPlane");
-			u_directionalLightShadowMap = GetUniform("dirLightShadowMap");
-			u_directionalLightShadowMatrix = GetUniform("dirLightShadowMatrix");
-			u_bEnableNormalMap = GetUniform("bEnableNormalMap");
-			u_bEnableSpecularMap = GetUniform("bEnableSpecularMap");
+			u_materialAmbient = GetUniform("materialAmbient", shaderProgramId);
+			u_materialDiffuse = GetUniform("materialDiffuse", shaderProgramId);
+			u_materialSpecular = GetUniform("materialSpecular", shaderProgramId);
+			u_materialReflectivity = GetUniform("materialReflectivity", shaderProgramId);
+			u_materialShineDamper = GetUniform("materialShineDamper", shaderProgramId);
+			u_sunDirection = GetUniform("sunDirection", shaderProgramId);
+			u_sunAmbientColour = GetUniform("sunAmbientColour", shaderProgramId);
+			u_sunDiffuseColour = GetUniform("sunDiffuseColour", shaderProgramId);
+			u_sunSpecularColour = GetUniform("sunSpecularColour", shaderProgramId);
+			u_sunEnable = GetUniform("sunEnable", shaderProgramId);
+			u_mistEnable = GetUniform("mistEnable", shaderProgramId);
+			u_mistDensity = GetUniform("mistDensity", shaderProgramId);
+			u_mistGradient = GetUniform("mistGradient", shaderProgramId);
+			u_mistColour = GetUniform("mistColour", shaderProgramId);
+
+			u_clipPlane = GetUniform("clipPlane", shaderProgramId);
+			u_directionalLightShadowMap = GetUniform("dirLightShadowMap", shaderProgramId);
+			u_directionalLightShadowMatrix = GetUniform("dirLightShadowMatrix", shaderProgramId);
+			u_bEnableNormalMap = GetUniform("bEnableNormalMap", shaderProgramId);
+			u_bEnableSpecularMap = GetUniform("bEnableSpecularMap", shaderProgramId);
 		}
 
 		void StaticMeshShader::SetShaderPredefine()
