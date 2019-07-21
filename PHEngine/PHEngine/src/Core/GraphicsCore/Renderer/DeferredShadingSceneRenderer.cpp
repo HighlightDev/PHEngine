@@ -63,8 +63,7 @@ namespace Graphics
 
          MaterialShaderImp<PBRMaterial> mMaterialShader = MaterialShaderImp<PBRMaterial>(PBRMaterial(image, image, image, image, image));
 
-         CompositeShader<float, MaterialShaderImp<PBRMaterial>, int> compositeShader(0.5f, mMaterialShader, 5);
-         compositeShader.AccessAllUniformLocations();
+         CompositeShader<float, int, MaterialShaderImp<PBRMaterial>> compositeShader("TestShader", 0.5f, 5, mMaterialShader);
          compositeShader.SetUniformValues();
       }
 

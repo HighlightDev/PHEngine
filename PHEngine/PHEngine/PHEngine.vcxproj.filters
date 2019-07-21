@@ -1690,6 +1690,12 @@
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\MaterialShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\IShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\VertexFactoryShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">
@@ -2026,6 +2032,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\MaterialShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\IShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\VertexFactoryShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

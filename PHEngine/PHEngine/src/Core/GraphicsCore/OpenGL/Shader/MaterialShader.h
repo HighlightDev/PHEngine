@@ -22,11 +22,12 @@ namespace Graphics
 
          void InitMaterialShader(const IMaterial* material);
 
-         void LoadMaterialShaderSource(const IMaterial* material);
-
          virtual void ProcessAllPredefines() override;
          virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override;
          virtual void SetShaderPredefine() override;
+
+      private:
+         void LoadMaterialShaderSource(const IMaterial* material);
       };
 
       template <typename ValuesTuple, typename UniformArray, size_t indexCount>

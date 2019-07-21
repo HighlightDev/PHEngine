@@ -41,14 +41,17 @@ namespace Graphics
 
       void IMaterialShader::ProcessAllPredefines()
       {
+         // This is an implementation in base class
       }
 
       void IMaterialShader::SetShaderPredefine()
       {
+         // This is an implementation in base class
       }
 
       void IMaterialShader::AccessAllUniformLocations(uint32_t shaderProgramID)
       {
+         // This is an implementation in base class
       }
    }
 }

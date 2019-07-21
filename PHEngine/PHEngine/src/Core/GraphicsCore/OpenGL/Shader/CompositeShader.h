@@ -8,6 +8,7 @@ namespace Graphics
 
       template <typename VertexFactoryShaderType, typename ShaderType, typename MaterialShaderType>
       class CompositeShader
+         : public IShader
       {
       protected:
 
@@ -16,17 +17,19 @@ namespace Graphics
          using materialShader_t = MaterialShaderType;
 
          shader_t mShader;
-         materialShader_t mMaterialShader;
          vertexFactoryShader_t mVertexFactoryShader;
+         materialShader_t mMaterialShader;
 
       public:
 
-         template <typename UShader, typename UMaterialShader, typename UVertexFactoryShader>
-         CompositeShader(UShader&& shader, UMaterialShader&& materialShader, UVertexFactoryShader&& vertexFactoryShader)
-            : mShader(std::forward<UShader>(shader))
-            , mMaterialShader(std::forward<UMaterialShader>(materialShader))
+         template <typename UVertexFactoryShader, typename UShader, typename UMaterialShader>
+         CompositeShader(const std::string& compositeShaderName, UVertexFactoryShader&& vertexFactoryShader, UShader&& shader, UMaterialShader&& materialShader)
+            : IShader(compositeShaderName)
             , mVertexFactoryShader(std::forward<UVertexFactoryShader>(vertexFactoryShader))
+            , mShader(std::forward<UShader>(shader))
+            , mMaterialShader(std::forward<UMaterialShader>(materialShader))
          {
+            Init();
          }
 
          virtual ~CompositeShader()
@@ -34,27 +37,31 @@ namespace Graphics
 
          }
 
-         void AccessAllUniformLocations()
+         virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override
          {
-            uint32_t mProgramId = 0; // TODO: temporary
 
             //mShader.AccessAllUniformLocations(mProgramId);
-            mMaterialShader.AccessAllUniformLocations(mProgramId);
+            mMaterialShader.AccessAllUniformLocations(shaderProgramID);
          }
 
-         void SetShaderPredefine()
+         virtual void SetShaderPredefine() override
          {
 
          }
 
-         virtual void SetUniformValues()
+         virtual void ProcessAllPredefines() override
+         {
+
+         }
+
+         void SetUniformValues()
          {
             mMaterialShader.SetUniformValues();
          }
 
-         virtual void Init()
+         void Init()
          {
-
+            AccessAllUniformLocations(m_shaderProgramID);
          }
          
       };
