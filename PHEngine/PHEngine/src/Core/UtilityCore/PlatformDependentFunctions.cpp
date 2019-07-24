@@ -37,6 +37,9 @@ namespace EngineUtility
 
 	std::string ConvertFromRelativeToAbsolutePath(const std::string& relativePath)
 	{
+      if ("" == relativePath)
+         return relativePath;
+
 		std::string pathToExe = std::move(EngineUtility::GetExecutablePath());
 		std::string absolutePath = pathToExe;
 

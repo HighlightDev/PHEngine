@@ -61,6 +61,11 @@ namespace Common
 		return GetResPath() + "shaders\\";
 	}
 
+   std::string FolderManager::GetShaderCommonPath() const
+   {
+      return GetShadersPath() + "common\\";
+   }
+
 	std::string FolderManager::GetCollisionPath() const
 	{
 		return GetResPath() + "collision\\";

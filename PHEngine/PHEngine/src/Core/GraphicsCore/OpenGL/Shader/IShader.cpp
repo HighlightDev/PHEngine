@@ -1,6 +1,9 @@
 #include "IShader.h"
+#include "Core/CommonCore/FolderManager.h"
 
 #include <fstream>
+#include <algorithm>
+#include <set>
 
 namespace Graphics
 {
@@ -12,6 +15,7 @@ namespace Graphics
          , m_geometryShaderID(-1)
          , m_shaderProgramID(-1)
          , mShaderName(shaderName)
+         , m_shaderCompiledSuccessfully(false)
       {
       }
    
@@ -49,7 +53,7 @@ namespace Graphics
          }
       }
 
-      std::vector<std::string> IShader::LoadShaderSrc(const std::string& pathToShader) const
+      std::vector<std::string> IShader::LoadShaderSrcVector(const std::string& pathToShader) const
       {
          std::ifstream stream(pathToShader);
          std::string line;
@@ -67,24 +71,142 @@ namespace Graphics
          return code;
       }
 
+      bool IShader::ProcessShaderIncludes(std::string& shaderSource)
+      {
+         bool bProcessInclude = false;
+
+         if ("" != shaderSource)
+         {
+            std::vector<std::string> sourceVector = EngineUtility::Split(shaderSource, '\n');
+
+            std::string includingSources = "", versionInfo = "";
+            std::set<std::string> includes;
+
+            for (auto it = sourceVector.begin(); it != sourceVector.end();)
+            {
+               if (EngineUtility::StartsWith(*it, "#version"))
+               {
+                  versionInfo = *it + "\n";
+                  it = sourceVector.erase(it);
+               }
+               else if (EngineUtility::StartsWith(*it, "#include"))
+               {
+                  size_t indexName = EngineUtility::IndexOf(*it, " ");
+                  if (std::string::npos != indexName)
+                  {
+                     std::string name = it->substr(indexName + 1);
+
+                     if (includes.end() == includes.find(name)) // New include
+                     {
+                        includes.insert(name);
+                        name.erase(std::remove(name.begin(), name.end(), '\"'), name.end()); // remove quotes
+
+                        const std::string absolutePath = EngineUtility::ConvertFromRelativeToAbsolutePath(Common::FolderManager::GetInstance()->GetShaderCommonPath() + name);
+                        includingSources += LoadShaderSource(absolutePath) + "\n";
+                     }
+                     it = sourceVector.erase(it);
+                  }
+               }
+               else
+               {
+                  it++;
+               }
+            }
+
+            for (auto item : sourceVector)
+            {
+               EngineUtility::StringStreamWrapper::ToString(item, "\n");
+            }
+
+            shaderSource = versionInfo + includingSources + EngineUtility::StringStreamWrapper::FlushString();
+            bProcessInclude = true;
+         }
+
+         return bProcessInclude;
+      }
+
+      bool IShader::SendToGpuSingleShaderSource(int32_t shaderId, const std::string& shaderSource) const
+      {
+         bool bLoadResult = false;
+
+         try
+         {
+            const char *c_str = shaderSource.c_str();
+            glShaderSource(shaderId, 1, &c_str, nullptr);
+
+            bLoadResult = true;
+         }
+         catch (...)
+         {
+
+         }
+
+         return bLoadResult;
+      }
+
+      std::string IShader::LoadShaderSource(const std::string& pathToShader) const
+      {
+         std::string result = "";
+
+         if ("" != pathToShader)
+         {
+            std::ifstream stream(pathToShader);
+            std::string line;
+
+            while (stream.is_open() && getline(stream, line))
+            {
+               result += line + "\n";
+            }
+
+            stream.clear();
+            stream.close();
+         }
+
+         return result;
+      }
+
+      bool IShader::SendToGpuShadersSources(std::string& vsSource, std::string& fsSource, std::string& gsSource)
+      {
+         bool bVertexShaderLoaded = true, bFragmentShaderLoaded = true, bGeometryShaderLoaded = true;
+
+         if (vsSource != "")
+         {
+            /*Vertex shader load*/
+            m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+            bVertexShaderLoaded &= SendToGpuSingleShaderSource(m_vertexShaderID, vsSource);
+         }
+
+         if (fsSource != "")
+         {
+            /*Fragment shader load*/
+            m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+            bFragmentShaderLoaded &= SendToGpuSingleShaderSource(m_fragmentShaderID, fsSource);
+         }
+
+         if (gsSource != "")
+         {
+            /*Geometry shader load*/
+            m_geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
+            bGeometryShaderLoaded &= SendToGpuSingleShaderSource(m_geometryShaderID, gsSource);
+         }
+
+         return bVertexShaderLoaded && bFragmentShaderLoaded && bGeometryShaderLoaded;
+      }
+
       void IShader::WriteShaderSrc(const std::string& pathToShader, const std::string& src) const
       {
          std::ofstream writeStream(pathToShader);
          writeStream << src;
       }
 
-      void IShader::ProcessPredefine(const std::string&  pathToShader, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const
+      std::string IShader::GetPredefinedSource(std::vector<std::string>& shaderSourceVector, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const
       {
-         if (pathToShader == "")
-            return;
-
-         auto shaderSrc = LoadShaderSrc(pathToShader);
 
          // src only with macros
          std::vector<ShaderGenericDefineConstant> existingConstantDefines;
          std::vector<ShaderGenericDefine> existingDefines;
 
-         for (auto it = shaderSrc.begin(); it != shaderSrc.end(); ++it)
+         for (auto it = shaderSourceVector.begin(); it != shaderSourceVector.end(); ++it)
          {
             if (EngineUtility::StartsWith(*it, "#define"))
             {
@@ -105,10 +227,10 @@ namespace Graphics
          }
 
          // remove all macros from code
-         for (auto it = shaderSrc.begin(); it != shaderSrc.end();)
+         for (auto it = shaderSourceVector.begin(); it != shaderSourceVector.end();)
          {
             if (EngineUtility::StartsWith(*it, "#define"))
-               it = shaderSrc.erase(it);
+               it = shaderSourceVector.erase(it);
             else
                ++it;
          }
@@ -164,9 +286,9 @@ namespace Graphics
          }
          const std::string definesResult = std::move(EngineUtility::StringStreamWrapper::FlushString());
 
-         std::vector<std::string>::iterator version_it = shaderSrc.begin();
+         std::vector<std::string>::iterator version_it = shaderSourceVector.begin();
 
-         for (auto it = shaderSrc.begin(); it != shaderSrc.end(); ++it, ++version_it)
+         for (auto it = shaderSourceVector.begin(); it != shaderSourceVector.end(); ++it, ++version_it)
          {
             if (EngineUtility::StartsWith(*it, "#version"))
             {
@@ -177,11 +299,11 @@ namespace Graphics
 
          if ("" != constantDefinesResult)
          {
-            shaderSrc.insert(version_it, constantDefinesResult);
+            shaderSourceVector.insert(version_it, constantDefinesResult);
          }
 
-         version_it = shaderSrc.begin();
-         for (auto it = shaderSrc.begin(); it != shaderSrc.end(); ++it, ++version_it)
+         version_it = shaderSourceVector.begin();
+         for (auto it = shaderSourceVector.begin(); it != shaderSourceVector.end(); ++it, ++version_it)
          {
             if (EngineUtility::StartsWith(*it, "#version"))
             {
@@ -192,23 +314,42 @@ namespace Graphics
 
          if ("" != definesResult)
          {
-            shaderSrc.insert(version_it, definesResult);
+            shaderSourceVector.insert(version_it, definesResult);
          }
 
          std::string codeResult = "";
 
-         for (std::vector<std::string>::iterator it = shaderSrc.begin(); it != shaderSrc.end(); ++it)
+         for (std::vector<std::string>::iterator it = shaderSourceVector.begin(); it != shaderSourceVector.end(); ++it)
          {
             std::string& str = *it;
             str = EngineUtility::TrimEnd(str);
 
-            if (shaderSrc.end() - 1 != it)
+            if (shaderSourceVector.end() - 1 != it)
                codeResult += str + "\n";
             else
                codeResult += str;
          }
 
-         WriteShaderSrc(pathToShader, codeResult);
+         return codeResult;
+      }
+
+      void IShader::ProcessPredefineToSource(std::string& shaderSource, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const
+      {
+         auto shaderSrc = EngineUtility::Split(shaderSource, '\n');
+
+         shaderSource = GetPredefinedSource(shaderSrc, constantDefines, defines);
+      }
+
+      void IShader::ProcessPredefineToFile(const std::string& pathToShader, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const
+      {
+         if (pathToShader == "")
+            return;
+
+         auto shaderSrc = LoadShaderSrcVector(pathToShader);
+
+         std::string result = GetPredefinedSource(shaderSrc, constantDefines, defines);
+
+         WriteShaderSrc(pathToShader, result);
       }
 
       bool IShader::CompileShaders() const

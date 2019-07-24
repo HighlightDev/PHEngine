@@ -17,6 +17,7 @@
 #include "Core/GraphicsCore/Material/PBRMaterial.h"
 #include "Core/GraphicsCore/OpenGL/Shader/MaterialShader.h"
 #include "Core/ResourceManagerCore/Pool/TexturePool.h"
+#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/StaticMeshVertexFactory.h"
 
 #include <gl/glew.h>
 #include <iostream>
@@ -62,8 +63,19 @@ namespace Graphics
          texShared image = TexturePool::GetInstance()->GetOrAllocateResource(diffuseTexPath);
 
          MaterialShaderImp<PBRMaterial> mMaterialShader = MaterialShaderImp<PBRMaterial>(PBRMaterial(image, image, image, image, image));
+         StaticMeshVertexFactory mVertexFactory("StaticMeshVertexFactory");
 
-         CompositeShader<float, int, MaterialShaderImp<PBRMaterial>> compositeShader("TestShader", 0.5f, 5, mMaterialShader);
+         struct Temp
+         {
+            void AccessAllUniformLocations(...) {}
+            void ProcessAllPredefines() {}
+
+            ShaderParams GetShaderParams() const {
+               return ShaderParams("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseFS.glsl", "", "", "", "");
+            }
+         } t;
+
+         CompositeShader<StaticMeshVertexFactory, Temp, MaterialShaderImp<PBRMaterial>> compositeShader("TestShader", mVertexFactory, t, mMaterialShader);
          compositeShader.SetUniformValues();
       }
 
@@ -354,7 +366,8 @@ namespace Graphics
       {
          glEnable(GL_DEPTH_TEST);
 
-         const glm::mat4& viewMatrix = m_scene->GetCamera()->GetViewMatrix();
+         /***** Access view matrix from GAME THREAD  *****/
+         const glm::mat4 viewMatrix = m_scene->GetCamera()->GetViewMatrix();
 
          std::vector<PrimitiveSceneProxy*> drawDeferredShadedPrimitives;
          std::vector<PrimitiveSceneProxy*> drawForwardShadedPrimitives;

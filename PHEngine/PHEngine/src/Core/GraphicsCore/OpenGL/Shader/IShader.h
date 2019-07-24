@@ -10,7 +10,7 @@
 
 namespace Graphics
 {
-   namespace OpenGL 
+   namespace OpenGL
    {
       class IShader
       {
@@ -20,8 +20,9 @@ namespace Graphics
          int32_t m_fragmentShaderID;
          int32_t m_geometryShaderID;
          uint32_t m_shaderProgramID;
-         
+
          std::string mShaderName;
+         bool m_shaderCompiledSuccessfully;
 
       public:
 
@@ -35,7 +36,7 @@ namespace Graphics
          std::string GetCompileLogInfo() const;
 
          std::string GetLinkLogInfo() const;
-         
+
          void ExecuteShader() const;
 
          void StopShader() const;
@@ -43,16 +44,26 @@ namespace Graphics
          void CleanUp(bool bDeleteShaderProgram = true);
 
          virtual void AccessAllUniformLocations(uint32_t shaderProgramID) = 0;
-         virtual void SetShaderPredefine() = 0;
-         virtual void ProcessAllPredefines() = 0;
+         virtual void SetShaderPredefine() {};
+         virtual void ProcessAllPredefines() {};
 
-         void ProcessPredefine(const std::string& pathToShader, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const;
+         void ProcessPredefineToFile(const std::string& pathToShader, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const;
+         void ProcessPredefineToSource(std::string& shaderSource, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const;
          void WriteShaderSrc(const std::string& pathToShader, const std::string& src) const;
 
          bool CompileShaders() const;
          bool LinkShaders() const;
 
-         std::vector<std::string> LoadShaderSrc(const std::string& pathToShader) const;
+         bool ProcessShaderIncludes(std::string& shaderSource);
+         bool SendToGpuSingleShaderSource(int32_t shaderId, const std::string& shaderSource) const;
+         bool SendToGpuShadersSources(std::string& vsSource, std::string& fsSource, std::string& gsSource);
+
+         std::vector<std::string> LoadShaderSrcVector(const std::string& pathToShader) const;
+         std::string LoadShaderSource(const std::string& pathToShader) const;
+
+      private:
+
+         std::string GetPredefinedSource(std::vector<std::string>& shaderSourceVector, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const;
       };
    }
 }

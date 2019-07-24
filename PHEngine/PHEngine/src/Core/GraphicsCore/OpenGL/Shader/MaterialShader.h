@@ -2,6 +2,7 @@
 
 #include "Core/GraphicsCore/Material/IMaterial.h"
 #include "Core/GraphicsCore/OpenGL/Shader/IShader.h"
+#include "Core/GraphicsCore/OpenGL/Shader/ShaderPredefineUtility.h"
 
 namespace Graphics
 {
@@ -12,19 +13,33 @@ namespace Graphics
       {
          std::string mShaderSource;
 
+         std::vector<ShaderGenericDefineConstant> mConstantDefines;
+         std::vector<ShaderGenericDefine> mDefines;
+
       public:
 
          IMaterialShader(const std::string& materialName);
 
          virtual ~IMaterialShader();
 
+         std::string GetShaderSource() const;
+
+         template <typename ValueType>
+         void DefineConstant(const std::string& name, ValueType&& value)
+         {
+            std::string formatedValue = MacroConverter<ValueType>::GetValue(std::forward<ValueType>(value));
+            mConstantDefines.emplace_back(ShaderGenericDefineConstant(name, formatedValue));
+         }
+
+         void Define(const std::string& name);
+
+         void Undefine(const std::string& name);
+
       protected:
 
          void InitMaterialShader(const IMaterial* material);
 
-         virtual void ProcessAllPredefines() override;
          virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override;
-         virtual void SetShaderPredefine() override;
 
       private:
          void LoadMaterialShaderSource(const IMaterial* material);

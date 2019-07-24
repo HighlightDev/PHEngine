@@ -28,30 +28,27 @@ namespace Graphics
       void IMaterialShader::LoadMaterialShaderSource(const IMaterial* material)
       {
          std::string absoluteShaderPath = EngineUtility::ConvertFromRelativeToAbsolutePath(material->GetShaderPath());
-
-         auto src = LoadShaderSrc(absoluteShaderPath);
-         for (auto item : src)
-         {
-            EngineUtility::StringStreamWrapper::ToString(item, '\n');
-         }
-         std::string shaderSource = std::move(EngineUtility::StringStreamWrapper::FlushString());
-
-         mShaderSource = shaderSource;
+         mShaderSource = LoadShaderSource(absoluteShaderPath);
       }
 
-      void IMaterialShader::ProcessAllPredefines()
+      std::string IMaterialShader::GetShaderSource() const
       {
-         // This is an implementation in base class
-      }
-
-      void IMaterialShader::SetShaderPredefine()
-      {
-         // This is an implementation in base class
+         return mShaderSource;
       }
 
       void IMaterialShader::AccessAllUniformLocations(uint32_t shaderProgramID)
       {
          // This is an implementation in base class
+      }
+
+      void IMaterialShader::Define(const std::string& name)
+      {
+         mDefines.emplace_back(name, true);
+      }
+
+      void IMaterialShader::Undefine(const std::string& name)
+      {
+         mDefines.emplace_back(name, false);
       }
    }
 }

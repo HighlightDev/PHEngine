@@ -26,13 +26,15 @@ namespace Graphics
 
 		class DeferredShadingSceneRenderer
 		{
+      private:
+
          InterThreadCommunicationMgr& m_interThreadMgr;
 
          /* Scene to render */
          Scene* const m_scene;
-
          std::unique_ptr<DeferredShadingGBuffer> m_gbuffer;
 
+         // Shaders
          std::shared_ptr<DeferredShader<false>> m_deferredBaseShaderNonSkeletal;
          std::shared_ptr<DeferredShader<true>> m_deferredBaseShaderSkeletal;
          std::shared_ptr<DeferredLightShader> m_deferredLightShader;
@@ -41,7 +43,10 @@ namespace Graphics
          std::shared_ptr<CubemapDepthShader<true>> m_depthCubemapShaderSkeletal;
          std::shared_ptr<CubemapDepthShader<false>> m_depthCubemapShaderNonSkeletal;
 
+         // Texture renderer
          TextureRenderer m_textureRenderer;
+
+      private:
 
          void DebugFramePanelsPass();
 

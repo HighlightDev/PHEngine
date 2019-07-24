@@ -35,7 +35,7 @@ namespace Graphics
          ProcessAllPredefines();
 
 			m_shaderCompiledSuccessfully = false;
-			const bool bShaderLoadedSuccessfully = LoadShadersSourceFromFile();
+			const bool bShaderLoadedSuccessfully = LoadShadersSourceToGpu();
 			if (bShaderLoadedSuccessfully)
 			{
 				m_shaderCompiledSuccessfully = CompileShaders();
@@ -55,64 +55,10 @@ namespace Graphics
 			}
 		}
 
-		bool Shader::LoadSingleShaderSourceFromFile(int32_t shaderId, std::string& shaderPath)
-		{
-			bool bLoadResult = false;
-
-			try
-			{
-            std::vector<std::string> srcVec = LoadShaderSrc(shaderPath);
-
-            for (auto srcLine : srcVec)
-            {
-               EngineUtility::StringStreamWrapper::ToString(srcLine, '\n');
-            }
-
-				std::string shaderSource = std::move(EngineUtility::StringStreamWrapper::FlushString());
-
-				const char *c_str = shaderSource.c_str();
-				glShaderSource(shaderId, 1, &c_str, nullptr);
-
-				bLoadResult = true;
-			}
-			catch (...)
-			{
-
-			}
-
-			return bLoadResult;
-		}
-
-		bool Shader::LoadShadersSourceFromFile()
-		{
-         bool bVertexShaderLoaded = true, bFragmentShaderLoaded = true, bGeometryShaderLoaded = true;
-
-         if (m_shaderParams.VertexShaderFile != "")
-         {
-            /*Vertex shader load*/
-            m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-            std::string vsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.VertexShaderFile);
-            bVertexShaderLoaded &= LoadSingleShaderSourceFromFile(m_vertexShaderID, vsSource);
-         }
-
-         if (m_shaderParams.FragmentShaderFile != "")
-         {
-            /*Fragment shader load*/
-            m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-            std::string fsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile);
-            bFragmentShaderLoaded &= LoadSingleShaderSourceFromFile(m_fragmentShaderID, fsSource);
-         }
-
-         if (m_shaderParams.GeometryShaderFile != "")
-         {
-            /*Geometry shader load*/
-            m_geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
-            std::string gsSource = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile);
-            bGeometryShaderLoaded &= LoadSingleShaderSourceFromFile(m_geometryShaderID, gsSource);
-         }
-
-         return bVertexShaderLoaded && bFragmentShaderLoaded && bGeometryShaderLoaded;
-		}
+      ShaderParams Shader::GetShaderParams() const
+      {
+         return m_shaderParams;
+      }
 
       void Shader::AccessAllUniformLocations(uint32_t shaderProgramId)
       {
@@ -127,9 +73,21 @@ namespace Graphics
 #endif
       }
 
-      void Shader::SetShaderPredefine()
+      bool Shader::LoadShadersSourceToGpu()
       {
+         std::string vsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.VertexShaderFile);
+         std::string fsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile);
+         std::string gsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile);
 
+         auto vsSource = LoadShaderSource(vsSourcePath);
+         auto fsSource = LoadShaderSource(fsSourcePath);
+         auto gsSource = LoadShaderSource(gsSourcePath);
+
+         ProcessShaderIncludes(vsSource);
+         ProcessShaderIncludes(gsSource);
+         ProcessShaderIncludes(fsSource);
+
+         return SendToGpuShadersSources(vsSource, fsSource, gsSource);
       }
 
 		void Shader::ProcessAllPredefines()
@@ -176,24 +134,24 @@ namespace Graphics
 			{
 				if (m_shaderParams.VertexShaderFile != "")
 				{
-					std::string vsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.VertexShaderFile));
-					ProcessPredefine(vsSource, vertexConstantPredefine, vertexPredefine);
+					std::string vsSourcePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.VertexShaderFile));
+               ProcessPredefineToFile(vsSourcePath, vertexConstantPredefine, vertexPredefine);
 				}
 			}
 			if (fragmentConstantPredefine.size() > 0 || fragmentPredefine.size() > 0)
 			{
 				if (m_shaderParams.FragmentShaderFile != "")
 				{
-					std::string fsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile));
-					ProcessPredefine(fsSource, fragmentConstantPredefine, fragmentPredefine);
+					std::string fsSourcePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile));
+               ProcessPredefineToFile(fsSourcePath, fragmentConstantPredefine, fragmentPredefine);
 				}
 			}
 			if (geometryConstantPredefine.size() > 0 || geometryPredefine.size() > 0)
 			{
 				if (m_shaderParams.GeometryShaderFile != "")
 				{
-					std::string gsSource = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile));
-					ProcessPredefine(gsSource, geometryConstantPredefine, geometryPredefine);
+					std::string gsSourcePath = std::move(EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile));
+               ProcessPredefineToFile(gsSourcePath, geometryConstantPredefine, geometryPredefine);
 				}
 			}
 		}
@@ -213,7 +171,7 @@ namespace Graphics
 		bool Shader::RecompileShader()
 		{
 			CleanUp(false);
-			LoadShadersSourceFromFile();
+         LoadShadersSourceToGpu();
 			m_shaderCompiledSuccessfully = CompileShaders();
 			if (m_shaderCompiledSuccessfully)
 			{

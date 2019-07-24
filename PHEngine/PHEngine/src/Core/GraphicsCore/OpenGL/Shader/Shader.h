@@ -33,23 +33,6 @@ namespace Graphics
          std::vector<ShaderDefine> m_defines;
 
 		protected:
-
-			bool m_shaderCompiledSuccessfully;
-
-		private:
-
-			bool LoadSingleShaderSourceFromFile(int32_t shaderId, std::string& shaderPath);
-
-			bool LoadShadersSourceFromFile();
-
-		protected:
-
-         // Init should be called in child constructor!
-         virtual void ShaderInit();
-         virtual void ProcessAllPredefines() override;
-         virtual void AccessAllUniformLocations(uint32_t shaderProgramId) override;
-         virtual void SetShaderPredefine() override;
-
          void LoadSubroutineIndex(ShaderType shaderType, int32_t countIndices, int32_t subroutineIndex) const;
          int32_t GetSubroutineIndex(ShaderType shaderType, const std::string& subroutineName) const;
 
@@ -64,7 +47,18 @@ namespace Graphics
 
          void Undefine(ShaderType shaderType, const std::string& name);
 
+      private:
+
+         bool LoadShadersSourceToGpu();
+
 		public:
+
+         // Init should be called in child constructor!
+         virtual void ShaderInit();
+         virtual void ProcessAllPredefines() override;
+         virtual void AccessAllUniformLocations(uint32_t shaderProgramId) override;
+
+         ShaderParams GetShaderParams() const;
 
 #if DEBUG
 			bool RecompileShader();

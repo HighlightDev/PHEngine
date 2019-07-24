@@ -500,6 +500,10 @@
     <None Include="res\shaders\cubemapShadowSkeletalVS.glsl" />
     <None Include="res\shaders\cubemapShadowGS.glsl" />
     <None Include="res\shaders\cubemapRendererFS.glsl" />
+    <None Include="res\shaders\vertex_factory\StaticMeshVertexFactory.glsl" />
+    <None Include="res\shaders\composite_shaders\deferredBaseFS.glsl" />
+    <None Include="res\shaders\common\VSCommon.glsl" />
+    <None Include="res\shaders\common\materialCommon.incl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h">
@@ -1694,6 +1698,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\VertexFactoryShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\VertexFactoryImp\StaticMeshVertexFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

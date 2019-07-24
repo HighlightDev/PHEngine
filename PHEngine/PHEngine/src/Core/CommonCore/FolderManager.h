@@ -42,6 +42,7 @@ namespace Common
 		std::string GetResPath() const;
 		std::string GetModelPath() const;
 		std::string GetShadersPath() const;
+      std::string GetShaderCommonPath() const;
 		std::string GetCollisionPath() const;
 		std::string GetTexturesPath() const;
 		std::string GetIniPath() const;
