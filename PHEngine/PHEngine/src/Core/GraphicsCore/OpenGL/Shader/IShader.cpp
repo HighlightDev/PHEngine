@@ -352,13 +352,14 @@ namespace Graphics
          WriteShaderSrc(pathToShader, result);
       }
 
-      bool IShader::CompileShaders() const
+      bool IShader::CompileShaders()
       {
          glCompileShader(m_vertexShaderID);
          glCompileShader(m_fragmentShaderID);
          glCompileShader(m_geometryShaderID);
 
-         return true;
+         m_shaderCompiledSuccessfully = true;
+         return m_shaderCompiledSuccessfully;
       }
 
 

@@ -8,20 +8,25 @@ using namespace Common;
 
 namespace Game
 {
-   class StaticMeshVertexFactory
+   template <int32_t InfluenceWeightsCount>
+   class SkeletalMeshVertexFactory
       : public VertexFactoryShader
    {
 
       Uniform u_worldMatrix;
       Uniform u_viewMatrix;
       Uniform u_projectionMatrix;
+      UniformArray u_boneMatrices;
+
+      static constexpr int32_t MaxBones = 55;
+      static constexpr int32_t MaxWeightsIndices = InfluenceWeightsCount;
 
   public:
 
-     StaticMeshVertexFactory(const std::string& vertexFactoryName)
+     SkeletalMeshVertexFactory(const std::string& vertexFactoryName)
         : VertexFactoryShader(vertexFactoryName)
      {
-        InitShader(EngineUtility::ConvertFromRelativeToAbsolutePath(FolderManager::GetInstance()->GetShadersPath() + "\\vertex_factory\\StaticMeshVertexFactory.glsl"));
+        InitShader(EngineUtility::ConvertFromRelativeToAbsolutePath(FolderManager::GetInstance()->GetShadersPath() + "\\vertex_factory\\SkeletalMeshVertexFactory.glsl"));
      }
 
      virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override
@@ -29,6 +34,7 @@ namespace Game
         u_worldMatrix = GetUniform("worldMatrix", shaderProgramID);
         u_viewMatrix = GetUniform("viewMatrix", shaderProgramID);
         u_projectionMatrix = GetUniform("projectionMatrix", shaderProgramID);
+        u_boneMatrices = GetUniformArray("bonesMatrices", MaxBones, shaderProgramID);
      }
 
      void SetMatrices(const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
@@ -37,5 +43,18 @@ namespace Game
         u_viewMatrix.LoadUniform(viewMatrix);
         u_projectionMatrix.LoadUniform(projectionMatrix);
      }
+
+     void SetSkinningMatrices(const std::vector<glm::mat4>& skinningMatrices)
+     {
+        for (size_t index = 0; index < skinningMatrices.size(); index++)
+           u_boneMatrices.LoadUniform(index, skinningMatrices[index]);
+     }
+
+     virtual void SetShaderPredefine() override
+     {
+        DefineConstant<int32_t>("MaxBones", (int32_t)MaxBones);
+        DefineConstant<int32_t>("MaxWeights", (int32_t)MaxWeightsIndices);
+     }
+
    };
 }

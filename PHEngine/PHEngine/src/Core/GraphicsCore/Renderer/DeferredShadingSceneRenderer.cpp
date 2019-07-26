@@ -17,7 +17,8 @@
 #include "Core/GraphicsCore/Material/PBRMaterial.h"
 #include "Core/GraphicsCore/OpenGL/Shader/MaterialShader.h"
 #include "Core/ResourceManagerCore/Pool/TexturePool.h"
-#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/StaticMeshVertexFactory.h"
+#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/SkeletalMeshVertexFactory.h"
+#include "Core/GameCore/ShaderImplementation/CompositeDeferredCollectShader.h"
 
 #include <gl/glew.h>
 #include <iostream>
@@ -63,19 +64,13 @@ namespace Graphics
          texShared image = TexturePool::GetInstance()->GetOrAllocateResource(diffuseTexPath);
 
          MaterialShaderImp<PBRMaterial> mMaterialShader = MaterialShaderImp<PBRMaterial>(PBRMaterial(image, image, image, image, image));
-         StaticMeshVertexFactory mVertexFactory("StaticMeshVertexFactory");
+         SkeletalMeshVertexFactory<3> mVertexFactory("SkeletalMeshVertexFactory");
 
-         struct Temp
-         {
-            void AccessAllUniformLocations(...) {}
-            void ProcessAllPredefines() {}
 
-            ShaderParams GetShaderParams() const {
-               return ShaderParams("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseFS.glsl", "", "", "", "");
-            }
-         } t;
+         ShaderParams shaderParam("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseFS.glsl", "", "", "", "");
+         CompositeDeferredCollectShader mDeferredCollectShader(shaderParam);
 
-         CompositeShader<StaticMeshVertexFactory, Temp, MaterialShaderImp<PBRMaterial>> compositeShader("TestShader", mVertexFactory, t, mMaterialShader);
+         CompositeShader<SkeletalMeshVertexFactory<3>, CompositeDeferredCollectShader, MaterialShaderImp<PBRMaterial>> compositeShader("TestShader", mVertexFactory, mDeferredCollectShader, mMaterialShader);
          compositeShader.SetUniformValues();
       }
 

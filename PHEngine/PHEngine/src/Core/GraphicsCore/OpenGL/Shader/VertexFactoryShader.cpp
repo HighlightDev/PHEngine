@@ -7,14 +7,19 @@ namespace Graphics
    namespace OpenGL
    {
 
-      VertexFactoryShader::VertexFactoryShader(const std::string& pathToVertexFactoryShader, const std::string& vertexFactoryName)
+      VertexFactoryShader::VertexFactoryShader(const std::string& vertexFactoryName)
          : IShader(vertexFactoryName)
       { 
-         mShaderSource = Base::LoadShaderSource(pathToVertexFactoryShader);
       }
 
       VertexFactoryShader::~VertexFactoryShader()
       {
+      }
+
+      void VertexFactoryShader::InitShader(const std::string& pathToShaderSource)
+      {
+         mShaderSource = Base::LoadShaderSource(pathToShaderSource);
+         SetShaderPredefine();
       }
 
       void VertexFactoryShader::ProcessAllPredefines()

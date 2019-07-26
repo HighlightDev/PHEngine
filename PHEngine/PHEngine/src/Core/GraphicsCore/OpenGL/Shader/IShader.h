@@ -51,7 +51,7 @@ namespace Graphics
          void ProcessPredefineToSource(std::string& shaderSource, const std::vector<ShaderGenericDefineConstant>& constantDefines, const std::vector<ShaderGenericDefine>& defines) const;
          void WriteShaderSrc(const std::string& pathToShader, const std::string& src) const;
 
-         bool CompileShaders() const;
+         bool CompileShaders();
          bool LinkShaders() const;
 
          bool ProcessShaderIncludes(std::string& shaderSource);

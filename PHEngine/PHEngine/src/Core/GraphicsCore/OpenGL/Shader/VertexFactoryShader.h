@@ -19,7 +19,7 @@ namespace Graphics
 
       public:
 
-         VertexFactoryShader(const std::string& pathToVertexFactoryShader, const std::string& vertexFactoryName);
+         VertexFactoryShader(const std::string& vertexFactoryName);
 
          virtual ~VertexFactoryShader();
 
@@ -38,6 +38,10 @@ namespace Graphics
          void Define(const std::string& name);
 
          void Undefine(const std::string& name);
+
+      protected:
+
+         void InitShader(const std::string& pathToShaderSource);
 
       };
 

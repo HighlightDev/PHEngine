@@ -8,6 +8,12 @@ struct MATERIAL_VS_OUTPUT
 	vec4 ClippedCoordinates;
 
 	vec3 NormalizedDeviceCoordinates;
+
+   vec3 WorldNormal;
+
+   vec3 WorldTangent;
+
+   vec3 WorldBitangent;
 };
 
 /**************** These are default implementations of material functions ****************/
@@ -36,3 +42,8 @@ float GetMaterialAlphaMask(in MATERIAL_VS_OUTPUT materialIn)
 {
 	return 1.0;
 };
+
+vec3 GetMaterialNormalMapNormal(in MATERIAL_VS_OUTPUT materialIn)
+{
+   return vec3(0);
+}
