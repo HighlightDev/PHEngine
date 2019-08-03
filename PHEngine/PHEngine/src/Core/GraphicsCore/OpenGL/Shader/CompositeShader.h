@@ -1,5 +1,6 @@
 #pragma once
 #include "Shader.h"
+#include "Core/CommonApi/StringHash.h"
 
 namespace Graphics
 {
@@ -10,24 +11,25 @@ namespace Graphics
       class CompositeShader
          : public IShader
       {
-      protected:
+      public:
 
          using vertexFactoryShader_t = VertexFactoryShaderType;
          using shader_t = ShaderType;
          using materialShader_t = MaterialShaderType;
 
-         shader_t mShader;
-         vertexFactoryShader_t mVertexFactoryShader;
-         materialShader_t mMaterialShader;
+      protected:
+         std::shared_ptr<shader_t> mShader;
+         std::unique_ptr<vertexFactoryShader_t> mVertexFactoryShader;
+         std::unique_ptr<materialShader_t> mMaterialShader;
 
       public:
 
-         template <typename UVertexFactoryShader, typename UShader, typename UMaterialShader>
-         CompositeShader(const std::string& compositeShaderName, UVertexFactoryShader&& vertexFactoryShader, UShader&& shader, UMaterialShader&& materialShader)
+         template <typename UShader>
+         CompositeShader(const std::string& compositeShaderName, const UShader& shader)
             : IShader(compositeShaderName)
-            , mVertexFactoryShader(std::forward<UVertexFactoryShader>(vertexFactoryShader))
-            , mShader(std::forward<UShader>(shader))
-            , mMaterialShader(std::forward<UMaterialShader>(materialShader))
+            , mVertexFactoryShader(std::make_unique<vertexFactoryShader_t>())
+            , mShader(std::static_pointer_cast<ShaderType>(shader))
+            , mMaterialShader(std::make_unique<materialShader_t>())
          {
             Init();
          }
@@ -36,31 +38,50 @@ namespace Graphics
          {
          }
 
+         void SetMaterialShaderUniformValues(typename materialShader_t::materialInstance_t& matInstance)
+         {
+            mMaterialShader->SetUniformValues(matInstance);
+         }
+
+         std::unique_ptr<VertexFactoryShaderType>& GetVertexFactoryShader()
+         {
+            return mVertexFactoryShader;
+         }
+
+         std::shared_ptr<ShaderType> GetShader() const
+         {
+            return mShader;
+         }
+
+         std::unique_ptr<MaterialShaderType>& GetMaterialShader()
+         {
+            return mMaterialShader;
+         }
+
+      private:
+
          virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override
          {
-            mVertexFactoryShader.AccessAllUniformLocations(shaderProgramID);
-            mShader.AccessAllUniformLocations(shaderProgramID);
-            mMaterialShader.AccessAllUniformLocations(shaderProgramID);
+            IShader::AccessAllUniformLocations(shaderProgramID);
+
+            mVertexFactoryShader->AccessAllUniformLocations(shaderProgramID);
+            mShader->AccessAllUniformLocations(shaderProgramID);
+            mMaterialShader->AccessAllUniformLocations(shaderProgramID);
          }
 
          virtual void ProcessAllPredefines() override
          {
-            mVertexFactoryShader.ProcessAllPredefines();
-            mShader.ProcessAllPredefines();
-            mMaterialShader.ProcessAllPredefines();
-         }
-
-         void SetUniformValues()
-         {
-            mMaterialShader.SetUniformValues();
+            mVertexFactoryShader->ProcessAllPredefines();
+            mShader->ProcessAllPredefines();
+            mMaterialShader->ProcessAllPredefines();
          }
 
          bool AssembleShaderSource()
          {
-            const std::string vertexFactoryShaderSource = mVertexFactoryShader.GetShaderSource();
-            const std::string materialShaderSource = mMaterialShader.GetShaderSource();
+            const std::string vertexFactoryShaderSource = mVertexFactoryShader->GetShaderSource();
+            const std::string materialShaderSource = mMaterialShader->GetShaderSource();
 
-            ShaderParams shaderParams = mShader.GetShaderParams();
+            ShaderParams shaderParams = mShader->GetShaderParams();
 
             std::string vsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(shaderParams.VertexShaderFile);
             std::string fsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(shaderParams.FragmentShaderFile);
@@ -87,24 +108,16 @@ namespace Graphics
          {
             ProcessAllPredefines();
 
-            m_shaderCompiledSuccessfully = false;
             const bool bShaderLoadedSuccessfully = AssembleShaderSource();
             if (bShaderLoadedSuccessfully)
             {
-               m_shaderCompiledSuccessfully = CompileShaders();
-            }
-            if (m_shaderCompiledSuccessfully)
-            {
+               CompileShaders();
                m_shaderProgramID = glCreateProgram();
-               const bool bLinkedSuccessfully = LinkShaders();
-               if (bLinkedSuccessfully)
-               {
-                  AccessAllUniformLocations(m_shaderProgramID);
-               }
+               LinkShaders();
+               AccessAllUniformLocations(m_shaderProgramID);
             }
          }
       };
-
    }
 }
 

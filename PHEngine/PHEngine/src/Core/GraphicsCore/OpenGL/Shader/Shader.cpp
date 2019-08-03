@@ -4,18 +4,10 @@
 #include <gl/glew.h>
 #include <fstream>
 
-#if DEBUG
-#include <iostream>
-#endif
-
 namespace Graphics
 {
 	namespace OpenGL
 	{
-
-#if DEBUG
-      bool Shader::bParentAccessUniformLocationsInvoked = false;
-#endif
 
       Shader::Shader(const ShaderParams& params)
          : IShader(params.ShaderName)
@@ -34,43 +26,19 @@ namespace Graphics
 			SetShaderPredefine(); // start precompile shader customization
          ProcessAllPredefines();
 
-			m_shaderCompiledSuccessfully = false;
 			const bool bShaderLoadedSuccessfully = LoadShadersSourceToGpu();
-			if (bShaderLoadedSuccessfully)
-			{
-				m_shaderCompiledSuccessfully = CompileShaders();
-			}
-			if (m_shaderCompiledSuccessfully)
-			{
+         if (bShaderLoadedSuccessfully)
+         {
+            CompileShaders();
             m_shaderProgramID = glCreateProgram();
-				const bool bLinkedSuccessfully = LinkShaders();
-            if (bLinkedSuccessfully)
-            {
-               AccessAllUniformLocations(m_shaderProgramID);
-#if DEBUG
-               if (!bParentAccessUniformLocationsInvoked)
-                  throw std::exception("Didn't called parent method AccessAllUniformLocations in derived method.");
-#endif
-            }
-			}
-		}
+            LinkShaders();
+            AccessAllUniformLocations(m_shaderProgramID);
+         }
+      }
 
       ShaderParams Shader::GetShaderParams() const
       {
          return m_shaderParams;
-      }
-
-      void Shader::AccessAllUniformLocations(uint32_t shaderProgramId)
-      {
-#if DEBUG
-         Shader::bParentAccessUniformLocationsInvoked = true;
-
-         if (m_shaderCompiledSuccessfully)
-         {
-            std::cout << GetCompileLogInfo();
-            std::cout << GetLinkLogInfo();
-         }
-#endif
       }
 
       bool Shader::LoadShadersSourceToGpu()
@@ -87,7 +55,7 @@ namespace Graphics
          ProcessShaderIncludes(gsSource);
          ProcessShaderIncludes(fsSource);
 
-         return SendToGpuShadersSources(vsSource, fsSource, gsSource);
+         return SendToGpuShadersSources(vsSource, gsSource, fsSource);
       }
 
 		void Shader::ProcessAllPredefines()
@@ -171,17 +139,19 @@ namespace Graphics
 		bool Shader::RecompileShader()
 		{
 			CleanUp(false);
-         LoadShadersSourceToGpu();
-			m_shaderCompiledSuccessfully = CompileShaders();
-			if (m_shaderCompiledSuccessfully)
+         const bool bLoaded = LoadShadersSourceToGpu();
+
+			if (bLoaded)
 			{
+            CompileShaders();
 				LinkShaders();
 				AccessAllUniformLocations(m_shaderProgramID);
 			}
 
-         std::cout << "Shader " + m_shaderParams.ShaderName + (m_shaderCompiledSuccessfully ? " has recompiled successfully " : "has not recompiled") << std::endl;
+         const bool bCompiledSuccesfully = IsShaderCompiled();
+         std::cout << "Shader " + m_shaderParams.ShaderName + (bCompiledSuccesfully ? " has recompiled successfully " : "has not recompiled") << std::endl;
 
-			return m_shaderCompiledSuccessfully;
+         return bCompiledSuccesfully;
 		}
 
 #endif

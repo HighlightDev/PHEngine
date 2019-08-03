@@ -23,8 +23,8 @@ namespace Game
 
   public:
 
-     SkeletalMeshVertexFactory(const std::string& vertexFactoryName)
-        : VertexFactoryShader(vertexFactoryName)
+     SkeletalMeshVertexFactory()
+        : VertexFactoryShader("SkeletalMeshVertexFactory")
      {
         InitShader(EngineUtility::ConvertFromRelativeToAbsolutePath(FolderManager::GetInstance()->GetShadersPath() + "\\vertex_factory\\SkeletalMeshVertexFactory.glsl"));
      }

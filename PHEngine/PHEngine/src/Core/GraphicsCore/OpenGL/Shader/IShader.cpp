@@ -15,7 +15,6 @@ namespace Graphics
          , m_geometryShaderID(-1)
          , m_shaderProgramID(-1)
          , mShaderName(shaderName)
-         , m_shaderCompiledSuccessfully(false)
       {
       }
    
@@ -165,7 +164,7 @@ namespace Graphics
          return result;
       }
 
-      bool IShader::SendToGpuShadersSources(std::string& vsSource, std::string& fsSource, std::string& gsSource)
+      bool IShader::SendToGpuShadersSources(std::string& vsSource, std::string& gsSource, std::string& fsSource)
       {
          bool bVertexShaderLoaded = true, bFragmentShaderLoaded = true, bGeometryShaderLoaded = true;
 
@@ -352,18 +351,15 @@ namespace Graphics
          WriteShaderSrc(pathToShader, result);
       }
 
-      bool IShader::CompileShaders()
+      void IShader::CompileShaders()
       {
          glCompileShader(m_vertexShaderID);
          glCompileShader(m_fragmentShaderID);
          glCompileShader(m_geometryShaderID);
-
-         m_shaderCompiledSuccessfully = true;
-         return m_shaderCompiledSuccessfully;
       }
 
 
-      bool IShader::LinkShaders() const
+      void IShader::LinkShaders() const
       {
          glAttachShader(m_shaderProgramID, m_vertexShaderID);
          glAttachShader(m_shaderProgramID, m_fragmentShaderID);
@@ -379,8 +375,6 @@ namespace Graphics
          {
             glDetachShader(m_shaderProgramID, m_geometryShaderID);
          }
-
-         return true;
       }
 
       std::string IShader::GetCompileLogInfo() const
@@ -465,6 +459,11 @@ namespace Graphics
          return linkLog;
       }
 
+      bool IShader::IsShaderCompiled() const
+      {
+         return GetCompileLogInfo().size() <= 0;
+      }
+
       void IShader::ExecuteShader() const
       {
          glUseProgram(m_shaderProgramID);
@@ -473,6 +472,14 @@ namespace Graphics
       void IShader::StopShader() const
       {
          glUseProgram(0);
+      }
+
+      void IShader::AccessAllUniformLocations(uint32_t shaderProgramId)
+      {
+#if DEBUG
+         std::cout << GetCompileLogInfo();
+         std::cout << GetLinkLogInfo();
+#endif
       }
 
       void IShader::CleanUp(bool bDeleteShaderProgram)

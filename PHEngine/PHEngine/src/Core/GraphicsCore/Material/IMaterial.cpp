@@ -10,9 +10,4 @@ namespace Graphics
    IMaterial::~IMaterial()
    {
    }
-
-   std::string IMaterial::GetShaderPath() const
-   {
-      return mMaterialShaderPath;
-   }
 }

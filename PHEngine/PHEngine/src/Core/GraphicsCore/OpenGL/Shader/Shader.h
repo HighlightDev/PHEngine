@@ -21,10 +21,6 @@ namespace Graphics
 
 			virtual ~Shader();
 
-#if DEBUG
-         static bool bParentAccessUniformLocationsInvoked;
-#endif
-
 		private:
 
          ShaderParams m_shaderParams;
@@ -56,7 +52,6 @@ namespace Graphics
          // Init should be called in child constructor!
          virtual void ShaderInit();
          virtual void ProcessAllPredefines() override;
-         virtual void AccessAllUniformLocations(uint32_t shaderProgramId) override;
 
          ShaderParams GetShaderParams() const;
 

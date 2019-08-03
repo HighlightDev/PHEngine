@@ -56,7 +56,7 @@ namespace Common
 		return GetResPath() + "model\\";
 	}
 
-	std::string FolderManager::GetShadersPath() const
+	const std::string FolderManager::GetShadersPath() const
 	{
 		return GetResPath() + "shaders\\";
 	}

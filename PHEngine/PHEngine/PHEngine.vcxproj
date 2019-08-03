@@ -290,8 +290,10 @@
     <None Include="res\shaders\buildingSpecialVShader.glsl" />
     <None Include="res\shaders\buildingVShader.glsl" />
     <None Include="res\shaders\common\materialCommon.incl" />
+    <None Include="res\shaders\material_shaders\PBRMaterial.glsl" />
     <None Include="res\shaders\common\VSCommon.glsl" />
     <None Include="res\shaders\composite_shaders\deferredBaseFS.glsl" />
+    <None Include="res\shaders\composite_shaders\deferredBaseVS.glsl" />
     <None Include="res\shaders\cubemapRendererFS.glsl" />
     <None Include="res\shaders\cubemapShadowFS.glsl" />
     <None Include="res\shaders\cubemapShadowGS.glsl" />
@@ -369,10 +371,14 @@
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\CompositeDeferredCollectShader.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\VertexFactoryImp\SkeletalMeshVertexFactory.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\VertexFactoryImp\StaticMeshVertexFactory.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Material\MaterialProcessPolicy.h" />
+    <ClInclude Include="src\Core\GraphicsCore\Material\MaterialProperty.h" />
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShaderParams.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\IShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\MaterialShader.h" />
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShader.h" />
-    <ClInclude Include="src\Core\ResourceManagerCore\Pool\MaterialShaderPool.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Policy\CompositeShaderAllocationPolicy.h" />
+    <ClInclude Include="src\Core\ResourceManagerCore\Pool\CompositeShaderPool.h" />
     <ClInclude Include="src\Core\GraphicsCore\Material\PBRMaterial.h" />
     <ClInclude Include="src\Core\GraphicsCore\Material\IMaterial.h" />
     <ClInclude Include="src\Core\CommonApi\StringHash.h" />
@@ -771,8 +777,7 @@
   <ItemGroup>
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\IShader.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\MaterialShader.cpp" />
-    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShader.cpp" />
-    <ClCompile Include="src\Core\ResourceManagerCore\Pool\MaterialShaderPool.cpp" />
+    <ClCompile Include="src\Core\ResourceManagerCore\Pool\CompositeShaderPool.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Material\PBRMaterial.cpp" />
     <ClCompile Include="src\Core\GraphicsCore\Material\IMaterial.cpp" />
     <ClCompile Include="src\Core\GameCore\Components\CubemapComponent.cpp" />

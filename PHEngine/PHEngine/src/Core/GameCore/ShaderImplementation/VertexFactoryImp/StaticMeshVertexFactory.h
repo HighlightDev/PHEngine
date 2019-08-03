@@ -18,8 +18,8 @@ namespace Game
 
   public:
 
-     StaticMeshVertexFactory(const std::string& vertexFactoryName)
-        : VertexFactoryShader(vertexFactoryName)
+     StaticMeshVertexFactory()
+        : VertexFactoryShader("StaticMeshVertexFactory")
      {
         InitShader(EngineUtility::ConvertFromRelativeToAbsolutePath(FolderManager::GetInstance()->GetShadersPath() + "\\vertex_factory\\StaticMeshVertexFactory.glsl"));
      }

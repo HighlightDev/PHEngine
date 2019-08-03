@@ -1,6 +1,8 @@
 #pragma once
 
 #include "IMaterial.h"
+#include "MaterialProperty.h"
+#include "MaterialProcessPolicy.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
 
 #include <memory>
@@ -25,9 +27,6 @@ namespace Graphics
          MaterialProperty<TexturePropertyProcessPolicy>>;
 
       materialProperties_t mProperties;
-      const std::string mMaterialName = "PBR Material";
-
-      const std::array<std::string, std::tuple_size<materialProperties_t>::value> mPropertiesName = { "albedo", "normalMap", "metallicMap", "roughnessMap", "ambientOcclusionMap" };
 
       PBRMaterial(ITextureShared albedo,
                   ITextureShared normalMap,
@@ -39,6 +38,12 @@ namespace Graphics
       PBRMaterial& operator=(const PBRMaterial&) = default;
 
       virtual ~PBRMaterial();
+
+   public:
+
+      static const std::string mMaterialName;
+      static const std::array<std::string, std::tuple_size<materialProperties_t>::value> mPropertiesName;
+      static const std::string mRelativeMaterialShaderPath;
    };
 
 }

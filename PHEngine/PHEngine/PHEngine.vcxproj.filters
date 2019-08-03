@@ -505,6 +505,8 @@
     <None Include="res\shaders\common\VSCommon.glsl" />
     <None Include="res\shaders\common\materialCommon.incl" />
     <None Include="res\shaders\vertex_factory\SkeletalMeshVertexFactory.glsl" />
+    <None Include="res\shaders\composite_shaders\deferredBaseVS.glsl" />
+    <None Include="res\shaders\material_shaders\PBRMaterial.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h">
@@ -1686,9 +1688,6 @@
     <ClInclude Include="src\Core\GraphicsCore\Material\PBRMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ResourceManagerCore\Pool\MaterialShaderPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1708,6 +1707,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\CompositeDeferredCollectShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\Material\MaterialProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\Material\MaterialProcessPolicy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ResourceManagerCore\Pool\CompositeShaderPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ResourceManagerCore\Policy\CompositeShaderAllocationPolicy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShaderParams.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2039,12 +2053,6 @@
     <ClCompile Include="src\Core\GraphicsCore\Material\PBRMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\ResourceManagerCore\Pool\MaterialShaderPool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\MaterialShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2052,6 +2060,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\GraphicsCore\OpenGL\Shader\VertexFactoryShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\ResourceManagerCore\Pool\CompositeShaderPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

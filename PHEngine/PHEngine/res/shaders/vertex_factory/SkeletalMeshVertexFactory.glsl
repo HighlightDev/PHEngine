@@ -123,6 +123,10 @@ MATERIAL_VS_OUTPUT VertexFactoryGetMaterialOutput()
 	result.WorldCoordinates = world_pos.xyz;
 	result.ClippedCoordinates = clipped_pos;
 	result.NormalizedDeviceCoordinates = ndc_pos;
+	
+	result.WorldNormal = GetLocalToWorldSpaceNormal();
+	result.WorldTangent = GetLocalToWorldSpaceTangent();
+	result.WorldBitangent = GetLocalToWorldSpaceBitangent();
 
 	return result;
 }

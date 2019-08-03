@@ -87,13 +87,17 @@ MATERIAL_VS_OUTPUT VertexFactoryGetMaterialOutput()
 
 	result.TextureCoordinates = vec3(VertexTexCoords, 0.0);
 
-	vec4 world_pos = worldMatrix * vec4(VertexPosition, 1.0);
+	vec4 world_pos = GetLocalToWorldSpacePosition();
 	vec4 clipped_pos = projectionMatrix * viewMatrix * world_pos;
 	vec3 ndc_pos = clipped_pos.xyz / clipped_pos.w;
 
 	result.WorldCoordinates = world_pos.xyz;
 	result.ClippedCoordinates = clipped_pos;
 	result.NormalizedDeviceCoordinates = ndc_pos;
+
+	result.WorldNormal = GetLocalToWorldSpaceNormal();
+	result.WorldTangent = GetLocalToWorldSpaceTangent();
+	result.WorldBitangent = GetLocalToWorldSpaceBitangent();
 
 	return result;
 }

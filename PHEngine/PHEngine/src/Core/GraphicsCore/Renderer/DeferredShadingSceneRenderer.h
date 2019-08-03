@@ -14,6 +14,15 @@
 #include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
 #include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 
+
+#include "Core/GraphicsCore/OpenGL/Shader/CompositeShader.h"
+#include "Core/GraphicsCore/Material/PBRMaterial.h"
+#include "Core/GraphicsCore/OpenGL/Shader/MaterialShader.h"
+#include "Core/ResourceManagerCore/Pool/TexturePool.h"
+#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/SkeletalMeshVertexFactory.h"
+#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/StaticMeshVertexFactory.h"
+#include "Core/GameCore/ShaderImplementation/CompositeDeferredCollectShader.h"
+
 using namespace Game::ShaderImpl;
 using namespace Game;
 using namespace Thread;
@@ -42,6 +51,11 @@ namespace Graphics
          std::shared_ptr<DepthShader<false>> m_depthShaderNonSkeletal;
          std::shared_ptr<CubemapDepthShader<true>> m_depthCubemapShaderSkeletal;
          std::shared_ptr<CubemapDepthShader<false>> m_depthCubemapShaderNonSkeletal;
+
+         std::shared_ptr<CompositeShader<SkeletalMeshVertexFactory<3>, CompositeDeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderSkelet;
+         std::shared_ptr<CompositeShader<StaticMeshVertexFactory, CompositeDeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderStatic;
+         PBRMaterial* mMatSkelet;
+         PBRMaterial* mMatStatic;
 
          // Texture renderer
          TextureRenderer m_textureRenderer;

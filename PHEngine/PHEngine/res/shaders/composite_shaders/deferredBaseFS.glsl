@@ -1,40 +1,27 @@
 #version 400
 
-#include "materialCommon.incl"
-
 layout (location = 0) out vec3 gBuffer_Position;
 layout (location = 1) out vec3 gBuffer_Normal;
-layout (location = 2) out vec4 gBuffer_AlbedoNSpecular;
+layout (location = 2) out vec4 gBuffer_AlbedoNMetallic;
 
-in VS_OUT
-{
-	vec3 world_normal;
-	vec3 world_tangent;
-	vec3 world_bitangent;
-	vec3 world_position;
-	vec2 tex_coords;
-} vertex_shader_result;
-
-uniform sampler2D albedo;
-uniform sampler2D normalMap;
-uniform sampler2D specularMap;
+in MATERIAL_VS_OUTPUT VsOutput;
 
 void main()
 {
-	vec3 albedoColor = texture(albedo, vertex_shader_result.tex_coords).rgb;
-	float specularFactor = texture(specularMap, vertex_shader_result.tex_coords).r;
+	vec3 albedoColor = GetMaterialAlbedo(VsOutput);
+	float metallicFactor = GetMaterialMetallic(VsOutput);
 
-	vec3 normalFromNM = (texture(normalMap, vertex_shader_result.tex_coords).xyz * 2.0) - 1.0;
+	vec3 normalFromNM = GetMaterialNormalMapNormal(VsOutput);
 
-	vec3 normal = normalize(vertex_shader_result.world_normal);
-	vec3 tangent = normalize(vertex_shader_result.world_tangent);
-	vec3 bitangent = normalize(vertex_shader_result.world_bitangent);
+	vec3 worldNormal = normalize(VsOutput.WorldNormal);
+	vec3 worldTangent = normalize(VsOutput.WorldTangent);
+	vec3 worldBitangent = normalize(VsOutput.WorldBitangent);
 
-	mat3 tangentToWorld = mat3(tangent, bitangent, normal);
+	mat3 tangentToWorld = mat3(worldTangent, worldBitangent, worldNormal);
 
 	normalFromNM = tangentToWorld * normalFromNM;
 	
-	gBuffer_Position = vertex_shader_result.world_position;
+	gBuffer_Position = VsOutput.WorldCoordinates;
 	gBuffer_Normal = normalize(normalFromNM);
-	gBuffer_AlbedoNSpecular = vec4(albedoColor, specularFactor);
+	gBuffer_AlbedoNMetallic = vec4(albedoColor, metallicFactor);
 }
