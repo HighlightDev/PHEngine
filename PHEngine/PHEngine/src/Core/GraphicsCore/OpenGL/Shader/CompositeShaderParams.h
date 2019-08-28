@@ -15,9 +15,9 @@ namespace Graphics
          std::shared_ptr<ShaderBase> mShader;
          std::string ShaderName;
 
-         const size_t HASH;
+         const uint64_t HASH;
 
-         CompositeShaderParams(const size_t hash, const std::string& shaderName, const std::shared_ptr<ShaderBase>& shader)
+         CompositeShaderParams(const uint64_t hash, const std::string& shaderName, const std::shared_ptr<ShaderBase>& shader)
             : mShader(shader)
             , ShaderName(shaderName)
             , HASH(hash)
@@ -58,7 +58,7 @@ namespace std
    template<>
    struct hash<CompositeShaderParams>
    {
-      std::size_t operator()(const CompositeShaderParams& k) const
+      std::uint64_t operator()(const CompositeShaderParams& k) const
       {
          return k.HASH;
       }

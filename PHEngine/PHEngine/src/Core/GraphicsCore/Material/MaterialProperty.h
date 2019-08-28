@@ -1,41 +1,41 @@
 #pragma once
 
+#include "Core/GraphicsCore/Texture/ITexture.h"
+#include "Core/GraphicsCore/OpenGL/Shader/Uniform.h"
+
 using namespace Graphics::Texture;
+using namespace Graphics::OpenGL;
 
-enum class PropertyType
-{
-   TEXTURE,
-   INT,
-   UINT,
-   FLOAT
-};
-
-template <typename PropertyProcessPolicy>
-struct MaterialProperty;
-
-template <typename PropertyProcessPolicy>
 struct MaterialProperty
 {
 public:
 
-   using propertyValue_t = typename PropertyProcessPolicy::propertyValue_t;
-   using property_t = typename PropertyProcessPolicy::property_t;
+   virtual void SetValueToUniform(Uniform uniform, const int32_t propertyIndex)
+   {
+   }
+};
 
-private:
+struct TextureMaterialProperty 
+   : public MaterialProperty
+{
+   using MaterialPropertyValueType = std::shared_ptr<ITexture>;
 
-   property_t mProperty;
+private :
+
+   MaterialPropertyValueType m_value;
 
 public:
 
-   template <typename PropertyType>
-   MaterialProperty(PropertyType&& propValue)
+   TextureMaterialProperty(MaterialPropertyValueType propertyValue)
+      : MaterialProperty()
+      , m_value(propertyValue)
    {
-      mProperty = std::forward<PropertyType>(propValue);
    }
 
-   propertyValue_t GetValue(size_t propertyIndex)
+   virtual void SetValueToUniform(Uniform uniform, const int32_t propertyIndex) override
    {
-      return PropertyProcessPolicy::Process(mProperty, propertyIndex);
+      int32_t slot = 10 + propertyIndex;
+      m_value->BindTexture(slot);
+      uniform.LoadUniform(slot);
    }
-
 };

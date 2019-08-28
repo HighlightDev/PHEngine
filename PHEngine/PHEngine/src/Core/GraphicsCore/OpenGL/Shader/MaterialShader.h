@@ -35,6 +35,8 @@ namespace Graphics
 
          void Undefine(const std::string& name);
 
+         virtual void SetUniformValues(std::shared_ptr<IMaterial> mMaterialInstance) = 0;
+
       protected:
 
          void InitMaterialShader(const std::string& pathToMaterialShader);
@@ -86,7 +88,7 @@ namespace Graphics
 
          virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override;
 
-         void SetUniformValues(const MaterialT& materialInstance);
+         virtual void SetUniformValues(std::shared_ptr<IMaterial> materialInstance) override;
 
          MaterialShaderImp();
 

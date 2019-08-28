@@ -7,6 +7,7 @@
 #include "Core/GraphicsCore/Texture/ITexture.h"
 #include "Core/GameCore/Components/ComponentType.h"
 #include "Core/GameCore/GameObject.h"
+#include "Core/GraphicsCore/Material/IMaterial.h"
 
 using namespace Graphics::OpenGL;
 using namespace Graphics::Mesh;
@@ -30,6 +31,8 @@ namespace Graphics
          std::shared_ptr<ITexture> m_albedoTex;
          std::shared_ptr<ITexture> m_normalMapTex;
          std::shared_ptr<ITexture> m_specularMapTex;
+
+         std::shared_ptr<IMaterial> m_material;
 
          bool m_IsDeferred = false;
 

@@ -7,6 +7,9 @@
 #include "Core/GameCore/ShaderImplementation/SkeletalMeshShader.h"
 #include "Core/GraphicsCore/Animation/AnimationSequence.h"
 #include "Core/GraphicsCore/Animation/AnimationHolder.h"
+#include "Core/GraphicsCore/OpenGL/Shader/CompositeShader.h"
+#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/SkeletalMeshVertexFactory.h"
+#include "Core/GameCore/ShaderImplementation/DeferredCollectShader.h"
 
 using namespace Game;
 using namespace Game::ShaderImpl;
@@ -20,11 +23,11 @@ namespace Graphics
       class SkeletalMeshSceneProxy :
          public PrimitiveSceneProxy
       {
-
+         using VertexFactoryType = SkeletalMeshVertexFactory<3>;
+         using CompositeShaderType = DeferredCollectShader;
          using Base = PrimitiveSceneProxy;
 
          std::shared_ptr<SkeletalMeshShader> m_shader;
-
          std::shared_ptr<std::vector<AnimationSequence>> m_animations;
 
          AnimationHolder m_animationHolder;
@@ -32,6 +35,9 @@ namespace Graphics
          float m_animationDeltaTime;
 
          bool bAnimationTransformationDirty = true;
+
+         std::shared_ptr<ICompositeShader> m_shaderTEMPMAIN;
+         std::shared_ptr<IMaterial> m_material;
 
       public:
          SkeletalMeshSceneProxy(const SkeletalMeshComponent* component);

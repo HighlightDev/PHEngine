@@ -29,12 +29,14 @@
 #include "Core/GameCore/Components/SkeletalMeshComponent.h"
 #include "Core/GameCore/ShaderImplementation/SkeletalMeshShader.h"
 #include "Core/GameCore/ShaderImplementation/CubemapShader.h"
+#include "Core/CommonCore/CommonMeta.h"
 
 using namespace Resources;
+using namespace Common;
 
 namespace Game
 {
-   template <typename T>
+   template <typename ComponentType, typename MaterialType = NullType>
    struct ComponentCreatorFactory;
 
    // Skybox component
@@ -177,8 +179,8 @@ namespace Game
    };
 
    // Skeletal mesh component
-   template <>
-   struct ComponentCreatorFactory<SkeletalMeshComponent>
+   template <typename MaterialType>
+   struct ComponentCreatorFactory<SkeletalMeshComponent, MaterialType>
    {
 
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
@@ -203,10 +205,29 @@ namespace Game
             if (mData.m_pathToSpecularMap != "")
                specularMap = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToSpecularMap);
 
+            //////////////////////////////////////////////////////////////////////////
+
+     /*       using texShared = PBRMaterial::ITextureShared;
+            std::string diffuseTexPath = folderManager->GetAlbedoTexturePath() + "diffuse.png";
+            std::string nmPath = folderManager->GetNormalMapPath() + "dummy_nm.png";
+            texShared image = TexturePool::GetInstance()->GetOrAllocateResource(diffuseTexPath);
+            texShared imageNM = TexturePool::GetInstance()->GetOrAllocateResource(nmPath);
+            mMatSkelet = std::make_shared<PBRMaterial>(image, imageNM, imageNM, imageNM, imageNM);
+
+            using skeletShader_t = CompositeShader<SkeletalMeshVertexFactory<3>, DeferredCollectShader, MaterialShaderImp<MaterialType>>;
+
+            const auto shParams = ShaderParams("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseFS.glsl", "", "", "", "");
+
+            TemplatedCompositeShaderParams<skeletShader_t> compositeParams(COMPOSITE_SHADER_TO_STR(SkeletalMeshVertexFactory<3>, DeferredCollectShader, MaterialShaderImp<MaterialType>), shParams);
+
+            mTestShaderSkelet = std::static_pointer_cast<skeletShader_t>(CompositeShaderPool::GetInstance()->GetOrAllocateResource<skeletShader_t>(compositeParams));*/
+
+            //////////////////////////////////////////////////////////////////////////
+
             ShaderParams shaderParams("SkeletalMesh Shader", mData.m_vsShaderPath, mData.m_fsShaderPath, "", "", "", "");
             ShaderPool::sharedValue_t skeletalMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<SkeletalMeshShader>(shaderParams);
 
-            SkeletalMeshRenderData renderData(skin, animations, skeletalMeshShader, albedo, normalMap, specularMap);
+            SkeletalMeshRenderData renderData(skin, animations, std::make_shared<ICompositeShader>(), std::make_shared<IMaterial>(), skeletalMeshShader, albedo, normalMap, specularMap);
              
             resultComponent = std::make_shared<SkeletalMeshComponent>(std::move(mData.m_translation), std::move(mData.m_rotation), std::move(mData.m_scale), renderData);
          }

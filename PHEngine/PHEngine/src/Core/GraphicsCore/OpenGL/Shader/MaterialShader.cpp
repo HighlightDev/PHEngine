@@ -69,9 +69,11 @@ namespace Graphics
       }
 
       template <typename MaterialT>
-      void MaterialShaderImp<MaterialT>::SetUniformValues(const MaterialT& materialInstance)
+      void MaterialShaderImp<MaterialT>::SetUniformValues(std::shared_ptr<IMaterial> materialInstance)
       {
-         SetUniformValuesIterate<properties_count - 1>::ProcessSet(materialInstance.mProperties, Uniforms);
+         std::shared_ptr<MaterialT> relevantMaterialInstance = std::static_pointer_cast<MaterialT>(materialInstance);
+
+         SetUniformValuesIterate<properties_count - 1>::ProcessSet(relevantMaterialInstance->mProperties, Uniforms);
       }
 
       template <typename MaterialT>

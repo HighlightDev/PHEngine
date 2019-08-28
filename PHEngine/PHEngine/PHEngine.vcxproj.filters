@@ -1724,6 +1724,12 @@
     <ClInclude Include="src\Core\GraphicsCore\OpenGL\Shader\CompositeShaderParams.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredCollectShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\CommonCore\CommonMeta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp">

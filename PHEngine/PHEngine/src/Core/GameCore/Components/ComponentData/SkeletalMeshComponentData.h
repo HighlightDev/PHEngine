@@ -10,7 +10,7 @@ namespace Game
 {
    struct SkeletalMeshComponentData : public ComponentData
    {
-      SkeletalMeshComponentData(std::string&& pathToMesh, glm::vec3&& translation, glm::vec3&& rotation, glm::vec3&& scale,
+      SkeletalMeshComponentData(std::shared_ptr<IMaterialParams> materialParams, std::string&& pathToMesh, glm::vec3&& translation, glm::vec3&& rotation, glm::vec3&& scale,
          std::string&& vsPath, std::string&& fsPath, std::string&& pathToAlbedo, std::string&& pathToNormalMap = "", std::string&& pathToSpecularMap = "")
 
          : ComponentData()
@@ -23,6 +23,7 @@ namespace Game
          , m_pathToSpecularMap(std::move(pathToSpecularMap))
          , m_vsShaderPath(std::move(vsPath))
          , m_fsShaderPath(std::move(fsPath))
+         , m_materialParams(materialParams)
       {
       }
 
@@ -40,6 +41,8 @@ namespace Game
       std::string m_pathToSpecularMap;
       std::string m_vsShaderPath;
       std::string m_fsShaderPath;
+
+      std::shared_ptr<IMaterialParams> m_materialParams;
    };
 
 }

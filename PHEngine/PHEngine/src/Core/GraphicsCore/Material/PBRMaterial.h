@@ -13,6 +13,32 @@ using namespace Graphics::Texture;
 namespace Graphics
 {
 
+   struct PBRMaterialParams 
+      : public IMaterialParams
+   {
+      using ITextureShared = std::shared_ptr<ITexture>;
+
+      ITextureShared mAlbedo;
+      ITextureShared mNormalMap;
+      ITextureShared mMetallicMap;
+      ITextureShared mRoughnessMap;
+      ITextureShared mAmbientOcclusionMap;
+
+      PBRMaterialParams(
+         ITextureShared albedo,
+         ITextureShared normalMap,
+         ITextureShared metallicMap,
+         ITextureShared roughnessMap,
+         ITextureShared ambientOcclusionMap)
+         : mAlbedo(albedo)
+         , mNormalMap(normalMap)
+         , mMetallicMap(metallicMap)
+         , mRoughnessMap(roughnessMap)
+         , mAmbientOcclusionMap(ambientOcclusionMap)
+      {
+      }
+   };
+
    class PBRMaterial :
       public IMaterial
    {
@@ -28,11 +54,7 @@ namespace Graphics
 
       materialProperties_t mProperties;
 
-      PBRMaterial(ITextureShared albedo,
-                  ITextureShared normalMap,
-                  ITextureShared metallicMap,
-                  ITextureShared roughnessMap,
-                  ITextureShared ambientOcclusionMap);
+      PBRMaterial(std::shared_ptr<IMaterialParams> materialParams);
 
       PBRMaterial(const PBRMaterial&) = default;
       PBRMaterial& operator=(const PBRMaterial&) = default;

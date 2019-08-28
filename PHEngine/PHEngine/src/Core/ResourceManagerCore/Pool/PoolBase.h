@@ -1,9 +1,13 @@
 #pragma once
 
+#include "Core/CommonCore/CommonMeta.h"
+
 #include <unordered_map>
 #include <stdint.h>
 #include <algorithm>
 #include <memory>
+
+using namespace Common;
 
 namespace Resources
 {
@@ -23,8 +27,6 @@ namespace Resources
 		
 		// META DATA
 
-		struct NullInnerType {};
-
 		template <typename T>
 		struct DoIfHasInnerType
 		{
@@ -35,7 +37,7 @@ namespace Resources
 		};
 
 		template <>
-		struct DoIfHasInnerType<NullInnerType>
+		struct DoIfHasInnerType<NullType>
 		{
 			static sharedValue_t Allocation(key_t& key)
 			{
@@ -129,7 +131,7 @@ namespace Resources
 			CleanUp();
 		}
 
-		template <typename InnerAllocationType = NullInnerType>
+		template <typename InnerAllocationType = NullType>
 		sharedValue_t GetOrAllocateResource(key_t& key)
 		{
 			sharedValue_t resource = GetResource(key);

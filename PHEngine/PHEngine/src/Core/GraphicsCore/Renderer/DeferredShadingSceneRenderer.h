@@ -21,7 +21,7 @@
 #include "Core/ResourceManagerCore/Pool/TexturePool.h"
 #include "Core/GameCore/ShaderImplementation/VertexFactoryImp/SkeletalMeshVertexFactory.h"
 #include "Core/GameCore/ShaderImplementation/VertexFactoryImp/StaticMeshVertexFactory.h"
-#include "Core/GameCore/ShaderImplementation/CompositeDeferredCollectShader.h"
+#include "Core/GameCore/ShaderImplementation/DeferredCollectShader.h"
 
 using namespace Game::ShaderImpl;
 using namespace Game;
@@ -52,10 +52,10 @@ namespace Graphics
          std::shared_ptr<CubemapDepthShader<true>> m_depthCubemapShaderSkeletal;
          std::shared_ptr<CubemapDepthShader<false>> m_depthCubemapShaderNonSkeletal;
 
-         std::shared_ptr<CompositeShader<SkeletalMeshVertexFactory<3>, CompositeDeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderSkelet;
-         std::shared_ptr<CompositeShader<StaticMeshVertexFactory, CompositeDeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderStatic;
-         PBRMaterial* mMatSkelet;
-         PBRMaterial* mMatStatic;
+         std::shared_ptr<CompositeShader<SkeletalMeshVertexFactory<3>, DeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderSkelet;
+         std::shared_ptr<CompositeShader<StaticMeshVertexFactory, DeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderStatic;
+         std::shared_ptr<IMaterial> mMatSkelet;
+         std::shared_ptr<IMaterial> mMatStatic;
 
          // Texture renderer
          TextureRenderer m_textureRenderer;

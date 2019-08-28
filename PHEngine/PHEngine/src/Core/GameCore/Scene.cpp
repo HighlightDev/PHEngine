@@ -170,7 +170,7 @@ namespace Game
       if (lightSceneProxyIndex < LightProxies.size())
       {
          ENQUEUE_RENDER_THREAD_JOB(m_interThreadMgr, EnqueueJobPolicy::IF_DUPLICATE_REPLACE_AND_PUSH,
-            Job( creatorObjectId, functionId, [=]()
+            Job(creatorObjectId, functionId, [=]()
          {
             LightProxies[lightSceneProxyIndex]->SetTransformationMatrix(newRelativeMatrix);
          }));
@@ -295,7 +295,7 @@ namespace Game
 
       // SKELETAL MESH
       {
-         SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
+         SkeletalMeshComponentData mData(std::make_shared<IMaterialParams>(), folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
             folderManager->GetShadersPath() + "skeletalMeshFS.glsl", folderManager->GetAlbedoTexturePath() + "diffuse.png", folderManager->GetNormalMapPath() + "dummy_nm.png",
             folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
          std::shared_ptr<Actor> skeletActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));

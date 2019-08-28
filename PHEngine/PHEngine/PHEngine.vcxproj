@@ -368,7 +368,9 @@
     <None Include="res\shaders\waterVS.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\CommonCore\CommonMeta.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\CompositeDeferredCollectShader.h" />
+    <ClInclude Include="src\Core\GameCore\ShaderImplementation\DeferredCollectShader.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\VertexFactoryImp\SkeletalMeshVertexFactory.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\VertexFactoryImp\StaticMeshVertexFactory.h" />
     <ClInclude Include="src\Core\GraphicsCore\Material\MaterialProcessPolicy.h" />

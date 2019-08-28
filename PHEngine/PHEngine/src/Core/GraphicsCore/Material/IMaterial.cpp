@@ -3,7 +3,9 @@
 namespace Graphics
 {
 
-   IMaterial::IMaterial()
+   IMaterial::IMaterial(const std::string& materialName, const std::string& relativeMaterialShaderPath)
+      : MaterialName(materialName)
+      , RelativeMaterialShaderPath(relativeMaterialShaderPath)
    {
    }
 
