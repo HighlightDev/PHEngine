@@ -39,7 +39,10 @@ namespace Graphics
 
       public:
 
-         virtual void SetMaterialShaderUniformValues(std::shared_ptr<IMaterial> matInstance) {};
+         void SetMaterialShaderUniformValues() 
+         {
+            mMaterialShader->SetUniformValues();
+         };
 
          std::shared_ptr<IShader> GetShader() const
          {
@@ -58,7 +61,7 @@ namespace Graphics
          
       };
 
-      template <typename VertexFactoryShaderType, typename ShaderType, typename MaterialShaderType>
+      template <typename VertexFactoryShaderType, typename ShaderType>
       class CompositeShader
          : public IShader
          , public ICompositeShader
@@ -67,26 +70,19 @@ namespace Graphics
 
          using vertexFactoryShader_t = VertexFactoryShaderType;
          using shader_t = ShaderType;
-         using materialShader_t = MaterialShaderType;
 
       public:
 
          template <typename UShader>
-         CompositeShader(const std::string& compositeShaderName, const UShader& shader)
+         CompositeShader(const std::string& compositeShaderName, const UShader& shader, std::shared_ptr<IMaterial> materialInstance)
             : IShader(compositeShaderName)
-            , ICompositeShader(std::static_pointer_cast<ShaderType>(shader), std::make_shared<vertexFactoryShader_t>(), std::make_shared<materialShader_t>())
+            , ICompositeShader(std::static_pointer_cast<ShaderType>(shader), std::make_shared<vertexFactoryShader_t>(), std::make_shared<MaterialShaderImp>(materialInstance))
          {
             Init();
          }
 
          virtual ~CompositeShader()
          {
-         }
-
-         virtual void SetMaterialShaderUniformValues(std::shared_ptr<IMaterial> matInstance) override
-         {
-            const auto relevantMaterial = std::static_pointer_cast<typename materialShader_t::materialInstance_t>(matInstance);
-            GetMaterialShader()->SetUniformValues(relevantMaterial);
          }
 
          std::shared_ptr<ShaderType> GetShader() const
@@ -97,11 +93,6 @@ namespace Graphics
          std::shared_ptr<VertexFactoryShaderType> GetVertexFactoryShader() const
          {
             return std::static_pointer_cast<VertexFactoryShaderType>(mVertexFactoryShader);
-         }
-
-         std::shared_ptr<MaterialShaderType> GetMaterialShader() const
-         {
-            return std::static_pointer_cast<MaterialShaderType>(mMaterialShader);
          }
        
       private:

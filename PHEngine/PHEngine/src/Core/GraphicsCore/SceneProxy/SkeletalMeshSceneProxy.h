@@ -23,11 +23,9 @@ namespace Graphics
       class SkeletalMeshSceneProxy :
          public PrimitiveSceneProxy
       {
-         using VertexFactoryType = SkeletalMeshVertexFactory<3>;
-         using CompositeShaderType = DeferredCollectShader;
+         using ShaderType = CompositeShader<SkeletalMeshVertexFactory<3>, DeferredCollectShader>;
          using Base = PrimitiveSceneProxy;
 
-         std::shared_ptr<SkeletalMeshShader> m_shader;
          std::shared_ptr<std::vector<AnimationSequence>> m_animations;
 
          AnimationHolder m_animationHolder;
@@ -36,8 +34,7 @@ namespace Graphics
 
          bool bAnimationTransformationDirty = true;
 
-         std::shared_ptr<ICompositeShader> m_shaderTEMPMAIN;
-         std::shared_ptr<IMaterial> m_material;
+         std::shared_ptr<ShaderType> m_shader;
 
       public:
          SkeletalMeshSceneProxy(const SkeletalMeshComponent* component);

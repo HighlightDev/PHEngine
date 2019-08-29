@@ -52,9 +52,7 @@ namespace Graphics
          std::shared_ptr<CubemapDepthShader<true>> m_depthCubemapShaderSkeletal;
          std::shared_ptr<CubemapDepthShader<false>> m_depthCubemapShaderNonSkeletal;
 
-         std::shared_ptr<CompositeShader<SkeletalMeshVertexFactory<3>, DeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderSkelet;
-         std::shared_ptr<CompositeShader<StaticMeshVertexFactory, DeferredCollectShader, MaterialShaderImp<PBRMaterial>>> mTestShaderStatic;
-         std::shared_ptr<IMaterial> mMatSkelet;
+         std::shared_ptr<CompositeShader<StaticMeshVertexFactory, DeferredCollectShader>> mTestShaderStatic;
          std::shared_ptr<IMaterial> mMatStatic;
 
          // Texture renderer
@@ -66,7 +64,7 @@ namespace Graphics
 
          void DeferredLightPass_RenderThread(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy);
 
-         void DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& nonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& skeletalMeshPrimitives, const glm::mat4& viewMatrix);
+         void DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& nonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& skeletalMeshPrimitives, glm::mat4& viewMatrix);
 
          void ForwardBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& forwardedPrimitives, const glm::mat4& viewMatrix);
 

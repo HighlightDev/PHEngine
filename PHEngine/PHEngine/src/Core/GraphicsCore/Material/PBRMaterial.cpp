@@ -4,19 +4,20 @@
 
 namespace Graphics
 {
-   const std::string PBRMaterial::mMaterialName = "PBR Material";
-   const std::string PBRMaterial::mRelativeMaterialShaderPath = Common::FolderManager::GetInstance()->GetShadersPath() + "\\material_shaders\\PBRMaterial.glsl";
-   const std::array<std::string, std::tuple_size<typename PBRMaterial::materialProperties_t>::value> PBRMaterial::mPropertiesName = { "albedo", "normalMap", "metallicMap", "roughnessMap", "ambientOcclusionMap" };
 
-   PBRMaterial::PBRMaterial(std::shared_ptr<IMaterialParams> materialParams)
-      : IMaterial()
-      , mProperties(std::make_tuple(
-         std::static_pointer_cast<PBRMaterialParams>(materialParams)->mAlbedo,
-         std::static_pointer_cast<PBRMaterialParams>(materialParams)->mNormalMap, 
-         std::static_pointer_cast<PBRMaterialParams>(materialParams)->mMetallicMap, 
-         std::static_pointer_cast<PBRMaterialParams>(materialParams)->mRoughnessMap, 
-         std::static_pointer_cast<PBRMaterialParams>(materialParams)->mAmbientOcclusionMap))
+   PBRMaterial::PBRMaterial(
+      ITextureShared albedo,
+      ITextureShared normalMap,
+      ITextureShared metallicMap,
+      ITextureShared roughnessMap,
+      ITextureShared ambientOcclusionMap)
+      : IMaterial("PBR Material", Common::FolderManager::GetInstance()->GetShadersPath() + "\\material_shaders\\PBRMaterial.glsl")
    {
+         mProperties.emplace(std::make_pair("albedo", std::make_shared<TextureMaterialProperty>(albedo)));
+         mProperties.emplace(std::make_pair("normalMap", std::make_shared<TextureMaterialProperty>(normalMap)));
+         mProperties.emplace(std::make_pair("metallicMap", std::make_shared<TextureMaterialProperty>(metallicMap)));
+         mProperties.emplace(std::make_pair("roughnessMap", std::make_shared<TextureMaterialProperty>(roughnessMap)));
+         mProperties.emplace(std::make_pair("ambientOcclusionMap", std::make_shared<TextureMaterialProperty>(ambientOcclusionMap)));
    }
 
    PBRMaterial::~PBRMaterial()

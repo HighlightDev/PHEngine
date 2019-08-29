@@ -17,6 +17,7 @@
 #include "Core/GameCore/Components/InputComponent.h"
 #include "Core/GraphicsCore/TextureAtlas/TextureAtlasFactory.h"
 #include "Core/GameCore/Components/ComponentData/InputComponentData.h"
+#include "Core/GraphicsCore/Material/PBRMaterial.h"
 
 using namespace Graphics::Texture;
 using namespace Common;
@@ -295,9 +296,14 @@ namespace Game
 
       // SKELETAL MESH
       {
-         SkeletalMeshComponentData mData(std::make_shared<IMaterialParams>(), folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1), folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
-            folderManager->GetShadersPath() + "skeletalMeshFS.glsl", folderManager->GetAlbedoTexturePath() + "diffuse.png", folderManager->GetNormalMapPath() + "dummy_nm.png",
-            folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
+
+         auto albedoTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetAlbedoTexturePath() + "diffuse.png");
+         auto normalMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetNormalMapPath() + "dummy_nm.png");
+
+         SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1),
+            folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
+            folderManager->GetShadersPath() + "skeletalMeshFS.glsl",
+            std::make_shared<PBRMaterial>(albedoTex, normalMapTex, albedoTex, albedoTex, albedoTex));
          std::shared_ptr<Actor> skeletActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkeletalMeshComponent>(mData, skeletActor);
 

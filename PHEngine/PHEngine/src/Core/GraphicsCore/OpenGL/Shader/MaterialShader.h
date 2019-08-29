@@ -16,9 +16,13 @@ namespace Graphics
          std::vector<ShaderGenericDefineConstant> mConstantDefines;
          std::vector<ShaderGenericDefine> mDefines;
 
+      protected:
+
+         std::shared_ptr<IMaterial> mMaterialInstance;
+
       public:
 
-         IMaterialShader(const std::string& materialName);
+         IMaterialShader(std::shared_ptr<IMaterial> materialInstance);
 
          virtual ~IMaterialShader();
 
@@ -35,66 +39,28 @@ namespace Graphics
 
          void Undefine(const std::string& name);
 
-         virtual void SetUniformValues(std::shared_ptr<IMaterial> mMaterialInstance) = 0;
-
-      protected:
-
-         void InitMaterialShader(const std::string& pathToMaterialShader);
+         virtual void SetUniformValues() = 0;
 
          virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override;
 
       private:
 
+         void InitMaterialShader(const std::string& pathToMaterialShader);
          void LoadMaterialShaderSource(const std::string& relativePathToMaterialShader);
       };
 
-      /* META DATA */
-      template <size_t indexCount>
-      struct SetUniformValuesIterate
-      {
-
-         template <typename ValuesTuple, typename UniformArray>
-         static void ProcessSet(ValuesTuple values, UniformArray uniforms)
-         {
-            uniforms[indexCount].LoadUniform(std::get<indexCount>(values).GetValue(indexCount));
-            SetUniformValuesIterate<indexCount - 1>::ProcessSet(values, uniforms);
-         }
-      };
-
-      template <>
-      struct SetUniformValuesIterate<0>
-      {
-         template <typename ValuesTuple, typename UniformArray>
-         static void ProcessSet(ValuesTuple values, UniformArray uniforms)
-         {
-            uniforms[0].LoadUniform(std::get<0>(values).GetValue(0));
-         }
-      };
-      /* META DATA */
-
-      template <typename MaterialT>
       class MaterialShaderImp
          : public IMaterialShader
       {
+
+         std::unordered_map<std::string, Uniform> UniformsMap;
+
       public :
-
-         using materialInstance_t = MaterialT;
-
-         static constexpr size_t properties_count = std::tuple_size<typename materialInstance_t::materialProperties_t>::value;
-
-         using uniforms_t = std::array<Uniform, properties_count>;
-
-         uniforms_t Uniforms;
-
          virtual void AccessAllUniformLocations(uint32_t shaderProgramID) override;
 
-         virtual void SetUniformValues(std::shared_ptr<IMaterial> materialInstance) override;
+         virtual void SetUniformValues() override;
 
-         MaterialShaderImp();
-
-      private:
-
-         std::array<std::string, properties_count> mPropertyNames;
+         MaterialShaderImp(std::shared_ptr<IMaterial> materialInstance);
       };
    }
 }

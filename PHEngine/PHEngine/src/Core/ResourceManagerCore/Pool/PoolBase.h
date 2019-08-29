@@ -122,6 +122,25 @@ namespace Resources
 			referenceMap.clear();
 		}
 
+      template <typename InnerAllocationType>
+      sharedValue_t GetOrAllocateResourceBridge(key_t& key)
+      {
+         sharedValue_t resource = GetResource(key);
+         if (!resource)
+         {
+            resource = DoIfHasInnerType<InnerAllocationType>::Allocation(key);
+            std::pair<key_t, sharedValue_t> pair = std::make_pair(key, resource);
+            resourceMap.emplace(std::move(pair));
+         }
+
+         if (resource)
+         {
+            IncreaseRefCounter(key);
+         }
+
+         return resource;
+      }
+
 	public:
 
 		PoolBase() {}
@@ -131,23 +150,17 @@ namespace Resources
 			CleanUp();
 		}
 
+      template <typename InnerAllocationType = NullType>
+      sharedValue_t GetOrAllocateResource(const key_t& key)
+      {
+         key_t localKey = key;
+         return GetOrAllocateResourceBridge<InnerAllocationType>(localKey);
+      }
+
 		template <typename InnerAllocationType = NullType>
 		sharedValue_t GetOrAllocateResource(key_t& key)
 		{
-			sharedValue_t resource = GetResource(key);
-			if (!resource)
-			{
-				resource = DoIfHasInnerType<InnerAllocationType>::Allocation(key);
-				std::pair<key_t, sharedValue_t> pair = std::make_pair(key, resource);
-				resourceMap.emplace(std::move(pair));
-			}
-
-			if (resource)
-			{
-				IncreaseRefCounter(key);
-			}
-
-			return resource;
+         return GetOrAllocateResourceBridge<InnerAllocationType>(key);
 		}
 
 		int32_t GetReferenceCount(key_t& key) const

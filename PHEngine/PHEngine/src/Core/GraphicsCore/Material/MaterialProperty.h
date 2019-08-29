@@ -10,9 +10,8 @@ struct MaterialProperty
 {
 public:
 
-   virtual void SetValueToUniform(Uniform uniform, const int32_t propertyIndex)
-   {
-   }
+   virtual void SetValueToUniform(Uniform uniform, const int32_t propertyIndex) const = 0;
+
 };
 
 struct TextureMaterialProperty 
@@ -32,7 +31,7 @@ public:
    {
    }
 
-   virtual void SetValueToUniform(Uniform uniform, const int32_t propertyIndex) override
+   virtual void SetValueToUniform(Uniform uniform, const int32_t propertyIndex) const override
    {
       int32_t slot = 10 + propertyIndex;
       m_value->BindTexture(slot);

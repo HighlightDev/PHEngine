@@ -53,29 +53,18 @@ namespace Graphics
          m_depthCubemapShaderNonSkeletal = std::static_pointer_cast<CubemapDepthShader<false>>(ShaderPool::GetInstance()->template GetOrAllocateResource< CubemapDepthShader<true>>(shaderParams7));
 
 
-         using texShared = PBRMaterial::ITextureShared;
-         std::string diffuseTexPath = folderManager->GetAlbedoTexturePath() + "diffuse.png";
-         std::string nmPath = folderManager->GetNormalMapPath() + "dummy_nm.png";
-         texShared image = TexturePool::GetInstance()->GetOrAllocateResource(diffuseTexPath);
-         texShared imageNM = TexturePool::GetInstance()->GetOrAllocateResource(nmPath);
-
-         mMatSkelet = std::make_shared<PBRMaterial>(std::make_shared<PBRMaterialParams>(image, imageNM, imageNM, imageNM, imageNM));
-
          std::string diffuseTexPath1 = folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png";
          std::string nmPath1 = folderManager->GetNormalMapPath() + "city_house_2_Nor.png";
-         texShared image1 = TexturePool::GetInstance()->GetOrAllocateResource(diffuseTexPath1);
-         texShared imageNM1 = TexturePool::GetInstance()->GetOrAllocateResource(nmPath1);
-         mMatStatic = std::make_shared<PBRMaterial>(std::make_shared<PBRMaterialParams>(image1, imageNM1, imageNM, imageNM, imageNM));
+         TexturePool::sharedValue_t image1 = TexturePool::GetInstance()->GetOrAllocateResource(diffuseTexPath1);
+         TexturePool::sharedValue_t imageNM1 = TexturePool::GetInstance()->GetOrAllocateResource(nmPath1);
+         mMatStatic = std::make_shared<PBRMaterial>(image1, imageNM1, imageNM1, imageNM1, imageNM1);
 
-         using staticShader_t = CompositeShader<StaticMeshVertexFactory, DeferredCollectShader, MaterialShaderImp<PBRMaterial>>;
-         using skeletShader_t = CompositeShader<SkeletalMeshVertexFactory<3>, DeferredCollectShader, MaterialShaderImp<PBRMaterial>>;
+         using staticShader_t = CompositeShader<StaticMeshVertexFactory, DeferredCollectShader>;
 
          const auto shParams = ShaderParams("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseFS.glsl", "", "", "", "");
 
-         TemplatedCompositeShaderParams<skeletShader_t> compositeParams(COMPOSITE_SHADER_TO_STR(SkeletalMeshVertexFactory<3>, DeferredCollectShader, MaterialShaderImp<PBRMaterial>), shParams);
-         TemplatedCompositeShaderParams<staticShader_t> compositeParams1(COMPOSITE_SHADER_TO_STR(StaticMeshVertexFactory, DeferredCollectShader, MaterialShaderImp<PBRMaterial>), shParams);
+         TemplatedCompositeShaderParams<staticShader_t> compositeParams1(COMPOSITE_SHADER_TO_STR(StaticMeshVertexFactory, DeferredCollectShader, mMatStatic->MaterialName), shParams, mMatStatic);
 
-         mTestShaderSkelet = std::static_pointer_cast<skeletShader_t>(CompositeShaderPool::GetInstance()->GetOrAllocateResource<skeletShader_t>(compositeParams));
          mTestShaderStatic = std::static_pointer_cast<staticShader_t>(CompositeShaderPool::GetInstance()->GetOrAllocateResource<staticShader_t>(compositeParams1));
       }
 
@@ -242,7 +231,7 @@ namespace Graphics
          }
       }
 
-      void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& nonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& skeletalMeshPrimitives, const glm::mat4& viewMatrix)
+      void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& nonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& skeletalMeshPrimitives, glm::mat4& viewMatrix)
       {
          {
             // Deferred shading collect info
@@ -251,7 +240,7 @@ namespace Graphics
             if (skeletalMeshPrimitives.size() > 0)
             {
                //m_deferredBaseShaderSkeletal->ExecuteShader();
-               mTestShaderSkelet->ExecuteShader();
+               //mTestShaderSkelet->ExecuteShader();
                for (auto& proxy : skeletalMeshPrimitives)
                {
                   //m_deferredBaseShaderSkeletal->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
@@ -260,14 +249,15 @@ namespace Graphics
                   //proxy->GetNormalMap()->BindTexture(1);
                   //m_deferredBaseShaderSkeletal->SetAlbedoTextureSlot(0);
                   //m_deferredBaseShaderSkeletal->SetNormalTextureSlot(1);
-                  SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(proxy);
-                  mTestShaderSkelet->GetVertexFactoryShader()->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
+                  //SkeletalMeshSceneProxy* skeletalProxy = static_cast<SkeletalMeshSceneProxy*>(proxy);
+                  proxy->Render(viewMatrix, m_scene->ProjectionMatrix);
+             /*     mTestShaderSkelet->GetVertexFactoryShader()->SetSkinningMatrices(skeletalProxy->GetSkinningMatrices());
                   const glm::mat4& worldMatrix = proxy->GetMatrix();
                   mTestShaderSkelet->GetVertexFactoryShader()->SetMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
-                  mTestShaderSkelet->SetMaterialShaderUniformValues(mMatSkelet);
-                  proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
+                  mTestShaderSkelet->SetMaterialShaderUniformValues();
+                  proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);*/
                }
-               mTestShaderSkelet->StopShader();
+               //mTestShaderSkelet->StopShader();
                //m_deferredBaseShaderSkeletal->StopShader();
             }
 
@@ -284,7 +274,7 @@ namespace Graphics
                   //m_deferredBaseShaderNonSkeletal->SetNormalTextureSlot(1);
                   const glm::mat4& worldMatrix = proxy->GetMatrix();
                   mTestShaderStatic->GetVertexFactoryShader()->SetMatrices(worldMatrix, viewMatrix, m_scene->ProjectionMatrix);
-                  mTestShaderStatic->SetMaterialShaderUniformValues(mMatStatic);
+                  mTestShaderStatic->SetMaterialShaderUniformValues();
                   proxy->GetSkin()->GetBuffer()->RenderVAO(GL_TRIANGLES);
                }
                mTestShaderStatic->StopShader();
@@ -377,7 +367,7 @@ namespace Graphics
          glEnable(GL_DEPTH_TEST);
 
          /***** Access view matrix from GAME THREAD  *****/
-         const glm::mat4 viewMatrix = m_scene->GetCamera()->GetViewMatrix();
+         glm::mat4 viewMatrix = m_scene->GetCamera()->GetViewMatrix();
 
          std::vector<PrimitiveSceneProxy*> drawDeferredShadedPrimitives;
          std::vector<PrimitiveSceneProxy*> drawForwardShadedPrimitives;

@@ -13,9 +13,11 @@ namespace Graphics
       /************************************************************************/
       /*                                 IMaterialShader                      */
       /************************************************************************/
-      IMaterialShader::IMaterialShader(const std::string& materialName)
-         : IShader(materialName)
+      IMaterialShader::IMaterialShader(std::shared_ptr<IMaterial> materialInstance)
+         : IShader(materialInstance->MaterialName)
+         , mMaterialInstance(materialInstance)
       {
+         InitMaterialShader(materialInstance->RelativeMaterialShaderPath);
       }
 
       IMaterialShader::~IMaterialShader()
@@ -57,35 +59,27 @@ namespace Graphics
       /*                               MaterialShaderImpl                     */
       /************************************************************************/
 
-      template class MaterialShaderImp<PBRMaterial>;
-
-      template <typename MaterialT>
-      void MaterialShaderImp<MaterialT>::AccessAllUniformLocations(uint32_t shaderProgramID)
+      void MaterialShaderImp::AccessAllUniformLocations(uint32_t shaderProgramID)
       {
-         for (size_t index = 0; index < properties_count; ++index)
+         for (auto namePlusPropPair : mMaterialInstance->GetProperties())
          {
-            Uniforms[index] = GetUniform(mPropertyNames[index], shaderProgramID);
+            UniformsMap[namePlusPropPair.first] = GetUniform(namePlusPropPair.first, shaderProgramID);
          }
       }
 
-      template <typename MaterialT>
-      void MaterialShaderImp<MaterialT>::SetUniformValues(std::shared_ptr<IMaterial> materialInstance)
+      void MaterialShaderImp::SetUniformValues()
       {
-         std::shared_ptr<MaterialT> relevantMaterialInstance = std::static_pointer_cast<MaterialT>(materialInstance);
-
-         SetUniformValuesIterate<properties_count - 1>::ProcessSet(relevantMaterialInstance->mProperties, Uniforms);
+         size_t index = 0;
+         for (auto namePlusPropPair : mMaterialInstance->GetProperties())
+         {
+            namePlusPropPair.second->SetValueToUniform(UniformsMap[namePlusPropPair.first], index);
+            ++index;
+         }
       }
 
-      template <typename MaterialT>
-      MaterialShaderImp<MaterialT>::MaterialShaderImp()
-         : IMaterialShader(MaterialT::mMaterialName)
-         , mPropertyNames(MaterialT::mPropertiesName)
+      MaterialShaderImp::MaterialShaderImp(std::shared_ptr<IMaterial> materialInstance)
+         : IMaterialShader(materialInstance)
       {
-#ifdef DEBUG
-         static_assert(std::is_base_of<IMaterial, MaterialT>::value, "Material type must be child if IMaterial!");
-#endif
-
-         InitMaterialShader(MaterialT::mRelativeMaterialShaderPath);
       }
    }
 }

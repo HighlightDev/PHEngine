@@ -25,24 +25,11 @@ namespace Graphics
          std::shared_ptr<std::vector<AnimationSequence>> m_animations;
 
          std::shared_ptr<ICompositeShader> m_materialShader;
-         std::shared_ptr<IMaterial> m_material;
 
-         std::shared_ptr<ShaderBase> m_shader;
-         std::shared_ptr<ITexture> m_albedo;
-         std::shared_ptr<ITexture> m_normalMapTex;
-         std::shared_ptr<ITexture> m_specularMapTex;
-
-         SkeletalMeshRenderData(std::shared_ptr<Skin> mesh, std::shared_ptr<std::vector<AnimationSequence>> animations, std::shared_ptr<ICompositeShader> materialShader, std::shared_ptr<IMaterial> material,
-            std::shared_ptr<ShaderBase> staticMeshShader, std::shared_ptr<ITexture> albedo,
-            std::shared_ptr<ITexture> normalMapTex, std::shared_ptr<ITexture> specularMapTex)
+         SkeletalMeshRenderData(std::shared_ptr<Skin> mesh, std::shared_ptr<std::vector<AnimationSequence>> animations, std::shared_ptr<IShader> materialShader)
             : m_skin(mesh)
             , m_animations(animations)
-            , m_materialShader(materialShader)
-            , m_material(material)
-            , m_shader(staticMeshShader)
-            , m_albedo(albedo)
-            , m_normalMapTex(normalMapTex)
-            , m_specularMapTex(specularMapTex)
+            , m_materialShader(std::dynamic_pointer_cast<ICompositeShader>(materialShader))
          {
          }
 
