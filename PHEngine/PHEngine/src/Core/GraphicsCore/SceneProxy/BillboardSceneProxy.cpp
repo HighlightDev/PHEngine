@@ -6,8 +6,9 @@ namespace Graphics
    {
 
       BillboardSceneProxy::BillboardSceneProxy(const BillboardComponent* component)
-         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, component->GetRenderData().m_texture)
-         , m_shader(std::static_pointer_cast<BillboardShader>(component->GetRenderData().m_shader))
+         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, nullptr)
+         , m_billboardShader(std::static_pointer_cast<BillboardShader>(component->GetRenderData().m_shader))
+         , m_billboardTexture(component->GetRenderData().m_texture)
       {
          m_IsDeferred = false;
       }
@@ -16,18 +17,13 @@ namespace Graphics
       {
       }
 
-      std::shared_ptr<ShaderBase> BillboardSceneProxy::GetShader() const
-      {
-         return m_shader;
-      }
-
       void BillboardSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
       {
-         auto billboardShader = std::static_pointer_cast<BillboardShader>(m_shader);
+         auto billboardShader = m_billboardShader;
 
          billboardShader->ExecuteShader();
 
-         m_albedoTex->BindTexture(0);
+         m_billboardTexture->BindTexture(0);
 
          billboardShader->SetTexture(0);
          billboardShader->SetTransformMatrices(m_relativeMatrix, viewMatrix, projectionMatrix);

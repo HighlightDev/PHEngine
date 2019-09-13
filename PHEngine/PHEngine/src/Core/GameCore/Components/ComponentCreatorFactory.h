@@ -32,6 +32,7 @@
 #include "Core/GameCore/ShaderImplementation/CubemapShader.h"
 #include "Core/GameCore/ShaderImplementation/DeferredCollectShader.h"
 #include "Core/GameCore/ShaderImplementation/VertexFactoryImp/SkeletalMeshVertexFactory.h"
+#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/StaticMeshVertexFactory.h"
 #include "Core/GraphicsCore/OpenGL/Shader/CompositeShaderParams.h"
 #include "Core/GraphicsCore/OpenGL/Shader/CompositeShader.h"
 
@@ -50,7 +51,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == SKYBOX_COMPONENT)
+         if (SKYBOX_COMPONENT == data.GetType())
          {
             SkyboxComponentData& mData = static_cast<SkyboxComponentData&>(data);
 
@@ -81,26 +82,17 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == STATIC_MESH_COMPONENT)
+         if (STATIC_MESH_COMPONENT == data.GetType())
          {
             StaticMeshComponentData& mData = static_cast<StaticMeshComponentData&>(data);
 
             typename MeshPool::sharedValue_t skin = MeshPool::GetInstance()->GetOrAllocateResource(mData.m_pathToMesh);
 
-            typename TexturePool::sharedValue_t albedo = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToAlbedo);
-            typename TexturePool::sharedValue_t normalMap;
-            typename TexturePool::sharedValue_t specularMap;
+            const ShaderParams shaderParams("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "simpleVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredCollectFS.glsl", "", "", "", "");
+            TemplatedCompositeShaderParams<CompositeShader<StaticMeshVertexFactory, DeferredCollectShader>> compositeParams(COMPOSITE_SHADER_TO_STR(StaticMeshVertexFactory, DeferredCollectShader, mData.m_material->MaterialName), shaderParams, mData.m_material);
+            CompositeShaderPool::sharedValue_t staticMeshShader = CompositeShaderPool::GetInstance()->template GetOrAllocateResource<CompositeShader<StaticMeshVertexFactory, DeferredCollectShader>>(compositeParams);
 
-            if (mData.m_pathToNormalMap != "")
-               normalMap = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToNormalMap);
-
-            if (mData.m_pathToSpecularMap != "")
-               specularMap = TexturePool::GetInstance()->GetOrAllocateResource(mData.m_pathToSpecularMap);
-
-            ShaderParams shaderParams("StaticMesh Shader", mData.m_vsShaderPath, mData.m_fsShaderPath, "", "", "", "");
-            ShaderPool::sharedValue_t staticMeshShader = ShaderPool::GetInstance()->template GetOrAllocateResource<StaticMeshShader>(shaderParams);
-
-            StaticMeshRenderData renderData(skin, staticMeshShader, albedo, normalMap, specularMap);
+            StaticMeshRenderData renderData(skin, staticMeshShader);
 
             resultComponent = std::make_shared<StaticMeshComponent>(std::move(mData.m_translation), std::move(mData.m_rotation), std::move(mData.m_scale), renderData);
          }
@@ -116,7 +108,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == DIR_LIGHT_COMPONENT)
+         if (DIR_LIGHT_COMPONENT == data.GetType())
          {
             DirectionalLightComponentData& mData = static_cast<DirectionalLightComponentData&>(data);
             DirectionalLightRenderData renderData(mData.Direction, mData.Ambient, mData.Diffuse, mData.Specular, mData.ShadowInfo);
@@ -134,7 +126,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == POINT_LIGHT_COMPONENT)
+         if (POINT_LIGHT_COMPONENT == data.GetType())
          {
             PointLightComponentData& mData = static_cast<PointLightComponentData&>(data);
             PointLightRenderData renderData(mData.Attenuation, mData.RadianceSqrRadius, mData.Ambient, mData.Diffuse, mData.Specular, mData.ShadowInfo);
@@ -172,7 +164,7 @@ namespace Game
       static std::shared_ptr<Component> CreateComponent(ComponentData& data)
       {
          std::shared_ptr<Component> resultComponent;
-         if (data.GetType() == MOVEMENT_COMPONENT)
+         if (MOVEMENT_COMPONENT == data.GetType())
          {
             MovementComponentData& mData = static_cast<MovementComponentData&>(data);
             resultComponent = std::make_shared<MovementComponent>(mData.m_camera, mData.m_launchVelocity);
@@ -191,7 +183,7 @@ namespace Game
       {
          std::shared_ptr<Component> resultComponent;
 
-         if (data.GetType() == SKELETAL_MESH_COMPONENT)
+         if (SKELETAL_MESH_COMPONENT == data.GetType())
          {
             SkeletalMeshComponentData& mData = static_cast<SkeletalMeshComponentData&>(data);
 
@@ -199,7 +191,7 @@ namespace Game
 
             typename AnimationPool::sharedValue_t animations = AnimationPool::GetInstance()->GetOrAllocateResource(mData.m_pathToMesh);
 
-            const ShaderParams shaderParams("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredBaseFS.glsl", "", "", "", "");
+            const ShaderParams shaderParams("DeferredNonSkeletalBase Shader", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "simpleVS.glsl", FolderManager::GetInstance()->GetShadersPath() + "composite_shaders\\" + "deferredCollectFS.glsl", "", "", "", "");
            
             TemplatedCompositeShaderParams<CompositeShader<SkeletalMeshVertexFactory<3>, DeferredCollectShader>> compositeParams(COMPOSITE_SHADER_TO_STR(SkeletalMeshVertexFactory<3>, DeferredCollectShader, mData.m_material->MaterialName), shaderParams, mData.m_material);
 

@@ -9,11 +9,7 @@ namespace Graphics
    {
 
       SkeletalMeshSceneProxy::SkeletalMeshSceneProxy(const SkeletalMeshComponent* component)
-         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin,
-           nullptr, nullptr, nullptr)
-
-         , m_shader(std::static_pointer_cast<ShaderType>(component->GetRenderData().m_materialShader))
-
+         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, component->GetRenderData().m_materialShader)
          , m_animations(component->GetRenderData().m_animations)
          , m_animationHolder(m_animations)
          , m_animationDeltaTime(component->GetAnimationDeltaTime())
@@ -28,7 +24,7 @@ namespace Graphics
 
       void SkeletalMeshSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
       {
-         AnimatedSkin* animatedSkin = static_cast<AnimatedSkin*>(m_skin.get());
+         std::shared_ptr<AnimatedSkin> animatedSkin = std::static_pointer_cast<AnimatedSkin>(m_skin);
 
          if (bAnimationTransformationDirty)
          {
@@ -38,17 +34,17 @@ namespace Graphics
 
          std::vector<glm::mat4> skinningMatrices = m_animationHolder.GetAnimatedOffsetedMatrices(animatedSkin->GetRootBone().get());
 
-         m_shader->ExecuteShader();
-         m_shader->GetVertexFactoryShader()->SetMatrices(m_relativeMatrix, viewMatrix, projectionMatrix);
-         m_shader->GetVertexFactoryShader()->SetSkinningMatrices(skinningMatrices);
-         m_shader->GetMaterialShader()->SetUniformValues();
+         GetShader()->ExecuteShader();
+         GetShader()->GetVertexFactoryShader()->SetMatrices(m_relativeMatrix, viewMatrix, projectionMatrix);
+         GetShader()->GetVertexFactoryShader()->SetSkinningMatrices(skinningMatrices);
+         GetShader()->GetMaterialShader()->SetUniformValues();
          animatedSkin->GetBuffer()->RenderVAO(GL_TRIANGLES);
-         m_shader->StopShader();
+         GetShader()->StopShader();
       }
 
-      std::shared_ptr<ShaderBase> SkeletalMeshSceneProxy::GetShader() const
+      std::shared_ptr<SkeletalMeshSceneProxy::ShaderType> SkeletalMeshSceneProxy::GetShader() const
       {
-         return nullptr;
+         return std::static_pointer_cast<SkeletalMeshSceneProxy::ShaderType>(m_shader);
       }
 
       void SkeletalMeshSceneProxy::SetAnimationDeltaTime(float animationDeltaTime)

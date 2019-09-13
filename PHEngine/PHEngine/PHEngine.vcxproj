@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -290,10 +290,11 @@
     <None Include="res\shaders\buildingSpecialVShader.glsl" />
     <None Include="res\shaders\buildingVShader.glsl" />
     <None Include="res\shaders\common\materialCommon.incl" />
+    <None Include="res\shaders\composite_shaders\simpleVS.glsl" />
+    <None Include="res\shaders\composite_shaders\skyboxFS.glsl" />
     <None Include="res\shaders\material_shaders\PBRMaterial.glsl" />
     <None Include="res\shaders\common\VSCommon.glsl" />
-    <None Include="res\shaders\composite_shaders\deferredBaseFS.glsl" />
-    <None Include="res\shaders\composite_shaders\deferredBaseVS.glsl" />
+    <None Include="res\shaders\composite_shaders\deferredCollectFS.glsl" />
     <None Include="res\shaders\cubemapRendererFS.glsl" />
     <None Include="res\shaders\cubemapShadowFS.glsl" />
     <None Include="res\shaders\cubemapShadowGS.glsl" />
@@ -320,6 +321,7 @@
     <None Include="res\shaders\lensFlareVS.glsl" />
     <None Include="res\shaders\lightShaftsFS.glsl" />
     <None Include="res\shaders\lightShaftsVS.glsl" />
+    <None Include="res\shaders\material_shaders\SkyboxMaterial.glsl" />
     <None Include="res\shaders\movableEntityFS.glsl" />
     <None Include="res\shaders\movableEntityVS.glsl" />
     <None Include="res\shaders\particleCS.glsl" />
@@ -355,6 +357,7 @@
     <None Include="res\shaders\uiFS.glsl" />
     <None Include="res\shaders\uiVS.glsl" />
     <None Include="res\shaders\vertex_factory\SkeletalMeshVertexFactory.glsl" />
+    <None Include="res\shaders\vertex_factory\SkyboxVertexFactory.glsl" />
     <None Include="res\shaders\vertex_factory\StaticMeshVertexFactory.glsl" />
     <None Include="res\shaders\waterFS.glsl" />
     <None Include="res\shaders\waterReflectionEntityFS.glsl" />

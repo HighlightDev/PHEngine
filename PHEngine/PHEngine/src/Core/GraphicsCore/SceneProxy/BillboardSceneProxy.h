@@ -15,9 +15,9 @@ namespace Graphics
          public PrimitiveSceneProxy
       {
 
-         std::shared_ptr<BillboardShader> m_shader;
+         std::shared_ptr<BillboardShader> m_billboardShader;
 
-      protected:
+         std::shared_ptr<ITexture> m_billboardTexture;
 
          using Base = PrimitiveSceneProxy;
 
@@ -29,7 +29,7 @@ namespace Graphics
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
 
-         virtual std::shared_ptr<ShaderBase> GetShader() const override;
+      
       };
 
    }

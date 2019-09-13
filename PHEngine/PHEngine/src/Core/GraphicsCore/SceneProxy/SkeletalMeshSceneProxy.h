@@ -34,7 +34,9 @@ namespace Graphics
 
          bool bAnimationTransformationDirty = true;
 
-         std::shared_ptr<ShaderType> m_shader;
+      private:
+
+         std::shared_ptr<ShaderType> GetShader() const;
 
       public:
          SkeletalMeshSceneProxy(const SkeletalMeshComponent* component);
@@ -42,8 +44,6 @@ namespace Graphics
          virtual ~SkeletalMeshSceneProxy();
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
-
-         virtual std::shared_ptr<ShaderBase> GetShader() const override;
 
          void SetAnimationDeltaTime(float animationDeltaTime);
 

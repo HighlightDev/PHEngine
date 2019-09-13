@@ -15,7 +15,8 @@ namespace Graphics
          public PrimitiveSceneProxy
       {
 
-         std::shared_ptr<CubemapShader> m_shader;
+         std::shared_ptr<CubemapShader> m_shaderCubemap;
+
          LazyTextureAtlasObtainer m_textureObtainer;
 
       protected:
@@ -28,9 +29,9 @@ namespace Graphics
 
          ~CubemapSceneProxy();
 
-         virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
+         std::shared_ptr<IShader> GetShader() const;
 
-         virtual std::shared_ptr<ShaderBase> GetShader() const override;
+         virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
       };
 
    }

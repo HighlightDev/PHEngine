@@ -8,10 +8,9 @@ namespace Graphics
    {
 
       WaterPlaneSceneProxy::WaterPlaneSceneProxy(const WaterPlaneComponent* component)
-         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, std::shared_ptr<ITexture>())
+         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, nullptr)
          , m_waterDistortionMap(component->GetRenderData().m_waterDistortionMap)
          , m_waterNormalMap(component->GetRenderData().m_waterNormalMap)
-         , m_skin(component->GetRenderData().m_skin)
          , m_shader(std::static_pointer_cast<WaterPlaneShader>(component->GetRenderData().m_shader))
          , m_moveFactor(component->GetMoveFactor())
          , m_waveStrength(component->GetWaveStrength())
@@ -54,11 +53,6 @@ namespace Graphics
       void WaterPlaneSceneProxy::SetFarClipPlane(float farClipPlane)
       {
          m_farClipPlane = farClipPlane;
-      }
-
-      std::shared_ptr<ShaderBase> WaterPlaneSceneProxy::GetShader() const
-      {
-         return m_shader;
       }
 
       uint64_t WaterPlaneSceneProxy::GetComponentType() const

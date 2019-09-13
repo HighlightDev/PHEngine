@@ -2,6 +2,9 @@
 #include "PrimitiveSceneProxy.h"
 #include "Core/GameCore/Components/StaticMeshComponent.h"
 #include "Core/GameCore/ShaderImplementation/StaticMeshShader.h"
+#include "Core/GraphicsCore/OpenGL/Shader/CompositeShader.h"
+#include "Core/GameCore/ShaderImplementation/DeferredCollectShader.h"
+#include "Core/GameCore/ShaderImplementation/VertexFactoryImp/StaticMeshVertexFactory.h"
 
 using namespace Game;
 using namespace Game::ShaderImpl;
@@ -15,11 +18,12 @@ namespace Graphics
          public PrimitiveSceneProxy
       {
 
-         std::shared_ptr<StaticMeshShader> m_shader;
-
-      protected:
-
          using Base = PrimitiveSceneProxy;
+         using ShaderType = CompositeShader<StaticMeshVertexFactory, DeferredCollectShader>;
+
+      private:
+
+         std::shared_ptr<ShaderType> GetShader() const;
 
       public:
          StaticMeshSceneProxy(const StaticMeshComponent* component);
@@ -27,8 +31,6 @@ namespace Graphics
          ~StaticMeshSceneProxy();
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
-
-         virtual std::shared_ptr<ShaderBase> GetShader() const override;
       };
 
    }

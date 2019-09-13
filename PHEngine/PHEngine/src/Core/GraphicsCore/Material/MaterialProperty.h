@@ -34,7 +34,10 @@ public:
    virtual void SetValueToUniform(Uniform uniform, const int32_t propertyIndex) const override
    {
       int32_t slot = 10 + propertyIndex;
-      m_value->BindTexture(slot);
-      uniform.LoadUniform(slot);
+      if (m_value)
+      {
+         m_value->BindTexture(slot);
+         uniform.LoadUniform(slot);
+      }
    }
 };

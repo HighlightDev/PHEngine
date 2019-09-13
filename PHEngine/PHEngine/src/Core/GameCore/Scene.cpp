@@ -286,9 +286,13 @@ namespace Game
 
       // HOUSE
       {
+         auto albedoTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png");
+         auto normalMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetNormalMapPath() + "city_house_2_Nor.png");
+         auto specualrMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
+
          StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(0), glm::vec3(), glm::vec3(5), folderManager->GetShadersPath() + "testVS.glsl",
-            folderManager->GetShadersPath() + "testFS.glsl", folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png", folderManager->GetNormalMapPath() + "city_house_2_Nor.png",
-            folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
+            folderManager->GetShadersPath() + "testFS.glsl", std::make_shared<PBRMaterial>(albedoTex, normalMapTex, specualrMapTex, nullptr, nullptr));
+
          std::shared_ptr<Actor> houseActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
          AllActors.push_back(houseActor);
@@ -303,7 +307,7 @@ namespace Game
          SkeletalMeshComponentData mData(folderManager->GetModelPath() + "model.dae", glm::vec3(0, 0 , 0), glm::vec3(270, 0, 0), glm::vec3(1),
             folderManager->GetShadersPath() + "skeletalMeshVS.glsl",
             folderManager->GetShadersPath() + "skeletalMeshFS.glsl",
-            std::make_shared<PBRMaterial>(albedoTex, normalMapTex, albedoTex, albedoTex, albedoTex));
+            std::make_shared<PBRMaterial>(albedoTex, normalMapTex, nullptr, nullptr, nullptr));
          std::shared_ptr<Actor> skeletActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
          CreateAndAddComponent_GameThread<SkeletalMeshComponent>(mData, skeletActor);
 

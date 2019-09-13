@@ -6,7 +6,7 @@ namespace Graphics
    {
 
       SkyboxSceneProxy::SkyboxSceneProxy(const SkyboxComponent* component)
-         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, std::shared_ptr<ITexture>(), std::shared_ptr<ITexture>())
+         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, nullptr)
          , m_skyboxShader(std::static_pointer_cast<SkyboxShader>(component->GetRenderData().m_shader))
          , m_dayTexture(component->GetRenderData().m_dayTex)
          , m_nightTexture(component->GetRenderData().m_nightTex)
@@ -21,11 +21,6 @@ namespace Graphics
       void SkyboxSceneProxy::PostConstructorInitialize()
       {
 
-      }
-
-      std::shared_ptr<ShaderBase> SkyboxSceneProxy::GetShader() const
-      {
-         return m_skyboxShader;
       }
 
       uint64_t SkyboxSceneProxy::GetComponentType() const
@@ -48,6 +43,7 @@ namespace Graphics
          {
             m_dayTexture->BindTexture(0);
          }
+
          if (m_nightTexture)
          {
             m_nightTexture->BindTexture(1);

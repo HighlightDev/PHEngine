@@ -25,8 +25,6 @@ namespace Game
 
       SkyboxRenderData m_renderData;
 
-      // MistComponent
-
 	protected:
 
 		using Base = PrimitiveComponent;

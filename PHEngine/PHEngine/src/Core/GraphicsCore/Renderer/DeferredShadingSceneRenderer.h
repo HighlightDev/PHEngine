@@ -52,9 +52,6 @@ namespace Graphics
          std::shared_ptr<CubemapDepthShader<true>> m_depthCubemapShaderSkeletal;
          std::shared_ptr<CubemapDepthShader<false>> m_depthCubemapShaderNonSkeletal;
 
-         std::shared_ptr<CompositeShader<StaticMeshVertexFactory, DeferredCollectShader>> mTestShaderStatic;
-         std::shared_ptr<IMaterial> mMatStatic;
-
          // Texture renderer
          TextureRenderer m_textureRenderer;
 

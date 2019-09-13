@@ -6,8 +6,8 @@ namespace Graphics
    {
 
       CubemapSceneProxy::CubemapSceneProxy(const CubemapComponent* component)
-         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, std::shared_ptr<ITexture>(nullptr))
-         , m_shader(std::static_pointer_cast<CubemapShader>(component->GetRenderData().m_shader))
+         : PrimitiveSceneProxy(component->GetRelativeMatrix(), component->GetRenderData().m_skin, nullptr)
+         , m_shaderCubemap(std::static_pointer_cast<CubemapShader>(component->GetRenderData().m_shader))
          , m_textureObtainer(component->GetRenderData().m_texture)
       {
          m_IsDeferred = false;
@@ -17,9 +17,9 @@ namespace Graphics
       {
       }
 
-      std::shared_ptr<ShaderBase> CubemapSceneProxy::GetShader() const
+      std::shared_ptr<IShader> CubemapSceneProxy::GetShader() const
       {
-         return m_shader;
+         return m_shaderCubemap;
       }
 
       void CubemapSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
@@ -29,7 +29,7 @@ namespace Graphics
          {
             std::shared_ptr<ITexture> texture = texHandler->GetAtlasResource();
 
-            auto cubemapShader = std::static_pointer_cast<CubemapShader>(m_shader);
+            auto cubemapShader = std::static_pointer_cast<CubemapShader>(m_shaderCubemap);
 
             cubemapShader->ExecuteShader();
             texture->BindTexture(0);

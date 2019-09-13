@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Core/GraphicsCore/Mesh/Skin.h"
-#include "Core/GraphicsCore/OpenGL/Shader/ShaderBase.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
 #include "Core/GraphicsCore/Animation/AnimationSequence.h"
 #include "Core/GraphicsCore/OpenGL/Shader/CompositeShader.h"
@@ -18,7 +17,6 @@ namespace Graphics
 {
    namespace Data
    {
-
       struct SkeletalMeshRenderData
       {
          std::shared_ptr<Skin> m_skin;

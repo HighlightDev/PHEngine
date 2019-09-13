@@ -8,6 +8,7 @@
 #include "Core/GameCore/Components/ComponentType.h"
 #include "Core/GameCore/GameObject.h"
 #include "Core/GraphicsCore/Material/IMaterial.h"
+#include "Core/GraphicsCore/OpenGL/Shader/CompositeShader.h"
 
 using namespace Graphics::OpenGL;
 using namespace Graphics::Mesh;
@@ -18,7 +19,6 @@ namespace Graphics
 {
    namespace Proxy
    {
-
       class PrimitiveSceneProxy
          : public GameObject
       {
@@ -28,25 +28,17 @@ namespace Graphics
 
          std::shared_ptr<Skin> m_skin;
 
-         std::shared_ptr<ITexture> m_albedoTex;
-         std::shared_ptr<ITexture> m_normalMapTex;
-         std::shared_ptr<ITexture> m_specularMapTex;
-
-         std::shared_ptr<IMaterial> m_material;
+         std::shared_ptr<ICompositeShader> m_shader;
 
          bool m_IsDeferred = false;
 
       public:
 
-         PrimitiveSceneProxy(glm::mat4 relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ITexture> albedoTex,
-            std::shared_ptr<ITexture> normalMapTex = std::shared_ptr<ITexture>(),
-            std::shared_ptr<ITexture> specularMapTex = std::shared_ptr<ITexture>());
+         PrimitiveSceneProxy(glm::mat4 relativeMatrix, std::shared_ptr<Skin> skin, std::shared_ptr<ICompositeShader> shader);
 
          virtual ~PrimitiveSceneProxy();
 
          virtual void PostConstructorInitialize();
-
-         virtual std::shared_ptr<ShaderBase> GetShader() const = 0;
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) = 0;
 
@@ -55,12 +47,6 @@ namespace Graphics
          void SetTransformationMatrix(const glm::mat4& relativeMatrix);
 
          virtual std::shared_ptr<Skin> GetSkin() const;
-
-         virtual std::shared_ptr<ITexture> GetAlbedo() const;
-
-         virtual std::shared_ptr<ITexture> GetNormalMap() const;
-
-         virtual std::shared_ptr<ITexture> GetSpecularMap() const;
 
          virtual uint64_t GetComponentType() const;
 

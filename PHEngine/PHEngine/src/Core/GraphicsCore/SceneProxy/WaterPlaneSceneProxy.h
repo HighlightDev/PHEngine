@@ -20,7 +20,6 @@ namespace Graphics
          std::unique_ptr<WaterPlaneFramebuffer> m_waterPlaneFramebuffer;
          std::shared_ptr<ITexture> m_waterDistortionMap;
          std::shared_ptr<ITexture> m_waterNormalMap;
-         std::shared_ptr<Skin> m_skin;
          std::shared_ptr<WaterPlaneShader> m_shader;
 
          float m_moveFactor;
@@ -36,8 +35,6 @@ namespace Graphics
          virtual ~WaterPlaneSceneProxy();
 
          virtual void Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix) override;
-
-         virtual std::shared_ptr<ShaderBase> GetShader() const override;
 
          virtual uint64_t GetComponentType() const override;
 
