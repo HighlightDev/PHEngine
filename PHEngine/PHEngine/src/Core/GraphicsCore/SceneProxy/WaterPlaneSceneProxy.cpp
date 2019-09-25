@@ -62,7 +62,6 @@ namespace Graphics
 
       void WaterPlaneSceneProxy::Render(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
       {
-
          glm::vec3 cameraPosition(viewMatrix[3][0], viewMatrix[3][1], viewMatrix[3][2]);
 
          m_shader->ExecuteShader();

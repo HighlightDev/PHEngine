@@ -88,8 +88,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions);SHADING_MODEL_PBR;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <UndefinePreprocessorDefinitions>SHADING_MODEL_PBR;</UndefinePreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -99,8 +100,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)PHEngine\Dependencies\GLM\include;$(SolutionDir)PHEngine\src;$(SolutionDir)PHEngine\Dependencies\Assimp\include;$(SolutionDir)PHEngine\Dependencies\STB\include;$(SolutionDir)PHEngine\Dependencies\GLEW\include;$(SolutionDir)PHEngine\Dependencies\BulletPhysics\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions);SHADING_MODEL_PBR;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;DEBUG;_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <UndefinePreprocessorDefinitions>SHADING_MODEL_PBR;</UndefinePreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -291,7 +293,6 @@
     <None Include="res\shaders\buildingVShader.glsl" />
     <None Include="res\shaders\common\materialCommon.incl" />
     <None Include="res\shaders\composite_shaders\simpleVS.glsl" />
-    <None Include="res\shaders\composite_shaders\skyboxFS.glsl" />
     <None Include="res\shaders\material_shaders\PBRMaterial.glsl" />
     <None Include="res\shaders\common\VSCommon.glsl" />
     <None Include="res\shaders\composite_shaders\deferredCollectFS.glsl" />
@@ -390,7 +391,7 @@
     <ClInclude Include="src\Core\CommonApi\VariableWrapper.h" />
     <ClInclude Include="src\Core\GameCore\Components\ComponentData\CubemapComponentData.h" />
     <ClInclude Include="src\Core\GameCore\Components\CubemapComponent.h" />
-    <ClInclude Include="src\Core\GameCore\Event\ComponentTransformChangedEvent.h" />
+    <ClInclude Include="src\Core\GameCore\Event\SceneComponentTransformChangedEvent.h" />
     <ClInclude Include="src\Core\GameCore\Event\PlayerMovedEvent.h" />
     <ClInclude Include="src\Core\GameCore\GameObject.h" />
     <ClInclude Include="src\Core\GameCore\ShaderImplementation\CubemapShader.h" />

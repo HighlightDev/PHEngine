@@ -2,6 +2,7 @@
 #include "Core/GraphicsCore/SceneProxy/SkeletalMeshSceneProxy.h"
 #include "Core/GameCore/Scene.h"
 #include "Core/CommonApi/StringHash.h"
+#include "Core/GameCore/Event/SceneComponentTransformChangedEvent.h"
 
 using namespace Graphics::Proxy;
 
@@ -27,7 +28,7 @@ namespace Game
 
    void SkeletalMeshComponent::Tick(float deltaTime)
    {
-      m_animationDeltaTime = std::max(deltaTime, 0.03f);
+      m_animationDeltaTime = std::min(deltaTime, 0.03f);
 
       constexpr uint64_t functionId = Hash("SkeletalMeshComponent: SetAnimationDeltaTime");
 
@@ -36,6 +37,8 @@ namespace Game
          SkeletalMeshSceneProxy* proxyPtr = static_cast<SkeletalMeshSceneProxy*>(m_scene->SceneProxies[PrimitiveProxyComponentId].get());
          proxyPtr->SetAnimationDeltaTime(m_animationDeltaTime);
       });
+
+      Event::SceneComponentTransformChangedEvent::GetInstance()->SendEvent(GetComponentType());
    }
 
    std::shared_ptr<PrimitiveSceneProxy> SkeletalMeshComponent::CreateSceneProxy() const

@@ -501,12 +501,14 @@
     <None Include="res\shaders\cubemapShadowGS.glsl" />
     <None Include="res\shaders\cubemapRendererFS.glsl" />
     <None Include="res\shaders\vertex_factory\StaticMeshVertexFactory.glsl" />
-    <None Include="res\shaders\composite_shaders\deferredBaseFS.glsl" />
     <None Include="res\shaders\common\VSCommon.glsl" />
     <None Include="res\shaders\common\materialCommon.incl" />
     <None Include="res\shaders\vertex_factory\SkeletalMeshVertexFactory.glsl" />
-    <None Include="res\shaders\composite_shaders\deferredBaseVS.glsl" />
     <None Include="res\shaders\material_shaders\PBRMaterial.glsl" />
+    <None Include="res\shaders\composite_shaders\simpleVS.glsl" />
+    <None Include="res\shaders\composite_shaders\deferredCollectFS.glsl" />
+    <None Include="res\shaders\material_shaders\SkyboxMaterial.glsl" />
+    <None Include="res\shaders\vertex_factory\SkyboxVertexFactory.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h">
@@ -1673,9 +1675,6 @@
     <ClInclude Include="src\Core\GameCore\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\GameCore\Event\ComponentTransformChangedEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\CommonApi\StringHash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1728,6 +1727,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\CommonCore\CommonMeta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\GameCore\Event\SceneComponentTransformChangedEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

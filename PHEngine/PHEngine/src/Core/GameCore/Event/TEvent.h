@@ -28,8 +28,6 @@ namespace Event
 
       virtual ~TEvent();
 
-      void SendEvent(DataTypes... data) const;
-
       void AddListener(Event_t* eventListener);
 
       void RemoveListener(Event_t* eventListener);
@@ -42,6 +40,16 @@ namespace Event
             m_instance = new Event_t();
 
          return m_instance;
+      }
+
+      template <typename... DataTypesT>
+      void SendEvent(DataTypesT&&... data) const
+      {
+         EventData_t packedData = std::make_tuple(std::forward<DataTypesT>(data)...);
+         for (auto& listener : m_listeners)
+         {
+            listener->ProcessEvent(packedData);
+         }
       }
 
    };

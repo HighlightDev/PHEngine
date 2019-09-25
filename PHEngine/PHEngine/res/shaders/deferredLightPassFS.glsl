@@ -1,6 +1,5 @@
 #version 400
 
-#define SHADING_MODEL_PBR
 #define MAX_DIR_LIGHT_COUNT 5
 #define MAX_POINT_LIGHT_COUNT 1
 #define SHADOWMAP_BIAS_DIR_LIGHT 0.005
@@ -45,8 +44,9 @@ in VS_OUT
 
 #ifdef SHADING_MODEL_PBR
 
-	uniform float Metallic;
-	uniform float Roughness;
+	const float Metallic = 0.6;
+	const float Roughness = 0.3;
+	uniform float ao;
 
 	const float PI = 3.14159265359;
 
@@ -83,6 +83,55 @@ in VS_OUT
 	    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
 
 	    return ggx1 * ggx2;
+	}
+
+	vec3 fresnelSchlick(float cosTheta, vec3 F0)
+	{
+		return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+	}
+
+	vec3 GetPBRColor(in vec3 worldPos, in vec3 nWorldNormal, vec3 albedoColor)
+	{
+		vec3 Lo = vec3(0.0);
+		vec3 V = normalize(CameraWorldPosition - worldPos);
+
+		vec3 F0 = vec3(0.04);
+		F0 = mix(F0, albedoColor, Metallic);
+
+		/* DIRECTIONAL LIGHTS */
+		for (uint dirLightIndex = 0; dirLightIndex < DirLightCount; ++dirLightIndex)
+		{
+			// calculate per-light radiance
+			vec3 L = -normalize(DirLightDirection[dirLightIndex]);
+			vec3 H = normalize(V + L);
+			vec3 radiance = vec3(1, 1, 1);
+			//DirLightDiffuseColor[dirLightIndex];
+
+			 // cook-torrance brdf
+		    float NDF = DistributionGGX(nWorldNormal, H, Roughness);
+		    float G = GeometrySmith(nWorldNormal, V, L, Roughness);
+		    vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);
+
+			vec3 kS = F;
+		    vec3 kD = vec3(1.0) - kS;
+		    kD *= 1.0 - Metallic;
+
+			vec3 numerator    = NDF * G * F;
+		    float denominator = DirLightCount * max(dot(nWorldNormal, V), 0.0) * max(dot(nWorldNormal, L), 0.0);
+		    vec3 specular     = numerator / max(denominator, 0.001);
+
+			// add to outgoing radiance Lo
+		    float NdotL = max(dot(nWorldNormal, L), 0.0);
+		    Lo += (kD * albedoColor / PI + specular) * radiance * NdotL;
+		}
+
+		vec3 ambient = vec3(0.03) * albedoColor;
+		//* ao;
+		vec3 color = ambient + Lo;
+		color = color / (color + vec3(1.0));
+		color = pow(color, vec3(1.0/2.2));
+
+		return color;
 	}
 
 #endif
@@ -148,7 +197,6 @@ float CalcLitFactorTexture2D(in sampler2D shadowmap, in vec2 shadowmapSize, in v
 }
 
 /* nWorldNormal - n means that normal has to be normalized */
-
 vec3 GetDiffuseColor(in vec3 worldPos, in vec3 nWorldNormal)
 {
 	vec3 resultDiffuseColor = vec3(0);
@@ -216,9 +264,13 @@ void main()
 	vec4 albedoAndSpecular = texture(gBuffer_AlbedoNSpecular, fs_in.tex_coords);
 
 	// Lighting
-	vec3 diffuseColor = GetDiffuseColor(worldPos, worldNormal);
-	vec3 ambientColor = GetAmbientColor();
-	vec4 totalColor = vec4(albedoAndSpecular.rgb * (diffuseColor + ambientColor), 1);
+	#ifdef SHADING_MODEL_PBR
+		vec4 totalColor = vec4(GetPBRColor(worldPos, worldNormal, albedoAndSpecular.xyz), 1.0);
+	#else
+		vec3 diffuseColor = GetDiffuseColor(worldPos, worldNormal);
+		vec3 ambientColor = GetAmbientColor();
+		vec4 totalColor = vec4(albedoAndSpecular.rgb * (diffuseColor + ambientColor), 1);
+	#endif
 
-	 FragColor = totalColor;
+	FragColor = totalColor;
 }

@@ -22,16 +22,6 @@ namespace Event
    }
 
    template <typename... DataTypes>
-   void TEvent<DataTypes...>::SendEvent(DataTypes... data) const
-   {
-      EventData_t packedData = std::make_tuple<DataTypes...>(std::forward<DataTypes>(data)...);
-      for (auto& listener : m_listeners)
-      {
-         listener->ProcessEvent(packedData);
-      }
-   }
-
-   template <typename... DataTypes>
    void TEvent<DataTypes...>::ProcessEvent(const EventData_t& data)
    {
    }

@@ -284,6 +284,7 @@ namespace Graphics
                   }
                }
             }
+            m_deferredLightShader->SetCameraWorldPosition(m_scene->GetCamera()->GetEyeVector());
             m_deferredLightShader->SetDirectionalLightShadowMapCount(dirShadowMapCount);
             m_deferredLightShader->SetPointLightShadowMapCount(pointShadowMapCount);
             // ************************** SHADOWS ************************** //

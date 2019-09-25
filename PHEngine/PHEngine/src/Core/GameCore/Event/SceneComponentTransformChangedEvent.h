@@ -5,7 +5,7 @@
 namespace Event
 {
 
-   class ComponentTransformChangedEvent
+   class SceneComponentTransformChangedEvent
       : public TEvent<uint64_t>
    {
    public:
