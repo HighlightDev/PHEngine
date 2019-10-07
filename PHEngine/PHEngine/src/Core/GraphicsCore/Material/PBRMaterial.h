@@ -2,7 +2,6 @@
 
 #include "IMaterial.h"
 #include "MaterialProperty.h"
-#include "MaterialProcessPolicy.h"
 #include "Core/GraphicsCore/Texture/ITexture.h"
 
 #include <memory>

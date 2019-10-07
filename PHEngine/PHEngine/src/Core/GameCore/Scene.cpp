@@ -19,6 +19,8 @@
 #include "Core/GameCore/Components/ComponentData/InputComponentData.h"
 #include "Core/GraphicsCore/Material/PBRMaterial.h"
 
+#include "Core/GameCore/Components/CollisionComponent.h"
+
 using namespace Graphics::Texture;
 using namespace Common;
 using namespace EngineUtility;
@@ -237,6 +239,9 @@ namespace Game
          AllActors.push_back(pointLightActor);
       }
 #endif
+
+     // CollisionComponent* component = new CollisionComponent(0, true);
+      //component->Tick(.5f);
 
       // DirectionalLight
       {

@@ -65,9 +65,10 @@ namespace Graphics
       std::vector<std::shared_ptr<DirectionalLightSceneProxy>> DeferredShadingSceneRenderer::RetrieveDirectionalLightProxies(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy) const
       {
          std::vector<std::shared_ptr<DirectionalLightSceneProxy>> directionalLights;
+
          for (const auto& lightProxy : lightSourcesProxy)
          {
-            if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
+            if (LightSceneProxyType::DIR_LIGHT == lightProxy->GetLightProxyType())
                directionalLights.push_back(std::static_pointer_cast<DirectionalLightSceneProxy>(lightProxy));
          }
          return directionalLights;
@@ -76,9 +77,10 @@ namespace Graphics
       std::vector<std::shared_ptr<PointLightSceneProxy>> DeferredShadingSceneRenderer::RetrievePointLightProxies(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy) const
       {
          std::vector<std::shared_ptr<PointLightSceneProxy>> pointLights;
+
          for (const auto& lightProxy : lightSourcesProxy)
          {
-            if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
+            if (LightSceneProxyType::POINT_LIGHT == lightProxy->GetLightProxyType())
                pointLights.push_back(std::static_pointer_cast<PointLightSceneProxy>(lightProxy));
          }
          return pointLights;
@@ -254,7 +256,7 @@ namespace Graphics
             size_t pointLightIndex = 0, dirLightIndex = 0, shadowMapSlot = 3, dirShadowMapCount = 0, pointShadowMapCount = 0;
             for (auto& lightProxy : lightSourcesProxy)
             {
-               if (lightProxy->GetLightProxyType() == LightSceneProxyType::DIR_LIGHT)
+               if (LightSceneProxyType::DIR_LIGHT == lightProxy->GetLightProxyType())
                {
                   DirectionalLightSceneProxy* lightPtr = static_cast<DirectionalLightSceneProxy*>(lightProxy.get());
                   ProjectedDirShadowInfo* shadowInfo = lightPtr->GetProjectedDirShadowInfo();
@@ -269,7 +271,7 @@ namespace Graphics
                      shadowMapSlot++;
                   }
                }
-               else if (lightProxy->GetLightProxyType() == LightSceneProxyType::POINT_LIGHT)
+               else if (LightSceneProxyType::POINT_LIGHT == lightProxy->GetLightProxyType())
                {
                   PointLightSceneProxy* lightPtr = static_cast<PointLightSceneProxy*>(lightProxy.get());
                   ProjectedPointShadowInfo* shadowInfo = lightPtr->GetProjectedPointShadowInfo();
