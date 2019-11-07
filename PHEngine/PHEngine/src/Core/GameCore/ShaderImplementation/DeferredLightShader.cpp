@@ -63,6 +63,8 @@ namespace Game
          DefineConstant<float>(FragmentShader, "SHADOWMAP_BIAS_POINT_LIGHT", SHADOWMAP_BIAS_POINT_LIGHT);
          DefineConstant<int32_t>(FragmentShader, "PCF_SAMPLES_DIR_LIGHT", PCF_SAMPLES_DIR_LIGHT);
          DefineConstant<int32_t>(FragmentShader, "PCF_SAMPLES_POINT_LIGHT", PCF_SAMPLES_POINT_LIGHT);
+         DefineConstant<int32_t>(FragmentShader, "MAX_POINT_LIGHT_SHADOW_MAP_COUNT", MAX_POINT_LIGHT_SHADOW_MAP_COUNT);
+         DefineConstant<int32_t>(FragmentShader, "MAX_DIR_LIGHT_SHADOW_MAP_COUNT", MAX_DIR_LIGHT_SHADOW_MAP_COUNT);
 #ifdef SHADING_MODEL_PBR
          Define(FragmentShader, "SHADING_MODEL_PBR");
 #else

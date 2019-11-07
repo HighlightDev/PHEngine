@@ -1,5 +1,7 @@
 #pragma once
 
+#include <BulletPhys/btBulletDynamicsCommon.h>
+
 namespace Game
 {
 
@@ -8,6 +10,12 @@ namespace Game
    public:
       PhysicsWorld();
       ~PhysicsWorld();
+
+      btBroadphaseInterface* mBroadphase;
+      btDefaultCollisionConfiguration*        mCollisionConfiguration;
+      btCollisionDispatcher*                  mDispatcher;
+      btSequentialImpulseConstraintSolver*    mSolver;
+      btDiscreteDynamicsWorld*                mWorld;
    };
 
 }

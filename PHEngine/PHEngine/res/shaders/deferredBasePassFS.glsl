@@ -33,6 +33,7 @@ void main()
 	normalFromNM = tangentToWorld * normalFromNM;
 	
 	gBuffer_Position = vertex_shader_result.world_position;
-	gBuffer_Normal = normalize(normalFromNM);
+	gBuffer_Normal = normal;
+	//normalize(normalFromNM);
 	gBuffer_AlbedoNSpecular = vec4(albedoColor, specularFactor);
 }

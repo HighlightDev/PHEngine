@@ -22,6 +22,7 @@ void main()
 	normalFromNM = tangentToWorld * normalFromNM;
 	
 	gBuffer_Position = VsOutput.WorldCoordinates;
-	gBuffer_Normal = normalize(normalFromNM);
+	gBuffer_Normal = worldNormal;
+	//normalize(normalFromNM);
 	gBuffer_AlbedoNMetallic = vec4(albedoColor, metallicFactor);
 }

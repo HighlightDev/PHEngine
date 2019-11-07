@@ -11,15 +11,12 @@ namespace Game
 {
 	struct StaticMeshComponentData : public ComponentData
 	{
-		StaticMeshComponentData(const std::string& pathToMesh, const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scale,
-			const std::string& vsPath, const std::string& fsPath, std::shared_ptr<IMaterial> material)
+		StaticMeshComponentData(const std::string& pathToMesh, const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scale, std::shared_ptr<IMaterial> material)
 			: ComponentData()
 			, m_pathToMesh(pathToMesh)
 			, m_translation(translation)
 			, m_rotation(rotation)
 			, m_scale(scale)
-         , m_vsShaderPath(vsPath)
-         , m_fsShaderPath(fsPath)
          , m_material(material)
 		{
 		}
@@ -33,8 +30,6 @@ namespace Game
 		glm::vec3 m_translation;
 		glm::vec3 m_rotation;
 		glm::vec3 m_scale;
-		std::string m_vsShaderPath;
-		std::string m_fsShaderPath;
 
       std::shared_ptr<IMaterial> m_material;
 	};

@@ -209,21 +209,65 @@ namespace Game
 
       const float aspectRatio = 16.0f / 9.0f;
       ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 1000);
-      #if 0
+#if 1
       // PointLight
       {
-         // 0
-         std::shared_ptr<Actor> pointLightActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(glm::vec3(0, 50, 0), glm::vec3(), glm::vec3(1)));
 
-         auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
-         ProjectedPointShadowInfo* pointLightInfo = new ProjectedPointShadowInfo(pointLightTextureAtlasRequest);
+         const size_t total_objects = 50;
 
-         PointLightComponentData mData(glm::vec3(0), glm::vec3(), glm::vec3(0.005f, 0, 0), 3000, glm::vec3(0.2f, 0.2f, 0.2f), 
-            glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), pointLightInfo);
-         CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
+         float x_offset = 0, y_offset = 0.0f;
 
-#if DEBUG
+         for (size_t i = 0; i < 4; ++i)
+         {
+            x_offset = i / 5;
+            y_offset = i % 5;
+            // 0
+            std::shared_ptr<Actor> pointLightActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(glm::vec3(0, y_offset * 4.0f, -5), glm::vec3(), glm::vec3(1)));
 
+            auto pointLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureCubeAtlasRequest(glm::ivec2(512, 512));
+            //ProjectedPointShadowInfo* pointLightInfo = new ProjectedPointShadowInfo(pointLightTextureAtlasRequest);
+
+            PointLightComponentData mData(glm::vec3(0), glm::vec3(), glm::vec3(0.005f, 0, 0), 3000, glm::vec3(0.2f, 0.2f, 0.2f),
+               glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), nullptr);
+            CreateAndAddComponent_GameThread<PointLightComponent>(mData, pointLightActor);
+
+
+            std::shared_ptr<Actor> debugVisualLigthActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(glm::vec3(0, 0, 0), glm::vec3(), glm::vec3(1)));
+
+            BillboardComponentData mBillboardData(glm::vec3(0, 5, 0), glm::vec3(), glm::vec3(1),
+               folderManager->GetShadersPath() + "lampVS.glsl", folderManager->GetShadersPath() + "lampFS.glsl", folderManager->GetShadersPath() + "lampGS.glsl",
+               folderManager->GetEditorTexturePath() + "lamp.png");
+            CreateAndAddComponent_GameThread<BillboardComponent>(mBillboardData, debugVisualLigthActor);
+
+            pointLightActor->AttachActor(debugVisualLigthActor);
+
+
+            AllActors.push_back(pointLightActor);
+         }
+
+         // Test for PBR
+         {
+            auto albedoTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png");
+            auto normalMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetNormalMapPath() + "city_house_2_Nor.png");
+            auto specualrMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
+
+            float x_offset = 0, y_offset = 0.0f;
+
+            for (size_t i = 0; i < total_objects; ++i)
+            {
+               x_offset = i / 5;
+               y_offset = i % 5;
+               StaticMeshComponentData mData(folderManager->GetModelPath() + "sphere.obj", glm::vec3(x_offset * 2.0f, y_offset * 2.0f, 0), glm::vec3(), glm::vec3(0.5f),
+                  std::make_shared<PBRMaterial>(albedoTex, normalMapTex, specualrMapTex, nullptr, nullptr));
+
+               std::shared_ptr<Actor> houseActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+               CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
+               AllActors.push_back(houseActor);
+         }
+
+      }
+   #if DEBUG
+      #if 0
          std::shared_ptr<Actor> debugVisualLigthActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(glm::vec3(0, 0, 0), glm::vec3(), glm::vec3(1)));
 
          BillboardComponentData mBillboardData(glm::vec3(0, 5, 0), glm::vec3(), glm::vec3(1),
@@ -234,19 +278,15 @@ namespace Game
          CubemapComponentData mCubemapData(glm::vec3(), glm::vec3(), glm::vec3(1), folderManager->GetShadersPath() + "tSkyboxVS.glsl", folderManager->GetShadersPath() + "cubemapRendererFS.glsl", pointLightTextureAtlasRequest);
          CreateAndAddComponent_GameThread<CubemapComponent>(mCubemapData, debugVisualLigthActor);
          pointLightActor->AttachActor(debugVisualLigthActor);
-#endif
-
-         AllActors.push_back(pointLightActor);
+      #endif
+   #endif
       }
 #endif
-
-     // CollisionComponent* component = new CollisionComponent(0, true);
-      //component->Tick(.5f);
 
       // DirectionalLight
       {
          // 0
-         auto directionalLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
+         /*auto directionalLightTextureAtlasRequest = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
          ProjectedDirShadowInfo* dirLightInfo = new ProjectedDirShadowInfo(directionalLightTextureAtlasRequest);
 
          DirectionalLightComponentData mData(glm::vec3(0),
@@ -254,7 +294,7 @@ namespace Game
             glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.68f, 0.5f, 0.5f), glm::vec3(0.7f, 0.7f, 0.7f), dirLightInfo);
          std::shared_ptr<Actor> dirLightActor = std::make_shared<Actor>(std::make_shared<SceneComponent>());
          CreateAndAddComponent_GameThread<DirectionalLightComponent>(mData, dirLightActor);
-         AllActors.push_back(dirLightActor);
+         AllActors.push_back(dirLightActor);*/
 
          //// 1
          //auto directionalLightTextureAtlasRequest1 = TextureAtlasFactory::GetInstance()->AddTextureAtlasRequest(glm::ivec2(512, 512));
@@ -289,19 +329,19 @@ namespace Game
          //AllActors.push_back(dirLightActor3);
       }
 
-      // HOUSE
-      {
-         auto albedoTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png");
-         auto normalMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetNormalMapPath() + "city_house_2_Nor.png");
-         auto specualrMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
+      //// HOUSE
+      //{
+      //   auto albedoTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetAlbedoTexturePath() + "city_house_2_Col.png");
+      //   auto normalMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetNormalMapPath() + "city_house_2_Nor.png");
+      //   auto specualrMapTex = TexturePool::GetInstance()->GetOrAllocateResource(folderManager->GetSpecularMapPath() + "city_house_2_Spec.png");
 
-         StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(0), glm::vec3(), glm::vec3(5), folderManager->GetShadersPath() + "testVS.glsl",
-            folderManager->GetShadersPath() + "testFS.glsl", std::make_shared<PBRMaterial>(albedoTex, normalMapTex, specualrMapTex, nullptr, nullptr));
+      //   StaticMeshComponentData mData(folderManager->GetModelPath() + "City_House_2_BI.obj", glm::vec3(0), glm::vec3(), glm::vec3(5)
+      //      , std::make_shared<PBRMaterial>(albedoTex, normalMapTex, specualrMapTex, nullptr, nullptr));
 
-         std::shared_ptr<Actor> houseActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
-         CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
-         AllActors.push_back(houseActor);
-      }
+      //   std::shared_ptr<Actor> houseActor = std::make_shared<Actor>(std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));
+      //   CreateAndAddComponent_GameThread<StaticMeshComponent>(mData, houseActor);
+      //   AllActors.push_back(houseActor);
+      //}
 
       // SKELETAL MESH
       {

@@ -31,9 +31,22 @@ namespace Game
       return POINT_LIGHT_COMPONENT;
    }
 
+   float time = 0.0f;
+
    void PointLightComponent::Tick(float deltaTime)
    {
       Base::Tick(deltaTime);
+
+      time += deltaTime;
+
+      if (time > 360.0f)
+      {
+         time -= 360.0f;
+      }
+      
+      auto translation = GetTranslation();
+
+      //SetTranslation(glm::vec3(translation.x + std::cos(time) * 5.0f, translation.y + std::sin(time) * 5.0f, 0.0f));
    }
 
 }

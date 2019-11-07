@@ -226,8 +226,6 @@ namespace Graphics
 
             if (skeletalMeshPrimitives.size() > 0)
             {
-               //m_deferredBaseShaderSkeletal->ExecuteShader();
-               //mTestShaderSkelet->ExecuteShader();
                for (auto& proxy : skeletalMeshPrimitives)
                {
                   proxy->Render(viewMatrix, m_scene->ProjectionMatrix);
