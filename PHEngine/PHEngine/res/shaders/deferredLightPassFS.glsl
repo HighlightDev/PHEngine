@@ -47,77 +47,36 @@ in VS_OUT
 
 #ifdef SHADING_MODEL_PBR
 
-	float Metallic = 0.8;
-	float Roughness = 0.5;
+	const float Metallic = 0.8;
+	const float Roughness = 0.5;
 	const vec4 albedoCOLOR = vec4(1.0, 0.0, 0.0, 1.0);
 	const float Epsilon = 0.00001;
 	uniform float ao;
 
 	const float PI = 3.14159265359;
 
-	float DistributionGGX(vec3 N, vec3 H, float roughness)
+	float ndfGGX(float cosLh, float roughness)
 	{
-	    float a      = roughness * roughness;
-	    float a2     = a * a;
-	    float NdotH  = max(dot(N, H), 0.0);
-	    float NdotH2 = NdotH * NdotH;
+		float alpha   = roughness * roughness;
+		float alphaSq = alpha * alpha;
 
-	    float num   = a2;
-	    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-	    denom = PI * denom * denom;
-
-	    return num / denom;
+		float denom = (cosLh * cosLh) * (alphaSq - 1.0) + 1.0;
+		return alphaSq / (PI * denom * denom);
 	}
 
-	float GeometrySchlickGGX(float NdotV, float roughness)
+	// Single term for separable Schlick-GGX below.
+	float gaSchlickG1(float cosTheta, float k)
 	{
-	    float r = (roughness + 1.0);
-	    float k = (r * r) * 0.125; // 1 / 8
-
-	    float num   = NdotV;
-	    float denom = NdotV * (1.0 - k) + k;
-
-	    return num / denom;
+		return cosTheta / (cosTheta * (1.0 - k) + k);
 	}
 
-	float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+	// Schlick-GGX approximation of geometric attenuation function using Smith's method.
+	float gaSchlickGGX(float cosLi, float cosLo, float roughness)
 	{
-	    float NdotV = max(dot(N, V), 0.0);
-	    float NdotL = max(dot(N, L), 0.0);
-	    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
-	    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
-
-	    return ggx1 * ggx2;
+		float r = roughness + 1.0;
+		float k = (r * r) / 8.0; // Epic suggests using this roughness remapping for analytic lights.
+		return gaSchlickG1(cosLi, k) * gaSchlickG1(cosLo, k);
 	}
-
-//	vec3 fresnelSchlick(float cosTheta, vec3 F0)
-//	{
-//		return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
-//	}
-
-
-float ndfGGX(float cosLh, float roughness)
-{
-	float alpha   = roughness * roughness;
-	float alphaSq = alpha * alpha;
-
-	float denom = (cosLh * cosLh) * (alphaSq - 1.0) + 1.0;
-	return alphaSq / (PI * denom * denom);
-}
-
-// Single term for separable Schlick-GGX below.
-float gaSchlickG1(float cosTheta, float k)
-{
-	return cosTheta / (cosTheta * (1.0 - k) + k);
-}
-
-// Schlick-GGX approximation of geometric attenuation function using Smith's method.
-float gaSchlickGGX(float cosLi, float cosLo, float roughness)
-{
-	float r = roughness + 1.0;
-	float k = (r * r) / 8.0; // Epic suggests using this roughness remapping for analytic lights.
-	return gaSchlickG1(cosLi, k) * gaSchlickG1(cosLo, k);
-}
 
 	// Shlick's approximation of the Fresnel factor.
 	vec3 fresnelSchlick(vec3 F0, float cosTheta)
@@ -127,110 +86,100 @@ float gaSchlickGGX(float cosLi, float cosLo, float roughness)
 
 	vec3 GetPBRColor(in vec3 worldPos, in vec3 nWorldNormal, vec3 albedoColor)
 	{
-		//vec3 Lo = vec3(0.0);
-		vec3 V = normalize(CameraWorldPosition - worldPos);
+		// General data
+		vec3 F0 = mix(vec3(0.04), albedoColor, Metallic);
+		vec3 Lo = normalize(CameraWorldPosition - worldPos);
+		// Angle between surface normal and camera position.
+		float cosLo = max(0.0, dot(nWorldNormal, Lo));
+		// Specular reflection vector.
+		vec3 Lr = 2.0 * cosLo * nWorldNormal - Lo;
 
-		vec3 F0 = vec3(0.04);
-
-		if (fs_in.tex_coords.x < 0.5)
+		vec3 pointLighting = vec3(0);
 		{
-			Metallic = 0.8;	
-			Roughness = 0.2;
+			for (uint pointLightIndex = 0; pointLightIndex < PointLightCount; ++pointLightIndex)
+			{
+				// calculate per-light radiance
+				vec3 Li = normalize(PointLightPositionWorld[pointLightIndex] - worldPos);
+
+				// temporary
+				float attenuation = 1; // for now
+				vec3 lightRadiance = vec3(1); // for now
+				// temprorary
+
+				vec3 Lradiance = lightRadiance * attenuation;
+
+				// Half-vector between Li and Lo.
+				vec3 Lh = normalize(Li + Lo);
+
+				// Calculate angles between surface normal and various light vectors.
+				float cosLi = max(0.0, dot(nWorldNormal, Li));
+				float cosLh = max(0.0, dot(nWorldNormal, Lh));
+
+				// Calculate Fresnel term for direct lighting.
+				vec3 F  = fresnelSchlick(F0, max(0.0, dot(Lh, Lo)));
+				// Calculate normal distribution for specular BRDF.
+				float D = ndfGGX(cosLh, Roughness);
+				// Calculate geometric attenuation for specular BRDF.
+				float G = gaSchlickGGX(cosLi, cosLo, Roughness);
+
+				// Diffuse scattering happens due to light being refracted multiple times by a dielectric medium.
+				// Metals on the other hand either reflect or absorb energy, so diffuse contribution is always zero.
+				// To be energy conserving we must scale diffuse BRDF contribution based on Fresnel factor & metalness.
+				vec3 kd = mix(vec3(1.0) - F, vec3(0.0), Metallic);
+
+				// Lambert diffuse BRDF.
+				vec3 diffuseBRDF = kd * albedoColor;
+
+				// Cook-Torrance specular microfacet BRDF.
+				vec3 specularBRDF = (F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo);
+
+				// Total contribution for this light.
+				pointLighting += (diffuseBRDF + specularBRDF) * Lradiance * cosLi;
+			}
 		}
-		else 
+
+		vec3 directLighting = vec3(0);
 		{
-			Metallic = 0.2;	
-			Roughness = 0.8;
-		}
+			for (uint directLightIndex = 0; directLightIndex < DirLightCount; ++directLightIndex)
+			{
+				// calculate per-light radiance
+				vec3 Li = -normalize(DirLightDirection[directLightIndex]);
 
-		F0 = mix(F0, albedoColor, Metallic);
+				// temporary
+				vec3 lightRadiance = vec3(1); // for now
+				// temprorary
 
-		vec3 N = nWorldNormal;
+				vec3 Lradiance = lightRadiance;
 
-		/* POINT LIGHTS */
+				// Half-vector between Li and Lo.
+				vec3 Lh = normalize(Li + Lo);
 
-	// Outgoing light direction (vector from world-space fragment position to the "eye").
-	vec3 Lo = normalize(CameraWorldPosition - worldPos);
+				// Calculate angles between surface normal and various light vectors.
+				float cosLi = max(0.0, dot(nWorldNormal, Li));
+				float cosLh = max(0.0, dot(nWorldNormal, Lh));
 
-	// Angle between surface normal and outgoing light direction.
-	float cosLo = max(0.0, dot(N, Lo));
+				// Calculate Fresnel term for direct lighting.
+				vec3 F  = fresnelSchlick(F0, max(0.0, dot(Lh, Lo)));
+				// Calculate normal distribution for specular BRDF.
+				float D = ndfGGX(cosLh, Roughness);
+				// Calculate geometric attenuation for specular BRDF.
+				float G = gaSchlickGGX(cosLi, cosLo, Roughness);
 
-	// Specular reflection vector.
-	vec3 Lr = 2.0 * cosLo * N - Lo;
+				// Diffuse scattering happens due to light being refracted multiple times by a dielectric medium.
+				// Metals on the other hand either reflect or absorb energy, so diffuse contribution is always zero.
+				// To be energy conserving we must scale diffuse BRDF contribution based on Fresnel factor & metalness.
+				vec3 kd = mix(vec3(1.0) - F, vec3(0.0), Metallic);
 
-	// Direct lighting calculation for analytical lights.
-	vec3 pointLighting = vec3(0);
-		for (uint pointLightIndex = 0; pointLightIndex < 4; ++pointLightIndex)
-		{
-			// calculate per-light radiance
+				// Lambert diffuse BRDF.
+				vec3 diffuseBRDF = kd * albedoColor;
 
-//			vec3 L_nonNormalized = PointLightPositionWorld[pointLightIndex] - worldPos;
-//
-//			vec3 L = normalize(L_nonNormalized);
-//			vec3 H = normalize(V + L);
-//
-//			float distance = 20.0 / dot(L_nonNormalized, L_nonNormalized);
-//
-//			float attenuation = 1.0;
-//			vec3 radiance = vec3(1) * attenuation;
-//
-//			 // cook-torrance brdf
-//		    float NDF = DistributionGGX(nWorldNormal, H, Roughness);
-//		    float G = GeometrySmith(nWorldNormal, V, L, Roughness);
-//		    vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);
-//
-//			vec3 kS = F;
-//		    vec3 kD = vec3(1.0) - kS;
-//		    kD *= 1.0 - Metallic;
-//
-//			vec3 numerator    = NDF * G * F;
-//		    float denominator = 4.0 * max(dot(nWorldNormal, V), 0.0) * max(dot(nWorldNormal, L), 0.0);
-//		    vec3 specular     = numerator / max(denominator, 0.001);
-//
-//			// add to outgoing radiance Lo
-//		    float NdotL = max(dot(nWorldNormal, L), 0.0);
-//		    Lo += (kD * albedoColor / PI + specular) * radiance * NdotL;
+				// Cook-Torrance specular microfacet BRDF.
+				vec3 specularBRDF = (F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo);
 
-
-		vec3 Li = normalize(PointLightPositionWorld[pointLightIndex] - worldPos);
-
-		// temporary
-		float attenuation = 1; // for now
-		vec3 lightRadiance = vec3(1); // for now 
-		// temprorary
-
-		vec3 Lradiance = lightRadiance * attenuation;
-
-		// Half-vector between Li and Lo.
-		vec3 Lh = normalize(Li + Lo);
-
-		// Calculate angles between surface normal and various light vectors.
-		float cosLi = max(0.0, dot(N, Li));
-		float cosLh = max(0.0, dot(N, Lh));
-
-		// Calculate Fresnel term for direct lighting.
-		vec3 F  = fresnelSchlick(F0, max(0.0, dot(Lh, Lo)));
-		// Calculate normal distribution for specular BRDF.
-		float D = ndfGGX(cosLh, Roughness);
-		// Calculate geometric attenuation for specular BRDF.
-		float G = gaSchlickGGX(cosLi, cosLo, Roughness);
-
-		// Diffuse scattering happens due to light being refracted multiple times by a dielectric medium.
-		// Metals on the other hand either reflect or absorb energy, so diffuse contribution is always zero.
-		// To be energy conserving we must scale diffuse BRDF contribution based on Fresnel factor & metalness.
-		vec3 kd = mix(vec3(1.0) - F, vec3(0.0), Metallic);
-
-		// Lambert diffuse BRDF.
-		// We don't scale by 1/PI for lighting & material units to be more convenient.
-		// See: https://seblagarde.wordpress.com/2012/01/08/pi-or-not-to-pi-in-game-lighting-equation/
-		vec3 diffuseBRDF = kd * albedoColor;
-
-		// Cook-Torrance specular microfacet BRDF.
-		vec3 specularBRDF = (F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo);
-
-		// Total contribution for this light.
-		pointLighting += (diffuseBRDF + specularBRDF) * Lradiance * cosLi;
-		}
+				// Total contribution for this light.
+				pointLighting += (diffuseBRDF + specularBRDF) * Lradiance * cosLi;
+			}
+			}
 
 		return pointLighting;
 	}

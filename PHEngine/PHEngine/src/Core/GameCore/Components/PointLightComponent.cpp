@@ -46,7 +46,7 @@ namespace Game
       
       auto translation = GetTranslation();
 
-      //SetTranslation(glm::vec3(translation.x + std::cos(time) * 5.0f, translation.y + std::sin(time) * 5.0f, 0.0f));
+      SetTranslation(glm::vec3(translation.x + std::cos(time) * 5.0f, translation.y + std::sin(time) * 5.0f, 0.0f));
    }
 
 }
