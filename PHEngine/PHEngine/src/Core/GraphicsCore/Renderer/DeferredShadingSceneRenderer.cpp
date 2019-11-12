@@ -15,7 +15,6 @@
 #include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
 
 #include <gl/glew.h>
-#include <iostream>
 
 using namespace Resources;
 using namespace Common; 

@@ -5,8 +5,9 @@
 namespace Game
 {
 
-	Actor::Actor(std::shared_ptr<Game::SceneComponent> rootComponent)
-      : m_rootComponent(rootComponent)
+	Actor::Actor(const std::string& name, std::shared_ptr<Game::SceneComponent> rootComponent)
+      : mName(name)
+      , m_rootComponent(rootComponent)
       , m_inputComponent(nullptr)
       , m_movementComponent(nullptr)
 	{
@@ -67,6 +68,8 @@ namespace Game
 
 			// Update all components that have transformation
          glm::mat4 rootRelativeMatrix(1);
+         rootRelativeMatrix *= parentRelativeMatrix;
+
          if (m_rootComponent)
          {
             rootRelativeMatrix = std::move(m_rootComponent->GetRelativeMatrix());
@@ -205,6 +208,15 @@ namespace Game
 
       rootComponent = ptrActor->GetRootComponent();
       return rootComponent;
+   }
+
+   std::string Actor::GetName() const {
+      return mName;
+   }
+
+   void Actor::SetName(const std::string& name)
+   {
+      mName = name;
    }
 
 }

@@ -69,7 +69,7 @@ namespace Graphics
 
       void MaterialShaderImp::SetUniformValues()
       {
-         size_t index = 0;
+         int32_t index = 0;
          for (auto namePlusPropPair : mMaterialInstance->GetProperties())
          {
             namePlusPropPair.second->SetValueToUniform(UniformsMap[namePlusPropPair.first], index);

@@ -78,7 +78,7 @@ namespace std
    {
       std::size_t operator()(const TexParams& k) const
       {
-         return hash<int32_t>()(k.UniqueIndex)
+         return hash<size_t>()(k.UniqueIndex)
          ^  hash<int32_t>()(k.TexBufferWidth)
          ^ hash<int32_t>()(k.TexBufferHeight)
          ^ hash<int32_t>()(k.TexTarget)

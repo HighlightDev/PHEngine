@@ -18,6 +18,7 @@ namespace Game
 	{
 	private:
 
+      std::string mName;
 		std::shared_ptr<Game::SceneComponent> m_rootComponent;
 
 	protected:
@@ -34,7 +35,7 @@ namespace Game
 
       std::vector<std::shared_ptr<Game::Component>> m_allComponents;
 
-		Actor(std::shared_ptr<Game::SceneComponent> rootComponent = nullptr);
+		Actor(const std::string& name, std::shared_ptr<Game::SceneComponent> rootComponent = nullptr);
 
 		virtual ~Actor();
 
@@ -55,7 +56,11 @@ namespace Game
 
 		void SetParent(Actor* actor);
 
+      void SetName(const std::string& name);
+
       Actor* GetParent() const;
+
+      std::string GetName() const;
 
 		void AttachActor(std::shared_ptr<Actor> actor);
 

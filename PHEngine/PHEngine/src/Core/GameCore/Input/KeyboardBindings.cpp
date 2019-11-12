@@ -41,8 +41,7 @@ namespace Game
 
    bool KeyboardBindings::GetKeyState(Keys key) const
    {
-      auto it = keyboardMaskMap.find(key);
-      return it != keyboardMaskMap.end();
+      return keyboardMaskMap.find(key) != keyboardMaskMap.end();
    }
 
 }
