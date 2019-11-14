@@ -47,8 +47,8 @@ in VS_OUT
 
 #ifdef SHADING_MODEL_PBR
 
-	const float Metallic = 0.8;
-	const float Roughness = 0.5;
+	const float Metallic = 0.2;
+	const float Roughness = 0.7;
 	const vec4 albedoCOLOR = vec4(1.0, 0.0, 0.0, 1.0);
 	const float Epsilon = 0.00001;
 	uniform float ao;

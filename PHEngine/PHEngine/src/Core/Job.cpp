@@ -33,4 +33,9 @@ namespace Thread
       {
          mCallback();
       }
+
+      uint64_t Job::GetHash() const
+      {
+         return mCreatorObjectId ^ mFunctionId;
+      }
 }

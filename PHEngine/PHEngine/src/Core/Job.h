@@ -22,6 +22,7 @@ namespace Thread
 
       uint64_t GetCreatorObjectId() const;
       uint64_t GetFunctionId() const;
+      uint64_t GetHash() const;
       callback_t GetCallback() const;
 
       void operator()() const;

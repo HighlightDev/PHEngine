@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
+#include <set>
 #include <mutex>
 
 #include "Job.h"
@@ -30,13 +32,20 @@ InterThreadMgrInstance.SpinGameThreadJobs();
    class InterThreadCommunicationMgr
    {
 
+      const size_t mPoolSize = 100;
+
       std::mutex m_gameThreadMutex;
 
       std::mutex m_renderThreadMutex;
 
+      using threadIndex_t = std::set<size_t>;
+      using threadJobsHashType = std::unordered_map<uint64_t, threadIndex_t>;
+
       std::vector<Job> m_gameThreadJobs;
+      threadJobsHashType m_gameThreadJobsHashes;
 
       std::vector<Job> m_renderThreadJobs;
+      threadJobsHashType m_renderThreadJobsHashes;
 
    public:
 
@@ -58,7 +67,9 @@ InterThreadMgrInstance.SpinGameThreadJobs();
 
       void ProcessPushRenderThreadJob(const EnqueueJobPolicy policy, const Job& job);
       void ProcessPushGameThreadJob(const EnqueueJobPolicy policy, const Job& job);
-      void ProcessPushJob(const EnqueueJobPolicy policy, const Job& job, std::vector<Job>& jobs);
+      void ProcessPushJob(const EnqueueJobPolicy policy, const Job& job, std::vector<Job>& jobs, threadJobsHashType& hashes, std::mutex& lockMutex);
+      
+      void CORE_ReplaceJob(const Job& job, std::vector<Job>& jobs, threadJobsHashType& hashes);
 
       inline bool AreGameJobsAwaiting() const {
 
