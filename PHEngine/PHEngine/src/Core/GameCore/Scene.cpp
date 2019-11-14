@@ -257,7 +257,7 @@ namespace Game
             {
                x_offset = i / 5;
                y_offset = i % 5;
-               StaticMeshComponentData mData(folderManager->GetModelPath() + "sphere.obj", glm::vec3(x_offset * 2.0f, y_offset * 2.0f, 0), glm::vec3(), glm::vec3(0.5f),
+               StaticMeshComponentData mData(folderManager->GetModelPath() + "sphere.obj", glm::vec3(x_offset * 2.5f, y_offset * 2.5f, 0), glm::vec3(), glm::vec3(0.5f),
                   std::make_shared<PBRMaterial>(albedoTex, nullptr, nullptr, nullptr, nullptr));
 
                std::shared_ptr<Actor> houseActor = std::make_shared<Actor>("House Actor", std::make_shared<SceneComponent>(std::move(glm::vec3(10)), std::move(glm::vec3(0)), std::move(glm::vec3(1))));

@@ -29,6 +29,7 @@ InterThreadMgrInstance.SpinGameThreadJobs();
 
    class InterThreadCommunicationMgr
    {
+      const size_t ThreadPoolCapacity = 80;
 
       std::mutex m_gameThreadMutex;
 

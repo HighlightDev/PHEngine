@@ -10,7 +10,7 @@ uniform sampler2D ambientOcclusionMap;
 
 vec3 GetMaterialAlbedo(in MATERIAL_VS_OUTPUT materialIn)
 {
-	return texture(albedo, materialIn.TextureCoordinates.xy);
+	return texture(albedo, materialIn.TextureCoordinates.xy).rgb;
 }
 
 float GetMaterialRoughness(in MATERIAL_VS_OUTPUT materialIn)
@@ -35,5 +35,5 @@ float GetMaterialAlphaMask(in MATERIAL_VS_OUTPUT materialIn)
 
 vec3 GetMaterialNormalMapNormal(in MATERIAL_VS_OUTPUT materialIn)
 {
-	return (texture(normalMap, materialIn.TextureCoordinates.xy) * 2.0 - 1.0);
+	return (texture(normalMap, materialIn.TextureCoordinates.xy).rgb * 2.0 - 1.0);
 }
