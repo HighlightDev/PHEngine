@@ -2,6 +2,8 @@
 
 #include "Core/GameCore/Scene.h"
 #include "Core/GraphicsCore/Renderer/DeferredShadingSceneRenderer.h"
+#include "Core/GameCore/Level.h"
+#include "Core/GameCore/LevelFactory.h"
 
 #include <thread>
 #include <chrono>
@@ -20,13 +22,13 @@ private:
 
    static constexpr double InvLimitFPS = 1.0 / 60.0;
 
-   // TODO: INSIDE WORLD
+   LevelFactory mLevelFactory;
 
    InterThreadCommunicationMgr m_interThreadMgr;
 
-   Scene m_scene;
+   std::shared_ptr<Level> m_level;
 
-   DeferredShadingSceneRenderer m_sceneRenderer;
+   std::unique_ptr<DeferredShadingSceneRenderer> m_sceneRenderer;
 
    std::thread m_gameThread;
 
@@ -42,6 +44,8 @@ public:
 	Engine();
 
 	~Engine();
+
+   void InitWorld(const std::string& levelName);
 
    void PostConstructorInitialize();
 

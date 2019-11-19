@@ -3,30 +3,33 @@
 
 Engine::Engine()
    : m_interThreadMgr()
-   , m_scene(m_interThreadMgr)
-   , m_sceneRenderer(m_interThreadMgr, &m_scene)
    , mLastRenderThreadPulseTime(Clock_t::now())
    , mRenderThreadDeltaTimeSeconds()
    , mLastGameThreadPulseTime(Clock_t::now())
    , mGameThreadDeltaTimeSeconds()
    , mGameThreadSumDeltaTimeSec()
 {
-   PostConstructorInitialize();
 }
 
 Engine::~Engine()
 {
 }
 
-void Engine::PostConstructorInitialize()
+void Engine::InitWorld(const std::string& levelName)
 {
-   m_scene.AddTestActors();
+   m_level = mLevelFactory.CreateLevel(levelName, m_interThreadMgr);
+   m_sceneRenderer = std::make_unique<DeferredShadingSceneRenderer>(m_interThreadMgr, m_level);
 
-   m_scene.PostConstructorInitialize();
-   m_sceneRenderer.PostConstructorInitialize();
+   PostConstructorInitialize();
 
    m_gameThread = std::thread(std::bind(&Engine::GameThreadPulse, this));
    m_gameThread.detach();
+}
+
+void Engine::PostConstructorInitialize()
+{
+   m_level->PostConstructorInitialize();
+   m_sceneRenderer->PostConstructorInitialize();
 }
 
 void Engine::GameThreadPulse()
@@ -42,7 +45,7 @@ void Engine::GameThreadPulse()
          if (mGameThreadSumDeltaTimeSec >= InvLimitFPS) // 1 / 60 of a second
          {
             // This should be executed on game thread
-            m_scene.Tick_GameThread(static_cast<float>(mGameThreadDeltaTimeSeconds));
+            m_level->TickLevel((float)mGameThreadDeltaTimeSeconds);
             mLastGameThreadPulseTime = Clock_t::now();
             mGameThreadSumDeltaTimeSec = 0.0;
          }
@@ -58,7 +61,7 @@ void Engine::RenderThreadPulse()
       
       // This should be executed on render thread
       SPIN_RENDER_THREAD_JOBS(m_interThreadMgr);
-      m_sceneRenderer.RenderScene_RenderThread();
+      m_sceneRenderer->RenderScene_RenderThread();
       mLastRenderThreadPulseTime = Clock_t::now();
    }
 
@@ -71,12 +74,12 @@ void Engine::TickWindow()
 
 void Engine::MouseMove()
 {
-   m_scene.CameraRotate();
+   m_level->CameraRotate();
 }
 
 void Engine::KeyDown()
 {
-   m_scene.CameraMove();
+   m_level->CameraMove();
 }
 
 double Engine::GetRenderThreadDeltaSeconds() const
@@ -107,7 +110,7 @@ double Engine::GetGameThreadDeltaTime() const
 
 void Engine::PushFrame()
 {
-   m_sceneRenderer.PushRenderTargetToTextureRenderer();
+   m_sceneRenderer->PushRenderTargetToTextureRenderer();
 }
 
 void Engine::RecompileAllShaders()

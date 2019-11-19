@@ -10,6 +10,8 @@
 #include "GuiMain.h"
 #include "Core/GameCore/KeyboardInputManager.h"
 
+#include "Core/GameCore/Level.h"
+
 using namespace Game;
 
 bool bMouseMove = false;
@@ -143,6 +145,7 @@ int32_t main(int32_t argc, char** argv)
 	}
 
 	Engine engine;
+   engine.InitWorld("TestLevel");
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))

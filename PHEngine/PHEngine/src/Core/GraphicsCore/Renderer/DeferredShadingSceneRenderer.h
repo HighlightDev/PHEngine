@@ -22,6 +22,7 @@
 #include "Core/GameCore/ShaderImplementation/VertexFactoryImp/SkeletalMeshVertexFactory.h"
 #include "Core/GameCore/ShaderImplementation/VertexFactoryImp/StaticMeshVertexFactory.h"
 #include "Core/GameCore/ShaderImplementation/DeferredCollectShader.h"
+#include "Core/GameCore/Level.h"
 
 using namespace Game::ShaderImpl;
 using namespace Game;
@@ -40,7 +41,7 @@ namespace Graphics
          InterThreadCommunicationMgr& m_interThreadMgr;
 
          /* Scene to render */
-         Scene* const m_scene;
+         std::weak_ptr<Level> mLevel;
          std::unique_ptr<DeferredShadingGBuffer> m_gbuffer;
 
          // Shaders
@@ -54,6 +55,10 @@ namespace Graphics
 
          // Texture renderer
          TextureRenderer m_textureRenderer;
+
+      public:
+
+         glm::mat4 ProjectionMatrix;
 
       private:
 
@@ -72,7 +77,7 @@ namespace Graphics
 
       public:
 
-         DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene);
+         DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, std::weak_ptr<Level> currentLevel);
 
 			~DeferredShadingSceneRenderer();
 

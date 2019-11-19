@@ -13,6 +13,7 @@
 #include "Core/GraphicsCore/SceneProxy/DirectionalLightSceneProxy.h"
 #include "Core/GraphicsCore/SceneProxy/PointLightSceneProxy.h"
 #include "Core/GraphicsCore/Shadow/ProjectedShadowInfo.h"
+#include "Core/UtilityCore/EngineMath.h"
 
 #include <gl/glew.h>
 
@@ -22,18 +23,22 @@ using namespace Graphics;
 using namespace Graphics::Renderer;
 using namespace Graphics::Proxy;
 using namespace Graphics::OpenGL;
+using namespace EngineUtility;
 
 namespace Graphics
 {
    namespace Renderer
    {
 
-      DeferredShadingSceneRenderer::DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, Scene* const scene)
+      DeferredShadingSceneRenderer::DeferredShadingSceneRenderer(InterThreadCommunicationMgr& interThreadMgr, std::weak_ptr<Level> level)
          : m_interThreadMgr(interThreadMgr)
-         , m_scene(scene)
+         , mLevel(level)
          , m_gbuffer(std::make_unique<DeferredShadingGBuffer>(GlobalProperties::GetInstance()->GetInputData().GetWindowWidth(), GlobalProperties::GetInstance()->GetInputData().GetWindowHeight()))
       {
          const auto& folderManager = FolderManager::GetInstance();
+
+         const float aspectRatio = 16.0f / 9.0f;
+         ProjectionMatrix = glm::perspective<float>(DEG_TO_RAD(60), aspectRatio, 1, 1000);
 
          ShaderParams shaderParams1("DeferredNonSkeletalBase Shader", folderManager->GetShadersPath() + "deferredNonSkeletalBasePassVS.glsl", folderManager->GetShadersPath() + "deferredBasePassFS.glsl", "", "", "", "");
          ShaderParams shaderParams2("DeferredSkeletalBase Shader", folderManager->GetShadersPath() + "deferredSkeletalBasePassVS.glsl", folderManager->GetShadersPath() + "deferredBasePassFS.glsl", "", "", "", "");
@@ -219,15 +224,18 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::DeferredBasePass_RenderThread(std::vector<PrimitiveSceneProxy*>& nonSkeletalMeshPrimitives, std::vector<PrimitiveSceneProxy*>& skeletalMeshPrimitives, glm::mat4& viewMatrix)
       {
+         if (std::shared_ptr<Level> level = mLevel.lock())
          {
             // Deferred shading collect info
             m_gbuffer->BindDeferredGBuffer();
+
+            glm::mat4 projectionMatrix = ProjectionMatrix;
 
             if (skeletalMeshPrimitives.size() > 0)
             {
                for (auto& proxy : skeletalMeshPrimitives)
                {
-                  proxy->Render(viewMatrix, m_scene->ProjectionMatrix);
+                  proxy->Render(viewMatrix, projectionMatrix);
                }
             }
 
@@ -235,7 +243,7 @@ namespace Graphics
             {
                for (auto& proxy : nonSkeletalMeshPrimitives)
                {
-                  proxy->Render(viewMatrix, m_scene->ProjectionMatrix);
+                  proxy->Render(viewMatrix, projectionMatrix);
                }
             }
 
@@ -245,6 +253,7 @@ namespace Graphics
 
       void DeferredShadingSceneRenderer::DeferredLightPass_RenderThread(const std::vector<std::shared_ptr<LightSceneProxy>>& lightSourcesProxy)
       {
+         if (std::shared_ptr<Level> level = mLevel.lock())
          {
             // TODO: Make some check if light source (point or spot light) is too far from current view position
             m_deferredLightShader->ExecuteShader();
@@ -283,7 +292,7 @@ namespace Graphics
                   }
                }
             }
-            m_deferredLightShader->SetCameraWorldPosition(m_scene->GetCamera()->GetEyeVector());
+            m_deferredLightShader->SetCameraWorldPosition(level->GetCamera()->GetEyeVector());
             m_deferredLightShader->SetDirectionalLightShadowMapCount(dirShadowMapCount);
             m_deferredLightShader->SetPointLightShadowMapCount(pointShadowMapCount);
             // ************************** SHADOWS ************************** //
@@ -296,7 +305,7 @@ namespace Graphics
             m_deferredLightShader->SetGBufferAlbedoNSpecular(1);
             m_deferredLightShader->SetGBufferNormal(2);
 
-            m_deferredLightShader->SetLightsInfo(m_scene->LightProxies);
+            m_deferredLightShader->SetLightsInfo(level->mScene.LightProxies);
             ScreenQuad::GetInstance()->GetBuffer()->RenderVAO(GL_TRIANGLES);
             m_deferredLightShader->StopShader();
          }
@@ -316,56 +325,59 @@ namespace Graphics
 
          for (auto& proxy : forwardedPrimitives)
          {
-            proxy->Render(const_cast<glm::mat4&>(viewMatrix), m_scene->ProjectionMatrix);
+            proxy->Render(const_cast<glm::mat4&>(viewMatrix), ProjectionMatrix); // TODO: remove from scene projection matrix and camera to render thread (I think)
          }
       }
 
       void DeferredShadingSceneRenderer::RenderScene_RenderThread()
       {
-         glEnable(GL_DEPTH_TEST);
-
-         /***** Access view matrix from GAME THREAD  *****/
-         glm::mat4 viewMatrix = m_scene->GetCamera()->GetViewMatrix();
-
-         std::vector<PrimitiveSceneProxy*> drawDeferredShadedPrimitives;
-         std::vector<PrimitiveSceneProxy*> drawForwardShadedPrimitives;
-
-         for (auto& proxy : m_scene->SceneProxies)
+         if (std::shared_ptr<Level> level = mLevel.lock())
          {
-            if (proxy->IsDeferred())
-               drawDeferredShadedPrimitives.push_back(proxy.get());
-            else
-               drawForwardShadedPrimitives.push_back(proxy.get());
-         }
 
-         const bool bIsForwardShadedPrimitives = drawForwardShadedPrimitives.size() > 0;
+            glEnable(GL_DEPTH_TEST);
 
-         std::vector<PrimitiveSceneProxy*> skeletalPrimitives, nonSkeletalPrimitives;
-         for (auto& proxy : drawDeferredShadedPrimitives)
-         {
-            if (proxy->GetComponentType() == SKELETAL_MESH_COMPONENT)
+            /***** Access view matrix from GAME THREAD  *****/
+            glm::mat4 viewMatrix = level->GetCamera()->GetViewMatrix();
+
+            std::vector<PrimitiveSceneProxy*> drawDeferredShadedPrimitives;
+            std::vector<PrimitiveSceneProxy*> drawForwardShadedPrimitives;
+
+            for (auto& proxy : level->mScene.SceneProxies)
             {
-               skeletalPrimitives.push_back(proxy);
+               if (proxy->IsDeferred())
+                  drawDeferredShadedPrimitives.push_back(proxy.get());
+               else
+                  drawForwardShadedPrimitives.push_back(proxy.get());
             }
-            else
+
+            const bool bIsForwardShadedPrimitives = drawForwardShadedPrimitives.size() > 0;
+
+            std::vector<PrimitiveSceneProxy*> skeletalPrimitives, nonSkeletalPrimitives;
+            for (auto& proxy : drawDeferredShadedPrimitives)
             {
-               nonSkeletalPrimitives.push_back(proxy);
+               if (proxy->GetComponentType() == SKELETAL_MESH_COMPONENT)
+               {
+                  skeletalPrimitives.push_back(proxy);
+               }
+               else
+               {
+                  nonSkeletalPrimitives.push_back(proxy);
+               }
             }
+
+            DepthPass(nonSkeletalPrimitives, skeletalPrimitives, level->mScene.LightProxies);
+
+            DeferredBasePass_RenderThread(nonSkeletalPrimitives, skeletalPrimitives, viewMatrix);
+
+            DeferredLightPass_RenderThread(level->mScene.LightProxies);
+
+            if (bIsForwardShadedPrimitives)
+            {
+               ForwardBasePass_RenderThread(drawForwardShadedPrimitives, viewMatrix);
+            }
+
+            DebugFramePanelsPass();
          }
-
-         DepthPass(nonSkeletalPrimitives, skeletalPrimitives, m_scene->LightProxies);
-
-         DeferredBasePass_RenderThread(nonSkeletalPrimitives, skeletalPrimitives, viewMatrix);
-
-         DeferredLightPass_RenderThread(m_scene->LightProxies);
-
-         if (bIsForwardShadedPrimitives)
-         {
-            ForwardBasePass_RenderThread(drawForwardShadedPrimitives, viewMatrix);
-         }
-
-         DebugFramePanelsPass();
-
       }
 
       void DeferredShadingSceneRenderer::DebugFramePanelsPass()
