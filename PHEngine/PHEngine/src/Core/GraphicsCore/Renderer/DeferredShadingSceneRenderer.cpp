@@ -305,7 +305,7 @@ namespace Graphics
             m_deferredLightShader->SetGBufferAlbedoNSpecular(1);
             m_deferredLightShader->SetGBufferNormal(2);
 
-            m_deferredLightShader->SetLightsInfo(level->mScene.LightProxies);
+            m_deferredLightShader->SetLightsInfo(level->GetLightProxies());
             ScreenQuad::GetInstance()->GetBuffer()->RenderVAO(GL_TRIANGLES);
             m_deferredLightShader->StopShader();
          }
@@ -342,7 +342,7 @@ namespace Graphics
             std::vector<PrimitiveSceneProxy*> drawDeferredShadedPrimitives;
             std::vector<PrimitiveSceneProxy*> drawForwardShadedPrimitives;
 
-            for (auto& proxy : level->mScene.SceneProxies)
+            for (auto& proxy : level->GetSceneProxies())
             {
                if (proxy->IsDeferred())
                   drawDeferredShadedPrimitives.push_back(proxy.get());
@@ -365,11 +365,11 @@ namespace Graphics
                }
             }
 
-            DepthPass(nonSkeletalPrimitives, skeletalPrimitives, level->mScene.LightProxies);
+            DepthPass(nonSkeletalPrimitives, skeletalPrimitives, level->GetLightProxies());
 
             DeferredBasePass_RenderThread(nonSkeletalPrimitives, skeletalPrimitives, viewMatrix);
 
-            DeferredLightPass_RenderThread(level->mScene.LightProxies);
+            DeferredLightPass_RenderThread(level->GetLightProxies());
 
             if (bIsForwardShadedPrimitives)
             {

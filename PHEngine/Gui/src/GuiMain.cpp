@@ -145,7 +145,7 @@ int32_t main(int32_t argc, char** argv)
 	}
 
 	Engine engine;
-   engine.InitWorld("TestLevel");
+   engine.PlayLevel(std::make_shared<Level>(engine.GetThreadCommunicationManager()));
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))

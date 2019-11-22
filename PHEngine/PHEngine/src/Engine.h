@@ -22,8 +22,6 @@ private:
 
    static constexpr double InvLimitFPS = 1.0 / 60.0;
 
-   LevelFactory mLevelFactory;
-
    InterThreadCommunicationMgr m_interThreadMgr;
 
    std::shared_ptr<Level> m_level;
@@ -45,7 +43,7 @@ public:
 
 	~Engine();
 
-   void InitWorld(const std::string& levelName);
+   void PlayLevel(std::shared_ptr<Level> level);
 
    void PostConstructorInitialize();
 
@@ -60,7 +58,10 @@ public:
    void KeyDown();
 
    double GetRenderThreadDeltaTime() const;
+
    double GetGameThreadDeltaTime() const;
+
+   InterThreadCommunicationMgr& GetThreadCommunicationManager();
 
 #if DEBUG
 
@@ -73,6 +74,7 @@ public:
 private:
 
    double GetRenderThreadDeltaSeconds() const;
+
    double GetGameThreadDeltaSeconds() const;
 
 };

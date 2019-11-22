@@ -15,15 +15,22 @@ Engine::~Engine()
 {
 }
 
-void Engine::InitWorld(const std::string& levelName)
+void Engine::PlayLevel(std::shared_ptr<Level> level)
 {
-   m_level = mLevelFactory.CreateLevel(levelName, m_interThreadMgr);
+   m_level = level;
    m_sceneRenderer = std::make_unique<DeferredShadingSceneRenderer>(m_interThreadMgr, m_level);
+
+   m_level->InitLevel();
 
    PostConstructorInitialize();
 
    m_gameThread = std::thread(std::bind(&Engine::GameThreadPulse, this));
    m_gameThread.detach();
+}
+
+InterThreadCommunicationMgr& Engine::GetThreadCommunicationManager()
+{
+   return m_interThreadMgr;
 }
 
 void Engine::PostConstructorInitialize()
@@ -45,7 +52,7 @@ void Engine::GameThreadPulse()
          if (mGameThreadSumDeltaTimeSec >= InvLimitFPS) // 1 / 60 of a second
          {
             // This should be executed on game thread
-            m_level->TickLevel((float)mGameThreadDeltaTimeSeconds);
+            m_level->TickLevel(static_cast<float>(mGameThreadDeltaTimeSeconds));
             mLastGameThreadPulseTime = Clock_t::now();
             mGameThreadSumDeltaTimeSec = 0.0;
          }

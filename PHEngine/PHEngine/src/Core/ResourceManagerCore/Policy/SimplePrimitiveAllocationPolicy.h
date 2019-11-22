@@ -12,7 +12,8 @@ namespace Resources
    enum class SimplePrimitiveType : int32_t
    {
       POINT,
-      CUBE
+      CUBE,
+      PLANE
    };
 
    template <typename Model>

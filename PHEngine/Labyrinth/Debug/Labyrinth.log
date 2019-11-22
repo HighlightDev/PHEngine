@@ -1,1 +1,6 @@
-﻿  Labyrinth.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\Labyrinth.exe
+﻿  SimpleLevel.cpp
+d:\mystartup\porthighlightengine\phengine\phengine\labyrinth\src\level\simplelevel.cpp(56): warning C4244: '=': conversion from 'size_t' to 'float', possible loss of data
+d:\mystartup\porthighlightengine\phengine\phengine\labyrinth\src\level\simplelevel.cpp(57): warning C4244: '=': conversion from 'size_t' to 'float', possible loss of data
+d:\mystartup\porthighlightengine\phengine\phengine\labyrinth\src\level\simplelevel.cpp(91): warning C4244: '=': conversion from 'size_t' to 'float', possible loss of data
+d:\mystartup\porthighlightengine\phengine\phengine\labyrinth\src\level\simplelevel.cpp(92): warning C4244: '=': conversion from 'size_t' to 'float', possible loss of data
+  Labyrinth.vcxproj -> D:\MyStartUP\PortHighlightEngine\PHEngine\PHEngine\bin\Debug\Labyrinth.exe
