@@ -23,6 +23,12 @@ namespace Graphics
 
 		void Shader::ShaderInit()
 		{
+         std::string vsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.VertexShaderFile);
+         std::string fsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile);
+         std::string gsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile);
+
+         SetIsShaderSourceFileChanged(vsSourcePath, gsSourcePath, fsSourcePath);
+
 			SetShaderPredefine(); // start precompile shader customization
          ProcessAllPredefines();
 

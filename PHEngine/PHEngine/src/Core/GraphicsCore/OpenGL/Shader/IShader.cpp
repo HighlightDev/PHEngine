@@ -1,9 +1,14 @@
+#define _CRT_SECURE_NO_WARNINGS 
+
 #include "IShader.h"
 #include "Core/CommonCore/FolderManager.h"
 
 #include <fstream>
 #include <algorithm>
 #include <set>
+
+#include <filesystem>
+#include <chrono>
 
 namespace Graphics
 {
@@ -50,6 +55,71 @@ namespace Graphics
 
             throw std::invalid_argument(EngineUtility::StringStreamWrapper::FlushString());
          }
+      }
+
+      template <typename TP>
+      std::time_t to_time_t(TP tp)
+      {
+         using namespace std::chrono;
+         auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now()
+            + system_clock::now());
+         return system_clock::to_time_t(sctp);
+      }
+
+      bool IShader::IsShaderSourceFileChanged(const std::string& shaderPath) const
+      {
+         std::string pathToPersistency = EngineUtility::ConvertFromRelativeToAbsolutePath(
+            Common::FolderManager::GetInstance()->GetPersistencyPath() + "shader_persistency");
+
+         std::filesystem::file_time_type fTimeType = std::filesystem::last_write_time(shaderPath);
+         std::time_t cftime = to_time_t(fTimeType);
+
+#undef _CRT_SECURE_NO_WARNINGS
+
+         std::string timeFileWasChanged = std::asctime(std::localtime(&cftime));
+
+         std::ifstream stream(pathToPersistency);
+         std::string line;
+
+         bool bShaderExistsInPersistency = false;
+
+         while (stream.is_open() && getline(stream, line))
+         {
+            if (EngineUtility::StartsWith(line, shaderPath))
+            {
+               bShaderExistsInPersistency = true;
+               break;
+            }
+         }
+
+         stream.clear();
+         stream.close();
+
+         if (!bShaderExistsInPersistency)
+         {
+            // if this shader doesn't exist in persistency 
+            // then write it to persistency and mark that shader was changed
+            std::ofstream stream;
+            stream.open(pathToPersistency, std::ios_base::app);
+            std::string result = shaderPath + " " + timeFileWasChanged;
+            stream << result;
+            return true;
+         }
+         else
+         {
+            std::string timeShaderWasChanged = line.substr(EngineUtility::IndexOf(line, " ") + 1);
+            if (EngineUtility::StartsWith(timeShaderWasChanged, EngineUtility::TrimEnd(timeFileWasChanged)))
+            {
+               // do nothing
+               return false;
+            }
+            else
+            {
+
+            }
+         }
+
+         return true;
       }
 
       std::vector<std::string> IShader::LoadShaderSrcVector(const std::string& pathToShader) const
@@ -164,6 +234,16 @@ namespace Graphics
          return result;
       }
 
+      void IShader::SetIsShaderSourceFileChanged(const std::string& vsPath, const std::string& gsPath, const std::string& fsPath)
+      {
+         if ("" != vsPath)
+            vsneedtoupdate = IsShaderSourceFileChanged(vsPath);
+         if ("" != gsPath)
+            gsneedtoupdate = IsShaderSourceFileChanged(gsPath);
+         if ("" != fsPath)
+            fsneedtoupdate = IsShaderSourceFileChanged(fsPath);
+      }
+
       bool IShader::SendToGpuShadersSources(std::string& vsSource, std::string& gsSource, std::string& fsSource)
       {
          bool bVertexShaderLoaded = true, bFragmentShaderLoaded = true, bGeometryShaderLoaded = true;
@@ -205,7 +285,7 @@ namespace Graphics
          std::vector<ShaderGenericDefineConstant> existingConstantDefines;
          std::vector<ShaderGenericDefine> existingDefines;
 
-         for (auto it = shaderSourceVector.begin(); it != shaderSourceVector.end(); ++it)
+         for (auto it = shaderSourceVector.begin(); it != shaderSourceVector.end();)
          {
             if (EngineUtility::StartsWith(*it, "#define"))
             {
@@ -213,23 +293,20 @@ namespace Graphics
                size_t indexValue = EngineUtility::IndexOf(*it, " ", indexName + 1);
 
                const std::string name = it->substr(indexName + 1, indexValue - indexName - 1);
-               std::string value = it->substr(indexValue + 1);
+              
                if (std::string::npos == indexValue)
                {
-                  existingDefines.push_back(ShaderGenericDefine(name, true));
+                  existingDefines.emplace_back(name, true);
                }
                else
                {
-                  existingConstantDefines.push_back(ShaderGenericDefineConstant(name, value));
+                  std::string value = it->substr(indexValue + 1);
+                  existingConstantDefines.emplace_back(name, value);
                }
-            }
-         }
 
-         // remove all macros from code
-         for (auto it = shaderSourceVector.begin(); it != shaderSourceVector.end();)
-         {
-            if (EngineUtility::StartsWith(*it, "#define"))
+               // remove all macros from code
                it = shaderSourceVector.erase(it);
+            }
             else
                ++it;
          }
@@ -273,7 +350,7 @@ namespace Graphics
             }
          }
 
-         for (auto it = constantDefines.begin(); it != constantDefines.end(); ++it)
+         for (auto it = existingConstantDefines.begin(); it != existingConstantDefines.end(); ++it)
          {
             EngineUtility::StringStreamWrapper::ToString("#define ", it->m_Name, " ", it->m_Value, '\n');
          }

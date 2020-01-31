@@ -57,6 +57,7 @@ namespace Common
 		std::string GetDistortionTexturePath() const;
 		std::string GetPostprocessTexturePath() const;
 		std::string GetEditorTexturePath() const;
+      std::string GetPersistencyPath() const;
 	};
 }
 

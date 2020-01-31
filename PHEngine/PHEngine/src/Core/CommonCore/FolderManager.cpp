@@ -15,7 +15,6 @@ namespace Common
 	{
 	}
 
-
 	std::string FolderManager::ConcatDirectoryBack(int32_t countChangeDirectoryBack)
 	{
 		std::string resultStr = std::move(std::string(""));
@@ -131,4 +130,8 @@ namespace Common
 		return GetTexturesPath() + "editor\\";
 	}
 	
+   std::string FolderManager::GetPersistencyPath() const
+   {
+      return GetResPath() + "persistency\\";
+   }
 }
