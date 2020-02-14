@@ -40,17 +40,17 @@ namespace Common
 		m_rootFolder = std::move(ConcatDirectoryBack(countChangeDirectoryBack));
 	}
 
-	std::string FolderManager::GetRootPath() const
+   const std::string FolderManager::GetRootPath() const
 	{
 		return m_rootFolder;
 	}
 
-	std::string FolderManager::GetResPath() const
+   const std::string FolderManager::GetResPath() const
 	{
 		return GetRootPath() + "res\\";
 	}
 
-	std::string FolderManager::GetModelPath() const
+   const std::string FolderManager::GetModelPath() const
 	{
 		return GetResPath() + "model\\";
 	}
@@ -60,77 +60,77 @@ namespace Common
 		return GetResPath() + "shaders\\";
 	}
 
-   std::string FolderManager::GetShaderCommonPath() const
+   const std::string FolderManager::GetShaderCommonPath() const
    {
       return GetShadersPath() + "common\\";
    }
 
-	std::string FolderManager::GetCollisionPath() const
+   const std::string FolderManager::GetCollisionPath() const
 	{
 		return GetResPath() + "collision\\";
 	}
 
-	std::string FolderManager::GetTexturesPath() const
+   const std::string FolderManager::GetTexturesPath() const
 	{
 		return GetResPath() + "texture\\";
 	}
 
-	std::string FolderManager::GetIniPath() const
+   const std::string FolderManager::GetIniPath() const
 	{
 		return GetResPath() + "ini\\";
 	}
 
-	std::string FolderManager::GetGrassTexturePath() const
+   const std::string FolderManager::GetGrassTexturePath() const
 	{
 		return GetTexturesPath() + "grass\\";
 	}
 
-	std::string FolderManager::GetHeightMapsTexturePath() const
+   const std::string FolderManager::GetHeightMapsTexturePath() const
 	{
 		return GetTexturesPath() + "heightmaps\\";
 	}
 
-	std::string FolderManager::GetLandscapeTexturePath() const
+   const std::string FolderManager::GetLandscapeTexturePath() const
 	{
 		return GetTexturesPath() + "landscape\\";
 	}
 
-	std::string FolderManager::GetCubemapTexturePath() const
+   const std::string FolderManager::GetCubemapTexturePath() const
 	{
 		return GetTexturesPath() + "cubemap\\";
 	}
 
-	std::string FolderManager::GetNormalMapPath() const
+   const std::string FolderManager::GetNormalMapPath() const
 	{
 		return GetTexturesPath() + "normalmap\\";
 	}
 
-	std::string FolderManager::GetSpecularMapPath() const
+   const std::string FolderManager::GetSpecularMapPath() const
 	{
 		return GetTexturesPath() + "specularmap\\";
 	}
 
-	std::string FolderManager::GetAlbedoTexturePath() const
+   const std::string FolderManager::GetAlbedoTexturePath() const
 	{
 		return GetTexturesPath() + "albedo\\";
 	}
 
-	std::string FolderManager::GetDistortionTexturePath() const
+   const std::string FolderManager::GetDistortionTexturePath() const
 	{
 		return GetTexturesPath() + "distortion\\";
 	}
 
-	std::string FolderManager::GetPostprocessTexturePath() const
+   const std::string FolderManager::GetPostprocessTexturePath() const
 	{
 		return GetTexturesPath() + "postprocess\\";
 	}
 
-	std::string FolderManager::GetEditorTexturePath() const
+   const std::string FolderManager::GetEditorTexturePath() const
 	{
 		return GetTexturesPath() + "editor\\";
 	}
 	
-   std::string FolderManager::GetPersistencyPath() const
+   const std::string FolderManager::GetPersistencyPath() const
    {
       return GetResPath() + "persistency\\";
    }

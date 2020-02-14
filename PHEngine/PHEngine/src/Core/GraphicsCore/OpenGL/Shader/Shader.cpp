@@ -27,7 +27,7 @@ namespace Graphics
          std::string fsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.FragmentShaderFile);
          std::string gsSourcePath = EngineUtility::ConvertFromRelativeToAbsolutePath(m_shaderParams.GeometryShaderFile);
 
-         SetIsShaderSourceFileChanged(vsSourcePath, gsSourcePath, fsSourcePath);
+         SetIsShaderSourceFileChanged(m_shaderParams.VertexShaderFile, m_shaderParams.GeometryShaderFile, m_shaderParams.FragmentShaderFile);
 
 			SetShaderPredefine(); // start precompile shader customization
          ProcessAllPredefines();

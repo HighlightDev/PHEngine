@@ -2,6 +2,7 @@
 
 #include "IShader.h"
 #include "Core/CommonCore/FolderManager.h"
+#include "Core/IoCore/FileFacade.h"
 
 #include <fstream>
 #include <algorithm>
@@ -68,58 +69,64 @@ namespace Graphics
 
       bool IShader::IsShaderSourceFileChanged(const std::string& shaderPath) const
       {
+         bool bResult = false;
+
          std::string pathToPersistency = EngineUtility::ConvertFromRelativeToAbsolutePath(
             Common::FolderManager::GetInstance()->GetPersistencyPath() + "shader_persistency");
 
-         std::filesystem::file_time_type fTimeType = std::filesystem::last_write_time(shaderPath);
+         std::string pathToShader = EngineUtility::ConvertFromRelativeToAbsolutePath(shaderPath);
+
+         std::filesystem::file_time_type fTimeType = std::filesystem::last_write_time(pathToShader);
          std::time_t cftime = to_time_t(fTimeType);
 
 #undef _CRT_SECURE_NO_WARNINGS
 
-         std::string timeFileWasChanged = std::asctime(std::localtime(&cftime));
+         std::string timeFileWasChanged = EngineUtility::TrimEnd(std::asctime(std::localtime(&cftime)));
 
-         std::ifstream stream(pathToPersistency);
-         std::string line;
+         FileFacade fileFacade = FileFacade(pathToPersistency);
+
+         const auto& fileSrcList = fileFacade.GetFileSrc();
 
          bool bShaderExistsInPersistency = false;
 
-         while (stream.is_open() && getline(stream, line))
+         size_t index = 0;
+         for (auto it = fileSrcList.begin(); it != fileSrcList.end(); ++it, ++index)
          {
-            if (EngineUtility::StartsWith(line, shaderPath))
+            if (EngineUtility::StartsWith(*it, shaderPath))
             {
                bShaderExistsInPersistency = true;
                break;
             }
          }
 
-         stream.clear();
-         stream.close();
-
          if (!bShaderExistsInPersistency)
          {
             // if this shader doesn't exist in persistency 
             // then write it to persistency and mark that shader was changed
-            std::ofstream stream;
-            stream.open(pathToPersistency, std::ios_base::app);
-            std::string result = shaderPath + " " + timeFileWasChanged;
-            stream << result;
-            return true;
+            std::string resultString = shaderPath + " " + timeFileWasChanged;
+            fileFacade.AppendToTheSrcEnd(resultString);
+            fileFacade.WriteToFile();
+            bResult = true;
          }
          else
          {
-            std::string timeShaderWasChanged = line.substr(EngineUtility::IndexOf(line, " ") + 1);
-            if (EngineUtility::StartsWith(timeShaderWasChanged, EngineUtility::TrimEnd(timeFileWasChanged)))
+            auto separateTimeFunctor = std::function<std::string(const std::string&, const std::string&)>(([](const std::string& lookupString, const std::string& separateBy)
             {
-               // do nothing
-               return false;
-            }
-            else
-            {
+               return lookupString.substr(EngineUtility::IndexOf(lookupString, separateBy) + 1);
+            }));
 
+            std::string timeFromPersistancy = fileFacade.SeparateByFunctor(index, separateTimeFunctor, " ");
+
+            if (timeFromPersistancy != timeFileWasChanged)
+            {
+               std::string replaceShaderPersistance = shaderPath + " " + timeFileWasChanged;
+               fileFacade.ReplaceSourceLineAt(index, replaceShaderPersistance);
+               fileFacade.WriteToFile();
+               bResult = true;
             }
          }
 
-         return true;
+         return bResult;
       }
 
       std::vector<std::string> IShader::LoadShaderSrcVector(const std::string& pathToShader) const
