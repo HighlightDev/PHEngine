@@ -468,7 +468,6 @@
     <None Include="res\shaders\sunVS.glsl" />
     <None Include="res\shaders\terrainFragmentShader.glsl" />
     <None Include="res\shaders\terrainVertexShader.glsl" />
-    <None Include="res\shaders\uiFS.glsl" />
     <None Include="res\shaders\waterFS.glsl" />
     <None Include="res\shaders\waterReflectionEntityFS.glsl" />
     <None Include="res\shaders\waterReflectionEntityVS.glsl" />
@@ -492,7 +491,6 @@
     <None Include="res\shaders\deferredNonSkeletalBasePassVS.glsl" />
     <None Include="res\shaders\deferredSkeletalBasePassVS.glsl" />
     <None Include="res\shaders\deferredBasePassFS.glsl" />
-    <None Include="res\shaders\uiVS.glsl" />
     <None Include="res\shaders\basicShadowNonSkeletalVS.glsl" />
     <None Include="res\shaders\basicShadowSkeletalVS.glsl" />
     <None Include="res\shaders\cubemapShadowFS.glsl" />
@@ -509,6 +507,8 @@
     <None Include="res\shaders\composite_shaders\deferredCollectFS.glsl" />
     <None Include="res\shaders\material_shaders\SkyboxMaterial.glsl" />
     <None Include="res\shaders\vertex_factory\SkyboxVertexFactory.glsl" />
+    <None Include="res\shaders\uiVS.glsl" />
+    <None Include="res\shaders\uiFS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h">
@@ -1738,7 +1738,7 @@
     <ClInclude Include="src\Core\GameCore\LevelFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\GraphicsCore\Material\DynamicMaterial.h">
+    <ClInclude Include="src\Core\IoCore\FileFacade.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2088,7 +2088,7 @@
     <ClCompile Include="src\Core\GameCore\LevelFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GraphicsCore\Material\DynamicMaterial.cpp">
+    <ClCompile Include="src\Core\IoCore\FileFacade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
